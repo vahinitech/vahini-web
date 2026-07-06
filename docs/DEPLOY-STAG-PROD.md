@@ -84,6 +84,51 @@ If production check fails:
 docker compose -f deploy/docker-compose.prod.yml logs --tail=120 web
 ```
 
+## 5) HTTPS certificate renewal
+
+`deploy/vahinitech.com.nginx.conf` and `deploy/stag.vahinitech.com.nginx.conf`
+both point at standard certbot cert paths
+(`/etc/letsencrypt/live/<domain>/{fullchain,privkey}.pem`) and already serve
+the HTTP-01 challenge webroot at `/var/www/certbot`. Let's Encrypt certs are
+valid 90 days, so this needs to auto-renew, not be reissued by hand every
+quarter.
+
+**The renewal check/schedule itself is not this repo's job.** Installing
+certbot via `apt install certbot` (or `snap install certbot`) already sets up
+its own systemd timer or `/etc/cron.d/certbot` entry that runs `certbot renew`
+twice a day and only actually renews certs within their last 30 days of
+validity — that's almost certainly already running on this host, since it's
+how the current cert was issued in the first place. Confirm with:
+
+```bash
+sudo deploy/certbot/check-renew-timer.sh
+```
+
+**What's commonly missing, and what this repo adds:** a *deploy-hook* so
+nginx actually reloads and starts serving the newly-renewed cert. Without it,
+certbot renews the files on disk correctly, but the running nginx worker
+keeps the old certificate loaded in memory until nginx is next restarted —
+so the renewal "worked" but nobody's HTTPS connection sees the new cert until
+someone happens to restart nginx for an unrelated reason. Install it once:
+
+```bash
+sudo deploy/certbot/install-renew-hook.sh
+```
+
+This installs `deploy/certbot/reload-nginx-hook.sh` to
+`/etc/letsencrypt/renewal-hooks/deploy/`, where certbot automatically runs it
+after every successful renewal (for either domain), and verifies the whole
+path end-to-end with `certbot renew --dry-run` (no real certs touched, no
+rate limits hit).
+
+Initial issuance (already done for the current cert; kept here for the next
+time a new subdomain needs one):
+
+```bash
+sudo certbot certonly --webroot -w /var/www/certbot -d vahinitech.com -d www.vahinitech.com
+sudo certbot certonly --webroot -w /var/www/certbot -d stag.vahinitech.com
+```
+
 ## Notes
 
 - Current server already has a service on `127.0.0.1:3015`, so staging uses `3016` to avoid collision.
