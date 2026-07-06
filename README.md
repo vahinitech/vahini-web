@@ -72,12 +72,12 @@ See `docs/DEPLOY-STAG-PROD.md`. Host nginx vhost templates live in `deploy/`.
 
 ## Change the website colour theme
 
-1. Open `site/theme.config.js`.
+1. Open `site/js/theme.config.js`.
 2. Set `ACTIVE_THEME` to one of: `"space-teal"` (default), `"midnight-indigo"`,
    `"forest-emerald"`, `"ember-charcoal"`.
 3. Reload.
 
-Colours live only in `site/theme.css`.
+Colours live only in `site/css/theme.css`.
 
 ---
 

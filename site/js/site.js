@@ -419,7 +419,7 @@
     wireShare();
     wireConsent();
     /* first-party audience profile + private feedback widget (path-aware) */
-    try { var vi = document.createElement("script"); vi.src = P("vahini-insights.js"); vi.async = true; document.body.appendChild(vi); } catch (e) {}
+    try { var vi = document.createElement("script"); vi.src = P("js/vahini-insights.js"); vi.async = true; document.body.appendChild(vi); } catch (e) {}
 
     /* page transitions */
     setupTransitions();
