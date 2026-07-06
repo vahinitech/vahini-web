@@ -115,7 +115,7 @@ function D_Build({ dur }){
         <ScriptChip key={i} x={360+i*308} y={760} w={284} name={c.name} sample={c.sample}
           on={1} fill={tw(t,0,1,c.d,c.d+0.4)}/>
       ))}
-      <Caption text="The Battu pen isn’t just a measuring tool — it’s the instrument building India’s first handwriting-motion dataset."
+      <Caption text="The Vahini pen isn’t just a measuring tool — it’s the instrument building India’s first handwriting-motion dataset."
         x={960} y={980} size={26} color={V.hint} align="center" width={1500} opacity={tw(t,0,1,4.0,4.8)}/>
     </FadeWrap>
   );

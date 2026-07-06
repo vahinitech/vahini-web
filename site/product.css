@@ -1,10 +1,10 @@
 /* SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
    © 2026 Vahini Technologies. All rights reserved. */
 /* ============================================================
-   PRODUCT · Battu — hardware story page
+   PRODUCT · Vahini — hardware story page
    Hero → Why it exists → How it works → Inside → Specs →
    What it understands → Why paper → Engineering → v1/v2 →
-   Timeline → CTA.  Crimson = Battu product accent. After site.css.
+   Timeline → CTA.  Crimson = Vahini product accent. After site.css.
    ============================================================ */
 .pp{ --paper:#FBFAF7; }
 
@@ -67,7 +67,7 @@
 @media (max-width:880px){ .pp-flow{grid-template-columns:1fr 1fr; gap:34px 0;} .pp-fstep:nth-child(2)::after{display:none;} }
 @media (max-width:480px){ .pp-flow{grid-template-columns:1fr; gap:26px;} .pp-fstep::after{display:none;} }
 
-/* ---------- INSIDE BATTU (engineering) ---------- */
+/* ---------- INSIDE VAHINI (engineering) ---------- */
 .pp-inside{display:grid; grid-template-columns:1.05fr 0.95fr; gap:48px; align-items:center; margin-top:8px;}
 .pp-inside__img{position:relative; background:radial-gradient(120% 100% at 50% 50%, #fff, var(--paper)); border:1px solid var(--rule); border-radius:var(--radius-xl); padding:30px; box-shadow:var(--shadow-2);}
 .pp-inside__img img{width:100%; height:auto; display:block; filter:drop-shadow(0 16px 24px rgba(34,40,49,.14));}
@@ -90,7 +90,7 @@
 .pp-speccol li span{font-size:12.5px; color:rgba(238,238,238,.6);}
 @media (max-width:880px){ .pp-specs{grid-template-columns:1fr;} }
 
-/* ---------- WHAT BATTU UNDERSTANDS (6 signal cards) ---------- */
+/* ---------- WHAT VAHINI UNDERSTANDS (6 signal cards) ---------- */
 .pp-sig{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:42px;}
 .pp-sigc{background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg); padding:24px 22px; box-shadow:var(--shadow-1); transition:transform .22s var(--ease), box-shadow .22s var(--ease);}
 .pp-sigc:hover{transform:translateY(-4px); box-shadow:var(--shadow-2);}

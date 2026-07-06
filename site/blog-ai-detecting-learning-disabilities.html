@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="only light">
 <title>How AI is learning to spot learning disabilities early | Vahini Blog</title>
-<meta name="description" content="Neural networks now flag dyslexia, dysgraphia and dyspraxia from reading patterns, handwriting and motor coordination. How the models work, and where Battu's motion signal fits.">
+<meta name="description" content="Neural networks now flag dyslexia, dysgraphia and dyspraxia from reading patterns, handwriting and motor coordination. How the models work, and where Vahini's motion signal fits.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -35,7 +35,7 @@
       <div class="post-ai__card">
         <span class="post-ai__tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9z"/><path d="M19 14l.7 1.8L21 16.5l-1.3.6L19 19l-.7-1.8L17 16.5z"/></svg>AI summary</span>
         <p>Machine-learning models can now flag specific learning disabilities from everyday signals. Neural networks read <strong>reading speed and phonological cues for dyslexia</strong> (reported accuracy up to ~97.8%), CNNs read <strong>handwriting and letter formation for dysgraphia</strong> (systems like "Pubudu" near 88%), and classifiers like SVM and Random Forest screen <strong>motor coordination for dyspraxia</strong> and broader neurodevelopmental concerns.</p>
-        <p>The promise is earlier, gentler identification and less reliance on slow manual assessment. Battu adds the one input these models most often lack, the <strong>live motion of writing</strong>, captured on ordinary paper.</p>
+        <p>The promise is earlier, gentler identification and less reliance on slow manual assessment. Vahini adds the one input these models most often lack, the <strong>live motion of writing</strong>, captured on ordinary paper.</p>
         <p class="post-ai__note">A quick machine-generated overview. The full post has the detail and the why.</p>
       </div>
     </div>
@@ -50,7 +50,7 @@
           <li><a href="#s2">Dyslexia: reading patterns and engagement</a></li>
           <li><a href="#s3">Dysgraphia: handwriting under the lens</a></li>
           <li><a href="#s4">Dyspraxia and broader screening</a></li>
-          <li><a href="#s5">Where Battu fits</a></li>
+          <li><a href="#s5">Where Vahini fits</a></li>
           <li><a href="#takeaways">Key takeaways</a></li>
         </ol>
       </div>
@@ -96,10 +96,10 @@
       <p>Dyspraxia, a coordination disorder, is less commonly tackled by a single dedicated model. Instead, classic machine-learning algorithms such as <strong>Support Vector Machines (SVM)</strong> and <strong>Random Forests</strong> are used to screen broader neurodevelopmental concerns by evaluating motor coordination and cognitive responses. These methods are well-suited to the kind of structured, multi-feature data that motor tasks produce.</p>
       <p>Across all three, the throughline is the same: AI turns slow, manual, specialist assessment into something that can run earlier, more often, and at lower cost, enabling <strong>early identification and personalised intervention</strong> rather than late diagnosis.</p>
 
-      <h2 id="s5">Where Battu fits</h2>
+      <h2 id="s5">Where Vahini fits</h2>
       <p>Notice what nearly every dysgraphia and dyspraxia approach is reaching for, and struggling to get from a photo or a tablet: the <strong>real motion of the hand</strong>. Pressure. Speed. Rhythm. Pen-lifts. Stroke order. These are exactly the signals a dual-IMU sensor pen captures directly, on ordinary paper, without a special tablet or dot-pattern notebook.</p>
-      <p>Battu doesn't diagnose, and we are careful never to claim it does. What it can do is <strong>feed these screening models the input they most lack</strong>: a rich, time-resolved motion stream from natural writing. A CNN that sees only finished letters can be paired with motion features that reveal <em>how</em> the writing happened, the difference between a child who forms letters slowly but steadily and one who is fighting the pen the whole way. That richer picture is what makes earlier, fairer screening possible.</p>
-      <p>It also matters for equity. Models trained on Latin-script, Western datasets do not serve a child writing in Telugu or Hindi. Battu's consent-first, multi-script motion dataset is built precisely for the writers these tools have so far left out.</p>
+      <p>Vahini doesn't diagnose, and we are careful never to claim it does. What it can do is <strong>feed these screening models the input they most lack</strong>: a rich, time-resolved motion stream from natural writing. A CNN that sees only finished letters can be paired with motion features that reveal <em>how</em> the writing happened, the difference between a child who forms letters slowly but steadily and one who is fighting the pen the whole way. That richer picture is what makes earlier, fairer screening possible.</p>
+      <p>It also matters for equity. Models trained on Latin-script, Western datasets do not serve a child writing in Telugu or Hindi. Vahini's consent-first, multi-script motion dataset is built precisely for the writers these tools have so far left out.</p>
 
       <div class="post-key" id="takeaways">
         <h4>Key takeaways</h4>
@@ -107,11 +107,11 @@
           <li>ANNs and RNNs screen dyslexia from reading patterns and engagement, up to ~97.8% accuracy in the literature.</li>
           <li>CNNs detect dysgraphia from handwriting and letter formation; systems like "Pubudu" reach ~88%.</li>
           <li>SVM and Random Forest models screen dyspraxia and broader concerns via motor and cognitive data.</li>
-          <li>Most approaches lack live writing motion, exactly what Battu captures on ordinary paper, to make earlier, fairer screening possible.</li>
+          <li>Most approaches lack live writing motion, exactly what Vahini captures on ordinary paper, to make earlier, fairer screening possible.</li>
         </ul>
       </div>
 
-      <p class="post-disclaimer">This article summarises research for general interest. Vahini's analyser and the Battu pen are educational and skill-building tools, not diagnostic or medical devices, and nothing here is medical advice. Screening and diagnosis of any learning disability should be carried out by qualified professionals.</p>
+      <p class="post-disclaimer">This article summarises research for general interest. Vahini's analyser and the Vahini pen are educational and skill-building tools, not diagnostic or medical devices, and nothing here is medical advice. Screening and diagnosis of any learning disability should be carried out by qualified professionals.</p>
 
       <div class="source-box">
         <span class="source-box__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>

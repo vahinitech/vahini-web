@@ -63,7 +63,7 @@
     path = (path || location.pathname).toLowerCase();
     var map = [
       [/analy|report/, "handwriting-analyser"], [/factor/, "20-factors"],
-      [/battu|product|pen/, "the-pen"], [/technolog|patent/, "technology"],
+      [/product|pen/, "the-pen"], [/technolog|patent/, "technology"],
       [/solution-handwriting|handwriting/, "handwriting"], [/diagnos|assistive/, "health-screening"],
       [/digiti|insight/, "digitisation"], [/invest/, "investors"], [/award|event/, "traction"],
       [/blog|why-handwriting|resource|faq/, "learn"], [/about|reach/, "company"]

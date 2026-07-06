@@ -36,9 +36,7 @@
     { href: "investor-book.dc.html", t: "Developer SDK", d: "Motion intelligence as an API for partners", pill: "future", pl: "Future" }
   ];
   var PLATFORM = [
-    { href: "product.html", t: "The pen, Battu", d: "Dual-IMU sensing on any paper", pill: "dev", pl: "Pre-order" },
-    { href: "battu-v1.html", t: "Battu v1 · for kids", d: "The writing buddy for young writers" },
-    { href: "battu-v2.html", t: "Battu v2 · for schools", d: "BLE multi-connect for classrooms" },
+    { href: "product.html", t: "The pen, Vahini", d: "Dual-IMU sensing on any paper", pill: "dev", pl: "Pre-order" },
     { href: "patents.html", t: "Patents & IP", d: "Granted Patent No. 584433" }
   ];
   var COMPANY = [
@@ -74,7 +72,7 @@
     { t:"Practice sheets", u:ROOT+"vahini-practice-sheet.html", d:"Printable drill sheets", k:"practice sheet drill print ruled exercises" },
     { t:"Handwriting analysis", u:P("solution-handwriting.html"), d:"The market, live today", k:"handwriting analysis solution scorecard exercises market" },
     { t:"OCR & Vision", u:P("solution-ocr-vision.html"), d:"Indic handwriting engine, quality not just text", k:"ocr vision indic handwriting recognition engine quality legibility telugu hindi tamil kannada api dataset licensing" },
-    { t:"The Pen (Battu)", u:P("product.html"), d:"Dual-IMU sensing on any paper", k:"pen battu hardware imu sensor pre-order" },
+    { t:"The Pen (Vahini)", u:P("product.html"), d:"Dual-IMU sensing on any paper", k:"pen vahini hardware imu sensor pre-order" },
     { t:"Patents & IP", u:P("patents.html"), d:"Granted Patent No. 584433", k:"patents ip granted intellectual property privacy consent dpdp how it works" },
     { t:"About Vahini", u:P("about.html"), d:"How it started, where we are", k:"about story founder origin team" },
     { t:"Investors", u:P("investor-book.dc.html"), d:"The motion-data field notebook", k:"investors funding round roadmap motion data moat deep tech notebook" },
@@ -188,8 +186,6 @@
         '<div class="foot__col"><h5>Applications</h5>'+sol+'</div>'+
         '<div class="foot__col"><h5>Company</h5>'+
           '<a href="'+P("product.html")+'" data-nav>The Pen</a>'+
-          '<a href="'+P("battu-v1.html")+'" data-nav>Battu v1 · kids</a>'+
-          '<a href="'+P("battu-v2.html")+'" data-nav>Battu v2 · schools</a>'+
           '<a href="'+P("about.html")+'" data-nav>About</a>'+
           '<a href="'+P("why-handwriting.html")+'" data-nav>Why handwriting matters</a>'+
           '<a href="'+P("awards.html")+'" data-nav>Awards</a>'+
@@ -421,7 +417,6 @@
 
     wireSearch();
     wireShare();
-    wrapBattuTerms(document.body);
     wireConsent();
     /* first-party audience profile + private feedback widget (path-aware) */
     try { var vi = document.createElement("script"); vi.src = P("vahini-insights.js"); vi.async = true; document.body.appendChild(vi); } catch (e) {}
@@ -496,50 +491,6 @@
     document.addEventListener("keydown", function(e){
       if(e.key==="/" && box.hidden && !/INPUT|TEXTAREA/.test((e.target.tagName||""))){ e.preventDefault(); open(); }
       else if(e.key==="Escape" && !box.hidden){ close(); }
-    });
-  }
-
-  /* ---- Battu term: hover callout about Nannaya, sitewide ---- */
-  function wrapBattuTerms(root){
-    if(!root || !window.NodeFilter) return;
-    var POP='<b class="ntip__h">Named for the first poet of Telugu.</b>'+
-      '<span>Battu honours <b>Nannaya Bhattaraka</b>, remembered as the <i>Adi Kavi</i>, the very first poet of the Telugu language, who wrote around the 11th century.</span>'+
-      '<span>A thousand years on, our little pen carries that same wish: to help a new generation fall in love with writing, by hand, in their own language.</span>';
-    var walker=document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
-      acceptNode:function(n){
-        if(!n.nodeValue || n.nodeValue.indexOf('Battu')===-1) return NodeFilter.FILTER_REJECT;
-        var p=n.parentNode; if(!p) return NodeFilter.FILTER_REJECT;
-        var t=p.nodeName;
-        if(t==='SCRIPT'||t==='STYLE'||t==='NOSCRIPT'||t==='TEXTAREA'||t==='TITLE') return NodeFilter.FILTER_REJECT;
-        if(p.closest && p.closest('.ntip')) return NodeFilter.FILTER_REJECT;
-        /* Only annotate "Battu" inside running body copy. Skip headings, titles,
-           buttons, links/CTAs, eyebrows, pills/badges, the nav and the footer, 
-           a tooltip on those distracts from the design (per design review). */
-        if(p.closest && p.closest('h1,h2,h3,h4,h5,h6,button,.btn,a,nav,header,'+
-          '#site-nav,#site-footer,.pill,'+
-          '[class*="eyebrow"],[class*="badge"],[class*="cta"],[class*="tag"],'+
-          '[class*="__eye"],[class*="__name"],[class*="__title"],[class*="__head"]'))
-          return NodeFilter.FILTER_REJECT;
-        return NodeFilter.FILTER_ACCEPT;
-      }
-    });
-    var nodes=[],n; while(n=walker.nextNode()) nodes.push(n);
-    nodes.forEach(function(node){
-      var parts=node.nodeValue.split('Battu');
-      if(parts.length<2) return;
-      var frag=document.createDocumentFragment();
-      parts.forEach(function(part,i){
-        if(i>0){
-          var span=document.createElement('span');
-          span.className='ntip'; span.tabIndex=0; span.setAttribute('aria-label','Battu: named after Nannaya, the first poet of Telugu');
-          span.appendChild(document.createTextNode('Battu'));
-          var pop=document.createElement('span'); pop.className='ntip__pop'; pop.setAttribute('role','tooltip'); pop.innerHTML=POP;
-          span.appendChild(pop);
-          frag.appendChild(span);
-        }
-        if(part) frag.appendChild(document.createTextNode(part));
-      });
-      node.parentNode.replaceChild(frag,node);
     });
   }
 

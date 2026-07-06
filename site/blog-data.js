@@ -32,13 +32,13 @@
       cat: "health",
       title: "How AI is learning to spot learning disabilities early",
       date: "Jun 2026", read: "8 min read", author: "Vishnu Kosuri",
-      excerpt: "Neural networks now flag dyslexia, dysgraphia and dyspraxia from reading patterns, handwriting and motor coordination. Here is how the models work, and where Battu's motion signal fits."
+      excerpt: "Neural networks now flag dyslexia, dysgraphia and dyspraxia from reading patterns, handwriting and motor coordination. Here is how the models work, and where Vahini's motion signal fits."
     },
     {
       slug: "battu-and-autism",
       url: "blog-battu-and-autism.html",
       cat: "health",
-      title: "How Battu can support autistic students who write",
+      title: "How Vahini can support autistic students who write",
       date: "Jun 2026", read: "7 min read", author: "Malli Kosuri",
       excerpt: "For many autistic students, handwriting carries hidden motor and sensory load. A dual-IMU pen that measures pressure, rhythm and effort can make that load visible, and support gentler, calmer practice."
     },
@@ -168,8 +168,8 @@
   global.VahiniPostKW = {
     "history-of-20-factors": "history of handwriting analysis, 20 handwriting factors, is graphology real, handwriting quality factors, computer vision handwriting measurement, handwriting legibility assessment, handwriting motor skills, BHK handwriting scale, handwriting improvement, letter formation spacing slant baseline",
     "how-vahini-reads-handwriting": "handwriting analysis, how handwriting OCR works, handwriting quality score, 20 factor handwriting report, computer vision handwriting, handwriting recognition pipeline, neatness score, legibility analysis, Vahini analyser, handwriting assessment tool",
-    "ai-detecting-learning-disabilities": "AI learning disability detection, dyslexia detection AI, dysgraphia detection deep learning, CNN handwriting dysgraphia, dyspraxia screening machine learning, neural network dyslexia, early screening learning disorders, special education AI, handwriting analysis dysgraphia, Battu sensor pen screening",
-    "battu-and-autism": "autism handwriting, autistic students writing support, sensory motor handwriting autism, dysgraphia autism, assistive writing autism, dual IMU pen autism, handwriting pressure autism, calm handwriting practice, special needs writing tool, Battu autism support",
+    "ai-detecting-learning-disabilities": "AI learning disability detection, dyslexia detection AI, dysgraphia detection deep learning, CNN handwriting dysgraphia, dyspraxia screening machine learning, neural network dyslexia, early screening learning disorders, special education AI, handwriting analysis dysgraphia, Vahini sensor pen screening",
+    "battu-and-autism": "autism handwriting, autistic students writing support, sensory motor handwriting autism, dysgraphia autism, assistive writing autism, dual IMU pen autism, handwriting pressure autism, calm handwriting practice, special needs writing tool, Vahini autism support",
     "startup-pitch-deck-guide": "startup pitch deck guide, pitch deck template, Startup India Seed Fund Scheme, SISFS application, how to make a pitch deck, investor deck slides, fundraising deck, deeptech startup pitch, seed funding India, pitch deck PDF download",
     "one-imu-or-two": "dual IMU pen, single vs dual IMU, inertial sensor pen, IMU sensor fusion, smart pen accuracy, handwriting sensor, MEMS gyroscope accelerometer, pen orientation tracking",
     "reading-pressure": "pen pressure sensor, force sensitive resistor, analog pressure signal, writing pressure, handwriting pressure analysis, FSR calibration, smart pen sensors, grip pressure",

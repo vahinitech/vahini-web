@@ -24,7 +24,7 @@ function C_Write({ dur }){
         <div/>
       </Paper>
       <WriteLine text={WORD} x={px+70} y={py+232} size={150} color={V.ink} progress={prog}/>
-      <Caption text="Start with ordinary paper. Any notebook, any page — and the Battu pen."
+      <Caption text="Start with ordinary paper. Any notebook, any page — and the Vahini pen."
         x={960} y={py+ph+70} size={38} color={V.ivory} align="center" width={1300}
         opacity={tw(t,0,1,1.2,2.0)}/>
     </FadeWrap>

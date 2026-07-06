@@ -247,18 +247,6 @@ section{position:relative;}
 .foot__soc:hover{background:var(--crimson); border-color:var(--crimson); color:#fff; transform:translateY(-2px);}
 .foot__soc svg{width:18px; height:18px;}
 
-/* Battu term, hover/focus callout about Nannaya (injected sitewide) */
-.ntip{position:relative; border-bottom:1px dotted currentColor; cursor:help;}
-.ntip__pop{position:absolute; left:0; top:calc(100% + 9px); width:min(330px,82vw); background:var(--ink); color:var(--ivory);
-  font-family:var(--sans); font-size:12.5px; font-weight:400; line-height:1.55; letter-spacing:0; text-transform:none;
-  padding:15px 16px; border-radius:11px; box-shadow:0 14px 34px rgba(0,0,0,.30); opacity:0; visibility:hidden;
-  transform:translateY(4px); transition:opacity .16s, transform .16s, visibility .16s; z-index:300; pointer-events:none; white-space:normal;}
-.ntip__pop b{color:#fff; font-weight:700;} .ntip__pop i{color:var(--accent-lite); font-style:italic;}
-.ntip__pop .ntip__h{display:block; font-family:var(--serif); font-size:14.5px; line-height:1.25; margin-bottom:9px;}
-.ntip__pop span{display:block;} .ntip__pop span + span{margin-top:9px; color:rgba(238,238,238,.82);}
-.ntip__pop::before{content:""; position:absolute; bottom:100%; left:18px; border:6px solid transparent; border-bottom-color:var(--ink);}
-.ntip:hover .ntip__pop, .ntip:focus .ntip__pop, .ntip:focus-within .ntip__pop{opacity:1; visibility:visible; transform:translateY(0);}
-
 /* ============================================================
    cookie consent (GDPR / CCPA)
    ============================================================ */

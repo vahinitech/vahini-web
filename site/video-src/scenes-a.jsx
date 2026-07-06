@@ -137,7 +137,7 @@ function SceneFamilies({ dur }){
       <FamilyCol famKey="spatial"   x={x0+1*(colW+gap)} w={colW} appear={1.5} t={t}/>
       <FamilyCol famKey="dynamics"  x={x0+2*(colW+gap)} w={colW} appear={2.2} t={t}/>
       <FamilyCol famKey="style"     x={x0+3*(colW+gap)} w={colW} appear={2.9} t={t}/>
-      <Caption text="Structure and space carry the most weight — Dynamics needs the Battu pen to measure speed, pressure and flow as you write."
+      <Caption text="Structure and space carry the most weight — Dynamics needs the Vahini pen to measure speed, pressure and flow as you write."
         x={960} y={930} size={28} color={V.hint} align="center" width={1500} opacity={tw(t,0,1,4.4,5.2)}/>
     </FadeWrap>
   );

@@ -34,7 +34,7 @@ function W_Write({ dur }){
       <StepBadge n={1} label="Write on paper" t={t} appear={0.2}/>
       <Paper x={px} y={py} w={pw} h={ph} ruled lineTop={150} lineGap={130}><div/></Paper>
       <WriteLine text="writing" x={px+90} y={py+212} size={150} color={V.ink} progress={prog}/>
-      <Caption text="Write naturally with the Battu pen — any notebook, any script."
+      <Caption text="Write naturally with the Vahini pen — any notebook, any script."
         x={960} y={py+ph+70} size={36} color={V.ivory} align="center" width={1200} opacity={tw(t,0,1,1.4,2.2)}/>
     </FadeWrap>
   );
