@@ -35,8 +35,8 @@
       excerpt: "Neural networks now flag dyslexia, dysgraphia and dyspraxia from reading patterns, handwriting and motor coordination. Here is how the models work, and where Vahini's motion signal fits."
     },
     {
-      slug: "battu-and-autism",
-      url: "blog-battu-and-autism.html",
+      slug: "vahini-and-autism",
+      url: "blog-vahini-and-autism.html",
       cat: "health",
       title: "How Vahini can support autistic students who write",
       date: "Jun 2026", read: "7 min read", author: "Malli Kosuri",
@@ -169,7 +169,7 @@
     "history-of-20-factors": "history of handwriting analysis, 20 handwriting factors, is graphology real, handwriting quality factors, computer vision handwriting measurement, handwriting legibility assessment, handwriting motor skills, BHK handwriting scale, handwriting improvement, letter formation spacing slant baseline",
     "how-vahini-reads-handwriting": "handwriting analysis, how handwriting OCR works, handwriting quality score, 20 factor handwriting report, computer vision handwriting, handwriting recognition pipeline, neatness score, legibility analysis, Vahini analyser, handwriting assessment tool",
     "ai-detecting-learning-disabilities": "AI learning disability detection, dyslexia detection AI, dysgraphia detection deep learning, CNN handwriting dysgraphia, dyspraxia screening machine learning, neural network dyslexia, early screening learning disorders, special education AI, handwriting analysis dysgraphia, Vahini sensor pen screening",
-    "battu-and-autism": "autism handwriting, autistic students writing support, sensory motor handwriting autism, dysgraphia autism, assistive writing autism, dual IMU pen autism, handwriting pressure autism, calm handwriting practice, special needs writing tool, Vahini autism support",
+    "vahini-and-autism": "autism handwriting, autistic students writing support, sensory motor handwriting autism, dysgraphia autism, assistive writing autism, dual IMU pen autism, handwriting pressure autism, calm handwriting practice, special needs writing tool, Vahini autism support",
     "startup-pitch-deck-guide": "startup pitch deck guide, pitch deck template, Startup India Seed Fund Scheme, SISFS application, how to make a pitch deck, investor deck slides, fundraising deck, deeptech startup pitch, seed funding India, pitch deck PDF download",
     "one-imu-or-two": "dual IMU pen, single vs dual IMU, inertial sensor pen, IMU sensor fusion, smart pen accuracy, handwriting sensor, MEMS gyroscope accelerometer, pen orientation tracking",
     "reading-pressure": "pen pressure sensor, force sensitive resistor, analog pressure signal, writing pressure, handwriting pressure analysis, FSR calibration, smart pen sensors, grip pressure",
@@ -244,7 +244,7 @@
         '<circle cx="96" cy="90" r="7" fill="'+j+'"/><circle cx="156" cy="122" r="7" fill="'+j+'"/><circle cx="186" cy="90" r="7" fill="'+j+'"/>'+
         '<path d="M250 122 q14 -34 28 0 t28 0 t28 0" fill="none" stroke="'+i+'" stroke-width="2.6" stroke-linecap="round"/>'+
         '<circle cx="250" cy="122" r="4" fill="'+j+'"/><circle cx="334" cy="122" r="4" fill="'+j+'"/>',
-      "battu-and-autism":
+      "vahini-and-autism":
         '<circle cx="150" cy="96" r="40" fill="none" stroke="'+i+'" stroke-width="2.6"/>'+
         '<path d="M150 70 a26 26 0 0 1 0 52 a13 13 0 0 1 0 -26 a13 13 0 0 0 0 -26" fill="'+i+'" opacity="0.8"/>'+
         '<circle cx="150" cy="83" r="5" fill="'+j+'"/><circle cx="150" cy="109" r="5" fill="'+i+'"/>'+
