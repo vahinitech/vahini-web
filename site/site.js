@@ -48,7 +48,7 @@
     { href: "events.html", t: "Events", d: "Where we\u2019ve shown Vahini" }
   ];
   var RESOURCES = [
-    { href: "blog.html", t: "Blog", d: "Notes from the handwriting research frontier" },
+    { href: "blog/index.html", t: "Blog", d: "Notes from the handwriting research frontier" },
     { href: "factors.html", t: "The 20 factors", d: "Every factor in plain English" },
     { href: "solution-ocr-vision.html", t: "Free tool: read handwriting", d: "Paste a page, read it back, our Indic OCR demo" },
     { href: "faq.html", t: "Questions & answers", d: "Honest answers about the pen & analyser" },
@@ -61,12 +61,12 @@
     { t:"The analyser", u:(BASE?"analyser.html":"../analyser/analyser.html"), d:"Upload a page, get your 20-factor scorecard", k:"analyse upload scan score report tool" },
     { t:"The 20 factors, explained", u:P("factors.html"), d:"Every factor in plain English", k:"factors score letter formation spacing slant legibility" },
     { t:"Why handwriting matters", u:P("why-handwriting.html"), d:"The research, news & viral videos", k:"brain research cursive memory science feed" },
-    { t:"Blog", u:P("blog.html"), d:"Research notes & write-ups", k:"blog research posts arxiv reconstruction" },
-    { t:"Reconstructing handwriting from motion", u:P("blog-reconstructing-handwriting-from-motion.html"), d:"Blog \u00b7 touching vs hovering", k:"imu reconstruction trajectory mixture experts motion strokes" },
-    { t:"Writing without a screen", u:P("blog-writing-without-a-screen.html"), d:"Blog \u00b7 surface-free pens", k:"imu pen surface free cnn drift sensor fusion paper" },
-    { t:"Two views of a letter", u:P("blog-two-views-of-a-letter.html"), d:"Blog \u00b7 image + strokes", k:"recognition vlm image stroke ocr fusion online offline" },
-    { t:"Handwriting as a health signal", u:P("blog-handwriting-as-a-health-signal.html"), d:"Blog \u00b7 dysgraphia & Parkinson's", k:"dysgraphia parkinson micrographia health motor screening kids" },
-    { t:"Reading a hand it has never seen", u:P("blog-reading-a-hand-its-never-seen.html"), d:"Blog \u00b7 domain adaptation", k:"domain adaptation generalise writer covariate shift transfer" },
+    { t:"Blog", u:P("blog/index.html"), d:"Research notes & write-ups", k:"blog research posts arxiv reconstruction" },
+    { t:"Reconstructing handwriting from motion", u:P("blog/reconstructing-handwriting-from-motion.html"), d:"Blog \u00b7 touching vs hovering", k:"imu reconstruction trajectory mixture experts motion strokes" },
+    { t:"Writing without a screen", u:P("blog/writing-without-a-screen.html"), d:"Blog \u00b7 surface-free pens", k:"imu pen surface free cnn drift sensor fusion paper" },
+    { t:"Two views of a letter", u:P("blog/two-views-of-a-letter.html"), d:"Blog \u00b7 image + strokes", k:"recognition vlm image stroke ocr fusion online offline" },
+    { t:"Handwriting as a health signal", u:P("blog/handwriting-as-a-health-signal.html"), d:"Blog \u00b7 dysgraphia & Parkinson's", k:"dysgraphia parkinson micrographia health motor screening kids" },
+    { t:"Reading a hand it has never seen", u:P("blog/reading-a-hand-its-never-seen.html"), d:"Blog \u00b7 domain adaptation", k:"domain adaptation generalise writer covariate shift transfer" },
     { t:"Resources", u:P("resources.html"), d:"Guides, tools & the science", k:"resources guides tools downloads sample practice faq" },
     { t:"Questions & answers (FAQ)", u:P("faq.html"), d:"Honest answers about the pen & analyser", k:"faq questions privacy scripts pen scoring answers help" },
     { t:"Practice sheets", u:ROOT+"vahini-practice-sheet.html", d:"Printable drill sheets", k:"practice sheet drill print ruled exercises" },

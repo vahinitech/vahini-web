@@ -81,8 +81,8 @@ async function main() {
     {
       const page = await ctx.newPage();
       await checkPage(page, `${BASE}/site/index.html`, null, 'home page loads');
-      await checkPage(page, `${BASE}/site/blog.html`, null, 'blog index loads');
-      await checkPage(page, `${BASE}/site/blog-history-of-20-factors.html`, '20 handwriting factors', 'blog post loads');
+      await checkPage(page, `${BASE}/site/blog/index.html`, null, 'blog index loads');
+      await checkPage(page, `${BASE}/site/blog/history-of-20-factors.html`, '20 handwriting factors', 'blog post loads');
       await page.close();
     }
 

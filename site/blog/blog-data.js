@@ -12,7 +12,7 @@
   global.VahiniPosts = [
     {
       slug: "history-of-20-factors",
-      url: "blog-history-of-20-factors.html",
+      url: "history-of-20-factors.html",
       cat: "explainer",
       title: "A short, honest history of the 20 handwriting factors (and how computer vision measures each one)",
       date: "Jul 2026", read: "12 min read", author: "Malli Kosuri",
@@ -20,7 +20,7 @@
     },
     {
       slug: "how-vahini-reads-handwriting",
-      url: "blog-how-vahini-reads-handwriting.html",
+      url: "how-vahini-reads-handwriting.html",
       cat: "technology",
       title: "How Vahini reads handwriting: from a photo to a 20-factor report",
       date: "Jun 2026", read: "7 min read", author: "Malli Kosuri",
@@ -28,7 +28,7 @@
     },
     {
       slug: "ai-detecting-learning-disabilities",
-      url: "blog-ai-detecting-learning-disabilities.html",
+      url: "ai-detecting-learning-disabilities.html",
       cat: "health",
       title: "How AI is learning to spot learning disabilities early",
       date: "Jun 2026", read: "8 min read", author: "Vishnu Kosuri",
@@ -36,7 +36,7 @@
     },
     {
       slug: "vahini-and-autism",
-      url: "blog-vahini-and-autism.html",
+      url: "vahini-and-autism.html",
       cat: "health",
       title: "How Vahini can support autistic students who write",
       date: "Jun 2026", read: "7 min read", author: "Malli Kosuri",
@@ -44,7 +44,7 @@
     },
     {
       slug: "startup-pitch-deck-guide",
-      url: "blog-startup-pitch-deck-guide.html",
+      url: "startup-pitch-deck-guide.html",
       cat: "explainer",
       title: "The startup pitch deck guide (with a free template)",
       date: "Jun 2026", read: "8 min read", author: "Vishnu Kosuri",
@@ -52,7 +52,7 @@
     },
     {
       slug: "one-imu-or-two",
-      url: "blog-one-imu-or-two.html",
+      url: "one-imu-or-two.html",
       cat: "technology",
       title: "One IMU or two? Why dual-IMU sensing is more accurate",
       date: "Jun 2026", read: "6 min read", author: "Malli Kosuri",
@@ -60,7 +60,7 @@
     },
     {
       slug: "reading-pressure",
-      url: "blog-reading-pressure.html",
+      url: "reading-pressure.html",
       cat: "signals",
       title: "Reading pressure from an analog force sensor",
       date: "Jun 2026", read: "6 min read", author: "Vishnu Kosuri",
@@ -68,7 +68,7 @@
     },
     {
       slug: "reading-tilt",
-      url: "blog-reading-tilt.html",
+      url: "reading-tilt.html",
       cat: "signals",
       title: "Reading pen tilt from an IMU",
       date: "Jun 2026", read: "6 min read", author: "Malli Kosuri",
@@ -76,7 +76,7 @@
     },
     {
       slug: "velocity-signal",
-      url: "blog-velocity-signal.html",
+      url: "velocity-signal.html",
       cat: "signals",
       title: "Velocity: the speed signal inside every stroke",
       date: "Jun 2026", read: "5 min read", author: "Vishnu Kosuri",
@@ -84,7 +84,7 @@
     },
     {
       slug: "motion-to-strokes",
-      url: "blog-motion-to-strokes.html",
+      url: "motion-to-strokes.html",
       cat: "signals",
       title: "Motion: turning movement into strokes",
       date: "Jun 2026", read: "6 min read", author: "Malli Kosuri",
@@ -92,7 +92,7 @@
     },
     {
       slug: "rhythm-of-writing",
-      url: "blog-rhythm-of-writing.html",
+      url: "rhythm-of-writing.html",
       cat: "signals",
       title: "Rhythm: the music of fluent handwriting",
       date: "Jun 2026", read: "5 min read", author: "Vishnu Kosuri",
@@ -100,7 +100,7 @@
     },
     {
       slug: "intent-pen-up-down",
-      url: "blog-intent-pen-up-down.html",
+      url: "intent-pen-up-down.html",
       cat: "signals",
       title: "Intent: knowing when the pen is really writing",
       date: "Jun 2026", read: "5 min read", author: "Malli Kosuri",
@@ -108,7 +108,7 @@
     },
     {
       slug: "the-magnetometer",
-      url: "blog-the-magnetometer.html",
+      url: "the-magnetometer.html",
       cat: "technology",
       title: "The magnetometer: direction, zeroing and a cleaner signal",
       date: "Jun 2026", read: "6 min read", author: "Vishnu Kosuri",
@@ -116,7 +116,7 @@
     },
     {
       slug: "streaming-sensors-over-ble",
-      url: "blog-streaming-sensors-over-ble.html",
+      url: "streaming-sensors-over-ble.html",
       cat: "technology",
       title: "Streaming sensors over BLE: packets, fragmentation and flow",
       date: "Jun 2026", read: "7 min read", author: "Malli Kosuri",
@@ -124,7 +124,7 @@
     },
     {
       slug: "reconstructing-handwriting-from-motion",
-      url: "blog-reconstructing-handwriting-from-motion.html",
+      url: "reconstructing-handwriting-from-motion.html",
       cat: "research",
       title: "Reconstructing handwriting from motion alone",
       date: "Jun 2026", read: "6 min read", author: "Vishnu Kosuri",
@@ -132,7 +132,7 @@
     },
     {
       slug: "writing-without-a-screen",
-      url: "blog-writing-without-a-screen.html",
+      url: "writing-without-a-screen.html",
       cat: "technology",
       title: "Writing without a screen: surface-free pens",
       date: "May 2026", read: "5 min read", author: "Malli Kosuri",
@@ -140,7 +140,7 @@
     },
     {
       slug: "two-views-of-a-letter",
-      url: "blog-two-views-of-a-letter.html",
+      url: "two-views-of-a-letter.html",
       cat: "research",
       title: "Two views of a letter: the image and the strokes",
       date: "Apr 2026", read: "6 min read", author: "Vishnu Kosuri",
@@ -148,7 +148,7 @@
     },
     {
       slug: "handwriting-as-a-health-signal",
-      url: "blog-handwriting-as-a-health-signal.html",
+      url: "handwriting-as-a-health-signal.html",
       cat: "health",
       title: "Handwriting as an early health signal",
       date: "Mar 2026", read: "7 min read", author: "Malli Kosuri",
@@ -156,7 +156,7 @@
     },
     {
       slug: "reading-a-hand-its-never-seen",
-      url: "blog-reading-a-hand-its-never-seen.html",
+      url: "reading-a-hand-its-never-seen.html",
       cat: "research",
       title: "The hardest part: reading a hand it has never seen",
       date: "Feb 2026", read: "5 min read", author: "Vishnu Kosuri",
