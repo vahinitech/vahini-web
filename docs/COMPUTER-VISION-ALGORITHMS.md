@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. All rights reserved. -->
+
 # Computer Vision Algorithms in Vahini — How Each One Works
 
 A plain-language walkthrough of **every computer-vision (CV) algorithm** the Vahini engine uses,

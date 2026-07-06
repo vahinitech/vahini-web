@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. All rights reserved. -->
+
 # Tests
 
 > **`smoke.test.html`, `print-vs-handwriting.test.html` and

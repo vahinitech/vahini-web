@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+   © 2026 Vahini Technologies. All rights reserved. */
 "use strict";
 
 const fsp = require("node:fs/promises");

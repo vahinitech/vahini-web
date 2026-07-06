@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. All rights reserved. -->
+
 # Vahini — Vision & OCR Models: Options, Accuracy & Recommendation
 
 *Plain-language comparison of the recognition engines Vahini can use, what each is good at,

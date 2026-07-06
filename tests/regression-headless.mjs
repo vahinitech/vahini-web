@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+   © 2026 Vahini Technologies. All rights reserved. */
 // STALE as of analyser v0.3: drives tests/print-vs-handwriting.test.html,
 // which calls the removed in-browser scoring engine. See that file's header
 // comment. Not wired into package.json's test:all or CI until rewritten.

@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+# © 2026 Vahini Technologies. All rights reserved.
 # Vahini CI — runs on every commit (push + PR).
 #  - e2e            : headless Chrome — marketing pages load, analyser smoke check.
 #  - e2e-recognition: full stack WITH the OCR backend; proves server recognition

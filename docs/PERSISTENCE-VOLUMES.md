@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. All rights reserved. -->
+
 # Persistence Volumes (Uploads, Reports, Feedback)
 
 This setup stores analyser artifacts on host-mounted folders so data survives container restarts.

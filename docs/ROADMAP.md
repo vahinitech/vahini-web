@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. All rights reserved. -->
+
 # Vahini — Roadmap, Status & "Human Reading" Capability Matrix
 
 *A single place that records: what the report does **today**, how much of it is a "human reading

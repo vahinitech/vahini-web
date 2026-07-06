@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+# © 2026 Vahini Technologies. All rights reserved.
 # Vahini — LOCAL full-stack test compose (front-end + Python OCR + Node persist).
 #
 # Brings up the same 3-service topology as production, but with named volumes and

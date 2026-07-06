@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. All rights reserved. -->
+
 # Vahini 20-Factor Engine — Architecture & Algorithms
 
 ### A plain-language guide to how Vahini reads handwriting
@@ -771,7 +774,7 @@ frequency (C1); age/grade norm bands once coach calibration data exists; behavio
 (hesitant / impulsive / fatigue) **only after** real IMU data, always labelled indicators — never
 diagnosis; script/language expansion (Hindi, Telugu, Tamil, Kannada).
 
-See also **`Computer Vision Algorithms.md`** — a learner-friendly walkthrough of every CV algorithm
+See also **`COMPUTER-VISION-ALGORITHMS.md`** — a learner-friendly walkthrough of every CV algorithm
 used (what it is, why, and how it works step by step).
 
 ---

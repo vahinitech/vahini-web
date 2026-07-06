@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. All rights reserved. -->
+
 # Vahini Stall Demo — Local Setup & Run Guide
 
 **Event:** stall demo on **June 13th** · **Goal:** a visitor writes on a sheet, you photograph it,

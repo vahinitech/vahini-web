@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. All rights reserved. -->
+
 # Promo video source (Remotion scenes)
 
 These are Remotion React scene-definition scripts used to render Vahini's

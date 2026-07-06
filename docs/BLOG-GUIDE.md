@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. All rights reserved. -->
+
 # Writing and publishing a blog post
 
 This is the step-by-step for adding a post to the Vahini blog. Every post is a

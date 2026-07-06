@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+   © 2026 Vahini Technologies. All rights reserved. */
 import { spawn } from 'node:child_process';
 import { setTimeout as delay } from 'node:timers/promises';
 

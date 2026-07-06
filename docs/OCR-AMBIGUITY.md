@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. All rights reserved. -->
+
 # Vahini — OCR for Ambiguous Handwriting (CRNN, TrOCR, LM decoding)
 
 ### How Vahini reads hard, non-cursive letters — and why recognition is *assistive*, not the score
