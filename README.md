@@ -13,6 +13,9 @@ distribution.
 > latest release tag; it is licensed under AGPL-3.0 (see
 > [analyser/LICENSE](analyser/LICENSE)). The submodule's own `backend/` and
 > `frontend/` serve themselves — this repo never copies or vendors its files.
+> Its architecture, CV/OCR algorithm and roadmap docs live in
+> [`analyser/docs/`](analyser/docs/), not in this repo's `docs/` — don't
+> duplicate them here, they'll just go stale (this repo doesn't own that code).
 
 ---
 
@@ -22,7 +25,7 @@ distribution.
 site/         marketing website + blog (static; deploy this folder)
 analyser/     git submodule -> vahinitech/20factor-analyser (AGPL-3.0), served at /analyser
 deploy/       nginx vhosts + release scripts
-docs/         architecture, deploy, CV/OCR notes, blog guide
+docs/         this site's own deploy/persistence/blog/stall-demo docs
 services/     the persist API (uploads/reports/feedback)
 docker-compose.yml   local full stack (web + analyser OCR + persist)
 ```
