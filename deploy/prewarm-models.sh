@@ -33,6 +33,12 @@ echo "[prewarm] environment=${ENV_NAME}"
 echo "[prewarm] compose=${COMPOSE_FILE}"
 echo "[prewarm] langs=${LANGS_RAW}"
 
+git -C "${ROOT_DIR}" submodule update --init --recursive -- analyser
+if [[ ! -f "${ROOT_DIR}/analyser/deployment/Dockerfile" ]]; then
+  echo "[prewarm] ERROR: analyser/deployment/Dockerfile missing -- submodule not checked out." >&2
+  exit 1
+fi
+
 docker compose -f "${COMPOSE_FILE}" up -d analyser
 
 echo "[prewarm] running warmup_models.py in analyser container"

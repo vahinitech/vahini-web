@@ -11,9 +11,13 @@ This project now supports a clean two-step rollout:
 
 The reverse proxy (Hestia/nginx on host) should terminate TLS and proxy to these localhost ports.
 
-`analyser/` is a git submodule; make sure the server's checkout has it populated
-(`git submodule update --init` after pulling) before running `release.sh` --
-`docker compose build` fails on an empty submodule directory.
+`analyser/` is a git submodule (pinned to a `vahinitech/20factor-analyser`
+release tag). `deploy/release.sh` and `deploy/prewarm-models.sh` both run
+`git submodule update --init --recursive` before touching Docker, so a plain
+`git pull` on the server (which does **not** fetch submodule content on its
+own) is enough -- you don't need to run the submodule command by hand. Both
+scripts fail fast with a clear error if `analyser/deployment/Dockerfile` is
+still missing afterwards (network/auth issue reaching GitHub).
 
 ## Files
 
