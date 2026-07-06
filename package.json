@@ -5,8 +5,6 @@
   "description": "Smoke tests for the Vahini static site",
   "scripts": {
     "test": "node tests/smoke-http.mjs",
-    "test:regression:serve": "./node_modules/.bin/http-server . -p 4173 -c-1",
-    "test:regression:headless": "node tests/regression-headless.mjs",
     "test:e2e": "node tests/e2e-pages.mjs",
     "test:recognition": "node tests/e2e-recognition.mjs",
     "test:all": "node tests/e2e-pages.mjs",
