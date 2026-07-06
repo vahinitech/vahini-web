@@ -21,6 +21,8 @@ tests/*
 samples/
 archive/
 screenshots/
+# Remotion video source (not served, no runtime dependency on the site).
+site/video-src/
 uploads/
 shots/
 scraps/
