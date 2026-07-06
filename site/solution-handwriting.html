@@ -13,9 +13,6 @@
 <link rel="stylesheet" href="theme.css">
 <link rel="stylesheet" href="site.css">
 <style>
-.sh-vframe{position:relative; width:100%; max-width:920px; margin:24px auto 0; aspect-ratio:16/9; border-radius:18px;
-  overflow:hidden; box-shadow:var(--shadow-2); border:1px solid var(--rule); background:#1A1E24;}
-.sh-vframe iframe{position:absolute; inset:0; width:100%; height:100%; border:0; display:block;}
 .sh-scorecard{border:1px solid var(--rule); border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-2); background:#fff; display:block;}
 .sh-scorecard img{width:100%; height:auto; display:block;}
 .sh-cap{margin-top:12px; font-size:13px; color:var(--hint); display:flex; align-items:center; gap:7px;}
@@ -33,7 +30,7 @@
       <h1 class="reveal" data-d="1">Find exactly where your handwriting breaks down.</h1>
       <p class="lede reveal" data-d="2">Upload one handwritten page and get a 20-factor analysis with personalised exercises, not the same worksheet for everyone. Across five Indic scripts, in minutes.</p>
       <div class="phero__cta reveal" data-d="3">
-        <a class="btn btn--crimson btn--lg" href="../analyser/Vahini%20Analyser.html">See the Pen in Action
+        <a class="btn btn--crimson btn--lg" href="../analyser/analyser.html">See the Pen in Action
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         <a class="btn btn--ghost btn--lg" href="#how" data-nav>How it works</a>
       </div>
@@ -93,18 +90,7 @@
     </div>
   </section>
 
-  <section class="block" id="how" data-screen-label="Why it matters">
-    <div class="wrap">
-      <div class="block__head reveal"><p class="eyebrow">See why · 60 seconds</p>
-        <h2 style="margin-top:14px;">What “messy” is actually hiding.</h2>
-        <p class="body" style="margin-top:14px; max-width:640px;">An untidy page is never just one problem. Watch how the same messy word splits into a handful of specific, fixable things, which is exactly what the analyser measures for you.</p></div>
-      <div class="sh-vframe reveal" data-d="1">
-        <iframe src="../analyser/static/Vahini%20Why%20Messy.html" title="What messy handwriting is hiding" loading="lazy"></iframe>
-      </div>
-    </div>
-  </section>
-
-  <section class="block block--alt" data-screen-label="How it works">
+  <section class="block block--alt" id="how" data-screen-label="How it works">
     <div class="wrap">
       <div class="block__head reveal"><p class="eyebrow">How it works</p><h2 style="margin-top:14px;">Three steps, one page.</h2></div>
       <div class="steps-row">
@@ -122,11 +108,11 @@
         <h2 style="margin-top:14px;">A factor-by-factor scorecard you can act on.</h2>
         <p class="body" style="margin-top:18px;">A clear scorecard with a plain-language summary, the priority fixes, and a practice set that updates as you go. Built for the individual writer who wants to actually improve, not a class report.</p>
         <div class="phero__cta" style="margin-top:26px;">
-          <a class="btn btn--dark" href="../analyser/Vahini%20Analyser.html">See the Pen in Action</a>
+          <a class="btn btn--dark" href="../analyser/analyser.html">See the Pen in Action</a>
         </div>
       </div>
       <div class="reveal" data-d="2">
-        <a class="sh-scorecard" href="../analyser/Vahini%20Analyser.html" aria-label="Open the analyser to score your own handwriting">
+        <a class="sh-scorecard" href="../analyser/analyser.html" aria-label="Open the analyser to score your own handwriting">
           <img src="assets/sample-scorecard.png" alt="A real Vahini one-page scorecard: an overall 55 out of 100, four category bars (Structure 56, Spatial 49, Dynamics, Style & Readability 63), top strengths, focus areas and three prescribed drills." width="1366" height="1490" loading="lazy">
         </a>
         <p class="sh-cap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>An actual scorecard from one uploaded page, page 2 of the full report.</p>
@@ -139,7 +125,7 @@
       <h2>It's live today, and free to try.</h2>
       <p>Scan a page and see your 20-factor breakdown. The pen adds the live motion layer later; you don't need it to start.</p>
       <div class="bigcta__row">
-        <a class="btn btn--crimson btn--lg" href="../analyser/Vahini%20Analyser.html">See the Pen in Action</a>
+        <a class="btn btn--crimson btn--lg" href="../analyser/analyser.html">See the Pen in Action</a>
         <a class="btn btn--ghost btn--lg" href="reach.html" data-nav>Partner with us</a>
       </div>
     </div>

@@ -3,7 +3,7 @@ services:
     container_name: vahini-analyser-stag
     build:
       context: ../analyser
-      dockerfile: server/Dockerfile.analyser
+      dockerfile: deployment/Dockerfile
     image: vahini/analyser:stag
     restart: unless-stopped
     environment:

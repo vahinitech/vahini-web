@@ -12,12 +12,6 @@
 <script src="theme.config.js"></script>
 <link rel="stylesheet" href="theme.css">
 <link rel="stylesheet" href="site.css">
-<style>
-.ocr-frame{position:relative; width:100%; max-width:1100px; margin:34px auto 0; height:clamp(580px,82vh,840px);
-  border-radius:18px; overflow:hidden; box-shadow:var(--shadow-2); border:1px solid var(--rule); background:var(--ivory-2);}
-.ocr-frame iframe{position:absolute; inset:0; width:100%; height:100%; border:0; display:block;}
-.ocr-open{display:flex; justify-content:center; margin-top:18px;}
-</style>
 </head>
 <body class="booting">
 <div id="site-nav"></div>
@@ -30,7 +24,7 @@
       <h1 class="reveal" data-d="1">A free tool that reads handwriting back to you.</h1>
       <p class="lede reveal" data-d="2">Paste any page and watch it turn into text, including messy, <strong>handwritten Indic script</strong>, where generic OCR gives up. We don’t sell this as a product; it’s a free utility that shows what our handwriting AI can do, and a friendly front door to the pen and analyser.</p>
       <div class="phero__cta reveal" data-d="3">
-        <a class="btn btn--crimson btn--lg" href="#demo" data-nav>Try the live demo
+        <a class="btn btn--crimson btn--lg" href="../analyser/analyser.html">Try the live demo
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         <a class="btn btn--ghost btn--lg" href="product.html" data-nav>The pen</a>
       </div>
@@ -82,25 +76,6 @@
           <p>It reads the page back as text, side by side, free, in seconds. No account, nothing to buy. If they want more, the pen and analyser are one click away.</p>
           <div class="mk-flow"><b>Paste a page</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg><b>Read it back</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg><b>Copy it</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg><b class="is-out">Meet the pen</b></div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="block" id="demo" data-screen-label="Live demo">
-    <div class="wrap">
-      <div class="block__head reveal"><p class="eyebrow">Live demo · try it now</p>
-        <h2 style="margin-top:14px;">Paste a page. Watch it become text.</h2>
-        <p class="body" style="margin-top:14px; max-width:660px;">Drop or paste a handwritten page, ideally in an Indic script, and the engine reads it side-by-side with your image. This is the same vision layer that powers the analyser.</p></div>
-      <div class="ocr-frame reveal" data-d="1">
-        <iframe src="../analyser/static/Vahini%20OCR.html" title="Vahini OCR & Vision live demo" loading="lazy"></iframe>
-      </div>
-      <div class="ocr-open reveal" data-d="1">
-        <a class="btn btn--ghost" href="../analyser/static/Vahini%20OCR.html" target="_blank" rel="noopener">Open the demo full screen
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-8 8M10 20H4v-6"/></svg></a>
-      </div>
-      <div class="note-strip reveal" data-d="1">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
-        <p><strong>In development.</strong> This is a working demo of the vision engine. Accuracy, multi-page PDFs and batch processing are being built out, tell us what your documents look like and we'll tune for them.</p>
       </div>
     </div>
   </section>

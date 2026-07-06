@@ -1,10 +1,13 @@
 # Vahini CI — runs on every commit (push + PR).
-#  - python-tests   : server logic without the heavy paddle/torch install.
-#  - e2e            : headless Chrome — pages load, offline report (20 factors), PDF.
+#  - e2e            : headless Chrome — marketing pages load, analyser smoke check.
 #  - e2e-recognition: full stack WITH the OCR backend; proves server recognition
 #                     works on a sample. Kept to ~3 min on warm runs via Docker
 #                     layer cache (paddle never re-installs), plus Playwright/npm
 #                     caches and English-only model warm-up.
+#
+# The analyser is a submodule (vahinitech/20factor-analyser, see .gitmodules) --
+# its own unit/lint/CI live in that repo. This workflow only checks the
+# integration between the site and whatever analyser tag is pinned here.
 name: CI
 
 on:
@@ -16,31 +19,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  python-tests:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: pip
-      - name: Install light server deps (no paddle/torch)
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r analyser/server/requirements-core.txt
-      - name: Syntax-check server modules
-        run: python -m py_compile analyser/server/ppocr-server.py analyser/server/ocr_backends.py analyser/server/classify.py analyser/server/analyser-ocr-server.py analyser/server/warmup_models.py
-      - name: Run server unit + integration tests
-        run: |
-          python -m unittest -v \
-            analyser.server.tests.test_backends_classify \
-            analyser.server.tests.test_server_pipeline \
-            analyser.server.tests.test_regression_functional
-
   e2e:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: true
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
@@ -53,17 +37,8 @@ jobs:
           restore-keys: playwright-${{ runner.os }}-
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - name: Verify the packed bundle is in sync with src/
-        run: |
-          python3 analyser/build_bundle.py
-          if ! git diff --quiet -- analyser/scripts/core/engine.bundle.js; then
-            echo "::error::engine.bundle.js is stale. Run 'python analyser/build_bundle.py' and commit it."
-            exit 1
-          fi
-      - name: Headless page + report + PDF regression
+      - name: Headless page + PDF regression
         run: npm run test:e2e
-      - name: Print/handwriting headless checks
-        run: npm run test:regression:headless
 
   # Full stack WITH OCR. The slow part (paddle pip install) is cached as a Docker
   # layer via the GHA cache backend, so warm runs skip it entirely (~3 min).
@@ -71,12 +46,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: true
       - uses: docker/setup-buildx-action@v3
       - name: Build analyser image (cached paddle layer)
         uses: docker/build-push-action@v6
         with:
           context: ./analyser
-          file: ./analyser/server/Dockerfile.analyser
+          file: ./analyser/deployment/Dockerfile
           tags: vahini/analyser:local
           load: true
           cache-from: type=gha,scope=analyser

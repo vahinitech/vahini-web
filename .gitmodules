@@ -1,0 +1,3 @@
+[submodule "analyser"]
+	path = analyser
+	url = https://github.com/vahinitech/20factor-analyser.git

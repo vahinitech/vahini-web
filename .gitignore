@@ -6,7 +6,6 @@ samples/
 
 # Dead / superseded duplicates kept only for local reference, not for release.
 archive/
-analyser/archive/
 screenshots/
 
 # Scratch / working files (not part of the deployable product)

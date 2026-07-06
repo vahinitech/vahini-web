@@ -9,7 +9,7 @@
     "test:regression:headless": "node tests/regression-headless.mjs",
     "test:e2e": "node tests/e2e-pages.mjs",
     "test:recognition": "node tests/e2e-recognition.mjs",
-    "test:all": "node tests/regression-headless.mjs && node tests/e2e-pages.mjs",
+    "test:all": "node tests/e2e-pages.mjs",
     "test:regression:install": "./node_modules/.bin/playwright install chromium"
   },
   "devDependencies": {

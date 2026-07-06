@@ -1,12 +1,20 @@
 # Tests
 
+> **`smoke.test.html`, `print-vs-handwriting.test.html` and
+> `regression-headless.mjs` are currently STALE.** They drive the in-browser
+> `VahiniEngine`/`VahiniFactors`/`VahiniReport` scoring API that the
+> `analyser/` submodule removed as of its v0.3 release (scoring now runs
+> server-side — see `analyser/docs/BUILD.md`). They are not wired into
+> `npm run test:all` or CI until rewritten against the live `/report-python`
+> API. See each file's header comment for detail.
+
 Browser-run smoke tests — no toolchain required. Open the file in a modern browser
 (or the preview) and read the pass/fail panel.
 
 | File | Checks |
 |---|---|
-| `smoke.test.html` | Loads the **packed engine bundle**, runs the demo analysis, and asserts the engine's public API, a rendered multi-page report, **no duplicate pages**, and that the **validity gate** + Dynamics handling behave in photo mode. |
-| `print-vs-handwriting.test.html` | Mixed printed+handwritten filtering and report leakage checks using real local sample images from `samples/`. |
+| `smoke.test.html` *(stale)* | Loads the **packed engine bundle**, runs the demo analysis, and asserts the engine's public API, a rendered multi-page report, **no duplicate pages**, and that the **validity gate** + Dynamics handling behave in photo mode. |
+| `print-vs-handwriting.test.html` *(stale)* | Mixed printed+handwritten filtering and report leakage checks using real local sample images from `samples/`. |
 
 ## How to run
 
@@ -43,38 +51,37 @@ Run the same sample-image checks in headless Chromium and print PASS/FAIL in ter
 These are intentionally lightweight, dependency-free regression checks for the highest-risk
 report behaviours (the Fix-Spec items). Extend by adding more `assert(...)` calls in the file.
 
-## Full headless E2E (`e2e-pages.mjs`)
+## Headless marketing-site check (`e2e-pages.mjs`)
 
-End-to-end Chrome regression that drives the **real** pages and asserts the whole
-journey, fully offline (no Python/paddle backend needed):
-
-| Check | What it proves |
-|---|---|
-| Home / blog index / blog post load | marketing pages render, no page errors |
-| Analyser loads + engine wired | the packed bundle initialises |
-| Upload accepted | a real image upload enables Analyse |
-| Report generated | the pipeline completes on-device |
-| 20 distinct factors + 20-chip map | the report is complete and correct |
-| Scores varied | factors differ (not a stuck/placeholder report) |
-| Recognition note present | the trust/assistive note ships in the report |
-| PDF save works | `page.pdf()` produces a real PDF |
+Headless Chrome regression that drives the marketing pages fully offline (no
+Python/paddle backend needed): home, blog index, a blog post.
 
 Run it:
 
 ```
 npm run test:regression:install   # once, downloads Chromium
-npm run test:e2e                  # the full journey
-npm run test:all                  # e2e + print/handwriting checks
+npm run test:e2e                  # marketing pages load, no errors
+npm run test:all                  # same as test:e2e today
 ```
 
-Fixture: `tests/fixtures/handwriting-sample.jpg` (a committed real-handwriting page).
+## Live-backend recognition check (`e2e-recognition.mjs`)
+
+Drives the real analyser app against a running stack (`docker compose up -d
+--wait`) and asserts a report renders and shows recognition results for
+`tests/fixtures/handwriting-sample.jpg`:
+
+```
+VAHINI_BASE_URL=http://localhost:8080 npm run test:recognition
+```
 
 ## Continuous integration
 
 `.github/workflows/ci.yml` runs on **every push and pull request**:
 
-- **python-tests** — server logic (pluggable OCR backends, printed/handwriting
-  classifier, factor pipeline, PDF/passage alignment) on the light deps only
-  (engines are lazy-imported, so no paddle/torch needed).
-- **e2e** — installs Chromium, verifies the packed bundle is in sync with
-  `analyser/src/`, then runs `test:e2e` and `test:regression:headless`.
+- **e2e** — installs Chromium, runs `test:e2e` against the marketing site.
+- **e2e-recognition** — builds the analyser submodule's image, brings up the
+  full Docker stack, and runs `test:recognition` against it.
+
+The analyser submodule (`vahinitech/20factor-analyser`) has its own CI for its
+internal unit/lint tests; this repo's CI only covers the site/analyser
+integration.

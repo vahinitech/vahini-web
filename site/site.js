@@ -14,7 +14,7 @@
       analyser pages in /analyser. */
   var BASE = (document.documentElement.getAttribute("data-site-base") || "");
   function P(h){ return BASE + h; }
-    var ANALYSER = (BASE ? "Vahini%20Analyser.html" : "../analyser/Vahini%20Analyser.html");
+    var ANALYSER = (BASE ? "analyser.html" : "../analyser/analyser.html");
 
   /* ===== FEEDBACK / AUDIENCE ENDPOINT (one place, loads on every page) =====
      Paste your Google Apps Script web-app URL between the quotes to receive
@@ -60,7 +60,7 @@
   /* lightweight client-side search index (the site is growing) */
   var ROOT = (BASE ? "static/" : "../analyser/static/");
   var SEARCH = [
-    { t:"The analyser", u:(BASE?"Vahini%20Analyser.html":"../analyser/Vahini%20Analyser.html"), d:"Upload a page, get your 20-factor scorecard", k:"analyse upload scan score report tool" },
+    { t:"The analyser", u:(BASE?"analyser.html":"../analyser/analyser.html"), d:"Upload a page, get your 20-factor scorecard", k:"analyse upload scan score report tool" },
     { t:"The 20 factors, explained", u:P("factors.html"), d:"Every factor in plain English", k:"factors score letter formation spacing slant legibility" },
     { t:"Why handwriting matters", u:P("why-handwriting.html"), d:"The research, news & viral videos", k:"brain research cursive memory science feed" },
     { t:"Blog", u:P("blog.html"), d:"Research notes & write-ups", k:"blog research posts arxiv reconstruction" },
@@ -71,11 +71,7 @@
     { t:"Reading a hand it has never seen", u:P("blog-reading-a-hand-its-never-seen.html"), d:"Blog \u00b7 domain adaptation", k:"domain adaptation generalise writer covariate shift transfer" },
     { t:"Resources", u:P("resources.html"), d:"Guides, tools & the science", k:"resources guides tools downloads sample practice faq" },
     { t:"Questions & answers (FAQ)", u:P("faq.html"), d:"Honest answers about the pen & analyser", k:"faq questions privacy scripts pen scoring answers help" },
-    { t:"Sample text to copy", u:ROOT+"Vahini%20Sample%20Text.html", d:"A reference passage to write out", k:"sample text passage print copy practice" },
-    { t:"Practice sheets", u:ROOT+"Vahini%20Practice%20Sheet.html", d:"Printable drill sheets", k:"practice sheet drill print ruled exercises" },
-    { t:"User guides", u:ROOT+"Vahini%20User%20Guides.html", d:"How to capture & read a report", k:"guide help how to capture report" },
-    { t:"Accuracy & document types", u:ROOT+"Vahini%20Accuracy%20%26%20Document%20Types.html", d:"What the engine reads well", k:"accuracy document types limits printed handwritten" },
-    { t:"FAQ", u:ROOT+"Vahini%20FAQ.html", d:"Common questions answered", k:"faq questions privacy scripts pen scoring" },
+    { t:"Practice sheets", u:ROOT+"vahini-practice-sheet.html", d:"Printable drill sheets", k:"practice sheet drill print ruled exercises" },
     { t:"Handwriting analysis", u:P("solution-handwriting.html"), d:"The market, live today", k:"handwriting analysis solution scorecard exercises market" },
     { t:"OCR & Vision", u:P("solution-ocr-vision.html"), d:"Indic handwriting engine, quality not just text", k:"ocr vision indic handwriting recognition engine quality legibility telugu hindi tamil kannada api dataset licensing" },
     { t:"The Pen (Battu)", u:P("product.html"), d:"Dual-IMU sensing on any paper", k:"pen battu hardware imu sensor pre-order" },

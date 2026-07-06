@@ -2,13 +2,13 @@
 #
 #   docker build -t vahini-site .
 #   docker run --rm -p 8080:80 vahini-site
-#   open http://localhost:8080            (marketing site)
-#   open http://localhost:8080/Vahini%20Analyser.html   (the analyser app)
+#   open http://localhost:8080                       (marketing site)
+#   open http://localhost:8080/analyser/analyser.html (the analyser app)
 #
-# The image contains only the deployable site (see .dockerignore): the
-# marketing site in /site, the root Analyser app + printable HTML deliverables,
-# the packed engine bundle, and shared CSS/JS. Source (src/), docs, tests and
-# scratch folders are excluded.
+# The image contains only the deployable marketing site in /site (see
+# .dockerignore). The analyser app (frontend + API) is a separate submodule
+# service (see docker-compose.yml) that this image never bundles; nginx just
+# reverse-proxies /analyser, /ocr, /report-python and /analyze-vl to it.
 
 FROM nginx:1.27-alpine
 

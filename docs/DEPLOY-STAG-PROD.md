@@ -8,6 +8,10 @@ This project now supports a clean two-step rollout:
 
 The reverse proxy (Hestia/nginx on host) should terminate TLS and proxy to these localhost ports.
 
+`analyser/` is a git submodule; make sure the server's checkout has it populated
+(`git submodule update --init` after pulling) before running `release.sh` --
+`docker compose build` fails on an empty submodule directory.
+
 ## Files
 
 - `deploy/docker-compose.stag.yml`
@@ -28,7 +32,7 @@ Verify on server:
 
 ```bash
 curl -I http://127.0.0.1:3016/site/index.html
-curl -I http://127.0.0.1:3016/analyser/Vahini%20Analyser.html
+curl -I http://127.0.0.1:3016/analyser/analyser.html
 curl http://127.0.0.1:3016/ocr/health
 ```
 
@@ -39,7 +43,7 @@ Apply host nginx vhost using `deploy/stag.vahinitech.com.nginx.conf` and reload 
 Validate these before cutover:
 
 - Home page, product pages, blog pages
-- `analyser/Vahini Analyser.html`
+- `analyser/analyser.html`
 - Asset links and cache headers
 - Browser console errors
 
@@ -57,7 +61,7 @@ Verify:
 
 ```bash
 curl -I http://127.0.0.1:3015/site/index.html
-curl -I http://127.0.0.1:3015/analyser/Vahini%20Analyser.html
+curl -I http://127.0.0.1:3015/analyser/analyser.html
 curl http://127.0.0.1:3015/ocr/health
 ```
 

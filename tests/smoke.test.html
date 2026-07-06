@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="only light">
 <title>Vahini — Engine Smoke Tests</title>
-<link rel="stylesheet" href="../analyser/styles/report.css">
+<link rel="stylesheet" href="../analyser/frontend/styles/report.css">
 <style>
   body{font-family:"Hanken Grotesk",-apple-system,"Segoe UI",Roboto,sans-serif;background:#EEEEEE;color:#222831;margin:0;padding:32px;}
   h1{font-family:"Spectral",Georgia,serif;font-size:26px;margin:0 0 4px;}
@@ -21,13 +21,19 @@
 </style>
 </head>
 <body>
+<!-- STALE as of analyser v0.3: the in-browser VahiniEngine/VahiniFactors/
+     VahiniForecast/VahiniReport.render API this test drives was removed
+     upstream -- scoring now runs server-side (see analyser/docs/BUILD.md).
+     This file will fail loudly (ReferenceError) until it is rewritten
+     against the new /report-python API; it is intentionally not wired into
+     package.json/CI so it doesn't block merges. -->
 <h1>Vahini — Engine Smoke Tests</h1>
 <div class="sub">Loads the packed <code>engine.bundle.js</code> and exercises the analysis engine + report. No toolchain required.</div>
 <div class="summary" id="summary">Running…</div>
 <ul id="results"></ul>
 <div id="host"></div>
 
-<script src="../analyser/scripts/core/engine.bundle.js"></script>
+<script src="../analyser/frontend/scripts/core/engine.bundle.js"></script>
 <script>
 (function(){
   var results=[], hardFail=false;

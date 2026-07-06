@@ -3,7 +3,7 @@ services:
     container_name: vahini-analyser-prod
     build:
       context: ../analyser
-      dockerfile: server/Dockerfile.analyser
+      dockerfile: deployment/Dockerfile
     image: vahini/analyser:prod
     restart: unless-stopped
     environment:

@@ -9,8 +9,10 @@ distribution.
 > The 20-factor analyser engine is **open source** under the GNU AGPL-3.0 and
 > lives in its own public repository:
 > **https://github.com/vahinitech/20factor-analyser**
-> The `analyser/` folder here is a copy used to serve the live app; it is
-> licensed under AGPL-3.0 (see [analyser/LICENSE](analyser/LICENSE)).
+> The `analyser/` folder here is a **git submodule** pinned to that repository's
+> latest release tag; it is licensed under AGPL-3.0 (see
+> [analyser/LICENSE](analyser/LICENSE)). The submodule's own `backend/` and
+> `frontend/` serve themselves — this repo never copies or vendors its files.
 
 ---
 
@@ -18,9 +20,10 @@ distribution.
 
 ```
 site/         marketing website + blog (static; deploy this folder)
-analyser/     copy of the open-source 20-factor app (AGPL-3.0), served at /analyser
+analyser/     git submodule -> vahinitech/20factor-analyser (AGPL-3.0), served at /analyser
 deploy/       nginx vhosts + release scripts
-docs/         architecture, build, CV/OCR notes, blog guide
+docs/         architecture, deploy, CV/OCR notes, blog guide
+services/     the persist API (uploads/reports/feedback)
 docker-compose.yml   local full stack (web + analyser OCR + persist)
 ```
 
@@ -29,16 +32,33 @@ Scratch/PII folders (`uploads/`, `samples/`, `archive/`, `screenshots/`) and
 
 ---
 
+## Clone
+
+This repo has a submodule, so clone with:
+
+```bash
+git clone --recurse-submodules <this-repo-url>
+# or, if already cloned:
+git submodule update --init
+```
+
 ## Run it
 
 ```bash
 # Whole site + analyser + OCR, locally:
 docker compose up -d --wait
-# http://localhost:8080                                   -> marketing site
-# http://localhost:8080/analyser/Vahini%20Analyser.html   -> the analyser
+# http://localhost:8080                          -> marketing site
+# http://localhost:8080/analyser/analyser.html    -> the analyser
 
 # Or just open the static site without a build:
 #   site/index.html
+```
+
+To pull in a newer analyser release later:
+
+```bash
+cd analyser && git fetch --tags && git checkout <new-tag> && cd ..
+git add analyser && git commit -m "chore: bump analyser submodule to <new-tag>"
 ```
 
 ### Staging / production

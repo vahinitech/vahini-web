@@ -355,6 +355,8 @@
 
 /* ===== HANDWRITING DEEP DIVE ===== */
 .hw{display:grid; grid-template-columns:1fr 1.05fr; gap:56px; align-items:center;}
+.hw--text-only{grid-template-columns:1fr; max-width:640px; margin:0 auto; text-align:center;}
+.hw--text-only .hw__cta{justify-content:center;}
 .hw h2{font-size:clamp(28px,3.6vw,42px);}
 .hw p{font-size:17.5px; color:var(--muted); line-height:1.6; margin-top:20px;}
 .hw__cta{display:flex; gap:13px; flex-wrap:wrap; margin-top:30px;}
@@ -797,20 +799,15 @@
 
   <!-- ============ HANDWRITING DEEP DIVE ============ -->
   <section class="sec" style="background:var(--ivory-2); border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);" data-screen-label="Handwriting proof">
-    <div class="wrap"><div class="hw">
+    <div class="wrap"><div class="hw hw--text-only">
       <div class="reveal">
         <p class="eyebrow">Proven first in handwriting · <span style="color:var(--live)">Live today</span></p>
         <h2 style="margin-top:16px;">Proof the signal becomes real insight.</h2>
         <p>Our handwriting solution is live now. Upload any handwritten page and get a 20-factor analysis with personalised exercises, across five Indic scripts. It's the working proof of everything the platform promises.</p>
         <div class="hw__cta">
-          <a class="btn btn--dark btn--lg" href="../analyser/Vahini%20Analyser.html">See the Pen in Action
+          <a class="btn btn--dark btn--lg" href="../analyser/analyser.html">See the Pen in Action
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           <a class="btn btn--ghost btn--lg" href="solution-handwriting.html" data-nav>How it works</a>
-        </div>
-      </div>
-      <div class="reveal" data-d="2">
-        <div class="hw__video">
-          <iframe src="../analyser/static/Vahini%20Why%20Messy.html" title="What messy handwriting is hiding" loading="lazy"></iframe>
         </div>
       </div>
     </div></div>
@@ -890,7 +887,7 @@
       <h2>One pen. Regular paper. Endless signal.</h2>
       <p>Try the analyser that's live today, or help build the platform behind it.</p>
       <div class="closer__cta">
-        <a class="btn btn--crimson btn--lg" href="../analyser/Vahini%20Analyser.html">See the Pen in Action</a>
+        <a class="btn btn--crimson btn--lg" href="../analyser/analyser.html">See the Pen in Action</a>
         <a class="btn btn--ghost btn--lg" href="reach.html" data-nav style="color:var(--ivory); border-color:var(--rule-on);">Partner with us</a>
       </div>
     </div>

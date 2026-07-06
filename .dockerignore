@@ -10,15 +10,16 @@ venv/
 *.pyc
 README.md
 docs/
-analyser/src/
-analyser/server/
+# The analyser submodule now serves itself entirely (frontend + API) from the
+# analyser container (see deploy/docker-compose*.yml) -- the web/nginx image
+# never needs its files, it only reverse-proxies to it.
+analyser/
 tests/
 !tests/
 tests/*
 !tests/smoke-http.mjs
 samples/
 archive/
-analyser/archive/
 screenshots/
 uploads/
 shots/

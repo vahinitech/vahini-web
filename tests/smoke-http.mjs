@@ -3,9 +3,12 @@ import { setTimeout as delay } from 'node:timers/promises';
 
 const PORT = 4173;
 const BASE_URL = `http://127.0.0.1:${PORT}`;
+// analyser/ is a git submodule served by its own container (see
+// docker-compose.yml) and is excluded from the static site image entirely
+// (see .dockerignore) -- it is not reachable from a bare `http-server .`
+// over the repo root, so it is out of scope for this smoke test.
 const TARGETS = [
-  '/site/index.html',
-  '/analyser/Vahini%20Analyser.html'
+  '/site/index.html'
 ];
 
 function isReadyOutput(text) {

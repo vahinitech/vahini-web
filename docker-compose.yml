@@ -4,7 +4,7 @@
 # localhost ports so you can build and test the whole site on this machine:
 #
 #   docker compose up --build           # build + run all three services
-#   open http://localhost:8080/analyser/Vahini%20Analyser.html
+#   open http://localhost:8080/analyser/analyser.html
 #   docker compose down                 # stop (named volumes persist model cache)
 #
 # Service names (analyser, persist) MUST match the upstreams in deploy/nginx.conf.
@@ -17,7 +17,7 @@ services:
     container_name: vahini-analyser-local
     build:
       context: ./analyser
-      dockerfile: server/Dockerfile.analyser
+      dockerfile: deployment/Dockerfile
       args:
         # Default = fast paddle-only image. Set TROCR=1 to bake the English
         # handwriting refiner (more accurate, but adds CPU latency), and SURYA=1

@@ -1,18 +1,22 @@
 /* SPDX-License-Identifier: AGPL-3.0-only
  * (c) 2026 Vahini Technologies.
  *
- * e2e-pages.mjs — headless Chrome regression for the whole site.
+ * e2e-pages.mjs — headless Chrome regression for the marketing site.
  *
- * Drives a real Chromium (Playwright) against a local static server and checks:
- *   1. The marketing pages load (home, blog index, a blog post).
- *   2. The analyser app loads with the engine wired and no page errors.
- *   3. The full report flow works OFFLINE: upload a handwriting image, click
- *      Analyse, and a 20-factor report renders (no OCR backend needed — the
- *      in-browser engine falls back cleanly).
- *   4. The report contains exactly 20 DISTINCT factors with varied scores.
- *   5. "Save as PDF" works (Chromium page.pdf produces a non-trivial PDF).
+ * Drives a real Chromium (Playwright) against a local static server and checks
+ * that the marketing pages load (home, blog index, a blog post).
  *
  * Runs fully offline (no Python/paddle), so it is safe for CI on every commit.
+ *
+ * NOTE: this used to also drive a full offline analyser report (upload ->
+ * Analyse -> 20-factor report -> PDF) using the in-browser scoring engine.
+ * The analyser/ submodule (vahinitech/20factor-analyser) moved all scoring
+ * server-side as of v0.3 -- there is no more in-browser engine to fall back
+ * to, so that flow now requires a live recognition backend. That coverage
+ * lives in tests/e2e-recognition.mjs, which runs against the real Docker
+ * stack. If you need a lighter no-backend analyser check, assert against the
+ * new DOM (see analyser/frontend/analyser.html) instead of the removed
+ * window.VahiniEngine/VahiniReport globals.
  *
  *   node tests/e2e-pages.mjs
  */
@@ -20,13 +24,10 @@ import { spawn } from 'node:child_process';
 import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import os from 'node:os';
-import fs from 'node:fs';
 
 const PORT = 4173;
 const BASE = `http://127.0.0.1:${PORT}`;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const FIXTURE = path.join(ROOT, 'tests', 'fixtures', 'handwriting-sample.jpg');
 
 const results = [];
 const ok = (name, detail = '') => results.push({ name, ok: true, detail });
@@ -68,8 +69,6 @@ async function checkPage(page, url, mustContain, label) {
 }
 
 async function main() {
-  if (!fs.existsSync(FIXTURE)) { fail('fixture', `missing ${FIXTURE}`); }
-
   const alreadyUp = await serverUp();
   const local = alreadyUp ? null : startServer();
   try {
@@ -84,68 +83,6 @@ async function main() {
       await checkPage(page, `${BASE}/site/index.html`, null, 'home page loads');
       await checkPage(page, `${BASE}/site/blog.html`, null, 'blog index loads');
       await checkPage(page, `${BASE}/site/blog-history-of-20-factors.html`, '20 handwriting factors', 'blog post loads');
-      await page.close();
-    }
-
-    // ---- 2-5. analyser: load, upload, report, factors, PDF ----
-    {
-      const page = await ctx.newPage();
-      const pageErrors = [];
-      page.on('pageerror', (e) => pageErrors.push(String(e)));
-      // Force the deterministic OFFLINE path: abort any OCR-server calls so the
-      // in-browser engine is used immediately (CI has no Python backend). This
-      // also keeps the test fast and independent of any local port state.
-      await page.route('**/*', (route) => {
-        const u = route.request().url();
-        if (/\/(ocr|report-python|analyze-vl)(\?|$)/.test(u) || u.includes(':8868')) return route.abort();
-        return route.continue();
-      });
-      await page.goto(`${BASE}/analyser/Vahini%20Analyser.html`, { waitUntil: 'load', timeout: 30000 });
-
-      const wired = await page.evaluate(() => typeof window.VahiniEngine === 'object' && typeof window.VahiniReport === 'object');
-      if (wired && pageErrors.length === 0) ok('analyser app loads + engine wired');
-      else fail('analyser app loads + engine wired', `wired ${wired}, errors ${pageErrors.join('|').slice(0, 160)}`);
-
-      // upload the fixture and run the pipeline (offline → local engine fallback)
-      await page.setInputFiles('#file-input', FIXTURE);
-      await page.waitForSelector('#go-process:not([disabled])', { timeout: 15000 });
-      ok('upload accepted (Analyse enabled)');
-
-      await page.click('#go-process');
-      await page.waitForSelector('#screen-report.on', { timeout: 90000 });
-      // factor cards render across the section pages
-      await page.waitForSelector('.factor', { timeout: 30000 });
-      ok('report generated');
-
-      // ---- 20 distinct factors with varied scores ----
-      const factorInfo = await page.evaluate(() => {
-        const names = [...document.querySelectorAll('.factor .f-name')].map((n) => n.childNodes[0].textContent.trim());
-        const chips = [...document.querySelectorAll('.fscore-grid .fscore')];
-        const chipScores = chips.map((c) => (c.querySelector('i') || {}).textContent || '');
-        return { factorCount: names.length, uniqueNames: new Set(names).size, chipCount: chips.length, distinctScores: new Set(chipScores).size, names };
-      });
-      if (factorInfo.factorCount === 20 && factorInfo.uniqueNames === 20) ok('report contains 20 distinct factors', `${factorInfo.uniqueNames} unique names`);
-      else fail('report contains 20 distinct factors', JSON.stringify(factorInfo));
-
-      if (factorInfo.chipCount === 20) ok('at-a-glance map shows all 20', `chips ${factorInfo.chipCount}`);
-      else fail('at-a-glance map shows all 20', `chips ${factorInfo.chipCount}`);
-
-      if (factorInfo.distinctScores >= 2) ok('factor scores are varied (not all identical)', `${factorInfo.distinctScores} distinct scores`);
-      else fail('factor scores are varied (not all identical)', `${factorInfo.distinctScores} distinct scores`);
-
-      // recognition trust note present (our reliability work)
-      const hasNote = await page.evaluate(() => document.body.innerText.toLowerCase().includes('text recognition'));
-      if (hasNote) ok('recognition note present'); else fail('recognition note present', 'note text not found');
-
-      // ---- PDF save (Chromium print to PDF) ----
-      const pdfPath = path.join(os.tmpdir(), `vahini-report-${Date.now()}.pdf`);
-      await page.emulateMedia({ media: 'print' });
-      await page.pdf({ path: pdfPath, format: 'A4', printBackground: true });
-      const size = fs.existsSync(pdfPath) ? fs.statSync(pdfPath).size : 0;
-      if (size > 20000) ok('PDF save works', `${Math.round(size / 1024)} KB`);
-      else fail('PDF save works', `pdf size ${size} bytes`);
-      try { fs.unlinkSync(pdfPath); } catch {}
-
       await page.close();
     }
 

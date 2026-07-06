@@ -1,3 +1,6 @@
+// STALE as of analyser v0.3: drives tests/print-vs-handwriting.test.html,
+// which calls the removed in-browser scoring engine. See that file's header
+// comment. Not wired into package.json's test:all or CI until rewritten.
 import { spawn } from 'node:child_process';
 import { setTimeout as delay } from 'node:timers/promises';
 

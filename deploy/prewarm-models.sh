@@ -37,6 +37,6 @@ echo "[prewarm] running warmup_models.py in analyser container"
 docker compose -f "${COMPOSE_FILE}" exec -T \
   -e VAHINI_OCR_PRELOAD_LANGS="${LANGS_RAW}" \
   analyser \
-  python /app/analyser/server/warmup_models.py
+  python /app/backend/warmup_models.py
 
 echo "[prewarm] done. Cache volume path: /home/vishnu/paddle-models/.paddlex"

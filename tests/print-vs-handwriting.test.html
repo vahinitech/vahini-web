@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="only light">
 <title>Vahini — Print-vs-Handwriting Tests</title>
-<link rel="stylesheet" href="../analyser/styles/report.css">
+<link rel="stylesheet" href="../analyser/frontend/styles/report.css">
 <style>
   body{ font-family:system-ui,sans-serif; margin:0; padding:24px; background:#EEEEEE; color:#222831; }
   h1{ font-size:22px; margin:0 0 4px; }
@@ -24,6 +24,12 @@
 </style>
 </head>
 <body>
+<!-- STALE as of analyser v0.3: this test drives the in-browser
+     VahiniEngine/VahiniFactors/VahiniOCR/VahiniReport API that upstream
+     removed (printed/handwriting classification and scoring now run
+     server-side, see analyser/backend/classify.py + /report-python). It
+     will fail loudly (ReferenceError) until rewritten against the live
+     server API; it is intentionally not wired into package.json/CI. -->
 <h1>Print-vs-Handwriting · regression tests</h1>
 <div class="sub">Runs the packed engine on real uploaded images. Asserts printed text is excluded from a mixed page, clean handwriting is never over-flagged, noise is rejected, and the rendered report carries no leaked printed fragments or unusual characters.</div>
 <div class="summary run" id="summary">Running…</div>
@@ -39,7 +45,7 @@
   <img id="dz-preview"><div id="dz-prompt"></div><div id="passage-list"></div>
 </div>
 
-<script src="../analyser/scripts/core/engine.bundle.js"></script>
+<script src="../analyser/frontend/scripts/core/engine.bundle.js"></script>
 <script>
 (function(){
   const results = [];
