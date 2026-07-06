@@ -1,0 +1,11 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install npm dependencies inside the image.
+COPY package*.json ./
+RUN npm install
+
+# Copy project files and execute smoke tests.
+COPY . ./
+CMD ["npm", "test"]

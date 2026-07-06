@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>Handwriting analysis, Vahini</title>
+<meta name="description" content="Upload any handwritten page and get a 20-factor analysis with personalised exercises. Live today, across five Indic scripts.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="theme.config.js"></script>
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="site.css">
+<style>
+.sh-vframe{position:relative; width:100%; max-width:920px; margin:24px auto 0; aspect-ratio:16/9; border-radius:18px;
+  overflow:hidden; box-shadow:var(--shadow-2); border:1px solid var(--rule); background:#1A1E24;}
+.sh-vframe iframe{position:absolute; inset:0; width:100%; height:100%; border:0; display:block;}
+.sh-scorecard{border:1px solid var(--rule); border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-2); background:#fff; display:block;}
+.sh-scorecard img{width:100%; height:auto; display:block;}
+.sh-cap{margin-top:12px; font-size:13px; color:var(--hint); display:flex; align-items:center; gap:7px;}
+.sh-cap svg{width:15px; height:15px; flex:0 0 auto; color:var(--accent-deep);}
+</style>
+</head>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
+
+  <section class="phero phero--split" data-screen-label="Hero">
+    <div class="wrap">
+      <div class="phero__copy reveal">
+      <div class="phero__tags reveal"><p class="eyebrow">Market · Handwriting</p><span class="pill pill--live">Live today</span></div>
+      <h1 class="reveal" data-d="1">Find exactly where your handwriting breaks down.</h1>
+      <p class="lede reveal" data-d="2">Upload one handwritten page and get a 20-factor analysis with personalised exercises, not the same worksheet for everyone. Across five Indic scripts, in minutes.</p>
+      <div class="phero__cta reveal" data-d="3">
+        <a class="btn btn--crimson btn--lg" href="../analyser/Vahini%20Analyser.html">See the Pen in Action
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn btn--ghost btn--lg" href="#how" data-nav>How it works</a>
+      </div>
+    </div>
+      <div class="phero__media reveal" data-d="2"><svg viewBox="0 0 460 360" role="img" aria-label="A handwritten page being scored by the analyser"><ellipse cx="230" cy="300" rx="180" ry="24" fill="#DCF3F4"/><ellipse cx="230" cy="172" rx="196" ry="150" fill="#DCF3F4" opacity=".55"/>
+    <rect x="118" y="54" width="210" height="246" rx="14" fill="#fff" stroke="#222831" stroke-width="3"/>
+    <g stroke="#E3E5E7" stroke-width="2"><line x1="138" y1="110" x2="308" y2="110"/><line x1="138" y1="150" x2="308" y2="150"/><line x1="138" y1="190" x2="308" y2="190"/><line x1="138" y1="230" x2="308" y2="230"/></g>
+    <g stroke="#00ADB5" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M140 108 q12 -16 24 0 t24 0 t24 0 t24 0"/>
+      <path d="M140 148 q14 -14 28 2 t30 -4 t26 2"/>
+      <path d="M140 188 q10 -12 22 0 t22 0 t22 0"/></g>
+    <g stroke="#393E46" stroke-width="4" fill="none" stroke-linecap="round"><path d="M140 228 q14 -12 28 0 t28 0"/></g>
+    <circle cx="312" cy="74" r="36" fill="#222831"/><text x="312" y="70" text-anchor="middle" font-family="Spectral,serif" font-size="30" font-weight="700" fill="#00ADB5">81</text><text x="312" y="90" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="9" font-weight="700" fill="#EEEEEE" letter-spacing="1">/100</text>
+    <circle cx="232" cy="232" r="46" fill="rgba(0,173,181,.14)" stroke="#048A91" stroke-width="7"/>
+    <line x1="266" y1="266" x2="300" y2="300" stroke="#222831" stroke-width="11" stroke-linecap="round"/>
+    <path d="M214 232 l12 13 22 -26" fill="none" stroke="#C0080B" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </div>
+  </section>
+
+  <section class="block" data-screen-label="Problem">
+    <div class="wrap">
+      <div class="block__head reveal"><p class="eyebrow eyebrow--mute">The problem</p>
+        <h2 style="margin-top:14px;">You can see the writing is messy. You can't see <em>why</em>.</h2></div>
+      <p class="body reveal" data-d="1">Untidy writing has a cause, letter formation, spacing, size consistency, baseline alignment, or speed. From the finished page alone, none of that is obvious. So practice becomes guesswork, and generic worksheets treat every writer exactly the same.</p>
+    </div>
+  </section>
+
+  <section class="block block--alt" data-screen-label="Why it helps">
+    <div class="wrap">
+      <div class="block__head reveal"><p class="eyebrow">Key benefits</p>
+        <h2 style="margin-top:14px;">From “write neater” to a specific plan.</h2></div>
+      <div class="steps-row">
+        <div class="scard reveal"><div class="num">20 factors</div><h3>The whole hand, scored</h3><p>One page graded across structure, spatial, dynamics and style, not a single subjective grade.</p></div>
+        <div class="scard reveal" data-d="1"><div class="num">Plain</div><h3>Plain-language fixes</h3><p>A clear summary and the priority things to fix first, written for a person, not a marker.</p></div>
+        <div class="scard reveal" data-d="2"><div class="num">Adaptive</div><h3>Practice that adapts</h3><p>Exercises chosen for the weak spots, that update as the writing actually improves.</p></div>
+      </div>
+
+      <div class="mk-cases">
+        <div class="mk-uses reveal">
+          <p class="eyebrow">Common use cases</p>
+          <h3>Who it’s for</h3>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span><b>Parents</b> helping a child improve at home, between school terms.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span><b>Teachers</b> giving targeted feedback instead of generic worksheets.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span><b>Adult writers</b> fixing one specific weak spot in their hand.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span><b>Coaches</b> running structured handwriting programmes at scale.</span></li>
+          </ul>
+        </div>
+        <div class="mk-example reveal" data-d="1">
+          <p class="eyebrow">One example</p>
+          <h3>One page, one clear plan</h3>
+          <p>A parent uploads a photo of their child’s homework. In under a minute the analyser returns a 55/100 scorecard: line straightness is a strength, word spacing is the weak spot.</p>
+          <p>The report prescribes three drills for the week, specific and measurable, not “just write neater.” Re-scan in a fortnight to see the number move.</p>
+          <div class="mk-flow"><b>Upload a page</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg><b>Score 20 factors</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg><b>Prioritise fixes</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg><b class="is-out">Practice set</b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="how" data-screen-label="Why it matters">
+    <div class="wrap">
+      <div class="block__head reveal"><p class="eyebrow">See why · 60 seconds</p>
+        <h2 style="margin-top:14px;">What “messy” is actually hiding.</h2>
+        <p class="body" style="margin-top:14px; max-width:640px;">An untidy page is never just one problem. Watch how the same messy word splits into a handful of specific, fixable things, which is exactly what the analyser measures for you.</p></div>
+      <div class="sh-vframe reveal" data-d="1">
+        <iframe src="../analyser/static/Vahini%20Why%20Messy.html" title="What messy handwriting is hiding" loading="lazy"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <section class="block block--alt" data-screen-label="How it works">
+    <div class="wrap">
+      <div class="block__head reveal"><p class="eyebrow">How it works</p><h2 style="margin-top:14px;">Three steps, one page.</h2></div>
+      <div class="steps-row">
+        <div class="scard reveal"><div class="num">01, Upload</div><h3>Photograph the page</h3><p>Write naturally on ordinary paper, then upload a clear photo or scan. No special notebook, no app to install.</p></div>
+        <div class="scard reveal" data-d="1"><div class="num">02, Analyse</div><h3>20 factors, scored</h3><p>Computer vision measures the actual marks and scores 20 factors, then flags what to fix first. <a href="factors.html" data-nav style="color:var(--crimson-deep);font-weight:600;white-space:nowrap;">See all 20 &rarr;</a></p></div>
+        <div class="scard reveal" data-d="2"><div class="num">03, Practise</div><h3>Targeted exercises</h3><p>Exercises chosen for your weak spots, that adapt as the writing improves. No more one-size-fits-all.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" data-screen-label="What you get">
+    <div class="wrap"><div class="proof">
+      <div class="reveal">
+        <p class="eyebrow">What you get</p>
+        <h2 style="margin-top:14px;">A factor-by-factor scorecard you can act on.</h2>
+        <p class="body" style="margin-top:18px;">A clear scorecard with a plain-language summary, the priority fixes, and a practice set that updates as you go. Built for the individual writer who wants to actually improve, not a class report.</p>
+        <div class="phero__cta" style="margin-top:26px;">
+          <a class="btn btn--dark" href="../analyser/Vahini%20Analyser.html">See the Pen in Action</a>
+        </div>
+      </div>
+      <div class="reveal" data-d="2">
+        <a class="sh-scorecard" href="../analyser/Vahini%20Analyser.html" aria-label="Open the analyser to score your own handwriting">
+          <img src="assets/sample-scorecard.png" alt="A real Vahini one-page scorecard: an overall 55 out of 100, four category bars (Structure 56, Spatial 49, Dynamics, Style & Readability 63), top strengths, focus areas and three prescribed drills." width="1366" height="1490" loading="lazy">
+        </a>
+        <p class="sh-cap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>An actual scorecard from one uploaded page, page 2 of the full report.</p>
+      </div>
+    </div></div>
+  </section>
+
+  <section class="bigcta block--alt" data-screen-label="CTA">
+    <div class="wrap reveal">
+      <h2>It's live today, and free to try.</h2>
+      <p>Scan a page and see your 20-factor breakdown. The pen adds the live motion layer later; you don't need it to start.</p>
+      <div class="bigcta__row">
+        <a class="btn btn--crimson btn--lg" href="../analyser/Vahini%20Analyser.html">See the Pen in Action</a>
+        <a class="btn btn--ghost btn--lg" href="reach.html" data-nav>Partner with us</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+<script src="site.js"></script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>Questions &amp; answers · Vahini</title>
+<meta name="description" content="Honest answers about the Vahini handwriting analyser and sensor pen: do you need the pen, when it ships, what's live, privacy, scripts and scoring.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="theme.config.js"></script>
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="site.css">
+<style>
+  .faqp{display:flex; flex-direction:column; gap:30px; margin-top:8px;}
+  .faqp__group{}
+  .faqp__group h2{font-size:clamp(20px,2.4vw,26px); margin-bottom:6px;}
+  .faqp__group p.sub{font-size:15px; color:var(--muted); margin-bottom:16px;}
+  .faqp details{border:1px solid var(--rule); border-radius:var(--radius-lg); background:var(--surface);
+    box-shadow:var(--shadow-1); margin-bottom:12px; overflow:hidden; transition:border-color .2s;}
+  .faqp details[open]{border-color:var(--rule-2);}
+  .faqp summary{list-style:none; cursor:pointer; padding:20px 24px; font-family:var(--serif); font-size:18px;
+    font-weight:600; color:var(--ink); display:flex; align-items:center; justify-content:space-between; gap:16px;}
+  .faqp summary::-webkit-details-marker{display:none;}
+  .faqp summary::after{content:""; flex:0 0 auto; width:11px; height:11px; border-right:2px solid var(--hint);
+    border-bottom:2px solid var(--hint); transform:rotate(45deg); transition:transform .2s var(--ease);}
+  .faqp details[open] summary::after{transform:rotate(-135deg);}
+  .faqp details p{padding:0 24px 22px; font-size:16px; line-height:1.66; color:var(--elephant); margin:0;}
+  .faqp details p a{color:var(--crimson-deep); font-weight:600;}
+</style>
+</head>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
+
+  <section class="phero" data-screen-label="Hero">
+    <div class="wrap">
+      <div class="phero__tags reveal"><p class="eyebrow">Questions &amp; answers</p></div>
+      <h1 class="reveal" data-d="1">Honest answers.</h1>
+      <p class="lede reveal" data-d="2">Everything people ask before their first scan, about the analyser, the pen, privacy, scripts and scoring. Still curious? <a href="reach.html" data-nav style="color:var(--crimson-deep); font-weight:600;">Reach out &rarr;</a></p>
+    </div>
+  </section>
+
+  <section class="block" data-screen-label="FAQ">
+    <div class="wrap" style="max-width:820px;">
+      <div class="faqp">
+
+        <div class="faqp__group reveal">
+          <h2>Getting started</h2>
+          <p class="sub">What you need, and what you'll get.</p>
+          <details open><summary>Do I need the pen to start?</summary><p>No. The handwriting analyser works today by scanning a photo of any handwritten page, no hardware required. The pen adds the live motion layer (force, tilt, velocity) that a photo can't see.</p></details>
+          <details><summary>What do I get from one scan?</summary><p>A 20-factor scorecard with an overall score, the few factors to focus on first, real snippets of your own writing as evidence, and exercises matched to your focus areas. You can save it as a PDF.</p></details>
+          <details><summary>Which scripts are supported?</summary><p>The analyser reads handwriting across five Indic scripts. It focuses on the handwritten text on a page and is honest about what it can and can't read, see the accuracy &amp; document types guide for detail.</p></details>
+        </div>
+
+        <div class="faqp__group reveal">
+          <h2>The pen &amp; roadmap</h2>
+          <p class="sub">Where the hardware is, and what's coming.</p>
+          <details><summary>When does the pen ship?</summary><p>The pen is in development and pre-orders are open. Pre-ordering helps fund the build and reserves early units; we'll keep pre-order holders posted on milestones.</p></details>
+          <details><summary>Which solutions are live versus coming?</summary><p>Handwriting analysis is live today. Text reconstruction and actionable insights are in development. Assistive writing and diagnostics &amp; screening are at research stage, framed honestly, with no clinical claims.</p></details>
+          <details><summary>What's the difference between Battu v1 and v2?</summary><p>Battu v1 is the friendly single pen for young writers at home. Battu v2 brings improved BLE multi-connect so a whole class of pens links to one hub with a teacher dashboard, in development, with pilots opening.</p></details>
+        </div>
+
+        <div class="faqp__group reveal">
+          <h2>Privacy &amp; trust</h2>
+          <p class="sub">How your data is handled, and why it's defensible.</p>
+          <details><summary>How is my data handled?</summary><p>Consent-first, with zero image retention. The analyser runs on-device for the demo and nothing is uploaded by Vahini. The motion dataset is built only with explicit consent.</p></details>
+          <details><summary>What does the pen actually record?</summary><p>Motion, not words, how the pen moves, never what you write. It's a dual-IMU sensor pen that pairs with the analyser to turn motion into a clear handwriting report.</p></details>
+          <details><summary>What makes it defensible?</summary><p>Real hardware (dual-IMU sensing on any paper), five-script motion modelling, and granted IP, Indian Patent No. 584433, with DPIIT recognition.</p></details>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="bigcta block--alt" data-screen-label="CTA">
+    <div class="wrap reveal">
+      <h2>Still have a question?</h2>
+      <p>Try the analyser free, or reach out and we'll answer anything that isn't here.</p>
+      <div class="bigcta__row">
+        <a class="btn btn--crimson btn--lg" href="../analyser/Vahini%20Analyser.html">See the Pen in Action</a>
+        <a class="btn btn--ghost btn--lg" href="reach.html" data-nav>Reach us</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+<script src="site.js"></script>
+</body>
+</html>

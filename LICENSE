@@ -1,0 +1,34 @@
+Vahini Technologies - Proprietary License
+==========================================
+
+Copyright (c) 2026 Vahini Technologies. All rights reserved.
+
+This repository - the Vahini marketing website, investor materials and related
+deliverables - is PROPRIETARY and CONFIDENTIAL software of Vahini Technologies.
+
+No part of this repository may be copied, reproduced, modified, published,
+uploaded, posted, transmitted, reverse-engineered, decompiled, disassembled, or
+distributed in any form or by any means without the prior written permission of
+Vahini Technologies.
+
+EXCEPTION - the analyser engine:
+The "analyser/" directory is licensed separately under the GNU Affero General
+Public License v3.0 only (see analyser/LICENSE) and is published as open source
+at https://github.com/vahinitech/20factor-analyser. That AGPL-3.0 grant applies
+ONLY to the contents of analyser/, not to the rest of this repository.
+
+Dual-IMU handwriting-motion sensing on ordinary paper is protected under Indian
+Patent No. 584433. Vahini Technologies is recognised by DPIIT.
+
+Permission to view the public website does not grant any licence to the
+underlying source code, algorithms, or models, except as stated above for the
+analyser engine.
+
+THIRD-PARTY COMPONENTS
+----------------------
+This product includes third-party open-source and hosted components, each under
+its own licence. Those components are NOT covered by this proprietary licence and
+remain the property of their respective owners. See THIRD-PARTY-NOTICES.md for the
+full attribution list and sbom.spdx.json for the machine-readable SBOM.
+
+Contact: info@vahinitech.com | vahinitech.com

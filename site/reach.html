@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>Reach us, Vahini</title>
+<meta name="description" content="Partner with Vahini, investment, sponsorship, development pilots, research collaboration, pen pre-orders or press.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="theme.config.js"></script>
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="site.css">
+<style>
+.reach{display:grid; grid-template-columns:1fr 1fr; gap:54px; align-items:start;}
+.intents{display:grid; grid-template-columns:1fr; gap:12px; margin-top:8px;}
+.intent{display:flex; gap:12px; align-items:flex-start; padding:16px; border:1.5px solid var(--rule); border-radius:14px; background:var(--surface); cursor:pointer; transition:border-color .18s, background .18s, transform .18s;}
+.intent:hover{transform:translateY(-2px); border-color:var(--rule-2);}
+.intent.on{border-color:var(--crimson); background:var(--crimson-soft);}
+.intent .ic{width:34px; height:34px; border-radius:9px; background:var(--surface-2); display:grid; place-items:center; color:var(--crimson-deep); flex:0 0 auto;}
+.intent.on .ic{background:#fff;}
+.intent .ic svg{width:19px; height:19px;}
+.intent b{font-size:15px; color:var(--ink); font-family:var(--serif); font-weight:600; display:block; line-height:1.2;}
+.intent span{font-size:12.5px; color:var(--muted); line-height:1.4; display:block; margin-top:3px;}
+.formcard{background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg); padding:30px; box-shadow:var(--shadow-1);}
+.field{margin-bottom:16px;}
+.field label{display:block; font-size:13px; font-weight:600; color:var(--elephant); margin-bottom:7px;}
+.field label .opt{color:var(--hint); font-weight:400;}
+.field input, .field textarea, .field select{width:100%; font-family:var(--sans); font-size:15px; color:var(--ink); background:var(--ivory-2);
+  border:1.5px solid var(--rule); border-radius:10px; padding:12px 14px; transition:border-color .15s, background .15s;}
+.field input:focus, .field textarea:focus, .field select:focus{outline:none; border-color:var(--crimson); background:#fff;}
+.field textarea{resize:vertical; min-height:120px;}
+.formcard .send{width:100%; margin-top:6px;}
+.formhint{font-size:12.5px; color:var(--hint); margin-top:12px; text-align:center; line-height:1.5;}
+.contacts{display:flex; gap:10px; flex-wrap:wrap; margin-top:26px;}
+.contacts a{display:inline-flex; align-items:center; gap:8px; font-size:14px; color:var(--ink); text-decoration:none; padding:9px 14px; border:1px solid var(--rule); border-radius:10px; background:var(--surface); transition:border-color .15s;}
+.contacts a:hover{border-color:var(--crimson);} .contacts a svg{width:16px; height:16px; color:var(--crimson-deep);}
+@media (max-width:860px){.reach{grid-template-columns:1fr; gap:36px;}.intents{grid-template-columns:1fr;}}
+</style>
+</head>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
+
+  <section class="phero" data-screen-label="Hero">
+    <div class="wrap">
+      <p class="eyebrow reveal">Reach us</p>
+      <h1 class="reveal" data-d="1" style="margin-top:16px;">Help build the pen, and everything it unlocks.</h1>
+      <p class="lede reveal" data-d="2">Whether you want to invest, co-develop a solution, or just talk, pick a lane and send a note. It goes straight to the team.</p>
+    </div>
+  </section>
+
+  <section class="block" data-screen-label="Form">
+    <div class="wrap"><div class="reach">
+      <div class="reveal">
+        <p class="eyebrow eyebrow--mute">What brings you here?</p>
+        <h2 style="margin-top:12px; font-size:28px;">Choose a lane.</h2>
+        <div class="intents" id="intents">
+          <label class="intent on" data-to="vishnu" data-subject="Investment enquiry">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M5 9l7-7 7 7"/></svg></span>
+            <span><b>Investment</b><span>Back the round</span></span>
+          </label>
+          <label class="intent" data-to="vishnu" data-subject="Development / pilot enquiry">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 7l-2-2-8 8v2h2l8-8zM13 4l3 3M5 19h14"/></svg></span>
+            <span><b>Development &amp; pilots</b><span>Co-build or run a pilot</span></span>
+          </label>
+          <label class="intent" data-to="info" data-subject="General / press enquiry">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4zM8 9h8M8 13h5"/></svg></span>
+            <span><b>General &amp; press</b><span>Pre-orders, press, everything else</span></span>
+          </label>
+        </div>
+        <div class="contacts">
+          <a href="mailto:info@vahinitech.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z"/><path d="M4 7l8 6 8-6"/></svg>info@vahinitech.com</a>
+          <a href="mailto:vahinitechfirm@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z"/><path d="M4 7l8 6 8-6"/></svg>vahinitechfirm@gmail.com</a>
+        </div>
+      </div>
+
+      <div class="reveal" data-d="2">
+        <form class="formcard" id="reachForm">
+          <div class="field"><label>Your name</label><input id="r-name" type="text" placeholder="Full name" required></div>
+          <div class="field"><label>Email</label><input id="r-email" type="email" placeholder="you@company.com" required></div>
+          <div class="field"><label>Organisation <span class="opt">(optional)</span></label><input id="r-org" type="text" placeholder="Company, fund, lab or school"></div>
+          <div class="field"><label>Message</label><textarea id="r-msg" placeholder="Tell us what you have in mind…" required></textarea></div>
+          <button type="submit" class="btn btn--crimson btn--lg send">Send via email
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg></button>
+          <p class="formhint">Opens your email app with everything pre-filled, nothing is stored on this site. <span id="routeNote">Routing to vahinitechfirm@gmail.com.</span></p>
+        </form>
+      </div>
+    </div></div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+<script src="site.js"></script>
+<script>
+(function(){
+  var EMAILS = { vishnu:"vahinitechfirm@gmail.com", info:"info@vahinitech.com" };
+  var current = { to:"vishnu", subject:"Investment enquiry" };
+  var intents = document.querySelectorAll(".intent");
+  var note = document.getElementById("routeNote");
+  function setRoute(el){
+    intents.forEach(function(i){ i.classList.remove("on"); });
+    el.classList.add("on");
+    current.to = el.dataset.to; current.subject = el.dataset.subject;
+    note.textContent = "Routing to " + EMAILS[current.to] + ".";
+  }
+  intents.forEach(function(el){ el.addEventListener("click", function(){ setRoute(el); }); });
+
+  document.getElementById("reachForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    var name = document.getElementById("r-name").value.trim();
+    var email = document.getElementById("r-email").value.trim();
+    var org = document.getElementById("r-org").value.trim();
+    var msg = document.getElementById("r-msg").value.trim();
+    var to = EMAILS[current.to];
+    var subject = "Vahini · " + current.subject + (name ? " · " + name : "");
+    var body = "Hi Vahini team,\n\n" + msg + "\n\n--\nName: " + name + "\nEmail: " + email +
+               (org ? "\nOrganisation: " + org : "") + "\nEnquiry: " + current.subject + "\n";
+    window.location.href = "mailto:" + to + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+DEPLOY_DIR="${ROOT_DIR}/deploy"
+ENV_NAME="${1:-stag}"
+LANGS_RAW="${2:-}"
+
+case "${ENV_NAME}" in
+  stag)
+    COMPOSE_FILE="${DEPLOY_DIR}/docker-compose.stag.yml"
+    ;;
+  prod)
+    COMPOSE_FILE="${DEPLOY_DIR}/docker-compose.prod.yml"
+    ;;
+  *)
+    echo "Usage: $0 [stag|prod] [langs_csv]"
+    echo "Example: $0 stag en,te,hi,ta,kn,ml"
+    exit 1
+    ;;
+esac
+
+if [[ -z "${LANGS_RAW}" ]]; then
+  LANGS_RAW="en,te"
+fi
+
+# Keep cache on host so container rebuild/restart does not re-download models.
+mkdir -p /home/vishnu/paddle-models/.paddlex
+
+echo "[prewarm] environment=${ENV_NAME}"
+echo "[prewarm] compose=${COMPOSE_FILE}"
+echo "[prewarm] langs=${LANGS_RAW}"
+
+docker compose -f "${COMPOSE_FILE}" up -d analyser
+
+echo "[prewarm] running warmup_models.py in analyser container"
+docker compose -f "${COMPOSE_FILE}" exec -T \
+  -e VAHINI_OCR_PRELOAD_LANGS="${LANGS_RAW}" \
+  analyser \
+  python /app/analyser/server/warmup_models.py
+
+echo "[prewarm] done. Cache volume path: /home/vishnu/paddle-models/.paddlex"

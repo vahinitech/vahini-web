@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>Reconstructing handwriting from motion alone | Vahini Blog</title>
+<meta name="description" content="A pen only touches the paper part of the time. How a mixture-of-experts model tells writing from hovering and rebuilds the trajectory from raw inertial signals.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="theme.config.js"></script>
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="site.css">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
+
+  <article>
+  <section class="post-hero" data-screen-label="Post hero">
+    <div class="wrap">
+      <a class="post-back" href="blog.html" data-nav><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All posts</a>
+      <span class="btag btag--research">Research</span>
+      <h1>Reconstructing handwriting from motion alone</h1>
+      <div class="post-meta"><span class="post-author"><span class="pa-av">VK</span>Vishnu Kosuri</span><span class="dot"></span><span>Jun 2026</span><span class="dot"></span><span>6 min read</span></div>
+    </div>
+  </section>
+
+  <section class="post-ai" data-screen-label="AI summary">
+    <div class="wrap">
+      <div class="post-ai__card">
+        <span class="post-ai__tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9z"/><path d="M19 14l.7 1.8L21 16.5l-1.3.6L19 19l-.7-1.8L17 16.5z"/></svg>AI summary</span>
+        <p>A motion-sensing pen records far more hovering than writing, so the central challenge is telling the two apart at every instant. A 2025 <strong>mixture-of-experts</strong> model uses two specialist networks, one for the on-paper trajectory and one for in-air moves, and reconstructs the written line far more faithfully than a single model.</p>
+        <p>That faithful, time-ordered reconstruction is what lets a pen capture handwriting on ordinary paper and preserve <em>how</em> it was written, not just what.</p>
+        <p class="post-ai__note">A quick machine-generated overview. The full post has the detail and the why.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="post-body">
+    <div class="wrap">
+      <div class="post-toc">
+        <h4>In this post</h4>
+        <ol>
+          <li><a href="#s1">One model can't do two jobs well</a></li>
+          <li><a href="#s2">Why this matters beyond the lab</a></li>
+          <li><a href="#takeaways">Key takeaways</a></li>
+        </ol>
+      </div>
+      <p class="lede-para">A camera sees the finished letter. A motion-sensing pen sees something stranger and richer: a stream of accelerations and rotations, most of which is not writing at all. Turning that stream back into legible strokes is one of the hardest, and most useful, problems in handwriting technology.</p>
+
+      <p>When you write, the pen tip spends a surprising amount of time <strong>off the page</strong>, lifting between letters, gliding to the next word, hovering while you think. An inertial sensor inside the barrel records all of it indiscriminately. To rebuild the path the tip actually traced on paper, a system first has to answer a deceptively simple question at every instant: <em>was the pen writing, or just moving?</em></p>
+
+      <p>Get that wrong and the reconstructed page dissolves into scribble, phantom lines connecting letters that were never joined, or real strokes erased as if they were hovers. Get it right and you can recover handwriting from nothing but motion, on any surface, with no special paper or screen underneath.</p>
+
+      <h2 id="s1">One model can't do two jobs well</h2>
+
+      <p>The instinct is to train a single neural network to map raw sensor data straight to pen-tip positions. It works, but only up to a point, because <strong>touching and hovering are genuinely different physical regimes</strong>. A tip pressed to paper is constrained, damped, and relatively slow; a tip flying through the air between words is fast, free, and dominated by drift. Asking one model to be fluent in both means it ends up mediocre at each.</p>
+
+      <p>A 2025 study in <em>Pattern Recognition</em> by Florent Imbert and colleagues at IRISA / INSA Rennes takes a cleaner approach: a <strong>mixture of experts</strong>. Instead of one network, they train two specialists, one dedicated to the touching trajectory and one to the hovering trajectory, and combine them. Each expert only has to master a single regime, and each can be improved with context and examples tailored to its job. Splitting the problem along the seam where the physics actually changes turns out to reconstruct the written line far more faithfully than a single undivided model.</p>
+
+      <figure class="post-fig">
+        <svg viewBox="0 0 720 240" role="img" aria-label="A pen's motion split into on-paper writing strokes and in-air hovering moves">
+          <rect width="720" height="240" fill="#FFFFFF"/>
+          <line x1="40" y1="170" x2="680" y2="170" stroke="#E3E5E7" stroke-width="2"/>
+          <text x="40" y="208" font-family="Hanken Grotesk,sans-serif" font-size="13" font-weight="700" fill="#048A91">, writing (on paper)</text>
+          <text x="280" y="208" font-family="Hanken Grotesk,sans-serif" font-size="13" font-weight="700" fill="#C0080B">- - hovering (in air)</text>
+          <path d="M60 170 q14 -54 28 0 t28 0 t28 0" fill="none" stroke="#048A91" stroke-width="3.4" stroke-linecap="round"/>
+          <path d="M172 170 q40 -70 96 -28" fill="none" stroke="#C0080B" stroke-width="2.4" stroke-dasharray="5 7" stroke-linecap="round"/>
+          <path d="M268 142 q14 -34 28 6 t28 -2 28 18" fill="none" stroke="#048A91" stroke-width="3.4" stroke-linecap="round"/>
+          <path d="M352 164 q44 36 104 -2" fill="none" stroke="#C0080B" stroke-width="2.4" stroke-dasharray="5 7" stroke-linecap="round"/>
+          <path d="M456 162 q16 -48 32 0 t32 0 t32 0 t32 0" fill="none" stroke="#048A91" stroke-width="3.4" stroke-linecap="round"/>
+        </svg>
+        <figcaption>The same continuous motion stream contains two regimes. Separating the on-paper strokes (solid) from the in-air moves between them (dashed) is the key step in rebuilding what was actually written.</figcaption>
+      </figure>
+
+      <h2 id="s2">Why this matters beyond the lab</h2>
+
+      <p>Reconstruction from motion is what lets a pen work on <strong>ordinary paper</strong>, the way people already write, instead of on a tablet that dictates posture and feel. It also preserves something a photograph throws away: the <em>order and timing</em> of every stroke. That temporal signal is the raw material for measuring how someone writes, not just what they wrote, which is exactly where handwriting analysis gets its depth.</p>
+
+      <div class="post-key" id="takeaways">
+        <h4>Key takeaways</h4>
+        <ul>
+          <li>Most of a pen's motion is not writing; separating touch from hover is the core challenge.</li>
+          <li>A single model handles both regimes poorly because their physics differ.</li>
+          <li>A mixture-of-experts, one network for touching, one for hovering, reconstructs the written line more faithfully.</li>
+          <li>Motion-based reconstruction frees writing from special surfaces and preserves stroke order and timing.</li>
+        </ul>
+      </div>
+
+      <p>For Vahini, this is the layer beneath everything. Today the analyser reads a photo of the finished page. The sensor pen adds the live motion view, and the better that motion becomes legible strokes, the more honestly we can score the twenty factors that make handwriting clear, consistent and confident.</p>
+
+      <div class="source-box">
+        <span class="source-box__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+        <div>
+          <div class="sb-k">The paper</div>
+          <h4>Mixture-of-experts for handwriting trajectory reconstruction from IMU sensors</h4>
+          <p class="sb-cite">Florent Imbert, Eric Anquetil, Yann Soullard, Romain Tavenard. <em>Pattern Recognition</em>, vol. 161 (2025), 111231.</p>
+          <a href="https://hal.science/hal-04811975v1" target="_blank" rel="noopener">Read the paper <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+        </div>
+      </div>
+      <p class="post-disclaimer">Summary and interpretation are our own. We link the original work so you can read it in full; we don't reproduce it.</p>
+    </div>
+  </section>
+  </article>
+
+  <section class="block block--alt" data-screen-label="Read next">
+    <div class="wrap">
+      <div class="block__head reveal" style="margin-bottom:6px;"><p class="eyebrow">Read next</p></div>
+      <div class="post-next" id="readNext"></div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+<script src="blog-data.js"></script>
+<script src="site.js"></script>
+<script>
+(function(){
+  var SLUG="reconstructing-handwriting-from-motion";
+  if(!window.VahiniPosts) return;
+  var CAT={research:"Research",technology:"Technology",health:"Health",signals:"Signals",explainer:"Guide"};
+  var arrow='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+  var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+  var next=window.VahiniPosts.filter(function(p){return p.slug!==SLUG;}).slice(0,3);
+  document.getElementById('readNext').innerHTML=next.map(function(p){
+    return '<a class="bpost reveal" href="'+p.url+'">'+
+      '<div class="bpost__art">'+window.VahiniPostArt(p,0)+'</div>'+
+      '<div class="bpost__body"><div class="bpost__meta"><span class="btag btag--'+p.cat+'">'+CAT[p.cat]+'</span><span class="bpost__date">'+esc(p.date)+'</span></div>'+
+      '<h3>'+esc(p.title)+'</h3><p>'+esc(p.excerpt)+'</p><span class="bpost__more">Read '+arrow+'</span></div></a>';
+  }).join('');
+  if(window.VahiniRevealScan) window.VahiniRevealScan();
+})();
+</script>
+</body>
+</html>

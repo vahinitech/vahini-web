@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>Writing without a screen: surface-free pens | Vahini Blog</title>
+<meta name="description" content="Classical sensor fusion drifts within seconds. How a convolutional network reconstructs multi-stroke handwriting from an inertial pen on ordinary paper, no tablet required.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="theme.config.js"></script>
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="site.css">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
+
+  <article>
+  <section class="post-hero" data-screen-label="Post hero">
+    <div class="wrap">
+      <a class="post-back" href="blog.html" data-nav><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All posts</a>
+      <span class="btag btag--technology">Technology</span>
+      <h1>Writing without a screen: surface-free pens</h1>
+      <div class="post-meta"><span class="post-author"><span class="pa-av malli">MK</span>Malli Kosuri</span><span class="dot"></span><span>May 2026</span><span class="dot"></span><span>5 min read</span></div>
+    </div>
+  </section>
+
+  <section class="post-ai" data-screen-label="AI summary">
+    <div class="wrap">
+      <div class="post-ai__card">
+        <span class="post-ai__tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9z"/><path d="M19 14l.7 1.8L21 16.5l-1.3.6L19 19l-.7-1.8L17 16.5z"/></svg>AI summary</span>
+        <p>Tracking a pen's position from inertial sensors is hard because integration drift makes naive estimates run away within seconds, and classical sensor fusion is usually limited to a single short stroke.</p>
+        <p>A 2022 study trains a convolutional network to map raw IMU readings directly to pen-tip <strong>displacement</strong>, reconstructing multi-stroke writing on ordinary paper, no tablet or special surface required.</p>
+        <p class="post-ai__note">A quick machine-generated overview. The full post has the detail and the why.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="post-body">
+    <div class="wrap">
+      <div class="post-toc">
+        <h4>In this post</h4>
+        <ol>
+          <li><a href="#s1">Letting the data learn the mapping</a></li>
+          <li><a href="#takeaways">Key takeaways</a></li>
+        </ol>
+      </div>
+      <p class="lede-para">For decades, capturing handwriting digitally meant writing on something special, a tablet, a touchscreen, a grid of dots. The dream is the opposite: a pen that records what you write on any scrap of paper. The obstacle has always been drift.</p>
+
+      <p>An inertial measurement unit, the same kind of chip that knows which way your phone is facing, reports acceleration and rotation many times a second. In principle you can integrate those readings to recover position: where the pen went, and how fast. In practice, tiny errors in each reading pile up. Integrate them twice to get position and the path doesn't just wander, it <strong>runs away</strong>, often within a second or two.</p>
+
+      <p>The traditional fix is classical sensor fusion, careful filters that fold gyroscope and accelerometer data together and try to cancel the drift. It helps, but it tends to be brittle: tuned for one kind of motion, limited to tracing a <strong>single short stroke</strong> before the error swamps the signal. A page of real handwriting, with dozens of strokes and lifts, is far beyond it.</p>
+
+      <h2 id="s1">Letting the data learn the mapping</h2>
+
+      <p>A 2022 study in <em>Sensors</em> by Mohamad Wehbi and colleagues at FAU Erlangen-Nürnberg, working with the pen-maker STABILO, takes a different route. Rather than hand-designing the physics, they let a <strong>convolutional neural network learn the mapping directly</strong>, from raw IMU readings to the pen tip's relative displacement, how far and in which direction the tip moved from one moment to the next.</p>
+
+      <p>Two design choices make it practical. First, predicting <em>relative displacement</em> instead of absolute position keeps errors local, so a mistake in one moment doesn't poison the rest of the line. Second, the network reconstructs <strong>multiple strokes without needing the writing to be segmented first</strong>, and without hand-tuned correction afterward. To train it, the team recorded people writing on a tablet, which supplies the ground-truth trajectory, then aligned that against the pen's own sensor stream despite the two devices sampling at different rates.</p>
+
+      <figure class="post-fig">
+        <svg viewBox="0 0 720 200" role="img" aria-label="Raw sensor signals on the left mapped by a network into a reconstructed letter B on the right">
+          <rect width="720" height="200" fill="#FFFFFF"/>
+          <g fill="none" stroke-width="2.2" stroke-linecap="round">
+            <path d="M40 60 q20 -28 40 0 t40 0 t40 0 t40 0" stroke="#C0080B"/>
+            <path d="M40 100 q20 22 40 0 t40 0 t40 0 t40 0" stroke="#E8B06B"/>
+            <path d="M40 140 q20 -16 40 0 t40 0 t40 0 t40 0" stroke="#048A91"/>
+          </g>
+          <text x="40" y="172" font-family="Hanken Grotesk,sans-serif" font-size="12" font-weight="700" fill="#828A93">RAW IMU: ACCEL · GYRO</text>
+          <g stroke="#222831" stroke-width="2" fill="none"><path d="M300 100h70M362 92l12 8-12 8"/></g>
+          <rect x="392" y="78" width="86" height="44" rx="10" fill="#222831"/>
+          <text x="435" y="105" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="13" font-weight="700" fill="#fff">CNN</text>
+          <g stroke="#222831" stroke-width="2" fill="none"><path d="M500 100h60M552 92l12 8-12 8"/></g>
+          <path d="M590 150 V60 q0 -18 22 -18 t22 18 q0 18 -22 18 h-22 m0 0 q0 -2 22 -2 t26 20 q0 20 -26 20 h-22" fill="none" stroke="#048A91" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="612" y="186" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="12" font-weight="700" fill="#828A93">RECONSTRUCTED</text>
+        </svg>
+        <figcaption>Instead of integrating noisy signals by hand, the network learns to turn raw inertial data straight into pen-tip displacement, rebuilding whole multi-stroke words on plain paper.</figcaption>
+      </figure>
+
+      <p>The reported result, a normalised error of about 0.18 against the tablet's ground-truth trajectory, is the kind of number that signals a method has crossed from "interesting" to "usable." More importantly, the system reconstructs writing done on <strong>paper</strong>, not just on the tablet it learned from.</p>
+
+      <div class="post-key" id="takeaways">
+        <h4>Key takeaways</h4>
+        <ul>
+          <li>IMU drift makes naive position tracking fail within seconds.</li>
+          <li>Classical sensor fusion is brittle and usually limited to single strokes.</li>
+          <li>A CNN that predicts relative displacement reconstructs multi-stroke writing without segmentation.</li>
+          <li>Training on tablet ground truth lets the pen work on ordinary paper afterward.</li>
+        </ul>
+      </div>
+
+      <p>This is the bet underneath Vahini's pen: that you should be able to write the way you always have, on whatever paper is in front of you, and still capture every stroke. Learned reconstruction is what makes "surface-free" more than a slogan.</p>
+
+      <div class="source-box">
+        <span class="source-box__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+        <div>
+          <div class="sb-k">The paper</div>
+          <h4>Surface-Free Multi-Stroke Trajectory Reconstruction and Word Recognition Using an IMU-Enhanced Digital Pen</h4>
+          <p class="sb-cite">Mohamad Wehbi, Daniel Luge, Tim Hamann, Jens Barth, Peter Kaempf, Dario Zanca, Bjoern M. Eskofier. <em>Sensors</em>, 22(14), 5347 (2022).</p>
+          <a href="https://www.mdpi.com/1424-8220/22/14/5347" target="_blank" rel="noopener">Read the paper <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+        </div>
+      </div>
+      <p class="post-disclaimer">Summary and interpretation are our own. We link the original work so you can read it in full; we don't reproduce it.</p>
+    </div>
+  </section>
+  </article>
+
+  <section class="block block--alt" data-screen-label="Read next">
+    <div class="wrap">
+      <div class="block__head reveal" style="margin-bottom:6px;"><p class="eyebrow">Read next</p></div>
+      <div class="post-next" id="readNext"></div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+<script src="blog-data.js"></script>
+<script src="site.js"></script>
+<script>
+(function(){
+  var SLUG="writing-without-a-screen";
+  if(!window.VahiniPosts) return;
+  var CAT={research:"Research",technology:"Technology",health:"Health",signals:"Signals",explainer:"Guide"};
+  var arrow='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+  var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+  var next=window.VahiniPosts.filter(function(p){return p.slug!==SLUG;}).slice(0,3);
+  document.getElementById('readNext').innerHTML=next.map(function(p){
+    return '<a class="bpost reveal" href="'+p.url+'">'+
+      '<div class="bpost__art">'+window.VahiniPostArt(p,0)+'</div>'+
+      '<div class="bpost__body"><div class="bpost__meta"><span class="btag btag--'+p.cat+'">'+CAT[p.cat]+'</span><span class="bpost__date">'+esc(p.date)+'</span></div>'+
+      '<h3>'+esc(p.title)+'</h3><p>'+esc(p.excerpt)+'</p><span class="bpost__more">Read '+arrow+'</span></div></a>';
+  }).join('');
+  if(window.VahiniRevealScan) window.VahiniRevealScan();
+})();
+</script>
+</body>
+</html>

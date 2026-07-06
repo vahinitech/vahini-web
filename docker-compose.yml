@@ -1,0 +1,93 @@
+# Vahini — LOCAL full-stack test compose (front-end + Python OCR + Node persist).
+#
+# Brings up the same 3-service topology as production, but with named volumes and
+# localhost ports so you can build and test the whole site on this machine:
+#
+#   docker compose up --build           # build + run all three services
+#   open http://localhost:8080/analyser/Vahini%20Analyser.html
+#   docker compose down                 # stop (named volumes persist model cache)
+#
+# Service names (analyser, persist) MUST match the upstreams in deploy/nginx.conf.
+#
+# Switch OCR engine by setting VAHINI_OCR_BACKEND on the analyser service
+# (paddle|trocr|surya|chandra|auto). The default image ships PaddleOCR only;
+# trocr/surya/chandra need their tier deps added to the analyser image.
+services:
+  analyser:
+    container_name: vahini-analyser-local
+    build:
+      context: ./analyser
+      dockerfile: server/Dockerfile.analyser
+      args:
+        # Default = fast paddle-only image. Set TROCR=1 to bake the English
+        # handwriting refiner (more accurate, but adds CPU latency), and SURYA=1
+        # for the multilingual/Indic engine (heavy: +llama.cpp, slow on CPU).
+        VAHINI_WITH_TROCR: "0"
+        VAHINI_WITH_SURYA: "0"
+    image: vahini/analyser:local
+    restart: unless-stopped
+    environment:
+      - PORT=8868
+      # 'paddle' = fastest (mobile detector + lazy preprocessing). Switch to
+      # 'trocr' (needs TROCR=1 above) for guarded handwriting refinement, or
+      # 'surya'/'auto' when those are baked.
+      - VAHINI_OCR_BACKEND=paddle
+      - VAHINI_OCR_LANGS=${VAHINI_OCR_LANGS:-en,te}
+      - VAHINI_OCR_VARIANTS=2
+      - VAHINI_OCR_GPU=0
+    ports:
+      - "127.0.0.1:8869:8868"      # direct access for /health and debugging (8868 host port can clash with IDEs)
+    volumes:
+      - paddle_models:/opt/paddle-models
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys;sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8868/ocr/health', timeout=5).getcode()==200 else 1)"]
+      interval: 30s
+      timeout: 8s
+      retries: 5
+      start_period: 240s           # first run downloads PP-OCRv5 weights
+
+  persist:
+    container_name: vahini-persist-local
+    build:
+      context: .
+      dockerfile: services/persist-api/Dockerfile
+    image: vahini/persist:local
+    restart: unless-stopped
+    environment:
+      - PORT=8090
+      - MAX_BODY_BYTES=157286400
+      - PERSIST_UPLOADS_DIR=/data/uploads
+      - PERSIST_REPORTS_DIR=/data/reports
+      - PERSIST_FEEDBACK_DIR=/data/feedback
+    volumes:
+      - persist_data:/data
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8090/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  web:
+    container_name: vahini-site-local
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: vahini/site:local
+    restart: unless-stopped
+    depends_on:
+      analyser:
+        condition: service_healthy
+      persist:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/site/index.html"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+volumes:
+  paddle_models:
+  persist_data:

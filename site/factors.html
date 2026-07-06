@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>The 20 factors, explained · Vahini</title>
+<meta name="description" content="A plain-language guide to the 20 things Vahini checks in your handwriting: what each one means, and what good looks like.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="theme.config.js"></script>
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="site.css">
+<style>
+  /* ---- 20-factors explainer (page-scoped) ---- */
+  .fx-groups{display:flex; flex-direction:column; gap:34px; margin-top:8px;}
+  .fxg__head{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:18px;}
+  .fxg__n{font-family:var(--serif); font-size:15px; font-weight:600; color:var(--crimson-deep);}
+  .fxg__head h3{font-size:clamp(22px,2.6vw,30px);}
+  .fxg__blurb{font-size:15px; color:var(--muted);}
+  .fxg__w{margin-left:auto; font-family:var(--sans); font-size:12px; font-weight:700; letter-spacing:.04em;
+    text-transform:uppercase; color:var(--muted); background:var(--ivory-2); border:1px solid var(--rule);
+    padding:4px 11px; border-radius:20px; white-space:nowrap;}
+  .fx-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+  .fx{background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg);
+    padding:20px 20px 18px; box-shadow:var(--shadow-1); display:flex; flex-direction:column; gap:8px;}
+  .fx__top{display:flex; align-items:center; gap:11px;}
+  .fx__num{flex:0 0 auto; width:30px; height:30px; border-radius:9px; display:grid; place-items:center;
+    font-family:var(--serif); font-weight:600; font-size:14px; color:var(--crimson-deep); background:var(--crimson-soft);}
+  .fx__name{font-family:var(--serif); font-size:17px; font-weight:600; color:var(--ink); line-height:1.15;}
+  .fx__q{font-size:15px; color:var(--elephant); line-height:1.5; font-weight:500;}
+  .fx__good{font-size:13px; color:var(--muted); line-height:1.5;}
+  .fx__good b{color:var(--accent-ink); font-weight:700;}
+  .fx__pen{align-self:flex-start; margin-top:2px;}
+  @media (max-width:900px){ .fx-grid{grid-template-columns:1fr 1fr;} }
+  @media (max-width:620px){ .fx-grid{grid-template-columns:1fr;} .fxg__w{margin-left:0;} }
+</style>
+</head>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
+
+  <section class="phero" data-screen-label="Hero">
+    <div class="wrap">
+      <div class="phero__tags reveal"><p class="eyebrow">How the score works</p><span class="pill pill--live">Live today</span></div>
+      <h1 class="reveal" data-d="1">The 20 factors, in plain English.</h1>
+      <p class="lede reveal" data-d="2">Vahini gives handwriting a score out of 100. That score is built from 20 simple things, the same things a good teacher looks for. Here is every one, what it means, and what good looks like.</p>
+      <div class="phero__cta reveal" data-d="3">
+        <a class="btn btn--crimson btn--lg" href="../analyser/Vahini%20Analyser.html">See the Pen in Action
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" data-screen-label="The four groups">
+    <div class="wrap">
+      <div class="block__head reveal">
+        <p class="eyebrow eyebrow--mute">The big picture</p>
+        <h2 style="margin-top:14px;">Four simple groups make up the score.</h2>
+        <p class="body" style="margin-top:16px;">Every factor belongs to one of four groups. Each group counts for a share of the final score, shown beside its name. You don't need to know all 20 to start, the report always tells you the few that matter most for you.</p>
+      </div>
+
+      <div class="fx-groups">
+
+        <!-- ============ STRUCTURE ============ -->
+        <div class="reveal">
+          <div class="fxg__head">
+            <span class="fxg__n">Group 1</span>
+            <h3>Structure</h3>
+            <span class="fxg__blurb">How each letter is shaped and controlled.</span>
+            <span class="fxg__w">30% of score</span>
+          </div>
+          <div class="fx-grid">
+            <div class="fx">
+              <div class="fx__top"><span class="fx__num">1</span><span class="fx__name">Letter Formation</span></div>
+              <p class="fx__q">Are your letters shaped correctly and consistently?</p>
+              <p class="fx__good"><b>Good:</b> each letter looks the way it should, every time you write it.</p>
+            </div>
+            <div class="fx">
+              <div class="fx__top"><span class="fx__num">2</span><span class="fx__name">Stroke Order</span></div>
+              <p class="fx__q">Do you build each letter with the same strokes in the same order?</p>
+              <p class="fx__good"><b>Good:</b> a steady, repeatable way of forming letters. <span class="pill pill--dev fx__pen">Best with the pen</span></p>
+            </div>
+            <div class="fx">
+              <div class="fx__top"><span class="fx__num">3</span><span class="fx__name">Loop Closure</span></div>
+              <p class="fx__q">Do round letters like a, o, e and g close up neatly?</p>
+              <p class="fx__good"><b>Good:</b> closed loops, so an &lsquo;a&rsquo; never reads like a &lsquo;u&rsquo;.</p>
+            </div>
+            <div class="fx">
+              <div class="fx__top"><span class="fx__num">4</span><span class="fx__name">Line Quality</span></div>
+              <p class="fx__q">Are your strokes smooth, or shaky and wobbly?</p>
+              <p class="fx__good"><b>Good:</b> clean, confident lines instead of jitter.</p>
+            </div>
+            <div class="fx">
+              <div class="fx__top"><span class="fx__num">5</span><span class="fx__name">Size Consistency</span></div>
+              <p class="fx__q">Are your letters all a similar size?</p>
+              <p class="fx__good"><b>Good:</b> even height, not some big and some tiny.</p>
+            </div>
+            <div class="fx">
+              <div class="fx__top"><span class="fx__num">6</span><span class="fx__name">Ascenders &amp; Descenders</span></div>
+              <p class="fx__q">Do tall letters (b, h, l) and tails (g, y, p) reach the right length?</p>
+              <p class="fx__good"><b>Good:</b> talls and tails are balanced, not stunted or overgrown.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ SPATIAL ============ -->
+        <div class="reveal">
+          <div class="fxg__head">
+            <span class="fxg__n">Group 2</span>
+            <h3>Spacing &amp; layout</h3>
+            <span class="fxg__blurb">How the writing sits on the page.</span>
+            <span class="fxg__w">30% of score</span>
+          </div>
+          <div class="fx-grid">
+            <div class="fx">
+              <div class="fx__top"><span class="fx__num">7</span><span class="fx__name">Baseline Alignment</span></div>
+              <p class="fx__q">Do your words sit on the line, or drift up and down?</p>
+              <p class="fx__good"><b>Good:</b> letters rest on an even invisible line.</p>
+            </div>
+            <div class="fx">
+              <div class="fx__top"><span class="fx__num">8</span><span class="fx__name">Word Spacing</span></div>
+              <p class="fx__q">Are the gaps between words even, not too tight or too wide?</p>
+              <p class="fx__good"><b>Good:</b> about one letter's width between words.</p>
+            </div>
+            <div class="fx">
+              <div class="fx__top"><span class="fx__num">9</span><span class="fx__name">Letter Spacing</span></div>
+              <p class="fx__q">Are the letters inside a word evenly spaced?</p>
+              <p class="fx__good"><b>Good:</b> letters neither cramped together nor spread apart.</p>
+            </div>
+            <div class="fx">
+              <div class="fx__top"><span class="fx__num">10</span><span class="fx__name">Margin Discipline</span></div>
+              <p class="fx__q">Do your lines start at a tidy, even left edge?</p>
+              <p class="fx__good"><b>Good:</b> a straight left margin down the whole page.</p>
+            </div>
+            <div class="fx">
+              <div class="fx__top"><span class="fx__num">11</span><span class="fx__name">Line Straightness</span></div>
+              <p class="fx__q">Do your lines run straight across, or slope off?</p>
+              <p class="fx__good"><b>Good:</b> level lines, even on blank, unruled paper.</p>
+            </div>
+            <div class="fx">
+              <div class="fx__top"><span class="fx__num">12</span><span class="fx__name">Vertical Alignment</span></div>
+              <p class="fx__q">Do your letters stand upright in a consistent way?</p>
+              <p class="fx__good"><b>Good:</b> uprights all lean the same, not in random directions.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ DYNAMICS ============ -->
+        <div class="reveal">
+          <div class="fxg__head">
+            <span class="fxg__n">Group 3</span>
+            <h3>Movement &amp; flow</h3>
+            <span class="fxg__blurb">How you move while writing, the pen measures this live.</span>
+            <span class="fxg__w">20% of score</span>
+          </div>
+          <div class="fx-grid">
+            <div class="fx">
+              <div class="fx__top"><span class="fx__num">13</span><span class="fx__name">Speed Consistency</span></div>
+              <p class="fx__q">Do you write at a steady pace?</p>
+              <p class="fx__good"><b>Good:</b> an even rhythm, not rushing then crawling. <span class="pill pill--dev fx__pen">Best with the pen</span></p>
+            </div>
+            <div class="fx">
+              <div class="fx__top"><span class="fx__num">14</span><span class="fx__name">Pressure Consistency</span></div>
+              <p class="fx__q">Do you press with an even, relaxed force?</p>
+              <p class="fx__good"><b>Good:</b> steady pressure, not pressing hard and tiring out. <span class="pill pill--dev fx__pen">Best with the pen</span></p>
+            </div>
+            <div class="fx">
+              <div class="fx__top"><span class="fx__num">15</span><span class="fx__name">Stroke Continuity</span></div>
+              <p class="fx__q">Do you join your strokes, or stop and start a lot?</p>
+              <p class="fx__good"><b>Good:</b> smooth, connected movement through a word. <span class="pill pill--dev fx__pen">Best with the pen</span></p>
+            </div>
+            <div class="fx">
+              <div class="fx__top"><span class="fx__num">16</span><span class="fx__name">Pen Lifts</span></div>
+              <p class="fx__q">How often do you lift the pen in the middle of a word?</p>
+              <p class="fx__good"><b>Good:</b> few unnecessary lifts, the hand keeps flowing. <span class="pill pill--dev fx__pen">Best with the pen</span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ STYLE & READABILITY ============ -->
+        <div class="reveal">
+          <div class="fxg__head">
+            <span class="fxg__n">Group 4</span>
+            <h3>Style &amp; readability</h3>
+            <span class="fxg__blurb">How easy and how tidy the writing is to read.</span>
+            <span class="fxg__w">20% of score</span>
+          </div>
+          <div class="fx-grid">
+            <div class="fx">
+              <div class="fx__top"><span class="fx__num">17</span><span class="fx__name">Slant Consistency</span></div>
+              <p class="fx__q">Does your writing lean at one steady angle?</p>
+              <p class="fx__good"><b>Good:</b> a consistent slant, upright or italic, but the same throughout.</p>
+            </div>
+            <div class="fx">
+              <div class="fx__top"><span class="fx__num">18</span><span class="fx__name">Legibility</span></div>
+              <p class="fx__q">How easy is your writing to read at a glance?</p>
+              <p class="fx__good"><b>Good:</b> a stranger can read it without effort.</p>
+            </div>
+            <div class="fx">
+              <div class="fx__top"><span class="fx__num">19</span><span class="fx__name">Character Distinction</span></div>
+              <p class="fx__q">Are look-alike letters easy to tell apart?</p>
+              <p class="fx__good"><b>Good:</b> a/o, n/h and r/v are each unmistakable.</p>
+            </div>
+            <div class="fx">
+              <div class="fx__top"><span class="fx__num">20</span><span class="fx__name">Overall Neatness</span></div>
+              <p class="fx__q">How tidy does the whole page look, all together?</p>
+              <p class="fx__good"><b>Good:</b> even size, even spacing and straight lines add up to a clean page.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="note-strip reveal" style="margin-top:40px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <p>Four of the factors (movement &amp; flow) measure <em>how you move</em> as you write. A photo gives a careful estimate; the Vahini sensor pen measures them live for the most accurate score.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bigcta block--alt" data-screen-label="CTA">
+    <div class="wrap reveal">
+      <h2>See your own 20-factor breakdown.</h2>
+      <p>Upload one handwritten page and get every factor scored, with the few to fix first and exercises to match. Free to try.</p>
+      <div class="bigcta__row">
+        <a class="btn btn--crimson btn--lg" href="../analyser/Vahini%20Analyser.html">See the Pen in Action</a>
+        <a class="btn btn--ghost btn--lg" href="solution-handwriting.html" data-nav>How it works</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+<script src="site.js"></script>
+</body>
+</html>

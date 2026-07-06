@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>Awards, Vahini wins the DeepTech Innovation Award</title>
+<meta name="description" content="Vahini Technologies won the DeepTech Innovation Award at the Andhra Pradesh Digital Technology Summit 2026, Visakhapatnam.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="theme.config.js"></script>
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="site.css">
+<style>
+.aw-hero{display:grid; grid-template-columns:1.05fr .95fr; gap:48px; align-items:center;}
+.aw-badge{display:inline-flex; align-items:center; gap:9px; font-size:12.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--crimson-deep); background:var(--crimson-soft); padding:6px 14px; border-radius:30px;}
+.aw-badge svg{width:16px; height:16px;}
+.aw-hero h1{font-size:clamp(34px,4.6vw,56px); line-height:1.04; letter-spacing:-.02em; margin-top:20px;}
+.aw-hero h1 em{font-style:normal; color:var(--crimson-deep);}
+.aw-meta{display:flex; flex-wrap:wrap; gap:8px 20px; margin-top:22px; font-size:14.5px; color:var(--muted);}
+.aw-meta span{display:inline-flex; align-items:center; gap:7px;}
+.aw-meta span::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--crimson); flex:0 0 auto;}
+
+/* MSME Honours nomination band */
+.aw-badge--nom{color:var(--accent-ink,#075E63); background:var(--accent-soft,#DCF3F4);}
+.aw-nom{display:grid; grid-template-columns:1fr auto; gap:40px; align-items:center; background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-xl); padding:40px 44px; box-shadow:var(--shadow-1);}
+.aw-nom__body p{font-size:17px; color:var(--muted); line-height:1.7; max-width:640px; margin:18px 0 0;}
+.aw-nom__body .aw-meta{margin-top:22px;}
+.aw-nom__emblem{width:210px; height:210px; flex:0 0 auto; border-radius:50%; background:linear-gradient(155deg,var(--accent,#00ADB5),var(--accent-deep,#048A91)); color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; box-shadow:0 16px 40px rgba(0,173,181,.32);}
+.aw-nom__emblem svg{width:62px; height:62px; opacity:.95;}
+.aw-nom__k{font-family:var(--serif); font-size:21px; font-weight:600; letter-spacing:.01em; margin-top:6px;}
+.aw-nom__y{font-family:var(--sans); font-size:13px; font-weight:700; letter-spacing:.18em; opacity:.85;}
+@media (max-width:760px){ .aw-nom{grid-template-columns:1fr; gap:28px; justify-items:start;} }
+.aw-trophy{position:relative; border-radius:var(--radius-xl); overflow:hidden; box-shadow:var(--shadow-2); background:var(--surface-2); cursor:pointer;}
+.aw-trophy img{width:100%; height:auto; display:block; transition:transform .5s var(--ease);}
+.aw-trophy:hover img{transform:scale(1.03);}
+.aw-trophy .tag{position:absolute; left:16px; bottom:16px; background:rgba(34,40,49,.85); color:#fff; font-size:12px; font-weight:600; padding:6px 13px; border-radius:20px; backdrop-filter:blur(4px);}
+
+.aw-cite{display:grid; grid-template-columns:auto 1fr; gap:26px; align-items:start;}
+.aw-cite__seal{width:84px; height:84px; border-radius:50%; background:linear-gradient(150deg,var(--crimson),var(--crimson-deep)); color:#fff; display:grid; place-items:center; flex:0 0 auto; box-shadow:0 12px 30px rgba(192,8,11,.3);}
+.aw-cite__seal svg{width:42px; height:42px;}
+.aw-cite h2{font-size:clamp(24px,3vw,32px); margin-bottom:14px;}
+.aw-cite p{font-size:17px; color:var(--muted); line-height:1.7; max-width:640px;}
+
+.aw-summit{display:grid; grid-template-columns:1fr 1fr; gap:46px; align-items:center;}
+.aw-summit h2{font-size:clamp(24px,3vw,34px);}
+.aw-summit p{font-size:16.5px; color:var(--muted); line-height:1.7; margin-top:16px;}
+.aw-sectors{display:flex; flex-wrap:wrap; gap:8px; margin-top:22px;}
+.aw-sectors span{font-size:13px; font-weight:600; color:var(--elephant); background:var(--surface); border:1px solid var(--rule); border-radius:30px; padding:7px 14px;}
+
+.aw-gallery{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:8px;}
+.aw-shot{position:relative; border:0; padding:0; cursor:pointer; border-radius:var(--radius-lg); overflow:hidden; aspect-ratio:4/3; background:var(--surface-2); box-shadow:var(--shadow-1);}
+.aw-shot img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .35s var(--ease);}
+.aw-shot:hover img{transform:scale(1.05);}
+.aw-shot figcaption{position:absolute; left:0; right:0; bottom:0; padding:18px 14px 10px; font-size:12.5px; font-weight:600; color:#fff; background:linear-gradient(transparent, rgba(34,40,49,.8));}
+
+/* lightbox */
+.lightbox{position:fixed; inset:0; z-index:400; background:rgba(20,23,28,.93); display:none; align-items:center; justify-content:center; opacity:0; transition:opacity .25s var(--ease);}
+.lightbox.open{display:flex; opacity:1;}
+.lightbox figure{margin:0; max-width:92vw; max-height:86vh; display:flex; flex-direction:column; align-items:center; gap:14px;}
+.lightbox img{max-width:92vw; max-height:80vh; border-radius:10px; box-shadow:0 30px 80px rgba(0,0,0,.55); object-fit:contain;}
+.lb-cap{color:rgba(255,255,255,.82); font-size:13.5px; font-weight:500;}
+.lb-btn{position:absolute; background:rgba(255,255,255,.12); border:0; color:#fff; cursor:pointer; border-radius:50%; width:50px; height:50px; display:grid; place-items:center; transition:background .18s, transform .18s;}
+.lb-btn:hover{background:var(--crimson);}
+.lb-btn svg{width:24px; height:24px;}
+.lb-close{top:20px; right:20px;} .lb-prev{left:18px; top:50%; transform:translateY(-50%);} .lb-next{right:18px; top:50%; transform:translateY(-50%);}
+.lb-prev:hover,.lb-next:hover{transform:translateY(-50%) scale(1.06);}
+
+@media (max-width:860px){
+  .aw-hero,.aw-summit{grid-template-columns:1fr; gap:30px;}
+  .aw-hero .aw-trophy{order:-1; max-width:420px;}
+  .aw-cite{grid-template-columns:1fr; gap:18px;}
+  .aw-gallery{grid-template-columns:1fr;}
+  .lb-btn{width:42px;height:42px;}
+}
+</style>
+</head>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
+
+  <section class="phero" data-screen-label="Hero">
+    <div class="wrap"><div class="aw-hero">
+      <div class="reveal">
+        <span class="aw-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0zM7 5H4v2a3 3 0 0 0 3 3M17 5h3v2a3 3 0 0 1-3 3"/></svg>Award · 2026</span>
+        <h1>We won the <em>DeepTech Innovation Award</em>.</h1>
+        <p class="lede" style="margin-top:20px;">Vahini Technologies was recognised for outstanding innovation and excellence at the Andhra Pradesh Digital Technology Summit 2026, for the dual-IMU sensor pen and the handwriting-motion platform built on it.</p>
+        <div class="aw-meta">
+          <span>Andhra Pradesh Digital Technology Summit '26</span>
+          <span>9–10 Jan 2026</span>
+          <span>Visakhapatnam</span>
+        </div>
+        <div class="phero__cta">
+          <a class="btn btn--crimson btn--lg" href="reach.html" data-nav>Partner with an award-winning team</a>
+          <a class="btn btn--ghost btn--lg" href="product.html" data-nav>The pen</a>
+        </div>
+      </div>
+      <figure class="aw-trophy reveal" data-d="2" data-i="0" style="margin:0;">
+        <img src="assets/events/award-01-th.jpg" alt="The DeepTech Innovation Award trophy presented to Vahini Technologies" decoding="async">
+        <span class="tag">DeepTech Innovation Award · Winner</span>
+      </figure>
+    </div></div>
+  </section>
+
+  <section class="block" data-screen-label="Citation">
+    <div class="wrap">
+      <div class="aw-cite reveal">
+        <div class="aw-cite__seal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M8.5 13.5 7 22l5-3 5 3-1.5-8.5"/></svg></div>
+        <div>
+          <p class="eyebrow eyebrow--mute">The citation</p>
+          <h2 style="margin-top:12px;">DeepTech Innovation Award</h2>
+          <p>Recognising cutting-edge innovation in AI, robotics, semiconductors, IoT, blockchain, quantum computing, and other deeptech domains shaping the future of industry and society. Presented to <strong style="color:var(--ink);">Vahini Technologies</strong> for outstanding innovation and excellence at APDTS&nbsp;'26.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block block--alt" data-screen-label="MSME Honours">
+    <div class="wrap">
+      <div class="block__head reveal"><p class="eyebrow">New recognition · 2026</p><h2 style="margin-top:14px;">Nominated for the MSME Honours Award 2026.</h2></div>
+      <div class="aw-nom reveal" data-d="1">
+        <div class="aw-nom__body">
+          <span class="aw-badge aw-badge--nom"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0zM7 5H4v2a3 3 0 0 0 3 3M17 5h3v2a3 3 0 0 1-3 3"/></svg>Nominee · 2026</span>
+          <p>Vahini Technologies has been nominated for the flagship <strong style="color:var(--ink);">MSME Honours Award 2026</strong>, presented by <strong style="color:var(--ink);">Tally Solutions</strong> in partnership with SanchiConnect, a non-commercial honour celebrating MSMEs and startups shaping the future of Bharat.</p>
+          <div class="aw-meta">
+            <span>MSME Honours Award 2026</span>
+            <span>Presented by Tally Solutions</span>
+            <span>via SanchiConnect</span>
+          </div>
+        </div>
+        <div class="aw-nom__emblem" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M9 14.5 7.5 22 12 19.2 16.5 22 15 14.5"/><path d="M12 6v3l2 1"/></svg>
+          <span class="aw-nom__k">MSME Honours</span>
+          <span class="aw-nom__y">2026</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" data-screen-label="Summit">
+    <div class="wrap"><div class="aw-summit">
+      <div class="reveal">
+        <p class="eyebrow">About the summit</p>
+        <h2 style="margin-top:14px;">Andhra Pradesh Digital Technology Summit 2026.</h2>
+        <p>The summit brings together leaders, innovators, and stakeholders from across the eight sectors of the digital technology industry, a platform for insightful discussions, networking, and sharing best practices. Its goal is to foster collaboration, inspire innovation, and drive the growth of the digital technology industry in Andhra Pradesh.</p>
+        <div class="aw-sectors">
+          <span>AI</span><span>Robotics</span><span>Semiconductors</span><span>IoT</span>
+          <span>Blockchain</span><span>Quantum</span><span>DeepTech</span><span>+ more</span>
+        </div>
+      </div>
+      <figure class="aw-trophy reveal" data-d="2" data-i="1" style="margin:0; cursor:pointer;">
+        <img src="assets/events/award-02-th.jpg" alt="Vahini Technologies on stage at the APDTS 2026 award ceremony" decoding="async">
+        <span class="tag">On stage · APDTS '26 winners</span>
+      </figure>
+    </div></div>
+  </section>
+
+  <section class="block block--alt" data-screen-label="Gallery">
+    <div class="wrap">
+      <div class="block__head reveal"><p class="eyebrow">From the summit</p><h2 style="margin-top:14px;">Moments from Visakhapatnam.</h2></div>
+      <div class="aw-gallery reveal" data-d="1">
+        <figure class="aw-shot" data-i="0"><img src="assets/events/award-01-th.jpg" alt="The DeepTech Innovation Award trophy" decoding="async"><figcaption>The trophy</figcaption></figure>
+        <figure class="aw-shot" data-i="1"><img src="assets/events/award-02-th.jpg" alt="Award ceremony group on stage" loading="lazy" decoding="async"><figcaption>Award ceremony</figcaption></figure>
+        <figure class="aw-shot" data-i="2"><img src="assets/events/award-03-th.jpg" alt="The summit main stage" loading="lazy" decoding="async"><figcaption>The summit stage</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="bigcta block--alt" data-screen-label="CTA">
+    <div class="wrap reveal">
+      <h2>Award-winning deeptech, built in India.</h2>
+      <p>Back it, sponsor it, or build on it, let's talk about what's next for Vahini.</p>
+      <div class="bigcta__row">
+        <a class="btn btn--crimson btn--lg" href="reach.html" data-nav>Get in touch</a>
+        <a class="btn btn--ghost btn--lg" href="patents.html" data-nav>Our patents</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="lb-btn lb-close" id="lbClose" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  <button class="lb-btn lb-prev" id="lbPrev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+  <button class="lb-btn lb-next" id="lbNext" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+  <figure><img id="lbImg" src="" alt=""><figcaption class="lb-cap" id="lbCap"></figcaption></figure>
+</div>
+
+<script src="site-data.js"></script>
+<script src="site.js"></script>
+<script>
+(function(){
+  var PHOTOS=[
+    {full:'assets/events/award-01.jpg', cap:'DeepTech Innovation Award trophy'},
+    {full:'assets/events/award-02.jpg', cap:'Award ceremony, APDTS 2026 winners'},
+    {full:'assets/events/award-03.jpg', cap:'Andhra Pradesh Digital Technology Summit 2026 stage'}
+  ];
+  var lb=document.getElementById('lightbox'), lbImg=document.getElementById('lbImg'), lbCap=document.getElementById('lbCap');
+  var i=0;
+  function show(){ lbImg.src=PHOTOS[i].full; lbCap.textContent=PHOTOS[i].cap+' · '+(i+1)+' / '+PHOTOS.length; }
+  function open(idx){ i=idx; show(); lb.classList.add('open'); lb.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+  function close(){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+  function step(d){ i=(i+d+PHOTOS.length)%PHOTOS.length; show(); }
+  document.querySelectorAll('[data-i]').forEach(function(el){ el.addEventListener('click', function(){ open(parseInt(el.getAttribute('data-i'),10)||0); }); });
+  document.getElementById('lbClose').addEventListener('click', close);
+  document.getElementById('lbPrev').addEventListener('click', function(){ step(-1); });
+  document.getElementById('lbNext').addEventListener('click', function(){ step(1); });
+  lb.addEventListener('click', function(e){ if(e.target===lb) close(); });
+  document.addEventListener('keydown', function(e){ if(!lb.classList.contains('open')) return;
+    if(e.key==='Escape') close(); else if(e.key==='ArrowLeft') step(-1); else if(e.key==='ArrowRight') step(1); });
+})();
+</script>
+</body>
+</html>

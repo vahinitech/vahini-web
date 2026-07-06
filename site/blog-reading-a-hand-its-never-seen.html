@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>The hardest part: reading a hand it has never seen | Vahini Blog</title>
+<meta name="description" content="A model trained on one set of writers and devices stumbles on the next. Domain adaptation is how researchers teach handwriting AI to generalise to a brand-new hand.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="theme.config.js"></script>
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="site.css">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
+
+  <article>
+  <section class="post-hero" data-screen-label="Post hero">
+    <div class="wrap">
+      <a class="post-back" href="blog.html" data-nav><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All posts</a>
+      <span class="btag btag--research">Research</span>
+      <h1>The hardest part: reading a hand it has never seen</h1>
+      <div class="post-meta"><span class="post-author"><span class="pa-av">VK</span>Vishnu Kosuri</span><span class="dot"></span><span>Feb 2026</span><span class="dot"></span><span>5 min read</span></div>
+    </div>
+  </section>
+
+  <section class="post-ai" data-screen-label="AI summary">
+    <div class="wrap">
+      <div class="post-ai__card">
+        <span class="post-ai__tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9z"/><path d="M19 14l.7 1.8L21 16.5l-1.3.6L19 19l-.7-1.8L17 16.5z"/></svg>AI summary</span>
+        <p>Handwriting varies so much between people and devices that a model trained on one set of writers often fails on the next, a gap known as domain shift, and a leading reason lab results don't survive real users.</p>
+        <p><strong>Domain adaptation</strong>, including domain-adversarial training that erases writer-specific quirks, generalises a model to new hands with little or no new labelled data, the difference between a demo and a product.</p>
+        <p class="post-ai__note">A quick machine-generated overview. The full post has the detail and the why.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="post-body">
+    <div class="wrap">
+      <div class="post-toc">
+        <h4>In this post</h4>
+        <ol>
+          <li><a href="#s1">Closing the gap without new labels</a></li>
+          <li><a href="#takeaways">Key takeaways</a></li>
+        </ol>
+      </div>
+      <p class="lede-para">A handwriting model can look brilliant in the lab and fall apart in the real world, for a simple reason. The hands it learned from are not the hand in front of it now.</p>
+
+      <p>Everyone's writing is a fingerprint. The angle you hold the pen, your speed, the pressure, the idiosyncratic way you loop an "l" or cross a "t", all of it varies enormously from person to person, and even device to device. A model trained to reconstruct strokes from the motion of <em>some</em> writers, on <em>some</em> pens, quietly assumes the next writer will look statistically similar. When they don't, accuracy drops. Researchers call this gap <strong>covariate shift</strong>, or more broadly, a change of <strong>domain</strong>.</p>
+
+      <h2 id="s1">Closing the gap without new labels</h2>
+
+      <p>You could, in theory, fix this by collecting labelled data from every new writer, but that defeats the purpose of a tool meant to just work. The more elegant answer is <strong>domain adaptation</strong>: techniques that let a model trained on one distribution perform well on a new one, using little or no labelled data from the new domain.</p>
+
+      <p>A 2024 ICDAR workshop paper by Florent Imbert and colleagues applies this idea directly to handwriting trajectory reconstruction from inertial pens. A common ingredient in this family of methods is <strong>domain-adversarial training</strong>: alongside its main task, the network is pushed to learn features that a second "discriminator" <em>cannot</em> use to tell which domain a sample came from. If the discriminator can't distinguish writer A from writer B in the model's internal representation, then whatever the model learned is general, not specific to the writers it trained on.</p>
+
+      <figure class="post-fig">
+        <svg viewBox="0 0 720 220" role="img" aria-label="Two clusters of writing samples pulled into alignment so a model generalises across writers">
+          <rect width="720" height="220" fill="#FFFFFF"/>
+          <text x="60" y="40" font-family="Hanken Grotesk,sans-serif" font-size="13" font-weight="700" fill="#828A93">BEFORE: two writers, two clusters</text>
+          <g fill="#00ADB5"><circle cx="110" cy="90" r="6"/><circle cx="135" cy="110" r="6"/><circle cx="95" cy="120" r="6"/><circle cx="125" cy="135" r="6"/><circle cx="150" cy="95" r="6"/></g>
+          <g fill="#C0080B"><circle cx="250" cy="150" r="6"/><circle cx="270" cy="170" r="6"/><circle cx="235" cy="175" r="6"/><circle cx="285" cy="150" r="6"/><circle cx="255" cy="190" r="6"/></g>
+          <line x1="340" y1="120" x2="400" y2="120" stroke="#222831" stroke-width="2"/><path d="M392 112l12 8-12 8" fill="none" stroke="#222831" stroke-width="2"/>
+          <text x="470" y="40" font-family="Hanken Grotesk,sans-serif" font-size="13" font-weight="700" fill="#0F6E56">AFTER: aligned, one space</text>
+          <g><circle cx="540" cy="120" r="6" fill="#00ADB5"/><circle cx="565" cy="135" r="6" fill="#C0080B"/><circle cx="555" cy="105" r="6" fill="#00ADB5"/><circle cx="585" cy="120" r="6" fill="#C0080B"/><circle cx="575" cy="150" r="6" fill="#00ADB5"/><circle cx="600" cy="135" r="6" fill="#C0080B"/><circle cx="545" cy="150" r="6" fill="#C0080B"/><circle cx="595" cy="105" r="6" fill="#00ADB5"/></g>
+        </svg>
+        <figcaption>Domain adaptation pulls the internal representations of different writers into a shared space, so a model trained on one hand keeps working on another it never saw.</figcaption>
+      </figure>
+
+      <p>It's a humble-sounding goal with outsized importance. Generalisation is the difference between a demo and a product, between a system that flatters its own training set and one a stranger can pick up and trust on the first try.</p>
+
+      <div class="post-key" id="takeaways">
+        <h4>Key takeaways</h4>
+        <ul>
+          <li>Handwriting varies so much between people and devices that models often fail to transfer.</li>
+          <li>This "domain shift" is a leading reason lab results don't survive contact with real users.</li>
+          <li>Domain adaptation generalises a model to new writers with little or no new labelled data.</li>
+          <li>Domain-adversarial training learns representations that erase writer-specific quirks.</li>
+        </ul>
+      </div>
+
+      <p>For Vahini, every new user and every new pen is a fresh domain. Treating generalisation as a first-class problem, not an afterthought, is what lets the analyser stay honest across thousands of different hands and five different scripts, instead of only the ones it happened to learn from.</p>
+
+      <div class="source-box">
+        <span class="source-box__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+        <div>
+          <div class="sb-k">The paper</div>
+          <h4>Domain Adaptation for Handwriting Trajectory Reconstruction from IMU Sensors</h4>
+          <p class="sb-cite">Florent Imbert, Romain Tavenard, Yann Soullard, Eric Anquetil. ICDAR 2024 Workshops (ADAPDA); Springer LNCS vol. 14935.</p>
+          <a href="https://hal.science/hal-04605593v1" target="_blank" rel="noopener">Read the paper <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+        </div>
+      </div>
+      <p class="post-disclaimer">Summary and interpretation are our own. We link the original work so you can read it in full; we don't reproduce it.</p>
+    </div>
+  </section>
+  </article>
+
+  <section class="block block--alt" data-screen-label="Read next">
+    <div class="wrap">
+      <div class="block__head reveal" style="margin-bottom:6px;"><p class="eyebrow">Read next</p></div>
+      <div class="post-next" id="readNext"></div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+<script src="blog-data.js"></script>
+<script src="site.js"></script>
+<script>
+(function(){
+  var SLUG="reading-a-hand-its-never-seen";
+  if(!window.VahiniPosts) return;
+  var CAT={research:"Research",technology:"Technology",health:"Health",signals:"Signals",explainer:"Guide"};
+  var arrow='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+  var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+  var next=window.VahiniPosts.filter(function(p){return p.slug!==SLUG;}).slice(0,3);
+  document.getElementById('readNext').innerHTML=next.map(function(p){
+    return '<a class="bpost reveal" href="'+p.url+'">'+
+      '<div class="bpost__art">'+window.VahiniPostArt(p,0)+'</div>'+
+      '<div class="bpost__body"><div class="bpost__meta"><span class="btag btag--'+p.cat+'">'+CAT[p.cat]+'</span><span class="bpost__date">'+esc(p.date)+'</span></div>'+
+      '<h3>'+esc(p.title)+'</h3><p>'+esc(p.excerpt)+'</p><span class="bpost__more">Read '+arrow+'</span></div></a>';
+  }).join('');
+  if(window.VahiniRevealScan) window.VahiniRevealScan();
+})();
+</script>
+</body>
+</html>

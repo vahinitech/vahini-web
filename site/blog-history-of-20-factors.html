@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>A short, honest history of the 20 handwriting factors | Vahini Blog</title>
+<meta name="description" content="Where handwriting analysis really comes from, why old graphology's personality claims don't hold up, and how computer vision measures Vahini's 20 quality factors, with an example and a practice tip for each.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="theme.config.js"></script>
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="site.css">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
+
+  <article>
+  <section class="post-hero" data-screen-label="Post hero">
+    <div class="wrap">
+      <a class="post-back" href="blog.html" data-nav><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All posts</a>
+      <span class="btag btag--explainer">Guide</span>
+      <h1>A short, honest history of the 20 handwriting factors (and how computer vision measures each one)</h1>
+      <div class="post-meta"><span class="post-author"><span class="pa-av malli">MK</span>Malli Kosuri</span><span class="dot"></span><span>Jul 2026</span><span class="dot"></span><span>12 min read</span></div>
+    </div>
+  </section>
+
+  <section class="post-ai" data-screen-label="AI summary">
+    <div class="wrap">
+      <div class="post-ai__card">
+        <span class="post-ai__tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9z"/><path d="M19 14l.7 1.8L21 16.5l-1.3.6L19 19l-.7-1.8L17 16.5z"/></svg>AI summary</span>
+        <p>Handwriting analysis has two histories. One, old graphology, claimed to read your personality from your loops and slants, and controlled testing does not support it. The other, quieter history is about measuring how clear and well formed writing is, the tradition used by teachers, occupational therapists and motor-control scientists.</p>
+        <p>Vahini's 20 factors come from that second, measurable tradition. This post traces where they come from, then walks all twenty, showing how computer vision detects each one from a photo, with a concrete example and a practice tip.</p>
+        <p class="post-ai__note">A quick machine-generated overview. The full post has the detail and the why.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="post-body">
+    <div class="wrap">
+      <div class="post-toc">
+        <h4>In this post</h4>
+        <ol>
+          <li><a href="#s1">Two histories, only one of them holds up</a></li>
+          <li><a href="#s2">The measurable tradition Vahini stands in</a></li>
+          <li><a href="#s3">How a computer turns a page into numbers</a></li>
+          <li><a href="#s4">The 20 factors, one by one</a></li>
+          <li><a href="#s5">What a photo cannot see</a></li>
+          <li><a href="#takeaways">Key takeaways</a></li>
+        </ol>
+      </div>
+
+      <p class="lede-para">People have been reading handwriting for more than a century. The honest part of that story is not the part most people have heard. Before we measure twenty things about your writing, it is worth being clear about which tradition those twenty things come from, and which one we deliberately left behind.</p>
+
+      <h2 id="s1">Two histories, only one of them holds up</h2>
+      <p>The famous lineage is <strong>graphology</strong>. The term was coined by a French priest, Jean-Hippolyte Michon, in the 1870s. Later writers, Jules Crepieux-Jamin in France, then Ludwig Klages and Max Pulver in the German-speaking world, and Robert Saudek, built elaborate systems that mapped size, slant, pressure and spacing onto character traits: large writing meant ambition, a right slant meant warmth, heavy pressure meant willpower, and so on.</p>
+      <p>It is a seductive idea. It is also, as far as careful testing can tell, not true. When graphologists are asked to predict personality from writing under controlled conditions, blind to the person, and their predictions are checked against validated measures, they do no better than chance. The British Psychological Society has placed graphology's validity in the same bracket as astrology. So Vahini does not infer personality, intelligence, health or character from your handwriting, and no tool that respects you should.</p>
+      <p>There is a separate, legitimate field that people sometimes confuse with graphology: <strong>forensic document examination</strong>, which compares samples to decide who wrote something or whether a signature was forged. That is about identity and authenticity, not personality, and it is not what Vahini does either.</p>
+
+      <h2 id="s2">The measurable tradition Vahini stands in</h2>
+      <p>Long before anyone tried to read character from a curve, schools measured handwriting for one plain reason: can it be read? The copybook methods taught and graded across the world, the Palmer and Zaner-Bloser systems being two well known examples, drilled and scored the same handful of things: clean letter formation, even size, a consistent slant, regular spacing and a steady baseline. These are teachable, improvable skills, not fixed traits.</p>
+      <p>That practical tradition became rigorous in the clinic. Occupational therapists assess children's handwriting with structured, validated tools such as the BHK (the Concise Evaluation Scale for Children's Handwriting), the Minnesota Handwriting Assessment, and the ETCH (Evaluation Tool of Children's Handwriting). They score components like letter form, size, spacing, alignment and slant, exactly the surface features graphology borrowed, but for a completely different purpose: to support legibility and motor development.</p>
+      <p>And the dynamic side of writing, its speed, rhythm and pauses, has been studied for decades as a motor skill. Gerard van Galen's psychomotor model of handwriting and the kinematic work of researchers like Teulings and Thomassen treat writing as a movement unfolding in time, which is exactly where the speed, pressure and pen-lift factors come from.</p>
+      <p>Vahini's twenty factors are drawn from this measurable tradition. The observable features overlap with graphology's, because there are only so many things a pen does on a page. The difference is the purpose. We do not say "your size varies, so you are anxious." We say "your size varies, here is how to even it out."</p>
+
+      <div class="source-box">
+        <span class="source-box__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+        <div>
+          <div class="sb-k">Further reading</div>
+          <h4>On the validity of graphology, and the science of handwriting quality</h4>
+          <p class="sb-cite">Background on graphology's lack of predictive validity, and the legitimate fields it is often confused with: handwriting legibility assessment (BHK, Minnesota Handwriting Assessment, ETCH) and handwriting motor-control research (van Galen's psychomotor model; Teulings and Thomassen on kinematics).</p>
+          <a href="https://en.wikipedia.org/wiki/Graphology" target="_blank" rel="noopener">Start with the overview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+        </div>
+      </div>
+      <p class="post-disclaimer">Vahini measures the form and motion of writing to help you improve it. The twenty factors describe measurable features of handwriting; they are not statements about a person's health, intelligence, personality or character.</p>
+
+      <h2 id="s3">How a computer turns a page into numbers</h2>
+      <p>The whole point of measuring with computer vision is that it removes opinion. The scores come from pixels, the same way every time. The pipeline is short:</p>
+      <ul>
+        <li><strong>Capture and clean.</strong> The photo is converted to grayscale and gently denoised, and uneven lighting is checked.</li>
+        <li><strong>Binarize.</strong> An Otsu or adaptive threshold splits the image into ink and paper, so what follows works on the writing, not the background.</li>
+        <li><strong>Segment.</strong> Connected components (blobs of joined ink) become letters; projection profiles (adding up ink along each row or column) reveal lines, words and the gaps between them.</li>
+        <li><strong>Measure.</strong> Geometry is computed from those shapes: heights, widths, gaps, slopes and slants.</li>
+      </ul>
+      <p>Two ideas do most of the work. A <strong>projection profile</strong> is just the amount of ink in each row or column; peaks are lines or strokes, valleys are gaps. The <strong>coefficient of variation</strong> is how much a set of measurements wobbles around its average; low wobble means consistency, and consistency is most of what we mean by "neat". Recognition, reading the actual words, is a separate layer; the quality scores are geometric and need no text recognition at all.</p>
+
+      <figure class="post-fig">
+        <svg viewBox="0 0 720 200" role="img" aria-label="A photo of writing becoming an ink map, then boxed letters and lines, then a row of factor scores">
+          <rect width="720" height="200" fill="#FFFFFF"/>
+          <text x="20" y="26" font-family="Hanken Grotesk,sans-serif" font-size="11" font-weight="700" fill="#9A7B25">PHOTO</text>
+          <rect x="20" y="36" width="120" height="120" rx="8" fill="#F4EFE6" stroke="#D9912E" stroke-width="1.5"/>
+          <path d="M36 70 q20 -12 40 0 t40 0" fill="none" stroke="#6b5a3a" stroke-width="2.4"/>
+          <path d="M36 100 q24 -10 48 2 t36 -4" fill="none" stroke="#6b5a3a" stroke-width="2.4"/>
+          <path d="M36 130 q18 -8 40 0 t36 2" fill="none" stroke="#6b5a3a" stroke-width="2.4"/>
+          <g stroke="#222831" stroke-width="2" fill="none"><path d="M150 96h34M176 88l10 8-10 8"/></g>
+          <text x="206" y="26" font-family="Hanken Grotesk,sans-serif" font-size="11" font-weight="700" fill="#222831">INK MAP</text>
+          <rect x="206" y="36" width="120" height="120" rx="8" fill="#101418"/>
+          <path d="M222 70 q20 -12 40 0 t40 0" fill="none" stroke="#9fb4c9" stroke-width="2.4"/>
+          <path d="M222 100 q24 -10 48 2 t36 -4" fill="none" stroke="#9fb4c9" stroke-width="2.4"/>
+          <path d="M222 130 q18 -8 40 0 t36 2" fill="none" stroke="#9fb4c9" stroke-width="2.4"/>
+          <g stroke="#222831" stroke-width="2" fill="none"><path d="M336 96h34M362 88l10 8-10 8"/></g>
+          <text x="392" y="26" font-family="Hanken Grotesk,sans-serif" font-size="11" font-weight="700" fill="#048A91">SEGMENTS</text>
+          <rect x="392" y="36" width="120" height="120" rx="8" fill="#FFFFFF" stroke="#cfd8e3" stroke-width="1.5"/>
+          <g fill="none" stroke="#D4633A" stroke-width="1.6"><rect x="402" y="58" width="46" height="20" rx="3"/><rect x="456" y="58" width="46" height="20" rx="3"/><rect x="402" y="90" width="100" height="20" rx="3"/><rect x="402" y="122" width="70" height="20" rx="3"/></g>
+          <g stroke="#2F8F7F" stroke-width="1.4"><path d="M402 78h100" opacity="0.5"/><path d="M402 110h100" opacity="0.5"/><path d="M402 142h100" opacity="0.5"/></g>
+          <g stroke="#222831" stroke-width="2" fill="none"><path d="M522 96h30M544 88l10 8-10 8"/></g>
+          <text x="566" y="26" font-family="Hanken Grotesk,sans-serif" font-size="11" font-weight="700" fill="#3A45B0">20 SCORES</text>
+          <g fill="#4F5BD5"><rect x="566" y="120" width="10" height="36" rx="2"/><rect x="582" y="96" width="10" height="60" rx="2"/><rect x="598" y="108" width="10" height="48" rx="2"/><rect x="614" y="82" width="10" height="74" rx="2"/><rect x="630" y="128" width="10" height="28" rx="2"/><rect x="646" y="100" width="10" height="56" rx="2"/><rect x="662" y="114" width="10" height="42" rx="2"/><rect x="678" y="90" width="10" height="66" rx="2"/></g>
+        </svg>
+        <figcaption>A photo becomes an ink map, the ink map is segmented into letters and lines, and geometry on those shapes produces the twenty scores. No personality reading anywhere in the chain.</figcaption>
+      </figure>
+
+      <h2 id="s4">The 20 factors, one by one</h2>
+      <p>Vahini groups the twenty into four families. For each factor: what it is, how computer vision detects it from a photo, a quick example of it going wrong, and one thing to practise.</p>
+
+      <p><strong>Structure, factors 1 to 6, the shapes and control of the letters themselves.</strong></p>
+      <ul>
+        <li><strong>1. Letter Formation Accuracy.</strong> Does each letter match its standard shape? Detected from the regularity of each glyph's contour, supported by how confidently it can be recognised. <em>Example:</em> an "a" whose bowl never closes starts to read as "u". <em>Try:</em> slow block rows of a, o and d until the bowls close cleanly.</li>
+        <li><strong>2. Stroke Order Consistency.</strong> Are letters built the same way each time? From a photo this is a proxy, read from how evenly the strokes within a word are placed. <em>Example:</em> a "t" crossed before the stem is drawn drifts off line. <em>Try:</em> learn one stroke order per letter and repeat it; the Battu pen can see the true order.</li>
+        <li><strong>3. Loop Closure.</strong> Do round letters close? Measured from the topology of loop-bearing shapes (a, o, e, g, d, p, q). <em>Example:</em> an "e" left open looks like a "c". <em>Try:</em> close every loop deliberately for a few lines.</li>
+        <li><strong>4. Line Quality (Smoothness).</strong> Are strokes steady or shaky? Read from how much a stroke's edge and width wobble along its path. <em>Example:</em> a trembling downstroke that ripples instead of gliding. <em>Try:</em> write a little slower with a relaxed grip.</li>
+        <li><strong>5. Size Consistency.</strong> Do letters stay the same height? The coefficient of variation of letter heights across the page. <em>Example:</em> words that grow then shrink along a line. <em>Try:</em> lined paper, keeping every letter to one x-height.</li>
+        <li><strong>6. Ascender / Descender Control.</strong> Are the tall letters (b, d, h, l, t) and dropping letters (g, p, y) balanced against the middle zone? Measured from the proportion of ink in each vertical zone. <em>Example:</em> stunted ascenders that blur b into a. <em>Try:</em> three-zone ruled practice paper.</li>
+      </ul>
+
+      <p><strong>Spatial, factors 7 to 12, how the writing sits on the page.</strong></p>
+      <ul>
+        <li><strong>7. Baseline Alignment.</strong> Do letters sit on an even line? A line is fitted through each row and the drift (the regression residual) is measured. <em>Example:</em> words sliding above and below the rule. <em>Try:</em> trace along the line on ruled paper.</li>
+        <li><strong>8. Word Spacing.</strong> Are gaps between words even? The gaps are measured, scaled by letter height, and their wobble scored. <em>Example:</em> some words touching, others a thumb apart. <em>Try:</em> leave one finger-width between words.</li>
+        <li><strong>9. Letter Spacing.</strong> Are gaps inside words even? The same idea applied between letters within a word. <em>Example:</em> "cramped" then "l o o s e" in the same word. <em>Try:</em> aim for equal air between letters.</li>
+        <li><strong>10. Margin Discipline.</strong> Do lines start and stop tidily? The left start position of each line is tracked and its variation measured. <em>Example:</em> a left edge that steps in and out. <em>Try:</em> draw a faint margin line and return to it.</li>
+        <li><strong>11. Line Straightness.</strong> Are whole lines level? The slope of each line's baseline is measured. <em>Example:</em> lines that tilt uphill toward the right. <em>Try:</em> lined paper, and check your page angle.</li>
+        <li><strong>12. Vertical Alignment.</strong> Do upright strokes stay parallel? Read from the spread of stroke tilt across the page. <em>Example:</em> stems leaning at different angles. <em>Try:</em> pick one upright angle and hold it.</li>
+      </ul>
+
+      <p><strong>Dynamics, factors 13 to 16, the movement behind the marks.</strong> A photo can only estimate these, because they happen in time. The Battu sensor pen measures them directly.</p>
+      <ul>
+        <li><strong>13. Speed Consistency.</strong> Is the pace even? From a photo, estimated from the regularity of stroke widths; from the pen, measured from real velocity. <em>Example:</em> rushed ends of lines that thin and skid. <em>Try:</em> write to a steady one-two-three count per word.</li>
+        <li><strong>14. Pressure Consistency.</strong> Is the press even? From a photo, estimated from how much ink darkness varies; from the pen, measured by the force sensor. <em>Example:</em> some words embossed, others faint. <em>Try:</em> aim for a light, even hand that does not tire.</li>
+        <li><strong>15. Stroke Continuity.</strong> Do words flow or break into pieces? Estimated from how many separate components make up each word. <em>Example:</em> a word built from many disconnected bits. <em>Try:</em> join the letters of a word in one flow, dotting and crossing only at the end.</li>
+        <li><strong>16. Pen Lift Frequency.</strong> How often does the pen leave the page? A proxy from the gaps in segmentation; the pen counts each lift exactly. <em>Example:</em> frequent mid-letter lifts that fragment shapes. <em>Try:</em> write whole short words without lifting.</li>
+      </ul>
+
+      <p><strong>Style and readability, factors 17 to 20, the overall read.</strong></p>
+      <ul>
+        <li><strong>17. Slant Consistency.</strong> Does the lean stay put? The slant of each word is found by a shear search, and the spread around the average is scored. <em>Example:</em> a lean that wanders left then right. <em>Try:</em> commit to one slant, even if it is upright.</li>
+        <li><strong>18. Legibility Score.</strong> How easy is it to read overall? A blend of formation, size, spacing and baseline, the basics that decide readability. <em>Example:</em> writing that is fine in places and a struggle in others. <em>Try:</em> lift your two lowest factors first; legibility follows.</li>
+        <li><strong>19. Character Distinction.</strong> Can look-alike letters be told apart? Read from how cleanly confusable pairs (a and o, n and h, r and v) are formed and closed. <em>Example:</em> an "n" and an "h" that look identical. <em>Try:</em> write the confusable pairs side by side until each is unmistakable.</li>
+        <li><strong>20. Overall Neatness.</strong> The tidiness read, combining size, spacing, margins, straightness and slant into one number. <em>Example:</em> a decent page let down by a few repeated habits. <em>Try:</em> pick your single lowest factor and drill only that; this score follows.</li>
+      </ul>
+
+      <h2 id="s5">What a photo cannot see</h2>
+      <p>A still image freezes the result of writing, not the act of it. Speed, pressure, continuity and pen-lifts all live in time, so from a photo they can only be estimated, which is why factors 13 to 16 are flagged as estimates in a photo report. This is the gap the <strong>Battu</strong> sensor pen fills: it records the motion of the hand around two hundred times a second and measures those four directly. The other sixteen are geometric, and a sharp, well lit photo measures them well.</p>
+      <p>That split is the honest version of handwriting analysis. Sixteen things a camera can measure from the page, four more the pen can feel as you write, and twenty practice tips that follow from them. No character reading required, and none offered.</p>
+
+      <div class="post-key" id="takeaways">
+        <h4>Key takeaways</h4>
+        <ul>
+          <li>Old graphology read personality from writing; controlled testing does not support it, and Vahini does not do it.</li>
+          <li>The twenty factors come from the measurable tradition of legibility and motor skill: classroom handwriting teaching, validated occupational-therapy scales, and handwriting kinematics.</li>
+          <li>Computer vision measures sixteen of them from a photo using binarization, segmentation, and simple consistency statistics like the coefficient of variation.</li>
+          <li>Speed, pressure, continuity and pen-lifts unfold in time; a photo estimates them, the Battu pen measures them.</li>
+          <li>Every factor maps to a concrete thing to practise, because these are skills, not fixed traits.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  </article>
+
+  <section class="block block--alt" data-screen-label="Read next">
+    <div class="wrap">
+      <div class="block__head reveal" style="margin-bottom:6px;"><p class="eyebrow">Read next</p></div>
+      <div class="post-next" id="readNext"></div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+<script src="blog-data.js"></script>
+<script src="site.js"></script>
+<script>
+(function(){
+  var SLUG="history-of-20-factors";
+  if(!window.VahiniPosts) return;
+  var CAT={research:"Research",technology:"Technology",health:"Health",signals:"Signals",explainer:"Guide"};
+  var arrow='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+  var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+  var next=window.VahiniPosts.filter(function(p){return p.slug!==SLUG;}).slice(0,3);
+  document.getElementById('readNext').innerHTML=next.map(function(p){
+    return '<a class="bpost reveal" href="'+p.url+'">'+
+      '<div class="bpost__art">'+window.VahiniPostArt(p,0)+'</div>'+
+      '<div class="bpost__body"><div class="bpost__meta"><span class="btag btag--'+p.cat+'">'+CAT[p.cat]+'</span><span class="bpost__date">'+esc(p.date)+'</span></div>'+
+      '<h3>'+esc(p.title)+'</h3><p>'+esc(p.excerpt)+'</p><span class="bpost__more">Read '+arrow+'</span></div></a>';
+  }).join('');
+  if(window.VahiniRevealScan) window.VahiniRevealScan();
+})();
+</script>
+</body>
+</html>

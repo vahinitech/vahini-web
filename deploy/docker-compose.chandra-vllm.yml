@@ -1,0 +1,34 @@
+services:
+  chandra-vllm:
+    image: vllm/vllm-openai:latest
+    container_name: vahini-chandra-vllm-stag
+    restart: unless-stopped
+    profiles: ["chandra"]
+    command:
+      - --model
+      - datalab-to/chandra-ocr-2
+      - --served-model-name
+      - chandra
+      - --port
+      - "8000"
+      - --trust-remote-code
+    environment:
+      - HF_HOME=/data/hf-cache
+      - HUGGING_FACE_HUB_TOKEN=${HUGGING_FACE_HUB_TOKEN:-}
+    volumes:
+      - /home/vishnu/chandra-models:/data/hf-cache
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys;sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/v1/models', timeout=5).getcode()==200 else 1)"]
+      interval: 30s
+      timeout: 8s
+      retries: 5
+
+  analyser:
+    profiles: ["chandra"]
+    depends_on:
+      chandra-vllm:
+        condition: service_healthy
+    environment:
+      - VAHINI_OCR_BACKEND=auto
+      - VAHINI_CHANDRA_METHOD=vllm
+      - VLLM_API_BASE=http://chandra-vllm:8000/v1

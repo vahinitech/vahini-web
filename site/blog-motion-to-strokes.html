@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>Motion: turning movement into strokes | Vahini Blog</title>
+<meta name="description" content="Motion is the master signal the others ride on. How the pen reconstructs the path of the tip from raw inertial data, and renders the conjuncts of Indic scripts faithfully.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="theme.config.js"></script>
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="site.css">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
+
+  <article>
+  <section class="post-hero" data-screen-label="Post hero">
+    <div class="wrap">
+      <a class="post-back" href="blog.html" data-nav><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All posts</a>
+      <span class="btag btag--signals">Signals</span>
+      <h1>Motion: turning movement into strokes</h1>
+      <div class="post-meta"><span class="post-author"><span class="pa-av malli">MK</span>Malli Kosuri</span><span class="dot"></span><span>Jun 2026</span><span class="dot"></span><span>6 min read</span></div>
+    </div>
+  </section>
+
+  <section class="post-ai" data-screen-label="AI summary">
+    <div class="wrap">
+      <div class="post-ai__card">
+        <span class="post-ai__tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9z"/><path d="M19 14l.7 1.8L21 16.5l-1.3.6L19 19l-.7-1.8L17 16.5z"/></svg>AI summary</span>
+        <p>Motion is the master signal, the actual path the pen tip traces, and pressure, tilt, velocity and rhythm are all facets of it. Reconstructing that path means combining orientation, double-integrated acceleration, and a learned model that corrects the drift physics alone can't.</p>
+        <p>A faithful path is what lets the analyser render the stacked, looping conjuncts of Telugu, Kannada, Malayalam, Tamil and Hindi as the writer actually drew them, in the right order.</p>
+        <p class="post-ai__note">A quick machine-generated overview. The full post has the detail and the why.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="post-body">
+    <div class="wrap">
+      <div class="post-toc">
+        <h4>In this post</h4>
+        <ol>
+          <li><a href="#s1">The master signal</a></li>
+          <li><a href="#s2">From inertial data to a path</a></li>
+          <li><a href="#s3">Stitching strokes and lifts together</a></li>
+          <li><a href="#s4">Rendering Indic conjuncts faithfully</a></li>
+        </ol>
+      </div>
+
+      <p class="lede-para">Pressure, tilt, velocity, rhythm, each is a thread. Motion is the cloth they're woven into: the complete, time-ordered path of the pen tip across the page. Recover that, and you've recovered the handwriting itself.</p>
+
+      <h2 id="s1">The master signal</h2>
+      <p>Every other signal is a view onto motion. Velocity is how fast the motion is; tilt is the orientation the motion happens in; pressure is the force behind it; rhythm is its timing. Reconstructing the full trajectory, where the tip was at every instant, is therefore the central task, the one that makes a faithful digital record of writing on plain paper possible.</p>
+
+      <h2 id="s2">From inertial data to a path</h2>
+      <p>In principle the recipe is simple: take the pen's orientation (so you know which way "forward" is), rotate the measured acceleration into page coordinates, subtract gravity, then integrate twice, once to get velocity, again to get position. In practice this <strong>double integration amplifies noise</strong> badly; raw physics alone drifts off the page within seconds.</p>
+      <p>So modern systems combine physics with learning. The dual-IMU geometry and sensor fusion supply a clean orientation; zero-velocity resets at pen-lifts bound the drift; and a trained model maps the inertial stream to tip displacement, correcting the systematic errors that hand-built equations miss. The result is a trajectory that holds together across many strokes, not just one.</p>
+
+      <figure class="post-fig">
+        <svg viewBox="0 0 720 210" role="img" aria-label="Raw inertial axes on the left reconstructed into a looping letter path on the right">
+          <rect width="720" height="210" fill="#FFFFFF"/>
+          <g fill="none" stroke-width="2" stroke-linecap="round" opacity="0.85">
+            <path d="M40 70 q18 -22 36 0 t36 0 t36 0 t36 0" stroke="#D9912E"/>
+            <path d="M40 110 q18 18 36 0 t36 0 t36 0 t36 0" stroke="#E8B06B"/>
+            <path d="M40 150 q18 -14 36 0 t36 0 t36 0 t36 0" stroke="#C0080B"/>
+          </g>
+          <text x="40" y="182" font-family="Hanken Grotesk,sans-serif" font-size="11" font-weight="700" fill="#828A93">RAW INERTIAL AXES</text>
+          <g stroke="#222831" stroke-width="2" fill="none"><path d="M300 105h60M352 97l12 8-12 8"/></g>
+          <rect x="392" y="88" width="96" height="34" rx="9" fill="#222831"/><text x="440" y="110" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="12" font-weight="700" fill="#fff">fuse + learn</text>
+          <path d="M540 160 C540 70 620 70 620 110 C620 140 560 140 560 110 C560 80 640 80 660 150" fill="none" stroke="#00ADB5" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="600" y="186" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="11" font-weight="700" fill="#048A91">RECONSTRUCTED PATH</text>
+        </svg>
+        <figcaption>Reconstruction fuses orientation, integrated acceleration and a learned correction to turn raw inertial axes into the looping path the writer actually drew.</figcaption>
+      </figure>
+
+      <h2 id="s3">Stitching strokes and lifts together</h2>
+      <p>Real writing isn't one continuous line, it's strokes separated by lifts and slides. Motion reconstruction works hand in hand with <strong>intent detection</strong> (is the pen writing or hovering?) to decide which segments are ink and which are travel. Get that segmentation right and the page reads as crisp, separate strokes; get it wrong and phantom lines connect letters that were never joined.</p>
+
+      <h2 id="s4">Rendering Indic conjuncts faithfully</h2>
+      <p>Nowhere is a faithful path more important than in <strong>Indic scripts</strong>. A single character can stack a consonant, a vowel sign and a conjunct into one dense glyph: think of the layered aksharas of Kannada and Telugu, the flowing curves of Malayalam, the loops of Tamil, or the conjunct clusters hanging beneath Devanagari's head-line in Hindi. The <em>order</em> and <em>path</em> of strokes within these glyphs carry meaning and reveal skill.</p>
+      <p>If reconstruction blurs which stroke came first or where a loop closed, the rendered akshara can read as a different character entirely. Capturing motion precisely is what lets Vahini represent these scripts as they were truly written, and score how cleanly each complex character was formed.</p>
+
+      <div class="post-key">
+        <h4>Key takeaways</h4>
+        <ul>
+          <li>Motion, the full tip path, is the master signal the others are derived from.</li>
+          <li>Double-integrating acceleration drifts; physics is combined with a learned correction and zero-velocity resets.</li>
+          <li>Reconstruction pairs with intent detection to separate ink strokes from travel.</li>
+          <li>A faithful path preserves the stroke order of stacked Indic conjuncts, where order changes meaning.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  </article>
+
+  <section class="block block--alt" data-screen-label="Read next">
+    <div class="wrap">
+      <div class="block__head reveal" style="margin-bottom:6px;"><p class="eyebrow">Read next</p></div>
+      <div class="post-next" id="readNext"></div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+<script src="blog-data.js"></script>
+<script src="site.js"></script>
+<script>
+(function(){
+  var SLUG="motion-to-strokes";
+  if(!window.VahiniPosts) return;
+  var CAT={research:"Research",technology:"Technology",health:"Health",signals:"Signals",explainer:"Guide"};
+  var arrow='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+  var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+  var next=window.VahiniPosts.filter(function(p){return p.slug!==SLUG;}).slice(0,3);
+  document.getElementById('readNext').innerHTML=next.map(function(p){
+    return '<a class="bpost reveal" href="'+p.url+'">'+
+      '<div class="bpost__art">'+window.VahiniPostArt(p,0)+'</div>'+
+      '<div class="bpost__body"><div class="bpost__meta"><span class="btag btag--'+p.cat+'">'+CAT[p.cat]+'</span><span class="bpost__date">'+esc(p.date)+'</span></div>'+
+      '<h3>'+esc(p.title)+'</h3><p>'+esc(p.excerpt)+'</p><span class="bpost__more">Read '+arrow+'</span></div></a>';
+  }).join('');
+  if(window.VahiniRevealScan) window.VahiniRevealScan();
+})();
+</script>
+</body>
+</html>

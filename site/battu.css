@@ -1,0 +1,126 @@
+/* SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+   © 2026 Vahini Technologies. All rights reserved. Dual-IMU sensing: Indian Patent No. 584433.
+   Proprietary & confidential. Third-party notices: /THIRD-PARTY-NOTICES.md · SBOM: /sbom.spdx.json */
+/* ============================================================
+   Vahini — battu.css
+   Playful kit for the CHILDREN'S product pages (Battu v1 / v2).
+   Vibrant, rounded, bouncy. Scoped under .battu so it never
+   touches the rest of the (serious) marketing site.
+   Loads AFTER site.css; reuses its nav/footer/layout.
+   ============================================================ */
+
+.battu{
+  /* soft-vibrant palette, tuned to harmonise with the brand teal / crimson / gold theme */
+  --sun:#F2A93C; --coral:#EE6A53; --grape:#6E63D6; --leaf:#2BB081; --sky:#1FB4C0; --bubble:#F6F3EC;
+  --play: "Fredoka", "Hanken Grotesk", sans-serif;
+  --battu-body:var(--accent); --battu-cap:var(--coral);
+  background:
+    radial-gradient(120% 80% at 80% -10%, color-mix(in srgb,var(--sky) 22%, transparent), transparent 60%),
+    radial-gradient(100% 70% at -10% 10%, color-mix(in srgb,var(--sun) 24%, transparent), transparent 55%),
+    var(--bubble);
+}
+.battu h1,.battu h2,.battu h3,.battu .play{font-family:var(--play); letter-spacing:-.01em;}
+
+/* playful section + headline scales */
+.bsec{padding:84px 0; position:relative;}
+.bsec--tight{padding:56px 0;}
+.b-eyebrow{display:inline-flex; align-items:center; gap:8px; font-family:var(--play); font-weight:600; font-size:14px;
+  color:var(--accent-deep); background:#fff; border:2px solid var(--accent); border-radius:99px; padding:6px 16px; box-shadow:3px 3px 0 var(--accent);}
+.b-h1{font-size:clamp(40px,6.4vw,74px); line-height:1.0; color:var(--ink);}
+.b-h1 em{font-style:normal; color:var(--coral);}
+.b-h2{font-size:clamp(30px,4.4vw,48px); line-height:1.04; color:var(--ink);}
+.b-lede{font-size:19px; line-height:1.6; color:var(--elephant); max-width:520px;}
+
+/* chunky sticker buttons */
+.btn--play{font-family:var(--play); font-weight:600; font-size:17px; border-radius:99px; padding:15px 28px;
+  border:2.5px solid var(--ink); color:#fff; background:var(--coral); box-shadow:4px 5px 0 var(--ink); transition:transform .12s var(--ease), box-shadow .12s var(--ease);}
+.btn--play:hover{transform:translate(-2px,-2px); box-shadow:6px 7px 0 var(--ink); background:var(--coral);}
+.btn--play:active{transform:translate(2px,2px); box-shadow:1px 1px 0 var(--ink);}
+.btn--play.alt{background:var(--accent);}
+.btn--play.sun{background:var(--sun); color:var(--ink);}
+.btn--play.grape{background:var(--grape);}
+
+/* hero */
+.bhero{padding:64px 0 40px;}
+.bhero__grid{display:grid; grid-template-columns:1.05fr .95fr; gap:40px; align-items:center;}
+.bhero__cta{display:flex; gap:14px; flex-wrap:wrap; margin-top:28px;}
+.bhero__chips{display:flex; gap:10px; flex-wrap:wrap; margin-top:26px;}
+.b-chip{font-family:var(--play); font-weight:500; font-size:14px; color:var(--ink); background:#fff; border:2px solid var(--ink);
+  border-radius:99px; padding:7px 14px; display:inline-flex; align-items:center; gap:7px;}
+.b-chip i{width:11px; height:11px; border-radius:50%; display:inline-block;}
+
+/* mascot */
+.battu-stage{position:relative; display:flex; align-items:center; justify-content:center; min-height:380px;}
+.battu-mascot{width:min(360px,80%); height:auto; overflow:visible;}
+.b-float{animation:bFloat 3.2s ease-in-out infinite; transform-box:fill-box; transform-origin:center;}
+.b-arm-wave{animation:bWave 1.4s ease-in-out infinite; transform-box:fill-box; transform-origin:78% 22%;}
+.b-eye{animation:bBlink 4s infinite; transform-box:fill-box; transform-origin:center;}
+.b-shadow{animation:bShadow 3.2s ease-in-out infinite;}
+.b-body{fill:var(--battu-body);} .b-cap{fill:var(--battu-cap);}
+@media (prefers-reduced-motion:reduce){ .b-float,.b-arm-wave,.b-eye,.b-shadow,.confetti i{animation:none !important;} }
+@keyframes bFloat{0%,100%{transform:translateY(0) rotate(-2deg);}50%{transform:translateY(-16px) rotate(2deg);}}
+@keyframes bWave{0%,100%{transform:rotate(8deg);}50%{transform:rotate(-22deg);}}
+@keyframes bBlink{0%,92%,100%{transform:scaleY(1);}96%{transform:scaleY(.1);}}
+@keyframes bShadow{0%,100%{transform:scaleX(1); opacity:.18;}50%{transform:scaleX(.82); opacity:.12;}}
+
+/* confetti sprinkles */
+.confetti{position:absolute; inset:0; pointer-events:none; overflow:hidden;}
+.confetti i{position:absolute; width:14px; height:14px; border-radius:4px; opacity:.9;}
+.confetti i:nth-child(odd){border-radius:50%;}
+@media (prefers-reduced-motion:no-preference){
+  .confetti i{animation:confFloat 6s ease-in-out infinite;}
+}
+@keyframes confFloat{0%,100%{transform:translateY(0) rotate(0);}50%{transform:translateY(-22px) rotate(40deg);}}
+
+/* fun feature cards */
+.bcards{display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-top:44px;}
+.bcard{background:#fff; border:2.5px solid var(--ink); border-radius:26px; padding:28px; box-shadow:6px 7px 0 var(--ink);
+  transition:transform .16s var(--ease), box-shadow .16s var(--ease);}
+.bcard:hover{transform:translate(-3px,-3px); box-shadow:9px 10px 0 var(--ink);}
+.bcard__ico{width:64px; height:64px; border-radius:20px; display:grid; place-items:center; margin-bottom:16px; border:2.5px solid var(--ink);}
+.bcard__ico svg{width:32px; height:32px; color:#fff;}
+.bcard h3{font-size:23px; margin-bottom:8px; color:var(--ink);}
+.bcard p{font-size:15px; color:var(--elephant); line-height:1.55;}
+
+/* playful steps */
+.bsteps{display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-top:42px;}
+.bstep{position:relative; background:#fff; border:2.5px solid var(--ink); border-radius:24px; padding:26px; box-shadow:5px 6px 0 var(--ink);}
+.bstep__n{width:46px; height:46px; border-radius:50%; display:grid; place-items:center; font-family:var(--play); font-weight:700; font-size:22px; color:#fff; border:2.5px solid var(--ink); margin-bottom:14px;}
+.bstep h3{font-size:21px; margin-bottom:7px; color:var(--ink);}
+.bstep p{font-size:14.5px; color:var(--elephant); line-height:1.55;}
+
+/* "why Battu" inspiration band */
+.bwhy{display:grid; grid-template-columns:.8fr 1.2fr; gap:36px; align-items:center; background:#fff;
+  border:2.5px solid var(--ink); border-radius:30px; padding:38px 40px; box-shadow:7px 8px 0 var(--ink);}
+.bwhy__art{display:grid; place-items:center;}
+.bwhy__art svg{width:min(220px,80%); height:auto; overflow:visible;}
+.bwhy__copy h2{color:var(--ink);}
+.bwhy__copy p{font-size:16px; line-height:1.62; color:var(--elephant); margin-top:14px;}
+.bwhy__copy p.bwhy__tie{font-family:var(--play); font-size:18px; color:var(--accent-deep); margin-top:18px;}
+@media (max-width:760px){ .bwhy{grid-template-columns:1fr; gap:18px; padding:30px;} .bwhy__art{order:-1;} }
+
+/* big rounded CTA band */
+.bcta{border-radius:36px; border:3px solid var(--ink); box-shadow:8px 10px 0 var(--ink); padding:54px 40px; text-align:center; position:relative; overflow:hidden;}
+.bcta h2{color:#fff; font-size:clamp(30px,4.6vw,50px);}
+.bcta p{color:rgba(255,255,255,.92); font-size:18px; max-width:520px; margin:16px auto 28px; line-height:1.55;}
+.bcta__row{display:flex; gap:14px; justify-content:center; flex-wrap:wrap;}
+
+/* classroom (v2): pens connecting */
+.bclass{position:relative; display:flex; align-items:center; justify-content:center; gap:18px; flex-wrap:wrap; min-height:300px;}
+.mini-pen{width:62px; height:auto; overflow:visible;}
+.mini-pen .b-body{fill:var(--battu-body);}
+.bhub{width:96px; height:96px; border-radius:50%; background:var(--grape); border:3px solid var(--ink); display:grid; place-items:center; box-shadow:5px 6px 0 var(--ink); position:relative; color:#fff;}
+.bhub svg{width:46px; height:46px;}
+.ble-ring{position:absolute; inset:0; border-radius:50%; border:3px solid var(--grape);}
+@media (prefers-reduced-motion:no-preference){
+  .ble-ring{animation:bleRing 2.4s ease-out infinite;}
+  .mini-pen{animation:bFloat 3.4s ease-in-out infinite;}
+  .mini-pen:nth-child(2){animation-delay:.3s;} .mini-pen:nth-child(4){animation-delay:.6s;} .mini-pen:nth-child(5){animation-delay:.9s;}
+}
+@keyframes bleRing{0%{transform:scale(1); opacity:.7;}100%{transform:scale(2.1); opacity:0;}}
+
+@media (max-width:900px){
+  .bhero__grid{grid-template-columns:1fr; gap:24px;}
+  .battu-stage{order:-1; min-height:300px;}
+  .bcards,.bsteps{grid-template-columns:1fr;}
+}

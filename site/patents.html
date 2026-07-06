@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>Patents, Vahini's protected sensing technology</title>
+<meta name="description" content="Vahini's intellectual property: Indian Patent No. 584433 for dual-IMU handwriting-motion sensing on ordinary paper, plus DPIIT recognition.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="theme.config.js"></script>
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="site.css">
+<style>
+.pat-hero{display:grid; grid-template-columns:1fr .9fr; gap:48px; align-items:center;}
+.cert{background:linear-gradient(160deg,#fff,#F4F8F8); border:1px solid rgba(0,173,181,.3); border-radius:var(--radius-xl); padding:36px; box-shadow:var(--shadow-2); position:relative; overflow:hidden;}
+.cert::before{content:""; position:absolute; inset:14px; border:1.5px solid rgba(0,173,181,.25); border-radius:18px; pointer-events:none;}
+.cert__seal{width:74px; height:74px; border-radius:50%; background:var(--crimson-soft); color:var(--crimson-deep); display:grid; place-items:center; margin-bottom:20px;}
+.cert__seal svg{width:38px; height:38px;}
+.cert__k{font-size:11.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--hint);}
+.cert__no{font-family:var(--serif); font-size:clamp(40px,6vw,60px); font-weight:700; color:var(--ink); line-height:1; margin:6px 0 4px; letter-spacing:-.01em;}
+.cert__t{font-size:15px; color:var(--muted); line-height:1.55; margin-top:10px;}
+.cert__row{display:flex; gap:10px; flex-wrap:wrap; margin-top:22px;}
+.cert__row .b{font-size:12px; font-weight:700; padding:6px 12px; border-radius:20px; background:var(--surface-2); color:var(--elephant);}
+
+.prot{display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:38px;}
+.prot__c{background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg); padding:26px; box-shadow:var(--shadow-1);}
+.prot__c .ic{width:46px; height:46px; border-radius:12px; background:var(--surface-2); color:var(--crimson-deep); display:grid; place-items:center; margin-bottom:16px;}
+.prot__c .ic svg{width:24px; height:24px;}
+.prot__c h3{font-size:19px; margin-bottom:8px;}
+.prot__c p{font-size:14.5px; color:var(--muted); line-height:1.6;}
+
+.ip-table{margin-top:30px; border:1px solid var(--rule); border-radius:var(--radius-lg); overflow:hidden; background:var(--surface);}
+.ip-row{display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:18px; padding:18px 24px; align-items:center; border-bottom:1px solid var(--rule);}
+.ip-row:last-child{border-bottom:0;}
+.ip-row--h{background:var(--surface-2); font-size:11.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--hint);}
+.ip-row .ttl{font-family:var(--serif); font-size:16px; color:var(--ink); font-weight:600;}
+.ip-row .meta{font-size:14px; color:var(--muted);}
+.ip-status{font-size:11.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:3px 10px; border-radius:20px; justify-self:start;}
+.ip-status.granted{color:var(--live); background:var(--live-bg);}
+.ip-status.progress{color:var(--dev); background:var(--dev-bg);}
+
+/* official documents */
+.docs{display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:8px;}
+.doc{display:flex; gap:18px; align-items:flex-start; background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg); padding:24px; box-shadow:var(--shadow-1); text-decoration:none; transition:transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s;}
+.doc:hover{transform:translateY(-4px); box-shadow:var(--shadow-2); border-color:var(--rule-2);}
+.doc__ic{width:52px; height:52px; border-radius:12px; background:var(--crimson-soft); color:var(--crimson-deep); display:grid; place-items:center; flex:0 0 auto;}
+.doc__ic svg{width:26px; height:26px;}
+.doc__k{font-size:11.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--hint);}
+.doc h3{font-size:18px; margin:5px 0 6px; line-height:1.2;}
+.doc p{font-size:13.5px; color:var(--muted); line-height:1.5;}
+.doc__open{margin-top:12px; display:inline-flex; align-items:center; gap:6px; font-size:13.5px; font-weight:600; color:var(--crimson-deep);}
+.doc__open svg{width:15px; height:15px;}
+.doc:hover .doc__open{color:var(--hot);}
+@media (max-width:720px){ .docs{grid-template-columns:1fr;} }
+@media (max-width:860px){
+  .pat-hero{grid-template-columns:1fr; gap:34px;}
+  .prot{grid-template-columns:1fr;}
+  .ip-row{grid-template-columns:1fr; gap:6px;} .ip-row--h{display:none;}
+}
+</style>
+</head>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
+
+  <section class="phero" data-screen-label="Hero">
+    <div class="wrap"><div class="pat-hero">
+      <div class="reveal">
+        <p class="eyebrow">Patents &amp; IP</p>
+        <h1 style="margin-top:16px;">Protected at the hardware and signal layer.</h1>
+        <p class="lede" style="margin-top:20px;">Vahini competes on physics and IP, not on a feature anyone can copy. Our core sensing method is covered by a granted Indian patent, and we're DPIIT-recognised.</p>
+        <div class="phero__cta">
+          <a class="btn btn--crimson btn--lg" href="reach.html" data-nav>Discuss licensing / partnership</a>
+          <a class="btn btn--ghost btn--lg" href="product.html" data-nav>The pen</a>
+        </div>
+      </div>
+      <div class="reveal" data-d="2">
+        <div class="cert">
+          <div class="cert__seal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M9 14l-2 7 5-3 5 3-2-7"/></svg></div>
+          <div class="cert__k">Indian Patent</div>
+          <div class="cert__no">584433</div>
+          <div class="cert__t">Dual-IMU sensing for capturing handwriting motion on ordinary paper.</div>
+          <div class="cert__row"><span class="b">Granted</span><span class="b">DPIIT-recognised</span><span class="b">Made in India</span></div>
+        </div>
+      </div>
+    </div></div>
+  </section>
+
+  <section class="block" data-screen-label="What it protects">
+    <div class="wrap">
+      <div class="block__head reveal"><p class="eyebrow eyebrow--mute">What it protects</p>
+        <h2 style="margin-top:14px;">The moat under the platform.</h2></div>
+      <p class="body reveal" data-d="1">The patent covers the method that makes everything else possible, sensing the motion of writing from the pen itself, rather than imaging the page. That's why a camera company can't simply copy it.</p>
+      <div class="prot">
+        <div class="prot__c reveal">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="6" rx="3"/><circle cx="8" cy="12" r="1.4" fill="currentColor"/><circle cx="16" cy="12" r="1.4" fill="currentColor"/></svg></div>
+          <h3>Dual-IMU sensing</h3>
+          <p>Two inertial units plus supporting sensors capture force, tilt, velocity and pen-lifts as the hand moves.</p>
+        </div>
+        <div class="prot__c reveal" data-d="1">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16M4 19V5M8 15l3-4 3 2 4-7"/></svg></div>
+          <h3>On ordinary paper</h3>
+          <p>No dot-pattern, no tablet, no special notebook. The signal comes from the pen, the page is just paper.</p>
+        </div>
+        <div class="prot__c reveal" data-d="2">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 6 6 .5-4.5 4 1.5 6L12 15l-5.5 3.5 1.5-6L3.5 8.5 9.5 8z"/></svg></div>
+          <h3>Motion-to-meaning method</h3>
+          <p>The path from raw inertial signal to interpretable handwriting metrics, the basis of every Vahini solution.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block block--alt" data-screen-label="Portfolio">
+    <div class="wrap">
+      <div class="block__head reveal"><p class="eyebrow">The portfolio</p><h2 style="margin-top:14px;">Filings &amp; recognition.</h2></div>
+      <div class="ip-table reveal" data-d="1">
+        <div class="ip-row ip-row--h"><span>Title</span><span>Reference</span><span>Status</span></div>
+        <div class="ip-row"><span class="ttl">Dual-IMU handwriting-motion sensing</span><span class="meta">Indian Patent No. 584433</span><span class="ip-status granted">Granted</span></div>
+        <div class="ip-row"><span class="ttl">DPIIT startup recognition</span><span class="meta">Govt. of India</span><span class="ip-status granted">Recognised</span></div>
+        <div class="ip-row"><span class="ttl">Further filings on signal &amp; applications</span><span class="meta">Details on request</span><span class="ip-status progress">In progress</span></div>
+      </div>
+      <div class="note-strip reveal" data-d="1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+        <p>We share full IP detail with serious investors and partners under NDA. Reach out to discuss licensing, co-development or due diligence.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" data-screen-label="Documents">
+    <div class="wrap">
+      <div class="block__head reveal"><p class="eyebrow">Official documents</p><h2 style="margin-top:14px;">See the certificates.</h2>
+        <p class="body" style="margin-top:14px;">The original government documents, open or download them directly.</p></div>
+      <div class="docs reveal" data-d="1">
+        <a class="doc" href="assets/docs/Vahini-Patent-202541020024-Grant.pdf" target="_blank" rel="noopener">
+          <span class="doc__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><circle cx="12" cy="14" r="2.4"/><path d="M10.5 16 9 21l3-1.6L15 21l-1.5-5"/></svg></span>
+          <span>
+            <span class="doc__k">Patent grant</span>
+            <h3>Patent Certificate, No. 202541020024</h3>
+            <p>Granted patent for the dual-IMU handwriting-motion sensing method (Indian Patent No. 584433).</p>
+            <span class="doc__open">Open PDF <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+          </span>
+        </a>
+        <a class="doc" href="assets/docs/Vahini-DPIIT-Recognition-DIPP201621.pdf" target="_blank" rel="noopener">
+          <span class="doc__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M9 14l-2 7 5-3 5 3-2-7"/></svg></span>
+          <span>
+            <span class="doc__k">DPIIT recognition</span>
+            <h3>Startup Recognition, DIPP201621</h3>
+            <p>Certificate of Recognition for Vahini Technologies under DPIIT, Government of India.</p>
+            <span class="doc__open">Open PDF <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="bigcta" data-screen-label="CTA">
+    <div class="wrap reveal">
+      <h2>Defensible IP, ready to build on.</h2>
+      <p>Talk to us about licensing, partnership, or the technology behind the patent.</p>
+      <div class="bigcta__row">
+        <a class="btn btn--crimson btn--lg" href="reach.html" data-nav>Start a conversation</a>
+        <a class="btn btn--ghost btn--lg" href="investor-book.dc.html" data-nav>For investors</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+<script src="site.js"></script>
+</body>
+</html>

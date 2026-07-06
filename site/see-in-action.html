@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. Live-action demo. Patent No. 584433. -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>Vahini · See it in Action (Motion → Meaning)</title>
+<meta name="description" content="Watch one stroke on ordinary paper become 16-axis motion, reconstructed and scored in real time. The live action behind Vahini's motion-data platform.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Shantell+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Patrick+Hand&family=Oswald:wght@300;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green-0:#2a4138; --green-1:#1b2a24; --green-2:#111c18;
+    --paper:#f5eeda; --paper-line:#dccfb1; --ink:#2c2113; --ink-2:#5b4d34;
+    --crimson:#c0392b; --gold:#e2a32b; --gold-d:#9a7b25; --teal:#2a8c82; --blue:#27408f;
+  }
+  *{box-sizing:border-box;-webkit-font-smoothing:antialiased;}
+  html,body{margin:0;min-height:100%;}
+  body{font-family:'Shantell Sans',cursive;color:#ecd49a;
+    background:radial-gradient(120% 120% at 50% 12%, var(--green-0) 0%, var(--green-1) 55%, var(--green-2) 100%);
+    min-height:100vh;display:flex;flex-direction:column;align-items:center;padding-bottom:40px;}
+  @keyframes dash{to{stroke-dashoffset:0}}
+  @keyframes barpulse{0%,100%{transform:scaleY(.45)}50%{transform:scaleY(1)}}
+  @keyframes nibmove{0%{offset-distance:0%}100%{offset-distance:100%}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  a{color:inherit;}
+  .topbar{width:100%;max-width:1080px;display:flex;align-items:center;gap:12px;padding:16px 22px;}
+  .home{display:flex;align-items:center;gap:9px;color:#ecd49a;text-decoration:none;font-family:'Patrick Hand',cursive;font-size:15px;opacity:.92;}
+  .home img{height:26px;}
+  .book-link{margin-left:auto;font-family:'Patrick Hand',cursive;font-size:13px;letter-spacing:.5px;color:#fff;background:var(--blue);
+    border:1px solid rgba(255,255,255,.2);border-radius:7px;padding:7px 13px;text-decoration:none;}
+  .hero{text-align:center;padding:6px 20px 4px;animation:fadeUp .5s ease both;}
+  .eyebrow{font-family:'Patrick Hand',cursive;letter-spacing:2px;text-transform:uppercase;font-size:13px;color:var(--gold);}
+  h1{font-family:'Caveat',cursive;font-size:clamp(38px,6vw,62px);line-height:1;margin:8px 0 6px;color:#f6e6b4;}
+  .sub{font-size:17px;color:#d8c79a;max-width:620px;margin:0 auto;}
+  /* phase chips */
+  .phases{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:20px auto 14px;font-family:'Patrick Hand',cursive;}
+  .phase-chip{padding:6px 13px;border-radius:20px;border:1px solid rgba(255,255,255,.18);font-size:13px;color:#cdbf9c;opacity:.6;transition:.25s;}
+  .phase-chip.on{opacity:1;color:#16241f;background:var(--gold);border-color:var(--gold);transform:translateY(-1px);}
+  /* stage = a paper card */
+  .stage{width:min(900px,94vw);background:
+      repeating-linear-gradient(transparent,transparent 27px,var(--paper-line) 27px,var(--paper-line) 28px),
+      linear-gradient(180deg,#f7f0dc,#efe4cc);
+    border-radius:14px;box-shadow:0 30px 60px rgba(0,0,0,.5);padding:26px 28px;position:relative;min-height:320px;color:var(--ink);}
+  .stage::before{content:'';position:absolute;left:46px;top:0;bottom:0;width:2px;background:rgba(192,57,43,.25);}
+  .panel{display:none;animation:fadeUp .4s ease both;}
+  .panel.on{display:block;}
+  .panel h3{font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:14px;color:var(--crimson);margin:0 0 4px 36px;}
+  .panel p{margin:0 0 14px 36px;color:var(--ink-2);font-size:15px;}
+  /* 1 write */
+  .paper-area{height:200px;position:relative;margin-left:36px;}
+  .scribble{stroke:var(--ink);stroke-width:3.4;fill:none;stroke-linecap:round;stroke-linejoin:round;
+    stroke-dasharray:1400;stroke-dashoffset:1400;}
+  .scribble.run{animation:dash 2.4s ease forwards;}
+  .nib{offset-path:path('M30 120 q40 -70 80 0 t80 0 q30 -60 70 -10 t70 10 q40 -50 80 0');}
+  .nib.run{animation:nibmove 2.4s ease forwards;}
+  /* 2 capture: motion bars */
+  .bars{display:flex;align-items:flex-end;gap:12px;height:170px;margin-left:36px;padding:10px 0;}
+  .bargrp{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;}
+  .bar{width:100%;max-width:38px;height:120px;display:flex;align-items:flex-end;}
+  .bar i{display:block;width:100%;border-radius:6px 6px 2px 2px;transform-origin:bottom;}
+  .bargrp span{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.04em;color:var(--ink-2);}
+  /* 3 reconstruct */
+  .recon{height:200px;margin-left:36px;}
+  .recon path{fill:none;stroke:var(--teal);stroke-width:3;stroke-linecap:round;stroke-dasharray:1400;stroke-dashoffset:1400;}
+  .recon.run path{animation:dash 2s ease forwards;}
+  /* 4 score: 20-factor mini grid */
+  .grid20{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;margin-left:36px;}
+  .cell{height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;
+    font-family:'Oswald',sans-serif;font-size:11px;color:#fff;}
+  .ctarow{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:22px auto 0;}
+  .cta{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-family:'Patrick Hand',cursive;
+    font-size:16px;letter-spacing:.5px;padding:12px 20px;border-radius:11px;box-shadow:0 10px 22px rgba(0,0,0,.32);}
+  .cta--teal{background:var(--teal);color:#fff;} .cta--gold{background:var(--gold);color:#16241f;}
+  .replay{cursor:pointer;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);color:#ecd49a;
+    font-family:'Patrick Hand',cursive;border-radius:9px;padding:8px 14px;margin:16px auto 0;display:inline-flex;gap:7px;align-items:center;}
+  .foot{margin-top:24px;font-family:'Patrick Hand',cursive;font-size:12px;color:#9c8a64;letter-spacing:.5px;text-align:center;}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <a class="home" href="index.html"><img src="assets/vahini-logo.png" alt="Vahini">← back to site</a>
+    <a class="book-link" href="investor-book.dc.html">◆ Investor notebook</a>
+  </div>
+
+  <div class="hero">
+    <div class="eyebrow">Live action · motion → meaning</div>
+    <h1>See the motion we capture.</h1>
+    <p class="sub">One stroke on ordinary paper becomes 16-axis motion, reconstructed and scored, the data a camera can never see.</p>
+  </div>
+
+  <div class="phases" id="phases">
+    <div class="phase-chip" data-p="0">01 · Write</div>
+    <div class="phase-chip" data-p="1">02 · Capture (16-axis)</div>
+    <div class="phase-chip" data-p="2">03 · Reconstruct</div>
+    <div class="phase-chip" data-p="3">04 · Score (20 factors)</div>
+  </div>
+
+  <div class="stage">
+    <!-- 1 WRITE -->
+    <div class="panel" data-p="0">
+      <h3>Write</h3><p>Plain pen, plain paper, screen-free.</p>
+      <div class="paper-area">
+        <svg viewBox="0 0 360 200" width="100%" height="100%">
+          <path id="scr" class="scribble" d="M30 120 q40 -70 80 0 t80 0 q30 -60 70 -10 t70 10 q40 -50 80 0"/>
+          <circle id="nib" class="nib" r="6" fill="var(--crimson)"/>
+        </svg>
+      </div>
+    </div>
+    <!-- 2 CAPTURE -->
+    <div class="panel" data-p="1">
+      <h3>Capture · 16 axes at 208 Hz</h3><p>A 9-axis IMU, a 6-axis IMU and a tip-force sensor stream the motion live.</p>
+      <div class="bars" id="bars"></div>
+    </div>
+    <!-- 3 RECONSTRUCT -->
+    <div class="panel" data-p="2">
+      <h3>Reconstruct</h3><p>From motion alone, the stroke path is rebuilt, no image required.</p>
+      <svg class="recon" id="recon" viewBox="0 0 360 200" width="100%" height="100%">
+        <path d="M30 130 q40 -70 80 0 t80 0 q30 -60 70 -10 t70 10 q40 -50 80 0"/>
+      </svg>
+    </div>
+    <!-- 4 SCORE -->
+    <div class="panel" data-p="3">
+      <h3>Score · 20 factors</h3><p>The dynamics a photo can’t see become measurements: speed, pressure, flow, pen-lifts and more.</p>
+      <div class="grid20" id="grid"></div>
+    </div>
+  </div>
+
+  <div style="text-align:center;">
+    <div class="replay" id="replay">↻ Replay</div>
+  </div>
+
+  <div class="ctarow">
+    <a class="cta cta--gold" href="../analyser/Vahini%20Analyser.html">Try the live analyser on your page</a>
+    <a class="cta cta--teal" href="investor-book.dc.html">◆ Read the investor notebook</a>
+  </div>
+
+  <div class="foot">Vahini · Patent No. 584433 · 16-axis motion · 208 Hz · vahinitech.com</div>
+
+<script>
+(function(){
+  "use strict";
+  var phases = [].slice.call(document.querySelectorAll('.phase-chip'));
+  var panels = [].slice.call(document.querySelectorAll('.panel'));
+  var AX = [['Pressure','#c0392b'],['Tilt','#2a8c82'],['Accel','#e2a32b'],['Speed','#27408f'],['Pen-lift','#9a5410']];
+  var bars = document.getElementById('bars');
+  bars.innerHTML = AX.map(function(a,k){
+    return '<div class="bargrp"><div class="bar"><i style="background:'+a[1]+';animation:barpulse '+(1+ k*0.18)+'s ease-in-out infinite"></i></div><span>'+a[0]+'</span></div>';
+  }).join('');
+  // 20-factor grid
+  var grid = document.getElementById('grid');
+  var cells='';
+  for(var n=1;n<=20;n++){
+    var v = 45 + ((n*37)%55);                 // deterministic varied scores
+    var col = v>=75?'#2a8c82':(v>=55?'#e2a32b':'#c0392b');
+    cells += '<div class="cell" style="background:'+col+'" title="Factor '+n+'">'+String(n).padStart(2,'0')+'</div>';
+  }
+  grid.innerHTML = cells;
+
+  var i=-1, timer=null;
+  function show(p){
+    phases.forEach(function(c){ c.classList.toggle('on', +c.dataset.p===p); });
+    panels.forEach(function(pl){ pl.classList.toggle('on', +pl.dataset.p===p); });
+    if(p===0){ var s=document.getElementById('scr'), nb=document.getElementById('nib');
+      s.classList.remove('run'); nb.classList.remove('run'); void s.getBBox(); s.classList.add('run'); nb.classList.add('run'); }
+    if(p===2){ var r=document.getElementById('recon'); r.classList.remove('run'); void r.getBBox(); r.classList.add('run'); }
+  }
+  function tick(){ i=(i+1)%4; show(i); }
+  function play(){ if(timer) clearInterval(timer); i=-1; tick(); timer=setInterval(tick, 2600); }
+  phases.forEach(function(c){ c.addEventListener('click', function(){ if(timer)clearInterval(timer); i=+c.dataset.p; show(i); timer=setInterval(tick,2600); }); });
+  document.getElementById('replay').addEventListener('click', play);
+  play();
+})();
+</script>
+</body>
+</html>

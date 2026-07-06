@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>One IMU or two? Why dual-IMU sensing is more accurate | Vahini Blog</title>
+<meta name="description" content="A single inertial unit can't tell a tilt from a slide. Putting two IMUs at different points along the pen barrel resolves the ambiguity and sharpens every downstream factor.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="theme.config.js"></script>
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="site.css">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
+
+  <article>
+  <section class="post-hero" data-screen-label="Post hero">
+    <div class="wrap">
+      <a class="post-back" href="blog.html" data-nav><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All posts</a>
+      <span class="btag btag--technology">Technology</span>
+      <h1>One IMU or two? Why dual-IMU sensing is more accurate</h1>
+      <div class="post-meta"><span class="post-author"><span class="pa-av malli">MK</span>Malli Kosuri</span><span class="dot"></span><span>Jun 2026</span><span class="dot"></span><span>6 min read</span></div>
+    </div>
+  </section>
+
+  <section class="post-ai" data-screen-label="AI summary">
+    <div class="wrap">
+      <div class="post-ai__card">
+        <span class="post-ai__tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9z"/><path d="M19 14l.7 1.8L21 16.5l-1.3.6L19 19l-.7-1.8L17 16.5z"/></svg>AI summary</span>
+        <p>A single IMU can't separate a true tilt of the pen from the pen sliding across the page, both look like the same blend of acceleration and rotation. Vahini places <strong>two IMUs at different points along the barrel</strong>, so the difference between their readings reveals the pen's real rotation and the position of the tip independently of how it's moving.</p>
+        <p>That extra constraint sharpens tilt, velocity and tip-path estimates, and feeds cleaner numbers into all twenty handwriting factors, especially for the dense, curved letterforms of Indic scripts.</p>
+        <p class="post-ai__note">A quick machine-generated overview. The full post has the detail and the why.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="post-body">
+    <div class="wrap">
+      <div class="post-toc">
+        <h4>In this post</h4>
+        <ol>
+          <li><a href="#s1">The ambiguity one sensor can't solve</a></li>
+          <li><a href="#s2">Two IMUs, two vantage points</a></li>
+          <li><a href="#s3">From two readings to one clean orientation</a></li>
+          <li><a href="#s4">What it sharpens downstream</a></li>
+        </ol>
+      </div>
+
+      <p class="lede-para">An inertial measurement unit (IMU) feels acceleration and rotation. It's a remarkable little chip, but on its own, inside a moving pen, it faces a problem it genuinely cannot solve.</p>
+
+      <h2 id="s1">The ambiguity one sensor can't solve</h2>
+      <p>An accelerometer measures all acceleration at once, the pen speeding up, <em>and</em> the constant tug of gravity. When the pen rotates, the gravity component shifts across its axes; when the pen slides, real motion shows up on the same axes. From a single point, <strong>a tilt and a slide can produce nearly identical readings</strong>. The gyroscope helps by measuring rotation rate directly, but it drifts, and one gyro still can't tell you <em>where</em> along the pen a motion originated.</p>
+      <p>The result, with one IMU, is that the pen is always making an educated guess about whether you tipped it or moved it. For casual motion tracking that's fine. For measuring the millimetre-scale geometry of handwriting, the guesswork shows up as noise in every factor.</p>
+
+      <h2 id="s2">Two IMUs, two vantage points</h2>
+      <p>Put a second IMU further down the barrel and the picture changes completely. When a rigid pen rotates, the two units, separated by a known distance, experience <strong>different accelerations</strong>. That difference is a direct, geometric fingerprint of rotation about the tip. When the pen merely slides, both units see the <em>same</em> motion. Comparing the two readings cleanly separates "the pen turned" from "the pen moved."</p>
+      <p>This is the same principle that lets your inner ear sense head rotation, and the reason aircraft and robots use distributed inertial sensing. The known lever arm between the two IMUs turns an ambiguous signal into two equations with one answer.</p>
+
+      <figure class="post-fig">
+        <svg viewBox="0 0 720 220" role="img" aria-label="A pen with two IMUs along the barrel; rotation produces different readings at each, a slide produces the same">
+          <rect width="720" height="220" fill="#FFFFFF"/>
+          <rect x="120" y="150" width="300" height="20" rx="10" fill="#222831" transform="rotate(-20 270 160)"/>
+          <polygon points="408,120 452,128 416,150" fill="#C0080B" transform="rotate(-20 270 160)"/>
+          <circle cx="190" cy="139" r="11" fill="#00ADB5"/><text x="190" y="120" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="12" font-weight="700" fill="#048A91">IMU 1</text>
+          <circle cx="300" cy="99" r="11" fill="#E8B06B"/><text x="300" y="80" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="12" font-weight="700" fill="#9A7B25">IMU 2</text>
+          <path d="M470 70 a60 60 0 0 1 0 90" fill="none" stroke="#222831" stroke-width="2.4" stroke-dasharray="5 5"/><text x="500" y="120" font-family="Hanken Grotesk,sans-serif" font-size="13" font-weight="700" fill="#565D66">rotation:</text><text x="500" y="140" font-family="Hanken Grotesk,sans-serif" font-size="12" fill="#565D66">readings differ</text>
+          <text x="500" y="172" font-family="Hanken Grotesk,sans-serif" font-size="13" font-weight="700" fill="#565D66">slide:</text><text x="560" y="172" font-family="Hanken Grotesk,sans-serif" font-size="12" fill="#565D66">readings match</text>
+        </svg>
+        <figcaption>Two IMUs separated by a known distance: rotation produces a measurable difference between them, while a pure slide moves both identically. That contrast is what resolves the single-sensor ambiguity.</figcaption>
+      </figure>
+
+      <h2 id="s3">From two readings to one clean orientation</h2>
+      <p>The two streams are fused, typically with a Kalman-style filter, into a single best estimate of the pen's orientation and the motion of its tip. Each sensor checks the other: the gyroscopes constrain fast rotation, the accelerometers anchor the slow drift, and the spatial separation pins down the geometry. The pen ends up with a steadier, less noisy sense of <strong>how it is held and where the tip is going</strong> than any single unit could provide.</p>
+
+      <h2 id="s4">What it sharpens downstream</h2>
+      <p>Cleaner orientation isn't an end in itself, it's the foundation the handwriting factors stand on. Slant and vertical alignment depend on knowing the true tilt. Velocity and rhythm depend on a tip path that isn't polluted by rotation artefacts. Stroke reconstruction depends on all of it.</p>
+      <p>This matters most for <strong>Indic scripts</strong>, Malayalam, Telugu, Kannada, Tamil and Devanagari for Hindi, where letters are built from tight curves, loops and stacked conjuncts. A small orientation error that a Latin print sample would shrug off can blur the difference between two similar aksharas. Dual-IMU sensing buys back that precision.</p>
+
+      <div class="post-key">
+        <h4>Key takeaways</h4>
+        <ul>
+          <li>One IMU can't reliably separate tilting the pen from sliding it.</li>
+          <li>Two IMUs a known distance apart turn that ambiguity into solvable geometry.</li>
+          <li>Fusing both yields steadier orientation and a cleaner tip path.</li>
+          <li>The precision gain matters most for the curved, stacked letterforms of Indic scripts.</li>
+        </ul>
+      </div>
+
+      <p>It's the reason Vahini's pen carries two inertial units rather than one. The second sensor isn't redundancy, it's the piece that makes the measurement trustworthy.</p>
+    </div>
+  </section>
+  </article>
+
+  <section class="block block--alt" data-screen-label="Read next">
+    <div class="wrap">
+      <div class="block__head reveal" style="margin-bottom:6px;"><p class="eyebrow">Read next</p></div>
+      <div class="post-next" id="readNext"></div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+<script src="blog-data.js"></script>
+<script src="site.js"></script>
+<script>
+(function(){
+  var SLUG="one-imu-or-two";
+  if(!window.VahiniPosts) return;
+  var CAT={research:"Research",technology:"Technology",health:"Health",signals:"Signals",explainer:"Guide"};
+  var arrow='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+  var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+  var next=window.VahiniPosts.filter(function(p){return p.slug!==SLUG;}).slice(0,3);
+  document.getElementById('readNext').innerHTML=next.map(function(p){
+    return '<a class="bpost reveal" href="'+p.url+'">'+
+      '<div class="bpost__art">'+window.VahiniPostArt(p,0)+'</div>'+
+      '<div class="bpost__body"><div class="bpost__meta"><span class="btag btag--'+p.cat+'">'+CAT[p.cat]+'</span><span class="bpost__date">'+esc(p.date)+'</span></div>'+
+      '<h3>'+esc(p.title)+'</h3><p>'+esc(p.excerpt)+'</p><span class="bpost__more">Read '+arrow+'</span></div></a>';
+  }).join('');
+  if(window.VahiniRevealScan) window.VahiniRevealScan();
+})();
+</script>
+</body>
+</html>
