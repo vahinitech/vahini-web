@@ -238,11 +238,14 @@
 /* ============================================================
    The book demo. Left paper page: write with the mouse while an
    SVG pen follows the cursor and 6 sensor channels (16 axes)
-   wiggle at 208 Hz. Right dark page: BLE packets stream, the
+   wiggle at 208 Hz. Right dark page: a live scrolling waveform
+   tracks the stroke as it's written, then BLE packets stream, the
    pen-tip path is reconstructed with a glow, and the letter is
-   recognised offline with a first-party template matcher
-   (resample, rotate to indicative angle, scale-normalise,
-   cosine distance).
+   recognised offline with a first-party template matcher (resample,
+   closed-form best-rotation match a la Protractor, tried forwards,
+   reversed, and -- for closed shapes -- from several start points
+   around the loop, so a circle drawn from any angle still lands on
+   "O" instead of drifting onto another shape).
    ============================================================ */
 (function(){
 "use strict";
@@ -278,6 +281,33 @@ function pulseBus(speed){
   }
 }
 function calmBus(){ traces.forEach(function(el){ el.style.height = '4px'; }); }
+
+/* ---------- live sensor waveform (right/dark page, while the pen moves) ---------- */
+var WCH = [['#2a8c82', 1.0, 0], ['#4a67c9', 1.4, 1.1], ['#9b7bd4', 0.8, 2.3], ['#e2a32b', 1.7, 3.6]];
+var waveT = 0, waveAmp = 0, waveTarget = 0, waveRaf = null;
+function waveFrame(){
+  waveRaf = requestAnimationFrame(waveFrame);
+  waveT += 0.09; waveAmp += (waveTarget - waveAmp) * 0.12;
+  var r = recon.getBoundingClientRect(), w = r.width, h = r.height;
+  gR.clearRect(0, 0, recon.width, recon.height);
+  gR.save();
+  gR.strokeStyle = 'rgba(255,255,255,.07)'; gR.lineWidth = 1;
+  gR.beginPath(); gR.moveTo(0, h / 2); gR.lineTo(w, h / 2); gR.stroke();
+  WCH.forEach(function(c, i){
+    var amp = (9 + i * 3.5) * (0.3 + waveAmp);
+    var midY = h / 2 + (i - (WCH.length - 1) / 2) * (h * 0.1);
+    gR.beginPath(); gR.strokeStyle = c[0]; gR.lineWidth = 2; gR.lineCap = 'round';
+    gR.shadowColor = c[0]; gR.shadowBlur = 5;
+    for (var x = 0; x <= w; x += 4){
+      var y = midY + Math.sin(x * 0.045 * c[1] + waveT * (1 + i * .12) + c[2]) * amp;
+      if (x === 0) gR.moveTo(x, y); else gR.lineTo(x, y);
+    }
+    gR.stroke();
+  });
+  gR.restore();
+}
+function waveStart(){ waitLay.classList.add('off'); if (!waveRaf && !reduce) waveFrame(); }
+function waveStop(){ cancelAnimationFrame(waveRaf); waveRaf = null; waveT = 0; waveAmp = 0; waveTarget = 0; }
 
 /* ---------- state + elements ---------- */
 var strokes = [], cur = null, samples = 0, lastPt = null, drawing = false, sendTimer = null, replayRaf = null;
@@ -321,6 +351,7 @@ draw.addEventListener('pointerdown', function(e){
   drawing = true; cur = [pos(e)]; lastPt = cur[0];
   hint.classList.add('off'); clearTimeout(sendTimer);
   setStep(0); setStatus('busy', 'Capturing motion…');
+  waveStart();
 });
 draw.addEventListener('pointermove', function(e){
   if (!drawing) return;
@@ -329,12 +360,13 @@ draw.addEventListener('pointermove', function(e){
   samples += Math.round(dt * 0.208);           /* 208 samples a second */
   sampleEl.textContent = samples.toLocaleString();
   pulseBus(speed);
+  waveTarget = Math.min(1, speed / 42);
   line(gD, lastPt, p, Math.max(2.1, 4.6 - Math.min(2.4, speed * 0.3)), INK, false);
   cur.push(p); lastPt = p;
 });
 function endStroke(){
   if (!drawing) return;
-  drawing = false; calmBus();
+  drawing = false; calmBus(); waveTarget = 0.18;
   if (cur && cur.length > 2) strokes.push(cur);
   cur = null;
   clearTimeout(sendTimer);
@@ -372,6 +404,7 @@ function transmit(){
   }, reduce ? 60 : 950);
 }
 function reconstruct(){
+  waveStop();
   setStep(2); setStatus('busy', 'Reconstructing the pen-tip path…');
   waitLay.classList.add('off');
   gR.clearRect(0, 0, recon.width, recon.height);
@@ -419,23 +452,84 @@ function resample(points){
   while (out.length < N) out.push(out[out.length - 1]);
   return out.slice(0, N);
 }
-function normalise(points){
+function toVector(points){
   var c = { x: 0, y: 0 };
   points.forEach(function(p){ c.x += p.x / points.length; c.y += p.y / points.length; });
-  var a = Math.atan2(points[0].y - c.y, points[0].x - c.x);
-  var cos = Math.cos(-a), sin = Math.sin(-a), v = [], mag = 0;
+  var v = [], mag = 0;
   points.forEach(function(p){
-    var x = (p.x - c.x) * cos - (p.y - c.y) * sin;
-    var y = (p.x - c.x) * sin + (p.y - c.y) * cos;
+    var x = p.x - c.x, y = p.y - c.y;
     v.push(x, y); mag += x * x + y * y;
   });
   mag = Math.sqrt(mag) || 1;
   return v.map(function(x){ return x / mag; });
 }
-function similarity(a, b){
-  var dot = 0, i;
-  for (i = 0; i < a.length; i += 2) dot += a[i] * b[i] + a[i+1] * b[i+1];
-  return dot;
+/* Best-rotation match (the Protractor method): the minimum achievable
+   distance between a point vector and a template, over every possible
+   rotation, works out in closed form to sqrt(dot^2 + cross^2) -- so we
+   never have to guess one angle from the stroke's first point. A circle
+   started at any point on the ring still lines up with "O" instead of
+   drifting onto "triangle". */
+function angleScore(a, b){
+  var dot = 0, cross = 0, i;
+  for (i = 0; i < a.length; i += 2){
+    dot += a[i] * b[i] + a[i+1] * b[i+1];
+    cross += a[i] * b[i+1] - a[i+1] * b[i];
+  }
+  return Math.min(1, Math.sqrt(dot * dot + cross * cross));
+}
+function reversedVec(v){
+  var out = [];
+  for (var i = v.length - 2; i >= 0; i -= 2) out.push(v[i], v[i+1]);
+  return out;
+}
+function shiftedVec(v, k){
+  var n = v.length / 2, out = [];
+  for (var i = 0; i < n; i++){
+    var j = ((i + k) % n + n) % n;
+    out.push(v[j*2], v[j*2+1]);
+  }
+  return out;
+}
+function dotProduct(a, b){
+  var s = 0;
+  for (var i = 0; i < a.length; i++) s += a[i] * b[i];
+  return s;
+}
+function rotateVec(v, theta){
+  var out = [], cos = Math.cos(theta), sin = Math.sin(theta);
+  for (var i = 0; i < v.length; i += 2){
+    var x = v[i], y = v[i+1];
+    out.push(x * cos - y * sin, x * sin + y * cos);
+  }
+  return out;
+}
+/* +-32 degrees of slack for imprecise handwriting -- wide enough to
+   forgive a wobbly hand, narrow enough that a V drawn upright never
+   scores well against a 7, which only differs from V by orientation. */
+var SWEEP = [];
+for (var sw = -32; sw <= 32; sw += 4) SWEEP.push(sw * Math.PI / 180);
+
+/* mouse strokes can start anywhere and run either direction. For open
+   letterforms (V, L, 7, Z...) orientation is part of what defines the
+   shape, so we only allow a small forgiving rotation either way. For
+   closed loops (O, triangle, star, heart) orientation and start point
+   are both arbitrary, so we search every rotation and every start point
+   around the loop, keeping whichever alignment scores best. */
+function bestMatch(v, t){
+  var rv = reversedVec(v);
+  if (t.closed){
+    var best = Math.max(angleScore(v, t.v), angleScore(rv, t.v));
+    var step = Math.max(1, Math.round((v.length / 2) / 12));
+    for (var k = step; k < v.length / 2; k += step){
+      best = Math.max(best, angleScore(shiftedVec(v, k), t.v), angleScore(shiftedVec(rv, k), t.v));
+    }
+    return best;
+  }
+  var best2 = -Infinity;
+  SWEEP.forEach(function(a){
+    best2 = Math.max(best2, dotProduct(rotateVec(v, a), t.v), dotProduct(rotateVec(rv, a), t.v));
+  });
+  return best2;
 }
 function P(x, y){ return { x: x, y: y }; }
 function poly(pts){
@@ -453,7 +547,7 @@ function arc(cx, cy, r, a0, a1){
 }
 var TAU = Math.PI * 2;
 var TEMPLATES = [
-  ['O', arc(.5, .5, .42, -TAU/4, -TAU/4 + TAU)],
+  ['O', arc(.5, .5, .42, -TAU/4, -TAU/4 + TAU), true],
   ['C', arc(.5, .5, .42, -TAU/8, -TAU/8 - TAU * .72)],
   ['S', arc(.5, .28, .22, -TAU/4, -TAU/4 - TAU/2).concat(arc(.5, .72, .22, TAU/4, TAU * .75))],
   ['U', poly([P(.1,.08), P(.1,.6)]).concat(arc(.5,.6,.4,Math.PI,TAU/2 + Math.PI)).concat(poly([P(.9,.6), P(.9,.08)]))],
@@ -467,12 +561,12 @@ var TEMPLATES = [
   ['7', poly([P(.08,.08), P(.9,.08), P(.42,.95)])],
   ['2', arc(.5,.3,.25,Math.PI,TAU * .55).concat(poly([P(.68,.45), P(.12,.92), P(.9,.92)]))],
   ['3', arc(.5,.28,.2,Math.PI * .8, -TAU * .3 + Math.PI).concat(arc(.5,.7,.24,-TAU/4,TAU * .42))],
-  ['triangle', poly([P(.5,.05), P(.05,.92), P(.95,.92), P(.5,.05)])],
-  ['star', poly([P(.5,.02), P(.38,.38), P(.02,.38), P(.31,.6), P(.2,.98), P(.5,.75), P(.8,.98), P(.69,.6), P(.98,.38), P(.62,.38), P(.5,.02)])],
-  ['heart', arc(.32,.3,.2,Math.PI,0).concat(arc(.68,.3,.2,Math.PI,0)).concat(poly([P(.88,.4), P(.5,.95), P(.12,.4)]))],
+  ['triangle', poly([P(.5,.05), P(.05,.92), P(.95,.92), P(.5,.05)]), true],
+  ['star', poly([P(.5,.02), P(.38,.38), P(.02,.38), P(.31,.6), P(.2,.98), P(.5,.75), P(.8,.98), P(.69,.6), P(.98,.38), P(.62,.38), P(.5,.02)]), true],
+  ['heart', arc(.32,.3,.2,Math.PI,0).concat(arc(.68,.3,.2,Math.PI,0)).concat(poly([P(.88,.4), P(.5,.95), P(.12,.4)])), true],
   ['check', poly([P(.08,.55), P(.35,.9), P(.92,.1)])]
 ];
-var VEC = TEMPLATES.map(function(t){ return [t[0], normalise(resample(t[1].slice()))]; });
+var VEC = TEMPLATES.map(function(t){ return { name: t[0], v: toVector(resample(t[1].slice())), closed: !!t[2] }; });
 var NICE = { O:'the letter O', C:'the letter C', S:'the letter S', U:'the letter U', V:'the letter V',
   W:'the letter W', M:'the letter M', N:'the letter N', L:'the letter L', Z:'the letter Z',
   1:'the number 1', 2:'the number 2', 3:'the number 3', 7:'the number 7',
@@ -484,10 +578,10 @@ function recognise(){
   strokes.forEach(function(s){ s.forEach(function(p){ flat.push({ x: p.x, y: p.y }); }); });
   if (flat.length < 8){ setStatus('', 'Awaiting strokes…'); return; }
   setStep(3);
-  var v = normalise(resample(flat)), best = null;
+  var v = toVector(resample(flat)), best = null;
   VEC.forEach(function(t){
-    var sc = similarity(v, t[1]);
-    if (!best || sc > best.sc) best = { name: t[0], sc: sc };
+    var sc = bestMatch(v, t);
+    if (!best || sc > best.sc) best = { name: t.name, sc: sc };
   });
   var pct = Math.round(Math.max(0, Math.min(.999, best.sc)) * 100);
   setStatus('done', 'Recognised ✓ offline');
@@ -506,7 +600,7 @@ function recognise(){
 document.getElementById('siaClear').addEventListener('click', function(){
   strokes = []; cur = null; samples = 0;
   sampleEl.textContent = '0'; pktEl.textContent = '0';
-  clearTimeout(sendTimer); cancelAnimationFrame(replayRaf);
+  clearTimeout(sendTimer); cancelAnimationFrame(replayRaf); waveStop();
   gD.clearRect(0, 0, draw.width, draw.height);
   gR.clearRect(0, 0, recon.width, recon.height);
   hint.classList.remove('off'); waitLay.classList.remove('off');
