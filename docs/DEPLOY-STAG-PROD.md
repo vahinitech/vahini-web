@@ -26,6 +26,10 @@ still missing afterwards (network/auth issue reaching GitHub).
 - `deploy/release.sh`
 - `deploy/stag.vahinitech.com.nginx.conf`
 - `deploy/vahinitech.com.nginx.conf`
+- `deploy/api.vahinitech.com.nginx.conf` -- friendlier host name for the same
+  recognition API (`/ocr`, `/report-python`, `/analyze-vl`) that already runs
+  behind vahinitech.com; no separate backend, just a dedicated vhost that
+  proxies through the same `web` container on `127.0.0.1:3015`.
 
 ## 1) Deploy Staging
 
@@ -86,11 +90,11 @@ docker compose -f deploy/docker-compose.prod.yml logs --tail=120 web
 
 ## 5) HTTPS certificate renewal
 
-`deploy/vahinitech.com.nginx.conf` and `deploy/stag.vahinitech.com.nginx.conf`
-both point at standard certbot cert paths
-(`/etc/letsencrypt/live/<domain>/{fullchain,privkey}.pem`) and already serve
-the HTTP-01 challenge webroot at `/var/www/certbot`. Let's Encrypt certs are
-valid 90 days, so this needs to auto-renew, not be reissued by hand every
+`deploy/vahinitech.com.nginx.conf`, `deploy/stag.vahinitech.com.nginx.conf`
+and `deploy/api.vahinitech.com.nginx.conf` all point at standard certbot cert
+paths (`/etc/letsencrypt/live/<domain>/{fullchain,privkey}.pem`) and already
+serve the HTTP-01 challenge webroot at `/var/www/certbot`. Let's Encrypt certs
+are valid 90 days, so this needs to auto-renew, not be reissued by hand every
 quarter.
 
 **The renewal check/schedule itself is not this repo's job.** Installing
@@ -117,17 +121,37 @@ sudo deploy/certbot/install-renew-hook.sh
 
 This installs `deploy/certbot/reload-nginx-hook.sh` to
 `/etc/letsencrypt/renewal-hooks/deploy/`, where certbot automatically runs it
-after every successful renewal (for either domain), and verifies the whole
-path end-to-end with `certbot renew --dry-run` (no real certs touched, no
-rate limits hit).
+after every successful renewal (**for any domain on this host**, not just
+vahinitech.com), and verifies the whole path end-to-end with
+`certbot renew --dry-run` (no real certs touched, no rate limits hit). Install
+it once and every current and future subdomain's renewals are covered.
 
-Initial issuance (already done for the current cert; kept here for the next
-time a new subdomain needs one):
+Initial issuance (already done for `vahinitech.com`/`www.vahinitech.com`;
+kept here for reference):
 
 ```bash
 sudo certbot certonly --webroot -w /var/www/certbot -d vahinitech.com -d www.vahinitech.com
 sudo certbot certonly --webroot -w /var/www/certbot -d stag.vahinitech.com
+sudo certbot certonly --webroot -w /var/www/certbot -d api.vahinitech.com
 ```
+
+### Adding a new subdomain
+
+Renewal (above) is automatic for any cert certbot already manages, but a
+**new** subdomain needs three one-time steps first -- there is nothing to
+renew until a certificate for it exists:
+
+1. Point DNS for the new subdomain at this host's IP (`110.172.148.13`).
+2. Add an nginx vhost for it under `deploy/` (copy the closest existing one,
+   e.g. `deploy/api.vahinitech.com.nginx.conf`) with the
+   `/.well-known/acme-challenge/` location so the HTTP-01 challenge can
+   succeed, and apply it on the host.
+3. Issue the cert: `sudo certbot certonly --webroot -w /var/www/certbot -d
+   <subdomain>.vahinitech.com`.
+
+After that, `deploy/certbot/install-renew-hook.sh` (if not already run) or
+the existing hook picks it up automatically -- no per-domain renewal setup
+needed.
 
 ## Notes
 

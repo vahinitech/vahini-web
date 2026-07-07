@@ -3,7 +3,11 @@
 # © 2026 Vahini Technologies. All rights reserved.
 #
 # One-time setup on the vahinitech.com host: wires up automatic HTTPS
-# certificate renewal for vahinitech.com / www.vahinitech.com / stag.vahinitech.com.
+# certificate renewal for every certbot-managed cert on this host --
+# vahinitech.com / www.vahinitech.com / stag.vahinitech.com /
+# api.vahinitech.com today, and any subdomain added later (see the "Adding a
+# new subdomain" section in docs/DEPLOY-STAG-PROD.md) -- with no per-domain
+# changes needed here.
 #
 # This does NOT set up a new cron job or systemd timer -- if certbot was
 # installed via apt/snap (the normal way, and how the current cert under
