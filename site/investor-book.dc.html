@@ -679,7 +679,7 @@
               <div style="position:absolute;top:0;bottom:0;left:56px;width:0;background:transparent;"></div>
               <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:#9aa;">CHAPTER 07 · WRITING DNA</div>
               <div style="font-family:'Caveat',cursive;font-size:54px;color:#27408f;line-height:1;margin:2px 0 6px;">Writing DNA</div>
-              <div style="font-family:'Shantell Sans',cursive;font-size:16px;line-height:1.4;color:#39404f;max-width:430px;margin-bottom:14px;">Every page produces a <b style="color:#27408f;">20-factor signature</b>, as distinct as a fingerprint. This is the product, and what no scanned image can ever capture.</div>
+              <div style="font-family:'Shantell Sans',cursive;font-size:16px;line-height:1.4;color:#39404f;max-width:430px;margin-bottom:14px;">Every page produces a <b style="color:#27408f;">20-factor signature</b>, as distinct as a fingerprint. Today it is scored by computer vision from a simple scan; the pen's motion research makes it deeper still.</div>
               <div style="display:flex;flex-wrap:wrap;gap:8px;max-width:440px;">
                 <sc-for list="{{ factors }}" as="f" hint-placeholder-count="20">
                   <span style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:13.5px;color:#27408f;background:#fff;border:1.5px solid #c3d2f0;border-radius:18px;padding:5px 12px;box-shadow:1px 2px 0 rgba(39,64,143,.06);">{{ f }}</span>
@@ -1518,9 +1518,9 @@ class Component extends DCLogic {
     const is = (k) => cur === k;
 
     const appData = [
-      { name:'Handwriting AI', glyph:'✎', status:'LIVE', badge:'#2a8c82', color:'#2a8c82', tag:'20-factor analysis & coaching, across six scripts.', doodle:'live & free today ✦', long:'Upload one handwritten page and get a 20-factor analysis (pressure, slant, spacing, formation) with personalised coaching exercises, not the same worksheet for everyone. Across six scripts, in minutes. Live and free to try today.' },
+      { name:'Handwriting AI', glyph:'✎', status:'LIVE', badge:'#2a8c82', color:'#2a8c82', tag:'20-factor CV analysis from a simple scan, for every child.', doodle:'live & free today ✦', long:'Scan or photograph one handwritten page and computer vision scores all 20 factors (pressure, slant, spacing, formation) with personalised coaching exercises, not the same worksheet for everyone. No pen, no per-child device: it works with the printers and scanners schools already have. English and Telugu today. Live and free to try.' },
       { name:'Digital Notes', glyph:'⇩', status:'IN DEV', badge:'#e2a32b', color:'#b07d12', tag:'Paper notes reconstructed to digital, screen-free.', doodle:'paper → searchable text', long:'Your ordinary paper notes, rebuilt as searchable digital text straight from the pen’s motion, no tablet, no dot-pattern paper and no camera. Write on the page you already use; keep the digital copy.' },
-      { name:'Screening & Assessment', glyph:'✚', status:'RESEARCH', badge:'#c0392b', color:'#c0392b', tag:'Early motor-pattern signals, studied with clinicians.', doodle:'built with clinicians', long:'The fine-motor patterns inside handwriting motion that screening studies look for, built with special educators, OTs and clinicians. A research-stage signal for early, gentle support. No diagnostic claims.' },
+      { name:'Autism Support · The Pen', glyph:'✚', status:'RESEARCH', badge:'#c0392b', color:'#c0392b', tag:'The dual-IMU pen, dedicated to autism-support research.', doodle:'built with clinicians', long:'The pen’s dedicated role: autism and CwSN support, built with special educators, OTs and clinicians. It senses grip pressure, steadiness, writing flow and pen lifts directly, and measures each child against their own baseline, not a norm. No dataset required, and no diagnostic claims.' },
       { name:'Signature Intelligence', glyph:'✓', status:'IN DEV', badge:'#e2a32b', color:'#7a4bd0', tag:'Verify how a signature was written, not just its shape.', doodle:'motion, not just shape', long:'A forgery can copy the shape of a signature; it cannot copy the motion behind it. Vahini verifies the pressure, speed and rhythm of how a signature is written, a motion layer no image-based check can see.' },
       { name:'Developer SDK', glyph:'{ }', status:'PLANNED', badge:'#27408f', color:'#27408f', tag:'Motion intelligence as an API for partners.', doodle:'build on our motion API', long:'Everything above, exposed as an API. Partners build their own products on Vahini’s motion-intelligence engine, banks, edtech, healthtech, without touching the hardware or the data pipeline.' }
     ];
@@ -1724,7 +1724,7 @@ class Component extends DCLogic {
       ],
       hardQL: this.hardQ.slice(0,5), hardQR: this.hardQ.slice(5),
       visionH: [
-        { tag:'TODAY', t:'AI handwriting coach', d:'A live 20-factor analyser and smart pen, in real classrooms.', c:'#2a8c82' },
+        { tag:'TODAY', t:'Two solutions, live', d:'20-factor CV analysis from a simple scan for every child; the pen dedicated to autism-support research.', c:'#2a8c82' },
         { tag:'TOMORROW', t:'Handwriting foundation model', d:'One model trained on the motion corpus, powering edtech, health, identity & robotics.', c:'#27408f' },
         { tag:'EVENTUALLY', t:'The writing operating system', d:'The motion layer every machine uses to read, verify and generate human handwriting.', c:'#c0392b' }
       ],

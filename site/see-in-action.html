@@ -1,178 +1,448 @@
 <!DOCTYPE html>
 <html lang="en">
 <!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
-     © 2026 Vahini Technologies. Live-action demo. Patent No. 584433. -->
+     © 2026 Vahini Technologies. All rights reserved. Interactive live demo. Patent No. 584433. -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="only light">
-<title>Vahini · See it in Action (Motion → Meaning)</title>
-<meta name="description" content="Watch one stroke on ordinary paper become 16-axis motion, reconstructed and scored in real time. The live action behind Vahini's motion-data platform.">
+<title>See it in Action · draw and watch the pen think | Vahini</title>
+<meta name="description" content="Draw a letter or symbol with your mouse. Watch it stream as 16-axis motion at 208 Hz over BLE, get reconstructed by AI, and be recognised offline in your browser.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Shantell+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Patrick+Hand&family=Oswald:wght@300;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Hanken+Grotesk:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<script src="js/theme.config.js"></script>
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/site.css">
 <style>
-  :root{
-    --green-0:#2a4138; --green-1:#1b2a24; --green-2:#111c18;
-    --paper:#f5eeda; --paper-line:#dccfb1; --ink:#2c2113; --ink-2:#5b4d34;
-    --crimson:#c0392b; --gold:#e2a32b; --gold-d:#9a7b25; --teal:#2a8c82; --blue:#27408f;
-  }
-  *{box-sizing:border-box;-webkit-font-smoothing:antialiased;}
-  html,body{margin:0;min-height:100%;}
-  body{font-family:'Shantell Sans',cursive;color:#ecd49a;
-    background:radial-gradient(120% 120% at 50% 12%, var(--green-0) 0%, var(--green-1) 55%, var(--green-2) 100%);
-    min-height:100vh;display:flex;flex-direction:column;align-items:center;padding-bottom:40px;}
-  @keyframes dash{to{stroke-dashoffset:0}}
-  @keyframes barpulse{0%,100%{transform:scaleY(.45)}50%{transform:scaleY(1)}}
-  @keyframes nibmove{0%{offset-distance:0%}100%{offset-distance:100%}}
-  @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-  a{color:inherit;}
-  .topbar{width:100%;max-width:1080px;display:flex;align-items:center;gap:12px;padding:16px 22px;}
-  .home{display:flex;align-items:center;gap:9px;color:#ecd49a;text-decoration:none;font-family:'Patrick Hand',cursive;font-size:15px;opacity:.92;}
-  .home img{height:26px;}
-  .book-link{margin-left:auto;font-family:'Patrick Hand',cursive;font-size:13px;letter-spacing:.5px;color:#fff;background:var(--blue);
-    border:1px solid rgba(255,255,255,.2);border-radius:7px;padding:7px 13px;text-decoration:none;}
-  .hero{text-align:center;padding:6px 20px 4px;animation:fadeUp .5s ease both;}
-  .eyebrow{font-family:'Patrick Hand',cursive;letter-spacing:2px;text-transform:uppercase;font-size:13px;color:var(--gold);}
-  h1{font-family:'Caveat',cursive;font-size:clamp(38px,6vw,62px);line-height:1;margin:8px 0 6px;color:#f6e6b4;}
-  .sub{font-size:17px;color:#d8c79a;max-width:620px;margin:0 auto;}
-  /* phase chips */
-  .phases{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:20px auto 14px;font-family:'Patrick Hand',cursive;}
-  .phase-chip{padding:6px 13px;border-radius:20px;border:1px solid rgba(255,255,255,.18);font-size:13px;color:#cdbf9c;opacity:.6;transition:.25s;}
-  .phase-chip.on{opacity:1;color:#16241f;background:var(--gold);border-color:var(--gold);transform:translateY(-1px);}
-  /* stage = a paper card */
-  .stage{width:min(900px,94vw);background:
-      repeating-linear-gradient(transparent,transparent 27px,var(--paper-line) 27px,var(--paper-line) 28px),
-      linear-gradient(180deg,#f7f0dc,#efe4cc);
-    border-radius:14px;box-shadow:0 30px 60px rgba(0,0,0,.5);padding:26px 28px;position:relative;min-height:320px;color:var(--ink);}
-  .stage::before{content:'';position:absolute;left:46px;top:0;bottom:0;width:2px;background:rgba(192,57,43,.25);}
-  .panel{display:none;animation:fadeUp .4s ease both;}
-  .panel.on{display:block;}
-  .panel h3{font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:14px;color:var(--crimson);margin:0 0 4px 36px;}
-  .panel p{margin:0 0 14px 36px;color:var(--ink-2);font-size:15px;}
-  /* 1 write */
-  .paper-area{height:200px;position:relative;margin-left:36px;}
-  .scribble{stroke:var(--ink);stroke-width:3.4;fill:none;stroke-linecap:round;stroke-linejoin:round;
-    stroke-dasharray:1400;stroke-dashoffset:1400;}
-  .scribble.run{animation:dash 2.4s ease forwards;}
-  .nib{offset-path:path('M30 120 q40 -70 80 0 t80 0 q30 -60 70 -10 t70 10 q40 -50 80 0');}
-  .nib.run{animation:nibmove 2.4s ease forwards;}
-  /* 2 capture: motion bars */
-  .bars{display:flex;align-items:flex-end;gap:12px;height:170px;margin-left:36px;padding:10px 0;}
-  .bargrp{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;}
-  .bar{width:100%;max-width:38px;height:120px;display:flex;align-items:flex-end;}
-  .bar i{display:block;width:100%;border-radius:6px 6px 2px 2px;transform-origin:bottom;}
-  .bargrp span{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.04em;color:var(--ink-2);}
-  /* 3 reconstruct */
-  .recon{height:200px;margin-left:36px;}
-  .recon path{fill:none;stroke:var(--teal);stroke-width:3;stroke-linecap:round;stroke-dasharray:1400;stroke-dashoffset:1400;}
-  .recon.run path{animation:dash 2s ease forwards;}
-  /* 4 score: 20-factor mini grid */
-  .grid20{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;margin-left:36px;}
-  .cell{height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;
-    font-family:'Oswald',sans-serif;font-size:11px;color:#fff;}
-  .ctarow{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:22px auto 0;}
-  .cta{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-family:'Patrick Hand',cursive;
-    font-size:16px;letter-spacing:.5px;padding:12px 20px;border-radius:11px;box-shadow:0 10px 22px rgba(0,0,0,.32);}
-  .cta--teal{background:var(--teal);color:#fff;} .cta--gold{background:var(--gold);color:#16241f;}
-  .replay{cursor:pointer;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);color:#ecd49a;
-    font-family:'Patrick Hand',cursive;border-radius:9px;padding:8px 14px;margin:16px auto 0;display:inline-flex;gap:7px;align-items:center;}
-  .foot{margin-top:24px;font-family:'Patrick Hand',cursive;font-size:12px;color:#9c8a64;letter-spacing:.5px;text-align:center;}
+/* ============ interactive motion demo ============ */
+.sia{padding:34px 0 60px;}
+.sia__head{max-width:720px; margin:0 auto 26px; text-align:center;}
+.sia__head h1{font-family:var(--serif); font-weight:700; font-size:clamp(32px,4vw,48px); line-height:1.05;
+  letter-spacing:-.02em; color:var(--ink); margin:12px 0 0;}
+.sia__head h1 em{font-style:normal; color:var(--accent-deep);}
+.sia__head .lede{font-size:16.5px; color:var(--muted); line-height:1.55; margin:14px auto 0; max-width:560px;}
+
+.sia-grid{display:grid; grid-template-columns:1fr 92px 1fr; gap:0; align-items:stretch; max-width:1080px; margin:0 auto;}
+.sia-card{background:var(--surface); border:1px solid var(--rule); border-radius:18px; box-shadow:var(--shadow-2);
+  padding:16px 16px 14px; display:flex; flex-direction:column; min-width:0;}
+.sia-card__head{display:flex; align-items:center; gap:10px; margin-bottom:10px;}
+.sia-card__head b{font-family:var(--sans); font-weight:800; font-size:11px; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--accent-deep);}
+.sia-card__head span{font-size:12px; color:var(--hint);}
+.sia-clear{margin-left:auto; flex:0 0 auto; font-family:var(--sans); font-weight:700; font-size:12px; color:var(--muted);
+  background:var(--ivory-2); border:1px solid var(--rule); border-radius:8px; padding:5px 11px; cursor:pointer; transition:.18s;}
+.sia-clear:hover{color:var(--crimson-deep); border-color:var(--crimson);}
+
+.sia-canvasbox{position:relative; border-radius:12px; overflow:hidden; border:1px solid var(--rule);
+  background:var(--surface);
+  background-image:radial-gradient(var(--rule-2) 1.1px, transparent 1.1px); background-size:16px 16px;}
+.sia-canvasbox canvas{display:block; width:100%; height:300px; touch-action:none;}
+.sia-hintlay{position:absolute; inset:0; display:grid; place-items:center; pointer-events:none; transition:opacity .3s;}
+.sia-hintlay span{font-family:"Caveat",cursive; font-size:26px; color:var(--hint); background:color-mix(in srgb, var(--surface) 80%, transparent);
+  border-radius:12px; padding:6px 18px;}
+.sia-hintlay.off{opacity:0;}
+
+/* live capture readouts under the draw canvas */
+.sia-capture{display:flex; align-items:center; gap:14px; margin-top:12px;}
+.sia-axes{display:flex; align-items:flex-end; gap:3px; height:34px; flex:1;}
+.sia-axes i{flex:1; background:linear-gradient(180deg,var(--accent-lite),var(--accent)); border-radius:2px 2px 0 0;
+  height:12%; transition:height .12s linear; min-width:3px;}
+.sia-capstats{display:flex; flex-direction:column; gap:2px; flex:0 0 auto; text-align:right;}
+.sia-capstats b{font-family:var(--serif); font-size:16px; color:var(--ink); line-height:1.1;}
+.sia-capstats span{font-size:10.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--hint);}
+
+/* BLE rail between the panels */
+.sia-rail{position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;}
+.sia-rail__line{position:relative; width:100%; height:2px; background:var(--rule-2); border-radius:2px; overflow:visible;}
+.sia-rail__lab{font-family:var(--sans); font-weight:800; font-size:9.5px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--hint); text-align:center; line-height:1.5;}
+.sia-rail__lab b{display:block; color:var(--accent-deep);}
+.sia-pkt{position:absolute; top:-3px; left:0; width:8px; height:8px; border-radius:50%;
+  background:var(--accent); box-shadow:0 0 8px var(--accent); opacity:0;}
+.sia-rail.streaming .sia-pkt{animation:siaPkt .8s linear;}
+.sia-rail.streaming .sia-pkt:nth-child(2){animation-delay:.18s;}
+.sia-rail.streaming .sia-pkt:nth-child(3){animation-delay:.36s;}
+@keyframes siaPkt{0%{opacity:0; left:0} 12%{opacity:1} 88%{opacity:1} 100%{opacity:0; left:calc(100% - 8px)}}
+
+/* right panel: reconstruction + recognition */
+.sia-status{display:inline-flex; align-items:center; gap:8px; font-size:12.5px; font-weight:700; color:var(--muted); min-height:20px;}
+.sia-status i{width:7px; height:7px; border-radius:50%; background:var(--rule-2); flex:0 0 auto;}
+.sia-status.busy i{background:var(--accent); animation:siaBlink 1s ease-in-out infinite;}
+.sia-status.done i{background:var(--live);}
+@keyframes siaBlink{0%,100%{opacity:.4} 50%{opacity:1}}
+.sia-result{display:flex; align-items:center; gap:14px; margin-top:12px; min-height:64px;}
+.sia-result__glyph{flex:0 0 auto; width:58px; height:58px; border-radius:14px; display:none; place-items:center;
+  background:var(--accent-soft); border:1px solid var(--rule); font-family:var(--serif); font-weight:700;
+  font-size:32px; color:var(--accent-ink);}
+.sia-result__tx{min-width:0;}
+.sia-result__tx b{display:block; font-family:var(--serif); font-size:19px; color:var(--ink); line-height:1.15;}
+.sia-result__tx span{display:block; font-size:12.5px; color:var(--muted); margin-top:3px; line-height:1.45;}
+.sia-result.on .sia-result__glyph{display:grid;}
+
+/* metrics + explainer */
+.sia-mets{display:flex; gap:22px; flex-wrap:wrap; justify-content:center; margin:30px auto 0; padding-top:22px;
+  border-top:1px solid var(--rule); max-width:1080px;}
+.sia-met{display:flex; align-items:center; gap:10px;}
+.sia-met b{font-family:var(--serif); font-size:16px; color:var(--ink); white-space:nowrap;}
+.sia-met span{font-size:11.5px; color:var(--hint); white-space:nowrap;}
+.sia-note{max-width:720px; margin:20px auto 0; text-align:center; font-size:13.5px; color:var(--muted); line-height:1.6;}
+.sia-note b{color:var(--ink);}
+.sia-ctas{display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin:26px auto 0;}
+
+@media (max-width:900px){
+  .sia-grid{grid-template-columns:1fr; gap:0; max-width:560px;}
+  .sia-rail{flex-direction:row; padding:14px 30px;}
+  .sia-rail__line{width:100%; order:2;}
+  .sia-rail__lab{order:1; flex:0 0 auto; text-align:left;}
+  .sia-canvasbox canvas{height:250px;}
+}
+@media (prefers-reduced-motion: reduce){
+  .sia-rail.streaming .sia-pkt{animation:none; opacity:0;}
+}
 </style>
 </head>
-<body>
-  <div class="topbar">
-    <a class="home" href="index.html"><img src="assets/vahini-logo.png" alt="Vahini">← back to site</a>
-    <a class="book-link" href="investor-book.dc.html">◆ Investor notebook</a>
-  </div>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
 
-  <div class="hero">
-    <div class="eyebrow">Live action · motion → meaning</div>
-    <h1>See the motion we capture.</h1>
-    <p class="sub">One stroke on ordinary paper becomes 16-axis motion, reconstructed and scored, the data a camera can never see.</p>
-  </div>
+  <section class="sia" data-screen-label="Live demo">
+    <div class="wrap">
+      <div class="sia__head reveal">
+        <p class="eyebrow">Live in your browser · no install, no server</p>
+        <h1>Draw a letter. <em>Watch the pen think.</em></h1>
+        <p class="lede">Use your mouse or finger as the pen. Your strokes stream like real pen motion, cross over BLE, and the AI on the right rebuilds and recognises what you wrote. All of it runs offline, right here.</p>
+      </div>
 
-  <div class="phases" id="phases">
-    <div class="phase-chip" data-p="0">01 · Write</div>
-    <div class="phase-chip" data-p="1">02 · Capture (16-axis)</div>
-    <div class="phase-chip" data-p="2">03 · Reconstruct</div>
-    <div class="phase-chip" data-p="3">04 · Score (20 factors)</div>
-  </div>
+      <div class="sia-grid reveal" data-d="1">
 
-  <div class="stage">
-    <!-- 1 WRITE -->
-    <div class="panel" data-p="0">
-      <h3>Write</h3><p>Plain pen, plain paper, screen-free.</p>
-      <div class="paper-area">
-        <svg viewBox="0 0 360 200" width="100%" height="100%">
-          <path id="scr" class="scribble" d="M30 120 q40 -70 80 0 t80 0 q30 -60 70 -10 t70 10 q40 -50 80 0"/>
-          <circle id="nib" class="nib" r="6" fill="var(--crimson)"/>
-        </svg>
+        <!-- LEFT: you write -->
+        <div class="sia-card">
+          <div class="sia-card__head">
+            <b>01 · You write</b><span>draw one letter or symbol</span>
+            <button class="sia-clear" id="siaClear" type="button">Clear</button>
+          </div>
+          <div class="sia-canvasbox">
+            <canvas id="siaDraw"></canvas>
+            <div class="sia-hintlay" id="siaHint"><span>draw here, try O, S, V, Z, 7, a star or a heart</span></div>
+          </div>
+          <div class="sia-capture" aria-label="Live capture readouts">
+            <div class="sia-axes" id="siaAxes" title="16 motion axes, live"></div>
+            <div class="sia-capstats">
+              <b id="siaSamples">0</b><span>samples · 208 Hz</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- MIDDLE: BLE rail -->
+        <div class="sia-rail" id="siaRail" aria-hidden="true">
+          <div class="sia-rail__lab">16-axis<b>208 Hz</b></div>
+          <div class="sia-rail__line">
+            <i class="sia-pkt"></i><i class="sia-pkt"></i><i class="sia-pkt"></i>
+          </div>
+          <div class="sia-rail__lab">BLE 5<b id="siaRailState">idle</b></div>
+        </div>
+
+        <!-- RIGHT: AI reconstructs + recognises -->
+        <div class="sia-card">
+          <div class="sia-card__head">
+            <b>02 · AI reconstructs</b><span>from motion alone</span>
+          </div>
+          <div class="sia-canvasbox">
+            <canvas id="siaRecon"></canvas>
+            <div class="sia-hintlay" id="siaWait"><span>waiting for your strokes…</span></div>
+          </div>
+          <div class="sia-capture">
+            <div style="display:flex; flex-direction:column; gap:6px; min-width:0;">
+              <span class="sia-status" id="siaStatus"><i></i><em id="siaStatusTx" style="font-style:normal;">idle</em></span>
+              <div class="sia-result" id="siaResult">
+                <span class="sia-result__glyph" id="siaGlyph"></span>
+                <span class="sia-result__tx"><b id="siaGuess">&nbsp;</b><span id="siaGuessSub">The recognition runs entirely in this page. No network needed.</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="sia-mets reveal" data-d="2">
+        <div class="sia-met"><b>16-axis</b><span>dual-IMU motion</span></div>
+        <div class="sia-met"><b>208 Hz</b><span>sampling rate</span></div>
+        <div class="sia-met"><b>BLE 5</b><span>wireless streaming</span></div>
+        <div class="sia-met"><b>Offline AI</b><span>recognised on-device</span></div>
+        <div class="sia-met"><b>Patent 584433</b><span>dual-IMU sensing</span></div>
+      </div>
+
+      <p class="sia-note reveal" data-d="2"><b>What you just did is what the pen does.</b> The real Vahini pen feels true pressure, tilt and pen-lifts through two IMU sensors, streams them at 208 Hz over BLE, and the AI rebuilds the writing from motion alone. Your mouse gives it only position, the pen gives it everything.</p>
+
+      <div class="sia-ctas reveal" data-d="3">
+        <a class="btn btn--crimson btn--lg" href="../analyser/analyser.html">Score a full page, 20 factors</a>
+        <a class="btn btn--ghost btn--lg" href="product.html" data-nav>Meet the pen</a>
+        <a class="btn btn--ghost btn--lg" href="investor-book.dc.html" data-nav>Investor notebook</a>
       </div>
     </div>
-    <!-- 2 CAPTURE -->
-    <div class="panel" data-p="1">
-      <h3>Capture · 16 axes at 208 Hz</h3><p>A 9-axis IMU, a 6-axis IMU and a tip-force sensor stream the motion live.</p>
-      <div class="bars" id="bars"></div>
-    </div>
-    <!-- 3 RECONSTRUCT -->
-    <div class="panel" data-p="2">
-      <h3>Reconstruct</h3><p>From motion alone, the stroke path is rebuilt, no image required.</p>
-      <svg class="recon" id="recon" viewBox="0 0 360 200" width="100%" height="100%">
-        <path d="M30 130 q40 -70 80 0 t80 0 q30 -60 70 -10 t70 10 q40 -50 80 0"/>
-      </svg>
-    </div>
-    <!-- 4 SCORE -->
-    <div class="panel" data-p="3">
-      <h3>Score · 20 factors</h3><p>The dynamics a photo can’t see become measurements: speed, pressure, flow, pen-lifts and more.</p>
-      <div class="grid20" id="grid"></div>
-    </div>
-  </div>
+  </section>
 
-  <div style="text-align:center;">
-    <div class="replay" id="replay">↻ Replay</div>
-  </div>
-
-  <div class="ctarow">
-    <a class="cta cta--gold" href="../analyser/analyser.html">Try the live analyser on your page</a>
-    <a class="cta cta--teal" href="investor-book.dc.html">◆ Read the investor notebook</a>
-  </div>
-
-  <div class="foot">Vahini · Patent No. 584433 · 16-axis motion · 208 Hz · vahinitech.com</div>
-
+</main>
+<div id="site-footer"></div>
+<script src="js/site.js"></script>
 <script>
+/* ============================================================
+   Interactive motion demo.
+   Left: capture strokes from mouse/touch and show live 16-axis
+   and 208 Hz readouts. Middle: BLE packet animation. Right: the
+   stroke is replayed ("reconstructed") and recognised offline
+   with a small first-party template matcher (resample, rotate
+   to the indicative angle, scale-normalise, cosine distance,
+   the classic unistroke-recogniser recipe).
+   ============================================================ */
 (function(){
-  "use strict";
-  var phases = [].slice.call(document.querySelectorAll('.phase-chip'));
-  var panels = [].slice.call(document.querySelectorAll('.panel'));
-  var AX = [['Pressure','#c0392b'],['Tilt','#2a8c82'],['Accel','#e2a32b'],['Speed','#27408f'],['Pen-lift','#9a5410']];
-  var bars = document.getElementById('bars');
-  bars.innerHTML = AX.map(function(a,k){
-    return '<div class="bargrp"><div class="bar"><i style="background:'+a[1]+';animation:barpulse '+(1+ k*0.18)+'s ease-in-out infinite"></i></div><span>'+a[0]+'</span></div>';
-  }).join('');
-  // 20-factor grid
-  var grid = document.getElementById('grid');
-  var cells='';
-  for(var n=1;n<=20;n++){
-    var v = 45 + ((n*37)%55);                 // deterministic varied scores
-    var col = v>=75?'#2a8c82':(v>=55?'#e2a32b':'#c0392b');
-    cells += '<div class="cell" style="background:'+col+'" title="Factor '+n+'">'+String(n).padStart(2,'0')+'</div>';
-  }
-  grid.innerHTML = cells;
+"use strict";
+var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  var i=-1, timer=null;
-  function show(p){
-    phases.forEach(function(c){ c.classList.toggle('on', +c.dataset.p===p); });
-    panels.forEach(function(pl){ pl.classList.toggle('on', +pl.dataset.p===p); });
-    if(p===0){ var s=document.getElementById('scr'), nb=document.getElementById('nib');
-      s.classList.remove('run'); nb.classList.remove('run'); void s.getBBox(); s.classList.add('run'); nb.classList.add('run'); }
-    if(p===2){ var r=document.getElementById('recon'); r.classList.remove('run'); void r.getBBox(); r.classList.add('run'); }
+/* ---------- canvas setup ---------- */
+function fit(cv){
+  var r = cv.getBoundingClientRect(), d = window.devicePixelRatio || 1;
+  cv.width = Math.round(r.width * d); cv.height = Math.round(r.height * d);
+  var g = cv.getContext('2d'); g.scale(d, d); return g;
+}
+var draw = document.getElementById('siaDraw');
+var recon = document.getElementById('siaRecon');
+var gD = fit(draw), gR = fit(recon);
+window.addEventListener('resize', function(){
+  gD = fit(draw); gR = fit(recon); repaint();
+});
+
+var ACCENT = getComputedStyle(document.documentElement).getPropertyValue('--accent-deep').trim() || '#048A91';
+var INK = getComputedStyle(document.documentElement).getPropertyValue('--ink').trim() || '#222831';
+
+/* ---------- state ---------- */
+var strokes = [], cur = null, samples = 0, lastPt = null, drawing = false;
+var hint = document.getElementById('siaHint'), waitLay = document.getElementById('siaWait');
+var axes = document.getElementById('siaAxes'), sampleEl = document.getElementById('siaSamples');
+var rail = document.getElementById('siaRail'), railState = document.getElementById('siaRailState');
+var statusEl = document.getElementById('siaStatus'), statusTx = document.getElementById('siaStatusTx');
+var resultEl = document.getElementById('siaResult'), glyphEl = document.getElementById('siaGlyph');
+var guessEl = document.getElementById('siaGuess'), guessSub = document.getElementById('siaGuessSub');
+
+/* 16 axis bars */
+for (var b = 0; b < 16; b++){ var i = document.createElement('i'); axes.appendChild(i); }
+var barEls = [].slice.call(axes.children);
+function pulseAxes(speed){
+  for (var k = 0; k < barEls.length; k++){
+    var h = 10 + Math.min(80, speed * 2.2) * (0.45 + 0.55 * Math.abs(Math.sin(samples * 0.11 + k * 1.7)));
+    barEls[k].style.height = h + '%';
   }
-  function tick(){ i=(i+1)%4; show(i); }
-  function play(){ if(timer) clearInterval(timer); i=-1; tick(); timer=setInterval(tick, 2600); }
-  phases.forEach(function(c){ c.addEventListener('click', function(){ if(timer)clearInterval(timer); i=+c.dataset.p; show(i); timer=setInterval(tick,2600); }); });
-  document.getElementById('replay').addEventListener('click', play);
-  play();
+}
+function calmAxes(){ barEls.forEach(function(el){ el.style.height = '12%'; }); }
+calmAxes();
+
+/* ---------- drawing ---------- */
+function pos(e){
+  var r = draw.getBoundingClientRect();
+  return { x: e.clientX - r.left, y: e.clientY - r.top, t: performance.now() };
+}
+function line(g, a, b, w, col){
+  g.strokeStyle = col; g.lineWidth = w; g.lineCap = 'round'; g.lineJoin = 'round';
+  g.beginPath(); g.moveTo(a.x, a.y); g.lineTo(b.x, b.y); g.stroke();
+}
+draw.addEventListener('pointerdown', function(e){
+  e.preventDefault(); draw.setPointerCapture(e.pointerId);
+  drawing = true; cur = [pos(e)]; lastPt = cur[0];
+  hint.classList.add('off');
+  clearTimeout(sendTimer);
+});
+draw.addEventListener('pointermove', function(e){
+  if (!drawing) return;
+  var p = pos(e), dt = Math.max(1, p.t - lastPt.t);
+  var speed = Math.hypot(p.x - lastPt.x, p.y - lastPt.y) / dt * 16;
+  samples += Math.round(dt * 0.208);            /* 208 samples per second */
+  sampleEl.textContent = samples.toLocaleString();
+  pulseAxes(speed);
+  /* speed-based width, a light pressure feel */
+  line(gD, lastPt, p, Math.max(2, 5.5 - Math.min(3, speed * 0.35)), INK);
+  cur.push(p); lastPt = p;
+});
+function endStroke(e){
+  if (!drawing) return;
+  drawing = false; calmAxes();
+  if (cur && cur.length > 2) strokes.push(cur);
+  cur = null;
+  clearTimeout(sendTimer);
+  if (strokes.length) sendTimer = setTimeout(transmit, 750);
+}
+draw.addEventListener('pointerup', endStroke);
+draw.addEventListener('pointercancel', endStroke);
+draw.addEventListener('pointerleave', endStroke);
+
+function repaint(){
+  gD.clearRect(0, 0, draw.width, draw.height);
+  strokes.forEach(function(s){
+    for (var j = 1; j < s.length; j++) line(gD, s[j-1], s[j], 3.4, INK);
+  });
+}
+
+/* ---------- BLE transmit, then reconstruct, then recognise ---------- */
+var sendTimer = null, replayRaf = null;
+function setStatus(mode, text){
+  statusEl.className = 'sia-status' + (mode ? ' ' + mode : '');
+  statusTx.textContent = text;
+}
+function transmit(){
+  if (!strokes.length) return;
+  railState.textContent = 'streaming';
+  rail.classList.remove('streaming'); void rail.offsetWidth; rail.classList.add('streaming');
+  setStatus('busy', 'receiving 16-axis motion…');
+  resultEl.classList.remove('on'); guessEl.innerHTML = '&nbsp;';
+  guessSub.textContent = 'The recognition runs entirely in this page. No network needed.';
+  setTimeout(reconstruct, reduce ? 60 : 850);
+}
+function reconstruct(){
+  railState.textContent = 'idle';
+  setStatus('busy', 'reconstructing the strokes…');
+  waitLay.classList.add('off');
+  gR.clearRect(0, 0, recon.width, recon.height);
+  /* fit the drawing into the right canvas */
+  var all = [].concat.apply([], strokes);
+  var xs = all.map(function(p){ return p.x; }), ys = all.map(function(p){ return p.y; });
+  var minX = Math.min.apply(0, xs), maxX = Math.max.apply(0, xs);
+  var minY = Math.min.apply(0, ys), maxY = Math.max.apply(0, ys);
+  var rw = recon.getBoundingClientRect().width, rh = recon.getBoundingClientRect().height;
+  var pad = 30, w = Math.max(1, maxX - minX), h = Math.max(1, maxY - minY);
+  var s = Math.min((rw - pad * 2) / w, (rh - pad * 2) / h, 2.2);
+  var ox = (rw - w * s) / 2 - minX * s, oy = (rh - h * s) / 2 - minY * s;
+  var pts = [];
+  strokes.forEach(function(st, si){
+    st.forEach(function(p, pi){ pts.push({ x: p.x * s + ox, y: p.y * s + oy, brk: pi === 0 && si > 0 }); });
+  });
+  if (reduce){
+    for (var j = 1; j < pts.length; j++) if (!pts[j].brk) line(gR, pts[j-1], pts[j], 3.4, ACCENT);
+    return recognise();
+  }
+  var n = 1, per = Math.max(1, Math.round(pts.length / 46));
+  cancelAnimationFrame(replayRaf);
+  (function step(){
+    for (var c = 0; c < per && n < pts.length; c++, n++){
+      if (!pts[n].brk) line(gR, pts[n-1], pts[n], 3.4, ACCENT);
+    }
+    if (n < pts.length) replayRaf = requestAnimationFrame(step);
+    else recognise();
+  })();
+}
+
+/* ---------- offline recognition (template matcher) ---------- */
+var N = 48;
+function resample(points){
+  var length = 0, j;
+  for (j = 1; j < points.length; j++) length += Math.hypot(points[j].x - points[j-1].x, points[j].y - points[j-1].y);
+  var step = length / (N - 1), D = 0, out = [{ x: points[0].x, y: points[0].y }];
+  for (j = 1; j < points.length; j++){
+    var d = Math.hypot(points[j].x - points[j-1].x, points[j].y - points[j-1].y);
+    if (D + d >= step && d > 0){
+      var q = { x: points[j-1].x + ((step - D) / d) * (points[j].x - points[j-1].x),
+                y: points[j-1].y + ((step - D) / d) * (points[j].y - points[j-1].y) };
+      out.push(q); points.splice(j, 0, q); D = 0;
+    } else D += d;
+  }
+  while (out.length < N) out.push(out[out.length - 1]);
+  return out.slice(0, N);
+}
+function normalise(points){
+  var c = { x: 0, y: 0 };
+  points.forEach(function(p){ c.x += p.x / points.length; c.y += p.y / points.length; });
+  var a = Math.atan2(points[0].y - c.y, points[0].x - c.x);   /* indicative angle */
+  var cos = Math.cos(-a), sin = Math.sin(-a), v = [], mag = 0;
+  points.forEach(function(p){
+    var x = (p.x - c.x) * cos - (p.y - c.y) * sin;
+    var y = (p.x - c.x) * sin + (p.y - c.y) * cos;
+    v.push(x, y); mag += x * x + y * y;
+  });
+  mag = Math.sqrt(mag) || 1;
+  return v.map(function(x){ return x / mag; });
+}
+function similarity(a, b){
+  var dot = 0, i;
+  for (i = 0; i < a.length; i += 2) dot += a[i] * b[i] + a[i+1] * b[i+1];
+  return dot; /* both unit vectors: cosine similarity */
+}
+
+/* template geometry helpers (unit square, y down) */
+function P(x, y){ return { x: x, y: y }; }
+function poly(pts){
+  var out = [];
+  for (var j = 0; j < pts.length - 1; j++)
+    for (var k = 0; k < 12; k++)
+      out.push(P(pts[j].x + (pts[j+1].x - pts[j].x) * k / 12, pts[j].y + (pts[j+1].y - pts[j].y) * k / 12));
+  out.push(pts[pts.length - 1]);
+  return out;
+}
+function arc(cx, cy, r, a0, a1){
+  var out = [];
+  for (var k = 0; k <= 28; k++){ var a = a0 + (a1 - a0) * k / 28; out.push(P(cx + r * Math.cos(a), cy + r * Math.sin(a))); }
+  return out;
+}
+var TAU = Math.PI * 2;
+var TEMPLATES = [
+  ['O', arc(.5, .5, .42, -TAU/4, -TAU/4 + TAU)],
+  ['C', arc(.5, .5, .42, -TAU/8, -TAU/8 - TAU * .72)],
+  ['S', arc(.5, .28, .22, -TAU/4, -TAU/4 - TAU/2).concat(arc(.5, .72, .22, TAU/4, TAU * .75))],
+  ['U', poly([P(.1,.08), P(.1,.6)]).concat(arc(.5,.6,.4,Math.PI,TAU/2 + Math.PI)).concat(poly([P(.9,.6), P(.9,.08)]))],
+  ['V', poly([P(.05,.05), P(.5,.95), P(.95,.05)])],
+  ['W', poly([P(.02,.05), P(.27,.95), P(.5,.35), P(.73,.95), P(.98,.05)])],
+  ['M', poly([P(.05,.95), P(.05,.05), P(.5,.6), P(.95,.05), P(.95,.95)])],
+  ['N', poly([P(.08,.95), P(.08,.05), P(.92,.95), P(.92,.05)])],
+  ['L', poly([P(.15,.05), P(.15,.9), P(.85,.9)])],
+  ['Z', poly([P(.08,.08), P(.92,.08), P(.08,.92), P(.92,.92)])],
+  ['1', poly([P(.5,.05), P(.5,.95)])],
+  ['7', poly([P(.08,.08), P(.9,.08), P(.42,.95)])],
+  ['2', arc(.5,.3,.25,Math.PI,TAU * .55).concat(poly([P(.68,.45), P(.12,.92), P(.9,.92)]))],
+  ['3', arc(.5,.28,.2,Math.PI * .8, -TAU * .3 + Math.PI).concat(arc(.5,.7,.24,-TAU/4,TAU * .42))],
+  ['triangle', poly([P(.5,.05), P(.05,.92), P(.95,.92), P(.5,.05)])],
+  ['star', poly([P(.5,.02), P(.38,.38), P(.02,.38), P(.31,.6), P(.2,.98), P(.5,.75), P(.8,.98), P(.69,.6), P(.98,.38), P(.62,.38), P(.5,.02)])],
+  ['heart', arc(.32,.3,.2,Math.PI,0).concat(arc(.68,.3,.2,Math.PI,0)).concat(poly([P(.88,.4), P(.5,.95), P(.12,.4)]))],
+  ['check', poly([P(.08,.55), P(.35,.9), P(.92,.1)])]
+];
+var VEC = TEMPLATES.map(function(t){ return [t[0], normalise(resample(t[1].slice()))]; });
+var NICE = { O:'the letter O', C:'the letter C', S:'the letter S', U:'the letter U', V:'the letter V',
+  W:'the letter W', M:'the letter M', N:'the letter N', L:'the letter L', Z:'the letter Z',
+  1:'the number 1', 2:'the number 2', 3:'the number 3', 7:'the number 7',
+  triangle:'a triangle', star:'a star', heart:'a heart', check:'a check mark' };
+var GLYPH = { triangle:'△', star:'☆', heart:'♡', check:'✓' };
+
+function recognise(){
+  var flat = [];
+  strokes.forEach(function(s){ s.forEach(function(p){ flat.push({ x: p.x, y: p.y }); }); });
+  if (flat.length < 8){ setStatus('', 'idle'); return; }
+  var v = normalise(resample(flat)), best = null, second = null;
+  VEC.forEach(function(t){
+    var sc = similarity(v, t[1]);
+    if (!best || sc > best.sc){ second = best; best = { name: t[0], sc: sc }; }
+    else if (!second || sc > second.sc) second = { name: t[0], sc: sc };
+  });
+  var pct = Math.round(Math.max(0, Math.min(.999, best.sc)) * 100);
+  setStatus('done', 'recognised, offline');
+  resultEl.classList.add('on');
+  glyphEl.textContent = GLYPH[best.name] || best.name;
+  if (best.sc > 0.72){
+    guessEl.textContent = 'That looks like ' + (NICE[best.name] || best.name) + ' (' + pct + '%)';
+    guessSub.textContent = 'Matched in your browser, no network. The real pen adds pressure, tilt and pen-lifts to make this far richer.';
+  } else {
+    guessEl.textContent = 'Best guess: ' + (NICE[best.name] || best.name) + ' (' + pct + '%)';
+    guessSub.textContent = 'Not fully sure. Try a single clear shape, like O, S, V, Z, 7, a star or a heart.';
+  }
+}
+
+/* ---------- clear ---------- */
+document.getElementById('siaClear').addEventListener('click', function(){
+  strokes = []; cur = null; samples = 0; sampleEl.textContent = '0';
+  clearTimeout(sendTimer); cancelAnimationFrame(replayRaf);
+  gD.clearRect(0, 0, draw.width, draw.height);
+  gR.clearRect(0, 0, recon.width, recon.height);
+  hint.classList.remove('off'); waitLay.classList.remove('off');
+  resultEl.classList.remove('on'); guessEl.innerHTML = '&nbsp;';
+  guessSub.textContent = 'The recognition runs entirely in this page. No network needed.';
+  setStatus('', 'idle'); railState.textContent = 'idle'; calmAxes();
+});
 })();
 </script>
 </body>
