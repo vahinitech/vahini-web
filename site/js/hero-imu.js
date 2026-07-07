@@ -3,10 +3,13 @@
    Proprietary & confidential. Third-party notices: /THIRD-PARTY-NOTICES.md · SBOM: /sbom.spdx.json */
 /* ============================================================
    Vahini, hero-imu.js
-   Kinetic typography for the live-IMU hero: the word after
-   "The pen is reading your …" cycles through the signals the
-   dual-IMU pen captures, each swapped with a per-character GSAP
-   stagger. Pairs with the CSS oscilloscope + axis bars.
+   Kinetic typography for the index hero's signal ticker
+   (#imuWord in the flywheel hero): the word after "The pen is
+   reading your …" cycles through the signals the dual-IMU pen
+   captures, each swapped with a per-character GSAP stagger.
+   Falls back to static "MOTION" without GSAP or with
+   prefers-reduced-motion. Styles: css/platform-hero.css
+   (.pf__ticker / .pf__ticker-word / .ch).
    ============================================================ */
 (function () {
   "use strict";
