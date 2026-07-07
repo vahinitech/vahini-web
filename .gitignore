@@ -15,6 +15,9 @@ scraps/
 .thumbnail
 .image-slots.state.json
 
+# Never commit a real filled-in Cloudflare API token (see the .example template).
+deploy/certbot/cloudflare-credentials.ini
+
 # Local Claude Code / editor config (machine-specific, not for release)
 .claude/
 

@@ -23,6 +23,9 @@ archive/
 screenshots/
 # Remotion video source (not served, no runtime dependency on the site).
 site/video-src/
+# Defense in depth: even though this is gitignored, never let a real,
+# locally-created Cloudflare API token leak into the image via `COPY . .`.
+deploy/certbot/cloudflare-credentials.ini
 uploads/
 shots/
 scraps/

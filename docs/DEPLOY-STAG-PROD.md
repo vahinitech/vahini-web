@@ -24,6 +24,11 @@ still missing afterwards (network/auth issue reaching GitHub).
 - `deploy/docker-compose.stag.yml`
 - `deploy/docker-compose.prod.yml`
 - `deploy/release.sh`
+- `deploy/http-redirect.vahinitech.com.nginx.conf` -- the one shared port-80
+  block (ACME challenge + redirect to HTTPS) for vahinitech.com and every
+  subdomain. Apply once; new subdomains don't need their own copy.
+- `deploy/snippets/tls-vahinitech.conf` -- shared TLS config (cert paths,
+  protocols, ciphers, security headers), `include`d by every HTTPS vhost below.
 - `deploy/stag.vahinitech.com.nginx.conf`
 - `deploy/vahinitech.com.nginx.conf`
 - `deploy/api.vahinitech.com.nginx.conf` -- friendlier host name for the same
@@ -47,7 +52,10 @@ curl -I http://127.0.0.1:3016/analyser/analyser.html
 curl http://127.0.0.1:3016/ocr/health
 ```
 
-Apply host nginx vhost using `deploy/stag.vahinitech.com.nginx.conf` and reload nginx.
+Apply host nginx vhost using `deploy/stag.vahinitech.com.nginx.conf` (plus
+`deploy/http-redirect.vahinitech.com.nginx.conf` and
+`deploy/snippets/tls-vahinitech.conf` if not already in place -- see
+"HTTPS certificate renewal" below) and reload nginx.
 
 ## 2) Validate Staging Domain
 
@@ -66,7 +74,10 @@ Deploy production container:
 ./deploy/release.sh prod
 ```
 
-Apply host nginx vhost using `deploy/vahinitech.com.nginx.conf` and reload nginx.
+Apply host nginx vhost using `deploy/vahinitech.com.nginx.conf` (plus
+`deploy/http-redirect.vahinitech.com.nginx.conf` and
+`deploy/snippets/tls-vahinitech.conf` if not already in place -- see
+"HTTPS certificate renewal" below) and reload nginx.
 
 Verify:
 
@@ -88,70 +99,85 @@ If production check fails:
 docker compose -f deploy/docker-compose.prod.yml logs --tail=120 web
 ```
 
-## 5) HTTPS certificate renewal
+## 5) HTTPS certificates: one wildcard cert for every subdomain
 
-`deploy/vahinitech.com.nginx.conf`, `deploy/stag.vahinitech.com.nginx.conf`
-and `deploy/api.vahinitech.com.nginx.conf` all point at standard certbot cert
-paths (`/etc/letsencrypt/live/<domain>/{fullchain,privkey}.pem`) and already
-serve the HTTP-01 challenge webroot at `/var/www/certbot`. Let's Encrypt certs
-are valid 90 days, so this needs to auto-renew, not be reissued by hand every
-quarter.
+vahinitech.com's DNS is on **Cloudflare**, so instead of a separate
+Let's-Encrypt certificate per subdomain (the old approach, HTTP-01/webroot,
+one cert per domain), this uses a **single wildcard certificate**
+(`vahinitech.com` + `*.vahinitech.com`) via DNS-01 through Cloudflare's API.
+One cert, one renewal, covers `vahinitech.com`, `www.`, `stag.`, `api.`, and
+any subdomain added in the future with zero further cert work.
 
-**The renewal check/schedule itself is not this repo's job.** Installing
-certbot via `apt install certbot` (or `snap install certbot`) already sets up
-its own systemd timer or `/etc/cron.d/certbot` entry that runs `certbot renew`
-twice a day and only actually renews certs within their last 30 days of
-validity — that's almost certainly already running on this host, since it's
-how the current cert was issued in the first place. Confirm with:
+### One-time setup
+
+1. **Install the Cloudflare DNS plugin** (matches however certbot itself is
+   installed): `apt install python3-certbot-dns-cloudflare` (apt) or the
+   equivalent `certbot-dns-cloudflare` package for snap/pip installs.
+2. **Create a scoped Cloudflare API token**: dashboard -> My Profile -> API
+   Tokens -> "Edit zone DNS" template, scoped to **only** the vahinitech.com
+   zone. Do not use the Global API Key -- see
+   `deploy/certbot/cloudflare-credentials.ini.example` for exactly where it
+   goes and why the narrower scope matters.
+3. **Issue the wildcard cert**:
+   ```bash
+   sudo deploy/certbot/setup-wildcard-cert.sh
+   ```
+   This requests `vahinitech.com` + `*.vahinitech.com` in one certificate
+   (named `vahinitech-wildcard`), which is what
+   `deploy/snippets/tls-vahinitech.conf` already points at.
+4. **Install the shared nginx pieces** (once): copy
+   `deploy/snippets/tls-vahinitech.conf` to nginx's snippets directory (e.g.
+   `/etc/nginx/snippets/tls-vahinitech.conf`) and
+   `deploy/http-redirect.vahinitech.com.nginx.conf` alongside the other
+   vhosts, then `nginx -t && systemctl reload nginx`.
+5. **Wire up auto-renewal's nginx reload** (same as before this was a
+   wildcard cert -- this step doesn't change):
+   ```bash
+   sudo deploy/certbot/install-renew-hook.sh
+   ```
+
+### Why this is still "automatic" renewal, not a step backward
+
+Wildcard certs normally *require* manual work every renewal, because
+Let's Encrypt only issues them via DNS-01 (proving ownership with a
+temporary `_acme-challenge` TXT record) -- not the HTTP-01/webroot method
+plain per-domain certs use. `certbot-dns-cloudflare` closes that gap: it
+creates and removes that TXT record automatically through Cloudflare's API
+during `certbot renew`, so the OS-level renewal timer/cron (already running
+if certbot was installed the normal way -- confirm with
+`sudo deploy/certbot/check-renew-timer.sh`) renews this wildcard cert exactly
+as unattended as the old per-domain ones were.
+
+### Retiring the old per-domain certs
+
+Before the wildcard cert, `vahinitech.com`, `stag.vahinitech.com` and
+`api.vahinitech.com` (if issued) each had their own HTTP-01 certificate.
+Once the wildcard cert is confirmed serving correctly on all of them:
 
 ```bash
-sudo deploy/certbot/check-renew-timer.sh
+certbot certificates                    # list what's tracked
+certbot delete --cert-name vahinitech.com
+certbot delete --cert-name stag.vahinitech.com
+certbot delete --cert-name api.vahinitech.com   # only if it was ever issued
 ```
 
-**What's commonly missing, and what this repo adds:** a *deploy-hook* so
-nginx actually reloads and starts serving the newly-renewed cert. Without it,
-certbot renews the files on disk correctly, but the running nginx worker
-keeps the old certificate loaded in memory until nginx is next restarted —
-so the renewal "worked" but nobody's HTTPS connection sees the new cert until
-someone happens to restart nginx for an unrelated reason. Install it once:
-
-```bash
-sudo deploy/certbot/install-renew-hook.sh
-```
-
-This installs `deploy/certbot/reload-nginx-hook.sh` to
-`/etc/letsencrypt/renewal-hooks/deploy/`, where certbot automatically runs it
-after every successful renewal (**for any domain on this host**, not just
-vahinitech.com), and verifies the whole path end-to-end with
-`certbot renew --dry-run` (no real certs touched, no rate limits hit). Install
-it once and every current and future subdomain's renewals are covered.
-
-Initial issuance (already done for `vahinitech.com`/`www.vahinitech.com`;
-kept here for reference):
-
-```bash
-sudo certbot certonly --webroot -w /var/www/certbot -d vahinitech.com -d www.vahinitech.com
-sudo certbot certonly --webroot -w /var/www/certbot -d stag.vahinitech.com
-sudo certbot certonly --webroot -w /var/www/certbot -d api.vahinitech.com
-```
+Not required immediately -- they just keep renewing harmlessly alongside the
+wildcard cert until removed.
 
 ### Adding a new subdomain
 
-Renewal (above) is automatic for any cert certbot already manages, but a
-**new** subdomain needs three one-time steps first -- there is nothing to
-renew until a certificate for it exists:
+With the wildcard cert in place, a new `<name>.vahinitech.com` needs **no
+certificate work at all** -- `*.vahinitech.com` already covers it. Just:
 
-1. Point DNS for the new subdomain at this host's IP (`110.172.148.13`).
-2. Add an nginx vhost for it under `deploy/` (copy the closest existing one,
-   e.g. `deploy/api.vahinitech.com.nginx.conf`) with the
-   `/.well-known/acme-challenge/` location so the HTTP-01 challenge can
-   succeed, and apply it on the host.
-3. Issue the cert: `sudo certbot certonly --webroot -w /var/www/certbot -d
-   <subdomain>.vahinitech.com`.
+1. Point DNS for it at this host's IP (`110.172.148.13`), unless a wildcard
+   `*.vahinitech.com` DNS record already exists on Cloudflare, in which case
+   even this step is done.
+2. Add a short nginx vhost for it under `deploy/` with only the routing
+   logic (copy `deploy/api.vahinitech.com.nginx.conf` as the template --
+   `include snippets/tls-vahinitech.conf;` and no cert paths, no port-80
+   block needed), and apply it on the host.
 
-After that, `deploy/certbot/install-renew-hook.sh` (if not already run) or
-the existing hook picks it up automatically -- no per-domain renewal setup
-needed.
+That's it -- no `certbot certonly`, no new renewal-hook setup.
 
 ## Notes
 
