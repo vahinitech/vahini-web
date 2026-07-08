@@ -48,19 +48,20 @@
     --bk-paper-line: var(--surface-2);    /* card borders on paper             */
   }
   .ibk-stage{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
-    background:radial-gradient(120% 120% at 50% 18%, color-mix(in srgb, var(--dark) 88%, #fff) 0%, var(--dark) 55%, color-mix(in srgb, var(--dark-2) 70%, #000) 100%);
+    /* light desk, same ivory family as every other page of the site */
+    background:radial-gradient(120% 100% at 50% 0%, var(--ivory-2) 0%, var(--ivory) 55%, var(--surface-2) 100%);
     font-family:'Shantell Sans',cursive;padding:26px 0 16px;overflow:hidden;min-height:calc(100vh - 76px);
     cursor:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='30'%20height='30'%20viewBox='0%200%2030%2030'%3E%3Cpath%20d='M23%203%20L27%207%20L14%2020%20L10%2016%20Z'%20fill='%2327408f'%20stroke='%2316243a'%20stroke-width='1'/%3E%3Cpath%20d='M10%2016%20L14%2020%20L7%2025%20Z'%20fill='%23e2a32b'%20stroke='%2316243a'%20stroke-width='1'/%3E%3Cpath%20d='M7%2025%20L4.5%2027' stroke='%233a2a06'%20stroke-width='1.6'%20stroke-linecap='round'/%3E%3Ccircle%20cx='25'%20cy='5'%20r='2.3'%20fill='%23c0392b'/%3E%3C/svg%3E") 5 26, auto;}
   .ibk-stage:fullscreen{min-height:100vh;}
   /* flipbook toolbar (FlippingBook-style controls, unscaled) */
   .ibk-bar{position:relative;z-index:45;display:flex;align-items:center;gap:10px;margin-top:16px;
-    background:color-mix(in srgb, var(--dark-2) 78%, transparent);border:1px solid var(--rule-on);border-radius:999px;
-    padding:7px 14px;box-shadow:0 10px 26px rgba(0,0,0,.4);backdrop-filter:blur(4px);}
-  .ibk-bar button{appearance:none;border:0;background:transparent;color:var(--ivory);font-family:'Patrick Hand',cursive;
+    background:color-mix(in srgb, var(--surface) 90%, transparent);border:1px solid var(--rule-2);border-radius:999px;
+    padding:7px 14px;box-shadow:0 10px 26px rgba(20,26,34,.16);backdrop-filter:blur(4px);}
+  .ibk-bar button{appearance:none;border:0;background:transparent;color:var(--ink);font-family:'Patrick Hand',cursive;
     font-size:16px;line-height:1;padding:7px 11px;border-radius:999px;cursor:inherit;transition:background .15s,color .15s;}
-  .ibk-bar button:hover{background:rgba(255,255,255,.12);color:#fff;}
-  .ibk-bar .ibk-pg{font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:1px;color:color-mix(in srgb, var(--ivory) 82%, transparent);min-width:74px;text-align:center;}
-  .ibk-bar .ibk-sep{width:1px;height:20px;background:rgba(255,255,255,.2);}
+  .ibk-bar button:hover{background:var(--accent-soft);color:var(--accent-ink);}
+  .ibk-bar .ibk-pg{font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:1px;color:var(--muted);min-width:74px;text-align:center;}
+  .ibk-bar .ibk-sep{width:1px;height:20px;background:var(--rule-2);}
   @media (max-width:520px){ .ibk-bar{gap:4px;padding:6px 8px;} .ibk-bar .ibk-pg{min-width:58px;} .ibk-bar button{padding:7px 8px;} }
   @keyframes flipNext{from{transform:rotateY(0deg)}to{transform:rotateY(-178deg)}}
   @keyframes flipPrev{from{transform:rotateY(0deg)}to{transform:rotateY(178deg)}}
@@ -84,7 +85,7 @@
 <div class="ibk-stage" ref="{{ stageRef }}">
 
   <svg width="0" height="0" style="position:absolute;pointer-events:none;"><defs><filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.014" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.6"/></filter></defs></svg>
-  <div style="position:absolute;inset:0;opacity:.5;background-image:radial-gradient(circle at 50% 40%, rgba(255,255,255,.05), transparent 60%);pointer-events:none;"></div>
+  <div style="position:absolute;inset:0;background-image:radial-gradient(circle at 50% 42%, transparent 55%, rgba(34,40,49,.07) 100%);pointer-events:none;"></div>
 
   <!-- the frame reserves real layout height for the scaled book, so the
        toolbar below never overlaps it at any scale -->
@@ -93,21 +94,21 @@
 
     <!-- bookmark tabs (hang from the top edge, clear of page content) -->
     <div style="position:absolute;top:0;right:40px;z-index:40;display:flex;align-items:flex-start;gap:7px;font-family:'Patrick Hand',cursive;">
-      <div onClick="{{ goCover }}" class="lnk" style="height:27px;display:flex;align-items:center;padding:0 13px;background:#e2a32b;color:#3a2a06;font-size:13px;letter-spacing:1px;border-radius:0 0 6px 6px;box-shadow:0 5px 11px rgba(0,0,0,.32);">COVER</div>
-      <div onClick="{{ goIndex }}" class="lnk" style="height:27px;display:flex;align-items:center;padding:0 13px;background:var(--bk-red);color:#fff;font-size:13px;letter-spacing:1px;border-radius:0 0 6px 6px;box-shadow:0 5px 11px rgba(0,0,0,.32);">CONTENTS</div>
+      <div onClick="{{ goCover }}" class="lnk" style="height:27px;display:flex;align-items:center;padding:0 13px;background:#e2a32b;color:#3a2a06;font-size:13px;letter-spacing:1px;border-radius:0 0 6px 6px;box-shadow:0 5px 11px rgba(20,26,34,.22);">COVER</div>
+      <div onClick="{{ goIndex }}" class="lnk" style="height:27px;display:flex;align-items:center;padding:0 13px;background:var(--bk-red);color:#fff;font-size:13px;letter-spacing:1px;border-radius:0 0 6px 6px;box-shadow:0 5px 11px rgba(20,26,34,.22);">CONTENTS</div>
       <div style="width:1px;height:20px;margin:0 3px;background:rgba(255,255,255,.25);"></div>
-      <div onClick="{{ goDemo }}" class="lnk" title="see it in action" style="height:31px;display:flex;align-items:center;gap:5px;padding:0 13px;background:var(--bk-teal);color:#fff;font-size:13px;letter-spacing:.5px;border-radius:0 0 6px 6px;box-shadow:0 6px 13px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.2);">▶ LIVE DEMO</div>
-      <a href="pitch-deck.dc.html" class="lnk" title="the seed pitch deck, page by page" style="height:31px;display:flex;align-items:center;gap:5px;padding:0 13px;background:#7a4bd0;color:#fff;font-size:13px;letter-spacing:.5px;border-radius:0 0 6px 6px;box-shadow:0 6px 13px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.2);text-decoration:none;">✦ PITCH DECK</a>
-      <div onClick="{{ goMoat }}" class="lnk" title="the dataset moat" style="height:31px;display:flex;align-items:center;gap:5px;padding:0 13px;background:var(--bk-ink);color:#fff;font-size:13px;letter-spacing:.5px;border-radius:0 0 6px 6px;box-shadow:0 6px 13px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.2);">◆ THE PROBLEM</div>
+      <div onClick="{{ goDemo }}" class="lnk" title="see it in action" style="height:31px;display:flex;align-items:center;gap:5px;padding:0 13px;background:var(--bk-teal);color:#fff;font-size:13px;letter-spacing:.5px;border-radius:0 0 6px 6px;box-shadow:0 6px 13px rgba(20,26,34,.26);border:1px solid rgba(255,255,255,.28);">▶ LIVE DEMO</div>
+      <a href="pitch-deck.dc.html" class="lnk" title="the seed pitch deck, page by page" style="height:31px;display:flex;align-items:center;gap:5px;padding:0 13px;background:#7a4bd0;color:#fff;font-size:13px;letter-spacing:.5px;border-radius:0 0 6px 6px;box-shadow:0 6px 13px rgba(20,26,34,.26);border:1px solid rgba(255,255,255,.28);text-decoration:none;">✦ PITCH DECK</a>
+      <div onClick="{{ goMoat }}" class="lnk" title="the dataset moat" style="height:31px;display:flex;align-items:center;gap:5px;padding:0 13px;background:var(--bk-ink);color:#fff;font-size:13px;letter-spacing:.5px;border-radius:0 0 6px 6px;box-shadow:0 6px 13px rgba(20,26,34,.26);border:1px solid rgba(255,255,255,.28);">◆ THE PROBLEM</div>
     </div>
 
     <!-- the book. On narrow screens the outer viewport shows a single page
          (half the spread) and slides between halves, flipbook-reader style. -->
-    <div style="position:relative;width:{{ viewW }}px;height:730px;overflow:hidden;border-radius:8px;filter:drop-shadow(0 40px 60px rgba(0,0,0,.55));">
+    <div style="position:relative;width:{{ viewW }}px;height:730px;overflow:hidden;border-radius:8px;filter:drop-shadow(0 26px 44px rgba(20,26,34,.30)) drop-shadow(0 4px 10px rgba(20,26,34,.14));">
     <div style="position:relative;width:1120px;height:730px;perspective:2600px;transform:translateX({{ innerShift }}px);transition:transform .4s ease;">
 
       <!-- shared spread frame -->
-      <div style="position:absolute;inset:0;display:flex;background:#0d0d0d;border-radius:8px;">
+      <div style="position:absolute;inset:0;display:flex;background:var(--surface-2);border-radius:8px;">
 
         <!-- ============ LEFT + RIGHT pages, one spread visible ============ -->
 
