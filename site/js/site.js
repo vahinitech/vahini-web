@@ -33,7 +33,7 @@
     { href: "solution-insights.html", t: "Learning Analytics", d: "Classroom insight from how students write", pill: "pilot", pl: "Pilot" },
     { href: "solution-assistive.html", t: "Motor Assessment", d: "Early motor screening &amp; intervention", pill: "research", pl: "Research" },
     { href: "investor.html", t: "Signature Intelligence", d: "Verify how a signature was written, not just its shape", pill: "next", pl: "Next" },
-    { href: "investor.html", t: "Developer SDK", d: "Motion intelligence as an API for partners", pill: "future", pl: "Future" }
+    { href: "developers.html", t: "Developer SDK", d: "Motion intelligence as an API for partners", pill: "future", pl: "Future" }
   ];
   var PLATFORM = [
     { href: "product.html", t: "The pen, Vahini", d: "Dual-IMU sensing on any paper", pill: "dev", pl: "Pre-order" },
@@ -76,6 +76,7 @@
     { t:"Patents & IP", u:P("patents.html"), d:"Granted Patent No. 584433", k:"patents ip granted intellectual property privacy consent dpdp how it works" },
     { t:"About Vahini", u:P("about.html"), d:"How it started, where we are", k:"about story founder origin team" },
     { t:"Investors", u:P("investor.html"), d:"The motion-data field notebook", k:"investors funding round roadmap motion data moat deep tech notebook" },
+    { t:"Developer SDK & API", u:P("developers.html"), d:"Scan scoring & pen motion as an API", k:"developer sdk api endpoints rest keys metering pricing saas partners integrate motion scan ocr" },
     { t:"See it in Action", u:P("see-in-action.html"), d:"Motion to meaning, live", k:"demo live action motion capture reconstruct score" },
     { t:"Reach us", u:P("reach.html"), d:"Partner, invest or say hello", k:"contact reach partner invest email" }
   ];
