@@ -47,14 +47,13 @@
    scheme itself is red-based, so the red wax-seal logo always sits
    naturally on the page.
 
-   Current pick: "inked" — scheme 51, grayscale + vibrant teal.
-   Chosen because it matches the brand story (ink on paper) and the
-   logo: the teal accent mirrors the pen's indicator dot while the
-   crimson logo seal stays the loudest warm element on the page.
+   Current pick: "celestial" — scheme 40, bright confident blue.
+   The crimson logo seal stays the loudest warm element on the page
+   while the blue carries actions and links.
    ============================================================ */
 
 window.VAHINI_THEME = {
-  ACTIVE_THEME: "inked"
+  ACTIVE_THEME: "celestial"
 };
 
 /* applied before paint — no flash of the wrong colour */
