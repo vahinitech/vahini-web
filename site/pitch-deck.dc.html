@@ -5,6 +5,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- self-hosted React: support.js skips its unpkg fallback when window.React
+     already exists, so the page keeps working without third-party CDNs -->
+<script src="js/vendor/react.production.min.js"></script>
+<script src="js/vendor/react-dom.production.min.js"></script>
 <script src="js/support.js"></script>
 </head>
 <body>
@@ -40,7 +44,7 @@
     <!-- bookmark tabs (hang from the top edge, like the notebook) -->
     <div style="position:absolute;top:-2px;right:64px;z-index:40;display:flex;align-items:flex-start;gap:9px;font-family:'Patrick Hand',cursive;">
       <div onClick="{{ goCover }}" class="lnk" style="height:44px;display:flex;align-items:center;padding:0 22px;background:#e2a32b;color:#3a2a06;font-size:21px;letter-spacing:1px;border-radius:0 0 9px 9px;box-shadow:0 6px 13px rgba(0,0,0,.32);">COVER</div>
-      <a href="investor-book.dc.html" class="lnk" style="height:44px;display:flex;align-items:center;gap:7px;padding:0 22px;background:#c0392b;color:#fff;font-size:21px;letter-spacing:.5px;border-radius:0 0 9px 9px;box-shadow:0 8px 16px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.2);text-decoration:none;">✦ FIELD NOTEBOOK</a>
+      <a href="investor.html" class="lnk" style="height:44px;display:flex;align-items:center;gap:7px;padding:0 22px;background:#c0392b;color:#fff;font-size:21px;letter-spacing:.5px;border-radius:0 0 9px 9px;box-shadow:0 8px 16px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.2);text-decoration:none;">✦ FIELD NOTEBOOK</a>
       <a href="index.html" class="lnk" style="height:44px;display:flex;align-items:center;gap:7px;padding:0 22px;background:#27408f;color:#fff;font-size:21px;letter-spacing:.5px;border-radius:0 0 9px 9px;box-shadow:0 8px 16px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.2);text-decoration:none;">⌂ VAHINITECH.COM</a>
     </div>
 

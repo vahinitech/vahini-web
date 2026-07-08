@@ -32,8 +32,8 @@
     { href: "solution-digitization.html",t: "Digital Notes", d: "Paper notes, digitised in real time", pill: "dev", pl: "In dev" },
     { href: "solution-insights.html", t: "Learning Analytics", d: "Classroom insight from how students write", pill: "pilot", pl: "Pilot" },
     { href: "solution-assistive.html", t: "Motor Assessment", d: "Early motor screening &amp; intervention", pill: "research", pl: "Research" },
-    { href: "investor-book.dc.html", t: "Signature Intelligence", d: "Verify how a signature was written, not just its shape", pill: "next", pl: "Next" },
-    { href: "investor-book.dc.html", t: "Developer SDK", d: "Motion intelligence as an API for partners", pill: "future", pl: "Future" }
+    { href: "investor.html", t: "Signature Intelligence", d: "Verify how a signature was written, not just its shape", pill: "next", pl: "Next" },
+    { href: "investor.html", t: "Developer SDK", d: "Motion intelligence as an API for partners", pill: "future", pl: "Future" }
   ];
   var PLATFORM = [
     { href: "product.html", t: "The pen, Vahini", d: "Dual-IMU sensing on any paper", pill: "dev", pl: "Pre-order" },
@@ -75,7 +75,7 @@
     { t:"The Pen (Vahini)", u:P("product.html"), d:"Dual-IMU sensing on any paper", k:"pen vahini hardware imu sensor pre-order" },
     { t:"Patents & IP", u:P("patents.html"), d:"Granted Patent No. 584433", k:"patents ip granted intellectual property privacy consent dpdp how it works" },
     { t:"About Vahini", u:P("about.html"), d:"How it started, where we are", k:"about story founder origin team" },
-    { t:"Investors", u:P("investor-book.dc.html"), d:"The motion-data field notebook", k:"investors funding round roadmap motion data moat deep tech notebook" },
+    { t:"Investors", u:P("investor.html"), d:"The motion-data field notebook", k:"investors funding round roadmap motion data moat deep tech notebook" },
     { t:"See it in Action", u:P("see-in-action.html"), d:"Motion to meaning, live", k:"demo live action motion capture reconstruct score" },
     { t:"Reach us", u:P("reach.html"), d:"Partner, invest or say hello", k:"contact reach partner invest email" }
   ];
@@ -123,7 +123,7 @@
           '<button class="navtrig" aria-expanded="false">Company '+caret+'</button>'+
           '<div class="drop" role="menu">'+COMPANY.map(dropLink).join("")+'</div>'+
         '</li>'+
-        navItem("investor-book.dc.html","Investors",active)+
+        navItem("investor.html","Investors",active)+
       '</ul></nav>'+
       '<div class="actions">'+
         '<button class="navsearch" id="navSearch" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>'+
@@ -156,7 +156,7 @@
       '<a class="d-link" href="'+P("product.html")+'" data-nav>The Pen</a>'+
       '<details><summary>Resources</summary>'+resLinks+'</details>'+
       '<details><summary>Company</summary>'+compLinks+'</details>'+
-      '<a class="d-link" href="'+P("investor-book.dc.html")+'" data-nav>Investors</a>'+
+      '<a class="d-link" href="'+P("investor.html")+'" data-nav>Investors</a>'+
       '<div class="drawer__actions">'+
         '<a class="btn btn--ghost" href="'+P("see-in-action.html")+'">See it in Action</a>'+
         '<a class="btn btn--crimson" href="'+P("reach.html")+'" data-nav>Partner with us</a>'+

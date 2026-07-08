@@ -5,9 +5,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Investor Book · Vahini Technologies</title>
+<meta name="description" content="The Vahini investor field notebook: the handwriting-motion dataset thesis, live demo, patents, economics and the ask, as a page-turning book.">
+<script src="js/theme.config.js"></script>
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/site.css">
+<!-- self-hosted React: support.js skips its unpkg fallback when window.React
+     already exists, so the book keeps working without third-party CDNs -->
+<script src="js/vendor/react.production.min.js"></script>
+<script src="js/vendor/react-dom.production.min.js"></script>
 <script src="js/support.js"></script>
 </head>
-<body>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
 <x-dc>
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,8 +28,25 @@
 <link rel="icon" type="image/png" sizes="16x16" href="assets/ev/favicon-16x16.png">
 <link rel="apple-touch-icon" href="assets/ev/apple-touch-icon.png">
 <style>
-  html,body{margin:0;padding:0;height:100%;background:#16241f;overflow:hidden;cursor:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='30'%20height='30'%20viewBox='0%200%2030%2030'%3E%3Cpath%20d='M23%203%20L27%207%20L14%2020%20L10%2016%20Z'%20fill='%2327408f'%20stroke='%2316243a'%20stroke-width='1'/%3E%3Cpath%20d='M10%2016%20L14%2020%20L7%2025%20Z'%20fill='%23e2a32b'%20stroke='%2316243a'%20stroke-width='1'/%3E%3Cpath%20d='M7%2025%20L4.5%2027' stroke='%233a2a06'%20stroke-width='1.6'%20stroke-linecap='round'/%3E%3Ccircle%20cx='25'%20cy='5'%20r='2.3'%20fill='%23c0392b'/%3E%3C/svg%3E") 5 26, auto;}
+  /* the book lives inside a normal, scrollable subpage; support.js appends
+     "#dc-root{height:100%}" at boot, so the auto override needs !important */
+  #dc-root, #dc-root > .sc-host{height:auto !important;}
   *{box-sizing:border-box;-webkit-font-smoothing:antialiased;}
+  .ibk-stage{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:radial-gradient(120% 120% at 50% 18%, #2a4138 0%, #1b2a24 55%, #111c18 100%);
+    font-family:'Shantell Sans',cursive;padding:26px 0 16px;overflow:hidden;min-height:calc(100vh - 76px);
+    cursor:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='30'%20height='30'%20viewBox='0%200%2030%2030'%3E%3Cpath%20d='M23%203%20L27%207%20L14%2020%20L10%2016%20Z'%20fill='%2327408f'%20stroke='%2316243a'%20stroke-width='1'/%3E%3Cpath%20d='M10%2016%20L14%2020%20L7%2025%20Z'%20fill='%23e2a32b'%20stroke='%2316243a'%20stroke-width='1'/%3E%3Cpath%20d='M7%2025%20L4.5%2027' stroke='%233a2a06'%20stroke-width='1.6'%20stroke-linecap='round'/%3E%3Ccircle%20cx='25'%20cy='5'%20r='2.3'%20fill='%23c0392b'/%3E%3C/svg%3E") 5 26, auto;}
+  .ibk-stage:fullscreen{min-height:100vh;}
+  /* flipbook toolbar (FlippingBook-style controls, unscaled) */
+  .ibk-bar{position:relative;z-index:45;display:flex;align-items:center;gap:10px;margin-top:16px;
+    background:rgba(10,18,15,.72);border:1px solid rgba(255,255,255,.16);border-radius:999px;
+    padding:7px 14px;box-shadow:0 10px 26px rgba(0,0,0,.4);backdrop-filter:blur(4px);}
+  .ibk-bar button{appearance:none;border:0;background:transparent;color:#e8e2cd;font-family:'Patrick Hand',cursive;
+    font-size:16px;line-height:1;padding:7px 11px;border-radius:999px;cursor:inherit;transition:background .15s,color .15s;}
+  .ibk-bar button:hover{background:rgba(255,255,255,.12);color:#fff;}
+  .ibk-bar .ibk-pg{font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:1px;color:#cfd8c9;min-width:74px;text-align:center;}
+  .ibk-bar .ibk-sep{width:1px;height:20px;background:rgba(255,255,255,.2);}
+  @media (max-width:520px){ .ibk-bar{gap:4px;padding:6px 8px;} .ibk-bar .ibk-pg{min-width:58px;} .ibk-bar button{padding:7px 8px;} }
   @keyframes flipNext{from{transform:rotateY(0deg)}to{transform:rotateY(-178deg)}}
   @keyframes flipPrev{from{transform:rotateY(0deg)}to{transform:rotateY(178deg)}}
   @keyframes leafShade{from{opacity:.05}50%{opacity:.45}to{opacity:.05}}
@@ -38,15 +66,18 @@
 </style>
 </helmet>
 
-<div style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(120% 120% at 50% 18%, #2a4138 0%, #1b2a24 55%, #111c18 100%);font-family:'Shantell Sans',cursive;">
+<div class="ibk-stage" ref="{{ stageRef }}">
 
   <svg width="0" height="0" style="position:absolute;pointer-events:none;"><defs><filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.014" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.6"/></filter></defs></svg>
   <div style="position:absolute;inset:0;opacity:.5;background-image:radial-gradient(circle at 50% 40%, rgba(255,255,255,.05), transparent 60%);pointer-events:none;"></div>
 
-  <div style="transform:scale({{ scale }});transform-origin:center center;transition:transform .25s ease;">
+  <!-- the frame reserves real layout height for the scaled book, so the
+       toolbar below never overlaps it at any scale -->
+  <div style="height:{{ frameH }}px;width:100%;display:flex;justify-content:center;overflow:visible;">
+  <div style="transform:scale({{ scale }});transform-origin:top center;transition:transform .25s ease;flex:none;position:relative;padding-top:36px;">
 
     <!-- bookmark tabs (hang from the top edge, clear of page content) -->
-    <div style="position:absolute;top:-2px;right:40px;z-index:40;display:flex;align-items:flex-start;gap:7px;font-family:'Patrick Hand',cursive;">
+    <div style="position:absolute;top:0;right:40px;z-index:40;display:flex;align-items:flex-start;gap:7px;font-family:'Patrick Hand',cursive;">
       <div onClick="{{ goCover }}" class="lnk" style="height:27px;display:flex;align-items:center;padding:0 13px;background:#e2a32b;color:#3a2a06;font-size:13px;letter-spacing:1px;border-radius:0 0 6px 6px;box-shadow:0 5px 11px rgba(0,0,0,.32);">COVER</div>
       <div onClick="{{ goIndex }}" class="lnk" style="height:27px;display:flex;align-items:center;padding:0 13px;background:#c0392b;color:#fff;font-size:13px;letter-spacing:1px;border-radius:0 0 6px 6px;box-shadow:0 5px 11px rgba(0,0,0,.32);">CONTENTS</div>
       <div style="width:1px;height:20px;margin:0 3px;background:rgba(255,255,255,.25);"></div>
@@ -55,8 +86,10 @@
       <div onClick="{{ goMoat }}" class="lnk" title="the dataset moat" style="height:31px;display:flex;align-items:center;gap:5px;padding:0 13px;background:#27408f;color:#fff;font-size:13px;letter-spacing:.5px;border-radius:0 0 6px 6px;box-shadow:0 6px 13px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.2);">◆ THE PROBLEM</div>
     </div>
 
-    <!-- the book -->
-    <div style="position:relative;width:1120px;height:730px;perspective:2600px;filter:drop-shadow(0 40px 60px rgba(0,0,0,.55));">
+    <!-- the book. On narrow screens the outer viewport shows a single page
+         (half the spread) and slides between halves, flipbook-reader style. -->
+    <div style="position:relative;width:{{ viewW }}px;height:730px;overflow:hidden;border-radius:8px;filter:drop-shadow(0 40px 60px rgba(0,0,0,.55));">
+    <div style="position:relative;width:1120px;height:730px;perspective:2600px;transform:translateX({{ innerShift }}px);transition:transform .4s ease;">
 
       <!-- shared spread frame -->
       <div style="position:absolute;inset:0;display:flex;background:#0d0d0d;border-radius:8px;">
@@ -1208,12 +1241,27 @@
         <div style="position:absolute;bottom:18px;left:80px;font-family:'Patrick Hand',cursive;font-size:15px;color:#8a93a6;z-index:26;">Vahini · field notes</div>
       </sc-if>
     </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- flipbook controls -->
+  <div class="ibk-bar">
+    <button onClick="{{ prev }}" title="previous page" aria-label="Previous page">&#10094;</button>
+    <div class="ibk-pg">{{ pageCounter }}</div>
+    <button onClick="{{ next }}" title="next page" aria-label="Next page">&#10095;</button>
+    <span class="ibk-sep"></span>
+    <button onClick="{{ goIndex }}" title="table of contents">&#9776; Contents</button>
+    <button onClick="{{ toggleFS }}" title="fullscreen" aria-label="Toggle fullscreen">&#9974;</button>
   </div>
 </div>
 </x-dc>
+</main>
+<div id="site-footer"></div>
+<script src="js/site.js"></script>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { cur: 'cover', flipping: false, dir: 'next', scale: 1, selApp: 0, demoState: 'idle', pipeStep: -1, result: null, locked: false };
+  state = { cur: 'cover', flipping: false, dir: 'next', scale: 1, selApp: 0, demoState: 'idle', pipeStep: -1, result: null, locked: false, halfMode: false, half: 0 };
 
   order = ['cover','index','problem','whynow','beyond','competition','methods','pen','demo','specs','patents','economics','gtm','funding','awards','team','questions','vision','news','contact','back'];
 
@@ -1240,27 +1288,75 @@ class Component extends DCLogic {
     this.fit();
     this._onResize = () => this.fit();
     window.addEventListener('resize', this._onResize);
+    this._onKey = (e) => {
+      if (/input|textarea|select/i.test((e.target && e.target.tagName) || '')) return;
+      if (e.key === 'ArrowRight') { e.preventDefault(); this.next(); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); this.prev(); }
+    };
+    window.addEventListener('keydown', this._onKey);
+    this._onFs = () => { this.setState({ fs: !!document.fullscreenElement }); this.fit(); };
+    document.addEventListener('fullscreenchange', this._onFs);
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this._onResize);
+    window.removeEventListener('keydown', this._onKey);
+    document.removeEventListener('fullscreenchange', this._onFs);
     if (this._t) clearTimeout(this._t);
     if (this._auto) clearTimeout(this._auto);
     if (this._sensorRAF) cancelAnimationFrame(this._sensorRAF);
   }
+  stageRef = (el) => {
+    if (!el || el === this._stageEl) return;
+    this._stageEl = el;
+    // swipe between pages; leave the demo canvas, buttons and links alone
+    el.addEventListener('touchstart', (e) => {
+      const t = e.touches[0];
+      this._sw = t && { x: t.clientX, y: t.clientY, skip: !!(e.target.closest && e.target.closest('canvas,button,a,.lnk,.corner')) };
+    }, { passive: true });
+    el.addEventListener('touchend', (e) => {
+      const sw = this._sw; this._sw = null;
+      if (!sw || sw.skip) return;
+      const t = e.changedTouches[0]; if (!t) return;
+      const dx = t.clientX - sw.x, dy = t.clientY - sw.y;
+      if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.5) (dx < 0 ? this.next() : this.prev());
+    }, { passive: true });
+    this.fit();
+  };
   fit = () => {
-    const s = Math.min(window.innerWidth / 1200, window.innerHeight / 800, 1.08);
-    this.setState({ scale: Math.max(0.3, s) });
+    const w = (this._stageEl && this._stageEl.clientWidth) || window.innerWidth;
+    const halfMode = w < 720;
+    const bookW = halfMode ? 560 : 1120;
+    const availW = Math.max(260, w - 18);
+    const chrome = document.fullscreenElement ? 110 : 220; /* toolbar + nav + breathing room */
+    const availH = Math.max(400, window.innerHeight - chrome);
+    const s = Math.min(availW / bookW, availH / 766, 1.06);
+    this.setState({ scale: Math.max(0.28, s), halfMode, half: halfMode ? this.state.half : 0 });
+  };
+  toggleFS = () => {
+    const el = this._stageEl; if (!el) return;
+    if (document.fullscreenElement) { if (document.exitFullscreen) document.exitFullscreen(); }
+    else if (el.requestFullscreen) el.requestFullscreen();
   };
 
-  go = (key) => {
+  go = (key, landHalf) => {
     if (key === this.state.cur || this.state.flipping) return;
     const dir = this.order.indexOf(key) > this.order.indexOf(this.state.cur) ? 'next' : 'prev';
     this.setState({ flipping: true, dir });
     if (this._t) clearTimeout(this._t);
-    this._t = setTimeout(() => this.setState({ cur: key, flipping: false }), 510);
+    this._t = setTimeout(() => this.setState({ cur: key, flipping: false, half: landHalf || 0 }), 510);
   };
-  next = () => { const i = this.order.indexOf(this.state.cur); if (i < this.order.length - 1) this.go(this.order[i + 1]); };
-  prev = () => { const i = this.order.indexOf(this.state.cur); if (i > 0) this.go(this.order[i - 1]); };
+  /* single-page (mobile) mode walks half-spreads: right half first, then the
+     next spread's left half; prev mirrors that so the page order is stable */
+  next = () => {
+    if (this.state.halfMode && this.state.half === 0) { this.setState({ half: 1 }); return; }
+    const i = this.order.indexOf(this.state.cur);
+    if (i < this.order.length - 1) this.go(this.order[i + 1], 0);
+  };
+  prev = () => {
+    if (this.state.halfMode && this.state.half === 1) { this.setState({ half: 0 }); return; }
+    const i = this.order.indexOf(this.state.cur);
+    if (i > 0) this.go(this.order[i - 1], this.state.halfMode ? 1 : 0);
+  };
 
   // ---- live demo ----
   initInput = (el) => {
@@ -1589,9 +1685,21 @@ class Component extends DCLogic {
       noteColor:d.us?'#27408f':'#8a8068'
     }));
 
+    const half = this.state.half || 0;
+    const halfMode = this.state.halfMode;
+    const pageCounter = halfMode
+      ? (idx * 2 + half + 1) + ' / ' + (this.order.length * 2)
+      : (idx + 1) + ' / ' + this.order.length;
+
     return {
       compRows,
       scale: this.state.scale,
+      stageRef: this.stageRef,
+      frameH: Math.round(766 * this.state.scale) + 8,
+      viewW: halfMode ? 560 : 1120,
+      innerShift: halfMode && half === 1 ? -560 : 0,
+      pageCounter,
+      toggleFS: this.toggleFS,
       isCover:is('cover'), isIndex:is('index'), isProblem:is('problem'), isPen:is('pen'),
       isDemo:is('demo'), isSpecs:is('specs'), isPatents:is('patents'), isBeyond:is('beyond'), isMethods:is('methods'), isEconomics:is('economics'), isFunding:is('funding'),
       isAwards:is('awards'), isTeam:is('team'), isNews:is('news'), isContact:is('contact'), isBack:is('back'),
