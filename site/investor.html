@@ -82,12 +82,13 @@
   .corner:hover{filter:brightness(.96);}
   .lnk{cursor:pointer;transition:color .15s,transform .15s;}
   .lnk:hover{color:var(--bk-red) !important;transform:translateX(3px);}
-  /* ribbon bookmarks: a hanging strip with a forked tail. box-shadow would
-     be clipped by the notch, so the shadow is a drop-shadow filter. */
-  .ibk-rib{display:flex;align-items:flex-start;justify-content:center;padding:9px 13px 0;
-    font-size:13px;letter-spacing:1.5px;white-space:nowrap;line-height:1;
-    clip-path:polygon(0 0, 100% 0, 100% calc(100% - 1px), 50% calc(100% - 11px), 0 calc(100% - 1px));
-    filter:drop-shadow(0 6px 7px rgba(20,26,34,.30));transition:height .18s ease, color .15s;}
+  /* ribbon bookmarks: tall vertical strips hanging down over the cover,
+     label reading top-to-bottom, forked tail cut at the bottom. box-shadow
+     would be clipped by the notch, so the shadow is a drop-shadow filter. */
+  .ibk-rib{writing-mode:vertical-rl;width:32px;padding:13px 0 22px;text-align:start;
+    display:flex;align-items:center;font-size:12.5px;letter-spacing:2.5px;white-space:nowrap;line-height:1;
+    clip-path:polygon(0 0, 100% 0, 100% calc(100% - 1px), 50% calc(100% - 12px), 0 calc(100% - 1px));
+    filter:drop-shadow(0 6px 7px rgba(20,26,34,.30));transition:transform .18s ease, color .15s;}
   /* hovering a ribbon must not repaint the label crimson (red-on-red is
      invisible); the ribbon slips down a little instead */
   .ibk-tabs .lnk:hover{color:var(--tabc,#fff) !important;transform:translateY(3px);}
@@ -106,10 +107,10 @@
   <div style="transform:scale({{ scale }});transform-origin:top center;transition:transform .25s ease;flex:none;position:relative;padding-top:36px;">
 
     <!-- ribbon bookmarks (hang over the cover's top edge like real ribbons) -->
-    <div class="ibk-tabs" style="position:absolute;top:0;right:40px;z-index:40;display:flex;align-items:flex-start;gap:9px;font-family:'Patrick Hand',cursive;">
-      <div onClick="{{ goCover }}" class="lnk ibk-rib" style="--tabc:#3a2a06;height:52px;background:linear-gradient(180deg,#eab143,#e2a32b);color:#3a2a06;">COVER</div>
-      <div onClick="{{ goIndex }}" class="lnk ibk-rib" style="height:64px;background:linear-gradient(180deg,color-mix(in srgb, var(--bk-red) 88%, #fff),var(--bk-red));color:#fff;">CONTENTS</div>
-      <div onClick="{{ goMoat }}" class="lnk ibk-rib" title="the dataset moat" style="height:56px;background:linear-gradient(180deg,color-mix(in srgb, var(--bk-ink) 82%, #fff),var(--bk-ink));color:#fff;">THE PROBLEM</div>
+    <div class="ibk-tabs" style="position:absolute;top:0;right:150px;z-index:40;display:flex;align-items:flex-start;gap:9px;font-family:'Patrick Hand',cursive;">
+      <div onClick="{{ goCover }}" class="lnk ibk-rib" style="--tabc:#3a2a06;height:104px;background:linear-gradient(180deg,#eab143,#e2a32b);color:#3a2a06;">COVER</div>
+      <div onClick="{{ goIndex }}" class="lnk ibk-rib" style="height:138px;background:linear-gradient(180deg,color-mix(in srgb, var(--bk-red) 88%, #fff),var(--bk-red));color:#fff;">CONTENTS</div>
+      <div onClick="{{ goMoat }}" class="lnk ibk-rib" title="the dataset moat" style="height:170px;background:linear-gradient(180deg,color-mix(in srgb, var(--bk-ink) 82%, #fff),var(--bk-ink));color:#fff;">THE PROBLEM</div>
     </div>
 
     <!-- the book. On narrow screens the outer viewport shows a single page
