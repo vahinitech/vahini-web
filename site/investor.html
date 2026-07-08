@@ -50,15 +50,14 @@
   .ibk-stage{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
     /* light desk, same ivory family as every other page of the site */
     background:radial-gradient(120% 100% at 50% 0%, var(--ivory-2) 0%, var(--ivory) 55%, var(--surface-2) 100%);
-    font-family:'Shantell Sans',cursive;padding:26px 0 16px;overflow:hidden;min-height:calc(100vh - 76px);
-    cursor:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='30'%20height='30'%20viewBox='0%200%2030%2030'%3E%3Cpath%20d='M23%203%20L27%207%20L14%2020%20L10%2016%20Z'%20fill='%2327408f'%20stroke='%2316243a'%20stroke-width='1'/%3E%3Cpath%20d='M10%2016%20L14%2020%20L7%2025%20Z'%20fill='%23e2a32b'%20stroke='%2316243a'%20stroke-width='1'/%3E%3Cpath%20d='M7%2025%20L4.5%2027' stroke='%233a2a06'%20stroke-width='1.6'%20stroke-linecap='round'/%3E%3Ccircle%20cx='25'%20cy='5'%20r='2.3'%20fill='%23c0392b'/%3E%3C/svg%3E") 5 26, auto;}
+    font-family:'Shantell Sans',cursive;padding:26px 0 16px;overflow:hidden;min-height:calc(100vh - 76px);}
   .ibk-stage:fullscreen{min-height:100vh;}
   /* flipbook toolbar (FlippingBook-style controls, unscaled) */
   .ibk-bar{position:relative;z-index:45;display:flex;align-items:center;gap:10px;margin-top:16px;
     background:color-mix(in srgb, var(--surface) 90%, transparent);border:1px solid var(--rule-2);border-radius:999px;
     padding:7px 14px;box-shadow:0 10px 26px rgba(20,26,34,.16);backdrop-filter:blur(4px);}
   .ibk-bar button{appearance:none;border:0;background:transparent;color:var(--ink);font-family:'Patrick Hand',cursive;
-    font-size:16px;line-height:1;padding:7px 11px;border-radius:999px;cursor:inherit;transition:background .15s,color .15s;}
+    font-size:16px;line-height:1;padding:7px 11px;border-radius:999px;cursor:pointer;transition:background .15s,color .15s;}
   .ibk-bar button:hover{background:var(--accent-soft);color:var(--accent-ink);}
   .ibk-bar .ibk-pg{font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:1px;color:var(--muted);min-width:74px;text-align:center;}
   .ibk-bar .ibk-sep{width:1px;height:20px;background:var(--rule-2);}
@@ -75,9 +74,13 @@
   @keyframes glow{0%,100%{opacity:.3}50%{opacity:.72}}
   @keyframes march{to{stroke-dashoffset:-24px}}
   .spd{animation:fadeUp .5s ease both;}
+  .corner{cursor:pointer;}
   .corner:hover{filter:brightness(.96);}
-  .lnk{cursor:inherit;transition:color .15s,transform .15s;}
+  .lnk{cursor:pointer;transition:color .15s,transform .15s;}
   .lnk:hover{color:var(--bk-red) !important;transform:translateX(3px);}
+  /* bookmark tabs are coloured chips: hovering them must not repaint the
+     label crimson (red-on-red is invisible), just nudge them down */
+  .ibk-tabs .lnk:hover{color:var(--tabc,#fff) !important;transform:translateY(1px);}
   ::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#cdbfa0;border-radius:8px}
 </style>
 </helmet>
@@ -93,11 +96,11 @@
   <div style="transform:scale({{ scale }});transform-origin:top center;transition:transform .25s ease;flex:none;position:relative;padding-top:36px;">
 
     <!-- bookmark tabs (hang from the top edge, clear of page content) -->
-    <div style="position:absolute;top:0;right:40px;z-index:40;display:flex;align-items:flex-start;gap:7px;font-family:'Patrick Hand',cursive;">
-      <div onClick="{{ goCover }}" class="lnk" style="height:27px;display:flex;align-items:center;padding:0 13px;background:#e2a32b;color:#3a2a06;font-size:13px;letter-spacing:1px;border-radius:0 0 6px 6px;box-shadow:0 5px 11px rgba(20,26,34,.22);">COVER</div>
+    <div class="ibk-tabs" style="position:absolute;top:0;right:40px;z-index:40;display:flex;align-items:flex-start;gap:7px;font-family:'Patrick Hand',cursive;">
+      <div onClick="{{ goCover }}" class="lnk" style="--tabc:#3a2a06;height:27px;display:flex;align-items:center;padding:0 13px;background:#e2a32b;color:#3a2a06;font-size:13px;letter-spacing:1px;border-radius:0 0 6px 6px;box-shadow:0 5px 11px rgba(20,26,34,.22);">COVER</div>
       <div onClick="{{ goIndex }}" class="lnk" style="height:27px;display:flex;align-items:center;padding:0 13px;background:var(--bk-red);color:#fff;font-size:13px;letter-spacing:1px;border-radius:0 0 6px 6px;box-shadow:0 5px 11px rgba(20,26,34,.22);">CONTENTS</div>
       <div style="width:1px;height:20px;margin:0 3px;background:rgba(255,255,255,.25);"></div>
-      <div onClick="{{ goDemo }}" class="lnk" title="see it in action" style="height:31px;display:flex;align-items:center;gap:5px;padding:0 13px;background:var(--bk-teal);color:#fff;font-size:13px;letter-spacing:.5px;border-radius:0 0 6px 6px;box-shadow:0 6px 13px rgba(20,26,34,.26);border:1px solid rgba(255,255,255,.28);">▶ LIVE DEMO</div>
+      <a href="see-in-action.html" class="lnk" title="see it in action, the live demo" style="height:31px;display:flex;align-items:center;gap:5px;padding:0 13px;background:var(--bk-teal);color:#fff;font-size:13px;letter-spacing:.5px;border-radius:0 0 6px 6px;box-shadow:0 6px 13px rgba(20,26,34,.26);border:1px solid rgba(255,255,255,.28);">▶ LIVE DEMO</a>
       <a href="pitch-deck.dc.html" class="lnk" title="the seed pitch deck, page by page" style="height:31px;display:flex;align-items:center;gap:5px;padding:0 13px;background:#7a4bd0;color:#fff;font-size:13px;letter-spacing:.5px;border-radius:0 0 6px 6px;box-shadow:0 6px 13px rgba(20,26,34,.26);border:1px solid rgba(255,255,255,.28);text-decoration:none;">✦ PITCH DECK</a>
       <div onClick="{{ goMoat }}" class="lnk" title="the dataset moat" style="height:31px;display:flex;align-items:center;gap:5px;padding:0 13px;background:var(--bk-ink);color:#fff;font-size:13px;letter-spacing:.5px;border-radius:0 0 6px 6px;box-shadow:0 6px 13px rgba(20,26,34,.26);border:1px solid rgba(255,255,255,.28);">◆ THE PROBLEM</div>
     </div>
@@ -610,117 +613,6 @@
           </div>
         </sc-if>
 
-        <!-- DEMO -->
-        <sc-if value="{{ isDemo }}" hint-placeholder-val="{{ false }}">
-          <div class="spd" style="display:flex;width:100%;height:100%;">
-            <div style="flex:1;height:100%;padding:30px 34px 22px 60px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;display:flex;flex-direction:column;">
-              <div style="position:absolute;top:0;bottom:0;left:50px;width:0;background:transparent;"></div>
-              <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">TRY IT</div>
-              <div style="font-family:'Caveat',cursive;font-size:42px;color:var(--bk-ink);line-height:1;margin:0 0 2px;">See it in action</div>
-              <div style="font-family:'Shantell Sans',cursive;font-size:13.5px;color:var(--bk-text-3);margin-bottom:8px;">Write one character and watch the pen's sensors fire, packetise &amp; stream.</div>
-              <div style="position:relative;flex:1;min-height:118px;">
-                <canvas ref="{{ inputCanvasRef }}" style="position:absolute;inset:0;width:100%;height:100%;background:transparent;border:1.5px dashed #c9bda0;border-radius:6px;cursor:crosshair;touch-action:none;"></canvas>
-                <sc-if value="{{ locked }}" hint-placeholder-val="{{ false }}">
-                  <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:rgba(253,253,251,.76);border:1.5px solid var(--bk-teal);border-radius:6px;">
-                    <div style="font-family:'Caveat',cursive;font-size:30px;color:var(--bk-teal);line-height:1;">✓ Captured</div>
-                    <div style="font-family:'Patrick Hand',cursive;font-size:14px;color:var(--bk-red);">press Clear to write again</div>
-                  </div>
-                </sc-if>
-              </div>
-              <div style="display:flex;align-items:center;justify-content:space-between;margin:9px 0 4px;">
-                <div style="font-family:'Patrick Hand',cursive;font-size:11px;letter-spacing:1.5px;color:var(--bk-hint);">PEN SENSOR BUS · 16 AXES</div>
-                <div style="font-family:'Patrick Hand',cursive;font-size:11.5px;color:var(--bk-teal);"><span ref="{{ sampleCountRef }}">0 samples</span> · <b style="color:var(--bk-red);">208 Hz</b></div>
-              </div>
-              <div ref="{{ sensorBusRef }}" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
-                <div style="background:#fff;border:1px solid var(--bk-paper-line);border-radius:6px;padding:5px 7px 6px;">
-                  <div style="font-family:'Patrick Hand',cursive;font-size:10px;color:var(--bk-text-3);line-height:1;margin-bottom:5px;white-space:nowrap;">IMU-A · accel</div>
-                  <div style="display:flex;gap:3px;align-items:flex-end;height:19px;">
-                    <div data-bar="" style="flex:1;height:3px;background:var(--accent-lite);border-radius:2px;transition:height .06s linear;"></div><div data-bar="" style="flex:1;height:3px;background:var(--accent-lite);border-radius:2px;transition:height .06s linear;"></div><div data-bar="" style="flex:1;height:3px;background:var(--accent-lite);border-radius:2px;transition:height .06s linear;"></div>
-                  </div>
-                </div>
-                <div style="background:#fff;border:1px solid var(--bk-paper-line);border-radius:6px;padding:5px 7px 6px;">
-                  <div style="font-family:'Patrick Hand',cursive;font-size:10px;color:var(--bk-text-3);line-height:1;margin-bottom:5px;white-space:nowrap;">IMU-A · gyro</div>
-                  <div style="display:flex;gap:3px;align-items:flex-end;height:19px;">
-                    <div data-bar="" style="flex:1;height:3px;background:#5bb7e2;border-radius:2px;transition:height .06s linear;"></div><div data-bar="" style="flex:1;height:3px;background:#5bb7e2;border-radius:2px;transition:height .06s linear;"></div><div data-bar="" style="flex:1;height:3px;background:#5bb7e2;border-radius:2px;transition:height .06s linear;"></div>
-                  </div>
-                </div>
-                <div style="background:#fff;border:1px solid var(--bk-paper-line);border-radius:6px;padding:5px 7px 6px;">
-                  <div style="font-family:'Patrick Hand',cursive;font-size:10px;color:var(--bk-text-3);line-height:1;margin-bottom:5px;white-space:nowrap;">IMU-A · magneto</div>
-                  <div style="display:flex;gap:3px;align-items:flex-end;height:19px;">
-                    <div data-bar="" style="flex:1;height:3px;background:#b69cf0;border-radius:2px;transition:height .06s linear;"></div><div data-bar="" style="flex:1;height:3px;background:#b69cf0;border-radius:2px;transition:height .06s linear;"></div><div data-bar="" style="flex:1;height:3px;background:#b69cf0;border-radius:2px;transition:height .06s linear;"></div>
-                  </div>
-                </div>
-                <div style="background:#fff;border:1px solid var(--bk-paper-line);border-radius:6px;padding:5px 7px 6px;">
-                  <div style="font-family:'Patrick Hand',cursive;font-size:10px;color:var(--bk-text-3);line-height:1;margin-bottom:5px;white-space:nowrap;">IMU-B · accel</div>
-                  <div style="display:flex;gap:3px;align-items:flex-end;height:19px;">
-                    <div data-bar="" style="flex:1;height:3px;background:var(--accent-lite);border-radius:2px;transition:height .06s linear;"></div><div data-bar="" style="flex:1;height:3px;background:var(--accent-lite);border-radius:2px;transition:height .06s linear;"></div><div data-bar="" style="flex:1;height:3px;background:var(--accent-lite);border-radius:2px;transition:height .06s linear;"></div>
-                  </div>
-                </div>
-                <div style="background:#fff;border:1px solid var(--bk-paper-line);border-radius:6px;padding:5px 7px 6px;">
-                  <div style="font-family:'Patrick Hand',cursive;font-size:10px;color:var(--bk-text-3);line-height:1;margin-bottom:5px;white-space:nowrap;">IMU-B · gyro</div>
-                  <div style="display:flex;gap:3px;align-items:flex-end;height:19px;">
-                    <div data-bar="" style="flex:1;height:3px;background:#5bb7e2;border-radius:2px;transition:height .06s linear;"></div><div data-bar="" style="flex:1;height:3px;background:#5bb7e2;border-radius:2px;transition:height .06s linear;"></div><div data-bar="" style="flex:1;height:3px;background:#5bb7e2;border-radius:2px;transition:height .06s linear;"></div>
-                  </div>
-                </div>
-                <div style="background:#fff;border:1px solid var(--bk-paper-line);border-radius:6px;padding:5px 7px 6px;">
-                  <div style="font-family:'Patrick Hand',cursive;font-size:10px;color:var(--bk-text-3);line-height:1;margin-bottom:5px;white-space:nowrap;">tip force · analog</div>
-                  <div style="display:flex;gap:3px;align-items:flex-end;height:19px;">
-                    <div data-bar="" style="flex:1;height:3px;background:#e2a32b;border-radius:2px;transition:height .06s linear;"></div>
-                  </div>
-                </div>
-              </div>
-              <div style="display:flex;gap:10px;margin-top:11px;">
-                <div onClick="{{ digitize }}" class="lnk" style="font-family:'Patrick Hand',cursive;font-size:17px;background:var(--bk-ink);color:#fff;padding:8px 16px;border-radius:6px;box-shadow:2px 3px 0 rgba(0,0,0,.18);">Digitise →</div>
-                <div onClick="{{ clearDemo }}" class="lnk" style="font-family:'Patrick Hand',cursive;font-size:17px;background:#fff;color:var(--bk-red);border:1.5px solid #e3c9c4;padding:8px 16px;border-radius:6px;">Clear</div>
-              </div>
-            </div>
-            <div style="flex:1;height:100%;padding:26px 30px 18px;border-radius:0 8px 8px 0;background:#162a4f;position:relative;overflow:hidden;display:flex;flex-direction:column;color:#dfe7fb;">
-              <div style="padding-right:140px;">
-              <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-                <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:color-mix(in srgb, var(--bk-ink) 55%, var(--surface));">VAHINI AI ENGINE</div>
-                <div style="font-family:'Shantell Sans',cursive;font-size:11px;color:color-mix(in srgb, var(--bk-ink) 42%, var(--surface));display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:{{ demoDotColor }};display:inline-block;"></span>{{ demoStatus }}</div>
-              </div>
-              <div style="margin-top:8px;background:#0f203f;border:1px solid #2c477f;border-radius:8px;padding:8px 11px;">
-                <div style="display:flex;align-items:center;gap:9px;">
-                  <span style="font-family:'Patrick Hand',cursive;font-size:11px;color:color-mix(in srgb, var(--bk-ink) 55%, var(--surface));white-space:nowrap;">pen</span>
-                  <div ref="{{ bleTrackRef }}" style="position:relative;flex:1;height:24px;overflow:hidden;">
-                    <div style="position:absolute;top:50%;left:0;right:0;height:2px;transform:translateY(-50%);background:repeating-linear-gradient(90deg,#2c477f,#2c477f 5px,transparent 5px,transparent 11px);"></div>
-                  </div>
-                  <span style="font-family:'Caveat',cursive;font-size:20px;color:#5bb7e2;animation:glow 1.4s ease-in-out infinite;line-height:1;">ᛒ</span>
-                  <span style="font-family:'Patrick Hand',cursive;font-size:11px;color:color-mix(in srgb, var(--bk-ink) 55%, var(--surface));white-space:nowrap;">BLE</span>
-                </div>
-                <div style="display:flex;justify-content:space-between;margin-top:5px;font-family:'Shantell Sans',cursive;font-size:10px;color:color-mix(in srgb, var(--bk-ink) 42%, var(--surface));">
-                  <span>16 channels clubbed into packets</span>
-                  <span ref="{{ packetCountRef }}">0 packets sent</span>
-                </div>
-              </div>
-              </div>
-              <div style="font-family:'Caveat',cursive;font-size:28px;color:var(--accent-lite);line-height:1;margin:7px 0 6px;">motion &rarr; meaning</div>
-              <canvas ref="{{ outputCanvasRef }}" style="flex:1;min-height:0;width:100%;background:#0f203f;border-radius:6px;border:1px solid #2c477f;"></canvas>
-              <div style="display:flex;align-items:stretch;gap:6px;margin-top:11px;">
-                <sc-for list="{{ pipe }}" as="st" hint-placeholder-count="4">
-                  <div style="{{ st.style }}">
-                    <div style="display:flex;align-items:center;gap:6px;">
-                      <span style="{{ st.dotStyle }}">{{ st.icon }}</span>
-                      <span style="font-family:'Patrick Hand',cursive;font-size:12.5px;line-height:1.02;">{{ st.name }}</span>
-                    </div>
-                    <div style="font-family:'Shantell Sans',cursive;font-size:10px;opacity:.85;margin-top:3px;">{{ st.sub }}</div>
-                  </div>
-                </sc-for>
-              </div>
-              <div style="{{ resultBoxStyle }}">
-                <div style="{{ resultGlyphStyle }}">{{ resultGlyph }}</div>
-                <div style="flex:1;min-width:0;">
-                  <div style="font-family:'Patrick Hand',cursive;font-size:11px;letter-spacing:2px;color:color-mix(in srgb, var(--bk-ink) 55%, var(--surface));">RECOGNISED</div>
-                  <div style="font-family:'Caveat',cursive;font-size:25px;color:#fff;line-height:1.05;">{{ resultLabel }}</div>
-                  <div style="margin-top:6px;height:7px;border-radius:4px;background:#23396a;overflow:hidden;"><div style="height:100%;border-radius:4px;background:linear-gradient(90deg,var(--accent-lite),#5bb7e2);width:{{ resultConfPct }};transition:width .6s ease;"></div></div>
-                  <div style="font-family:'Patrick Hand',cursive;font-size:11px;color:color-mix(in srgb, var(--bk-ink) 42%, var(--surface));margin-top:3px;">{{ resultConfLabel }}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </sc-if>
-
         <!-- SPECS -->
         <sc-if value="{{ isSpecs }}" hint-placeholder-val="{{ false }}">
           <div class="spd" style="display:flex;width:100%;height:100%;">
@@ -778,7 +670,7 @@
           <div class="spd" style="display:flex;width:100%;height:100%;">
             <div style="flex:1;height:100%;padding:56px 40px 40px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
               <div style="position:absolute;top:0;bottom:0;left:56px;width:0;background:transparent;"></div>
-              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 09</div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 08</div>
               <div style="font-family:'Caveat',cursive;font-size:54px;color:var(--bk-ink);line-height:1;margin:2px 0 18px;">Patents &amp; IP</div>
               <div style="position:relative;background:#fff;border:2px solid var(--bk-ink);border-radius:8px;padding:18px 20px;box-shadow:4px 5px 0 rgba(39,64,143,.15);">
                 <div style="position:absolute;top:-14px;right:-14px;width:64px;height:64px;border-radius:50%;border:2.5px solid var(--bk-red);color:var(--bk-red);font-family:'Patrick Hand',cursive;font-size:13px;display:flex;align-items:center;justify-content:center;text-align:center;transform:rotate(-12deg);background:#fff;">GRANTED</div>
@@ -854,7 +746,7 @@
           <div class="spd" style="display:flex;width:100%;height:100%;">
             <div style="flex:1;height:100%;padding:48px 40px 32px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
               <div style="display:flex;align-items:center;justify-content:space-between;">
-                <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 10 · UNIT ECONOMICS</div>
+                <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 09 · UNIT ECONOMICS</div>
                 <div style="font-family:'Patrick Hand',cursive;font-size:10px;letter-spacing:.5px;color:var(--dev);background:var(--dev-bg);border:1px solid color-mix(in srgb, var(--dev) 35%, var(--surface));border-radius:5px;padding:2px 7px;transform:rotate(2deg);">ILLUSTRATIVE · REPLACE</div>
               </div>
               <div style="font-family:'Caveat',cursive;font-size:48px;color:var(--bk-ink);line-height:1;margin:2px 0 4px;">Where the money comes from</div>
@@ -898,7 +790,7 @@
         <sc-if value="{{ isGtm }}" hint-placeholder-val="{{ false }}">
           <div class="spd" style="display:flex;width:100%;height:100%;">
             <div style="flex:1;height:100%;padding:54px 40px 36px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
-              <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 11 · GO-TO-MARKET</div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 10 · GO-TO-MARKET</div>
               <div style="font-family:'Caveat',cursive;font-size:50px;color:var(--bk-ink);line-height:1;margin:2px 0 4px;">Land soft, expand hard</div>
               <svg viewBox="0 0 250 14" style="display:block;width:250px;height:13px;margin:0 0 14px;filter:url(#rough);"><path d="M4 8 C60 2 120 12 165 6 C200 2 228 9 246 5" fill="none" stroke="#e2a32b" stroke-width="3" stroke-linecap="round"/></svg>
               <div style="font-family:'Shantell Sans',cursive;font-size:15px;line-height:1.4;color:var(--bk-text-2);margin-bottom:13px;">A free analyser earns trust with parents, then we climb: classrooms, districts, states, and finally enterprise licensing.</div>
@@ -928,61 +820,12 @@
           </div>
         </sc-if>
 
-        <!-- FUNDING ASK -->
-        <sc-if value="{{ isFunding }}" hint-placeholder-val="{{ false }}">
-          <div class="spd" style="display:flex;width:100%;height:100%;">
-            <div style="flex:1;height:100%;padding:48px 40px 34px 74px;border-radius:8px 0 0 8px;background:var(--bk-ink);position:relative;overflow:hidden;color:#fff;">
-              <div style="position:absolute;inset:0;background-image:radial-gradient(circle at center, rgba(255,255,255,.07) 1.3px, transparent 1.6px);background-size:26px 26px;"></div>
-              <div style="position:relative;">
-                <div style="display:flex;align-items:center;justify-content:space-between;">
-                  <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:color-mix(in srgb, var(--bk-ink) 20%, var(--surface));">CHAPTER 12 · THE ASK</div>
-                  <div style="font-family:'Patrick Hand',cursive;font-size:10px;letter-spacing:.5px;color:#3a2a06;background:#e3c66b;border-radius:5px;padding:2px 7px;transform:rotate(2deg);">ILLUSTRATIVE</div>
-                </div>
-                <div style="font-family:'Patrick Hand',cursive;font-size:17px;color:color-mix(in srgb, var(--bk-ink) 20%, var(--surface));margin-top:18px;">We're raising</div>
-                <div style="font-family:'Caveat',cursive;font-size:104px;line-height:.85;color:#fff;margin:2px 0;">₹3 Cr</div>
-                <div style="font-family:'Shantell Sans',cursive;font-size:18px;color:#e3c66b;font-weight:600;">Seed round · SAFE</div>
-                <div style="width:140px;height:3px;background:#e3c66b;border-radius:3px;margin:18px 0;transform:rotate(-1deg);"></div>
-                <div style="font-family:'Shantell Sans',cursive;font-size:16px;line-height:1.55;color:var(--accent-soft);max-width:380px;">Funds 18 months: collect <b>English first (~6 months), then Hindi by population</b> through our RTIH-Tirupati incubation and university / school partnerships, ship the v1 pen, and land the first paying pilots, the milestones that de-risk a Series A.</div>
-                <div style="margin-top:24px;display:flex;gap:10px;">
-                  <div style="flex:1;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.22);border-radius:11px;padding:12px;text-align:center;"><div style="font-family:'Caveat',cursive;font-size:30px;color:#fff;line-height:.9;">18 mo</div><div style="font-family:'Shantell Sans',cursive;font-size:12px;color:color-mix(in srgb, var(--bk-ink) 20%, var(--surface));">runway</div></div>
-                  <div style="flex:1;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.22);border-radius:11px;padding:12px;text-align:center;"><div style="font-family:'Caveat',cursive;font-size:30px;color:#fff;line-height:.9;">Eng+Hi</div><div style="font-family:'Shantell Sans',cursive;font-size:12px;color:color-mix(in srgb, var(--bk-ink) 20%, var(--surface));">datasets built</div></div>
-                  <div style="flex:1;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.22);border-radius:11px;padding:12px;text-align:center;"><div style="font-family:'Caveat',cursive;font-size:30px;color:#fff;line-height:.9;">3+</div><div style="font-family:'Shantell Sans',cursive;font-size:12px;color:color-mix(in srgb, var(--bk-ink) 20%, var(--surface));">paid pilots</div></div>
-                </div>
-              </div>
-            </div>
-            <div style="flex:1;height:100%;padding:48px 46px 34px;border-radius:0 8px 8px 0;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;display:flex;flex-direction:column;">
-              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">USE OF FUNDS</div>
-              <div style="font-family:'Caveat',cursive;font-size:40px;color:var(--bk-ink);line-height:1;margin:1px 0 16px;">Where it goes</div>
-              <div style="display:flex;flex-direction:column;gap:13px;">
-                <sc-for list="{{ useOfFunds }}" as="u" hint-placeholder-count="4">
-                  <div>
-                    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;">
-                      <span style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:15.5px;color:var(--bk-text);">{{ u.name }}</span>
-                      <span style="font-family:'Caveat',cursive;font-size:24px;color:{{ u.c }};">{{ u.pct }}</span>
-                    </div>
-                    <div style="height:13px;background:var(--bk-paper-line);border-radius:8px;overflow:hidden;"><div style="height:100%;width:{{ u.pct }};background:{{ u.c }};border-radius:8px;"></div></div>
-                    <div style="font-family:'Shantell Sans',cursive;font-size:12.5px;color:#6a7180;line-height:1.25;margin-top:3px;">{{ u.note }}</div>
-                  </div>
-                </sc-for>
-              </div>
-              <div style="margin-top:auto;background:var(--accent-soft);border:2px solid var(--bk-ink);border-radius:10px;padding:11px 14px;box-shadow:3px 4px 0 rgba(39,64,143,.1);">
-                <div style="font-family:'Patrick Hand',cursive;font-size:12px;letter-spacing:1px;color:var(--bk-ink);margin-bottom:6px;">BY MONTH 18 → WHAT SERIES A BUYS</div>
-                <div style="display:flex;flex-direction:column;gap:3px;">
-                  <sc-for list="{{ askMilestones }}" as="m" hint-placeholder-count="5">
-                    <div style="display:flex;gap:7px;align-items:baseline;font-family:'Shantell Sans',cursive;font-size:13.5px;color:var(--bk-ink);"><span style="color:var(--bk-teal);font-weight:700;">✓</span><span>{{ m }}</span></div>
-                  </sc-for>
-                </div>
-              </div>
-            </div>
-          </div>
-        </sc-if>
-
         <!-- AWARDS / RECOGNITIONS -->
         <sc-if value="{{ isAwards }}" hint-placeholder-val="{{ false }}">
           <div class="spd" style="display:flex;width:100%;height:100%;">
             <div style="flex:1;height:100%;padding:56px 40px 40px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
               <div style="position:absolute;top:0;bottom:0;left:56px;width:0;background:transparent;"></div>
-              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 13 · TRACTION</div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 11 · TRACTION</div>
               <div style="font-family:'Caveat',cursive;font-size:52px;color:var(--bk-ink);line-height:1;margin:2px 0 6px;">Traction so far</div>
               <div style="font-family:'Shantell Sans',cursive;font-size:15px;color:var(--bk-text-3);margin-bottom:14px;">Small but real: a granted patent, recognition, a live product in the field, and open pre-orders.</div>
               <sc-for list="{{ recognitions }}" as="r" hint-placeholder-count="3">
@@ -1011,7 +854,7 @@
           <div class="spd" style="display:flex;width:100%;height:100%;">
             <div style="flex:1;height:100%;padding:56px 40px 40px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
               <div style="position:absolute;top:0;bottom:0;left:56px;width:0;background:transparent;"></div>
-              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 14</div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 12</div>
               <div style="font-family:'Caveat',cursive;font-size:54px;color:var(--bk-ink);line-height:1;margin:2px 0 6px;">The Team</div>
               <div style="font-family:'Shantell Sans',cursive;font-size:15px;color:var(--bk-text-3);margin-bottom:8px;">17 years in embedded systems, a granted patent, and three years living this problem, why this team can collect what others won't.</div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
@@ -1046,7 +889,7 @@
         <sc-if value="{{ isQuestions }}" hint-placeholder-val="{{ false }}">
           <div class="spd" style="display:flex;width:100%;height:100%;">
             <div style="flex:1;height:100%;padding:46px 38px 34px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
-              <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 15 · HARD QUESTIONS</div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 13 · HARD QUESTIONS</div>
               <div style="font-family:'Caveat',cursive;font-size:46px;color:var(--bk-ink);line-height:1;margin:2px 0 3px;">The questions you'll ask</div>
               <div style="font-family:'Shantell Sans',cursive;font-size:13.5px;color:var(--bk-text-3);margin-bottom:13px;">Answered before you have to ask them.</div>
               <div style="display:flex;flex-direction:column;gap:12px;">
@@ -1076,7 +919,7 @@
         <sc-if value="{{ isVision }}" hint-placeholder-val="{{ false }}">
           <div class="spd" style="display:flex;width:100%;height:100%;">
             <div style="flex:1;height:100%;padding:54px 40px 36px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
-              <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 16 · THE VISION</div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 14 · THE VISION</div>
               <div style="font-family:'Caveat',cursive;font-size:50px;color:var(--bk-ink);line-height:1;margin:2px 0 4px;">Where this goes</div>
               <svg viewBox="0 0 250 14" style="display:block;width:250px;height:13px;margin:0 0 18px;filter:url(#rough);"><path d="M4 8 C60 2 120 12 165 6 C200 2 228 9 246 5" fill="none" stroke="#e2a32b" stroke-width="3" stroke-linecap="round"/></svg>
               <div style="display:flex;flex-direction:column;gap:14px;">
@@ -1106,7 +949,7 @@
           <div class="spd" style="display:flex;width:100%;height:100%;">
             <div style="flex:1;height:100%;padding:56px 40px 40px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
               <div style="position:absolute;top:0;bottom:0;left:56px;width:0;background:transparent;"></div>
-              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 17</div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 15</div>
               <div style="font-family:'Caveat',cursive;font-size:54px;color:var(--bk-ink);line-height:1;margin:2px 0 18px;">Events &amp; News</div>
               <sc-for list="{{ news }}" as="n" hint-placeholder-count="3">
                 <div style="margin-bottom:18px;">
@@ -1161,7 +1004,7 @@
           <div class="spd" style="display:flex;width:100%;height:100%;">
             <div style="flex:1;height:100%;padding:56px 40px 40px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
               <div style="position:absolute;top:0;bottom:0;left:56px;width:0;background:transparent;"></div>
-              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 18</div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 16</div>
               <div style="font-family:'Caveat',cursive;font-size:54px;color:var(--bk-ink);line-height:1;margin:2px 0 18px;">Get in touch</div>
               <sc-for list="{{ contacts }}" as="c" hint-placeholder-count="6">
                 <div style="display:flex;gap:12px;align-items:baseline;line-height:36px;">
@@ -1277,13 +1120,13 @@
 <script src="js/site.js"></script>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { cur: 'cover', flipping: false, dir: 'next', scale: 1, selApp: 0, demoState: 'idle', pipeStep: -1, result: null, locked: false, halfMode: false, half: 0 };
+  state = { cur: 'cover', flipping: false, dir: 'next', scale: 1, selApp: 0, halfMode: false, half: 0 };
 
-  order = ['cover','index','problem','whynow','beyond','competition','methods','pen','demo','specs','patents','economics','gtm','funding','awards','team','questions','vision','news','contact','back'];
+  order = ['cover','index','problem','whynow','beyond','competition','methods','pen','specs','patents','economics','gtm','awards','team','questions','vision','news','contact','back'];
 
   labels = {
-    problem:'The Problem', whynow:'Why Now', beyond:'The Moat', competition:'Competition', methods:'Dataset Methods', pen:'How Vahini Works', demo:'See it in Action',
-    specs:'Writing DNA & Specs', patents:'Patents & IP', economics:'Unit Economics', gtm:'Go-to-Market', funding:'The Ask',
+    problem:'The Problem', whynow:'Why Now', beyond:'The Moat', competition:'Competition', methods:'Dataset Methods', pen:'How Vahini Works',
+    specs:'Writing DNA & Specs', patents:'Patents & IP', economics:'Unit Economics', gtm:'Go-to-Market',
     awards:'Traction', team:'The Team', questions:'Hard Questions', vision:'The Vision', news:'Events & News', contact:'Get in Touch'
   };
 
@@ -1318,8 +1161,6 @@ class Component extends DCLogic {
     window.removeEventListener('keydown', this._onKey);
     document.removeEventListener('fullscreenchange', this._onFs);
     if (this._t) clearTimeout(this._t);
-    if (this._auto) clearTimeout(this._auto);
-    if (this._sensorRAF) cancelAnimationFrame(this._sensorRAF);
   }
   stageRef = (el) => {
     if (!el || el === this._stageEl) return;
@@ -1374,256 +1215,6 @@ class Component extends DCLogic {
     if (i > 0) this.go(this.order[i - 1], this.state.halfMode ? 1 : 0);
   };
 
-  // ---- live demo ----
-  initInput = (el) => {
-    if (!el) return;
-    this.inEl = el;
-    const dpr = window.devicePixelRatio || 1;
-    const rect = el.getBoundingClientRect();
-    const cssScale = this.state.scale || 1;
-    const w = (rect.width / cssScale) || 480, h = (rect.height / cssScale) || 480;
-    el.width = w * dpr; el.height = h * dpr;
-    const ctx = el.getContext('2d');
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.lineWidth = 2.6; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = 'var(--bk-ink)';
-    this.inCtx = ctx; this.cssW = w; this.cssH = h;
-    this.strokes = []; this.drawing = false;
-    const pt = (e) => {
-      const r = el.getBoundingClientRect();
-      return { x: (e.clientX - r.left) * (w / r.width), y: (e.clientY - r.top) * (h / r.height) };
-    };
-    el.onpointerdown = (e) => {
-      if (this.state.locked) return;
-      if (this._auto) { clearTimeout(this._auto); this._auto = null; }
-      try { el.setPointerCapture(e.pointerId); } catch (err) {}
-      this.drawing = true; const p = pt(e); this.strokes.push([p]);
-      this._lastPt = p; this._lastT = performance.now();
-      this._startSensors();
-    };
-    el.onpointermove = (e) => {
-      if (!this.drawing) return;
-      const s = this.strokes[this.strokes.length - 1]; const p = pt(e); const last = s[s.length - 1];
-      s.push(p); ctx.beginPath(); ctx.moveTo(last.x, last.y); ctx.lineTo(p.x, p.y); ctx.stroke();
-      const now = performance.now(); const dt = Math.max(1, now - (this._lastT || now));
-      const lp = this._lastPt || p;
-      this._penSpeed = Math.min(1, (Math.hypot(p.x - lp.x, p.y - lp.y) / dt) * 0.55);
-      this._lastPt = p; this._lastT = now;
-    };
-    el.onpointerup = () => {
-      this.drawing = false; this._penSpeed = 0;
-      if (this.strokes && this.strokes.length) {
-        if (this._auto) clearTimeout(this._auto);
-        this._auto = setTimeout(() => this.digitize(), 1100);
-      }
-    };
-    el.onpointerleave = () => { this.drawing = false; this._penSpeed = 0; };
-  };
-  _initSensorBus = (el) => {
-    if (!el) return;
-    this.bars = Array.from(el.querySelectorAll('[data-bar]'));
-    this.barFactors = this.bars.map(() => 0.42 + Math.random() * 0.58);
-  };
-  initSampleCount = (el) => { this._sampleEl = el; };
-  initPacketCount = (el) => { this._packetEl = el; };
-  initBleTrack = (el) => { this._bleTrack = el; };
-  _startSensors = () => {
-    if (this._sampleCount == null) this._sampleCount = 0;
-    if (this._packetFill == null) this._packetFill = 0;
-    if (this._sensorRAF) return;
-    let lastF = performance.now();
-    const loop = (t) => {
-      const dt = Math.min(0.05, (t - lastF) / 1000); lastF = t;
-      const target = this.drawing ? Math.max(0.14, this._penSpeed || 0) : 0;
-      this._cur = (this._cur || 0) + (target - (this._cur || 0)) * 0.25;
-      const cur = this._cur;
-      if (this.bars) this.bars.forEach((b, i) => {
-        const f = this.barFactors[i] || 0.6;
-        const mag = Math.max(0, cur * f + (Math.random() - 0.5) * 0.22 * cur);
-        b.style.height = (3 + Math.min(1, mag) * 15).toFixed(1) + 'px';
-      });
-      if (this.drawing) {
-        const add = 208 * dt;
-        this._sampleCount += add; this._packetFill += add;
-        while (this._packetFill >= 24) { this._packetFill -= 24; this._emitPacket(); }
-        if (this._sampleEl) this._sampleEl.textContent = Math.round(this._sampleCount).toLocaleString() + ' samples';
-      }
-      if (!this.drawing && cur < 0.02) {
-        if (this.bars) this.bars.forEach((b) => { b.style.height = '3px'; });
-        this._sensorRAF = null; return;
-      }
-      this._sensorRAF = requestAnimationFrame(loop);
-    };
-    this._sensorRAF = requestAnimationFrame(loop);
-  };
-  _emitPacket = () => {
-    const track = this._bleTrack; if (!track) return;
-    const tw = track.clientWidth || 150;
-    const d = document.createElement('div');
-    d.style.cssText = 'position:absolute;top:50%;left:0;width:11px;height:13px;border-radius:2px;background:linear-gradient(180deg,var(--accent-lite),#5bb7e2);box-shadow:0 0 6px rgba(127,212,200,.7);transform:translate(-13px,-50%);';
-    track.appendChild(d);
-    requestAnimationFrame(() => {
-      d.style.transition = 'transform .72s linear, opacity .72s linear';
-      d.style.transform = 'translate(' + (tw + 13) + 'px,-50%)';
-      d.style.opacity = '0.15';
-    });
-    d.addEventListener('transitionend', () => {
-      if (d._done) return; d._done = true; d.remove();
-      this._packetCount = (this._packetCount || 0) + 1;
-      if (this._packetEl) this._packetEl.textContent = this._packetCount.toLocaleString() + ' packets sent';
-    });
-  };
-  initOutput = (el) => { if (!el) return; this.outEl = el; const dpr = window.devicePixelRatio || 1;
-    const rect = el.getBoundingClientRect(); const cssScale = this.state.scale || 1;
-    const w = (rect.width / cssScale) || 480, h = (rect.height / cssScale) || 480;
-    el.width = w * dpr; el.height = h * dpr; const ctx = el.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
-    this.outCtx = ctx; this.outW = w; this.outH = h;
-  };
-  _drawGrid() {
-    const ctx = this.outCtx; ctx.clearRect(0, 0, this.outW, this.outH);
-    ctx.strokeStyle = 'rgba(127,212,200,.10)'; ctx.lineWidth = 1;
-    for (let gx = 0; gx < this.outW; gx += 28) { ctx.beginPath(); ctx.moveTo(gx,0); ctx.lineTo(gx,this.outH); ctx.stroke(); }
-    for (let gy = 0; gy < this.outH; gy += 28) { ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(this.outW,gy); ctx.stroke(); }
-  }
-  _smoothPath(ctx, s) {
-    ctx.beginPath();
-    if (s.length < 3) { s.forEach((p, k) => k ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)); }
-    else {
-      ctx.moveTo(s[0].x, s[0].y);
-      for (let k = 1; k < s.length - 1; k++) { const mx = (s[k].x + s[k+1].x)/2, my = (s[k].y + s[k+1].y)/2; ctx.quadraticCurveTo(s[k].x, s[k].y, mx, my); }
-      ctx.lineTo(s[s.length-1].x, s[s.length-1].y);
-    }
-    ctx.stroke();
-  }
-  digitize = () => {
-    if (this.state.locked) return;
-    if (this._auto) { clearTimeout(this._auto); this._auto = null; }
-    if (!this.outCtx || !this.strokes || !this.strokes.length) { this.setState({ demoState: 'empty', pipeStep: -1, result: null }); return; }
-    if (this._anim) this._anim.forEach(clearTimeout);
-    this._anim = [];
-    this.setState({ locked: true });
-    const ctx = this.outCtx;
-    const sx = this.outW / (this.cssW || this.outW), sy = this.outH / (this.cssH || this.outH);
-    const strokesS = this.strokes.map(s => s.map(p => ({ x: p.x * sx, y: p.y * sy })));
-    this._recogStrokes = this.strokes;
-
-    // Stage 1, raw, noisy capture
-    const stage1 = () => {
-      this._drawGrid();
-      ctx.strokeStyle = '#e8746b'; ctx.lineWidth = 1.6; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-      strokesS.forEach(s => { ctx.beginPath(); s.forEach((p, k) => { const jx = p.x + (Math.random()-.5)*7, jy = p.y + (Math.random()-.5)*7; k ? ctx.lineTo(jx,jy) : ctx.moveTo(jx,jy); }); ctx.stroke(); });
-      this.setState({ demoState: 'processing', pipeStep: 0, result: null });
-    };
-    // Stage 2, denoise (clean grey trace)
-    const stage2 = () => {
-      this._drawGrid();
-      ctx.strokeStyle = '#6b7fa6'; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-      strokesS.forEach(s => this._smoothPath(ctx, s));
-      this.setState({ pipeStep: 1 });
-    };
-    // Stage 3, reconstruct pen-tip path (teal glow + nodes)
-    const stage3 = () => {
-      this._drawGrid();
-      ctx.strokeStyle = 'var(--accent-lite)'; ctx.lineWidth = 2.6; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-      ctx.shadowColor = 'rgba(127,212,200,.7)'; ctx.shadowBlur = 7;
-      strokesS.forEach(s => this._smoothPath(ctx, s));
-      ctx.shadowBlur = 0;
-      ctx.fillStyle = '#e2a32b';
-      strokesS.forEach(s => { [s[0], s[s.length-1]].forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, 3, 0, 7); ctx.fill(); }); });
-      this.setState({ pipeStep: 2 });
-    };
-    // Stage 4, recognise
-    const stage4 = () => { this.setState({ pipeStep: 3 }); this._recognise(); };
-
-    this._anim.push(setTimeout(stage1, 60));
-    this._anim.push(setTimeout(stage2, 780));
-    this._anim.push(setTimeout(stage3, 1520));
-    this._anim.push(setTimeout(stage4, 2280));
-  };
-  _grid(strokes) {
-    let minx = 1e9, miny = 1e9, maxx = -1e9, maxy = -1e9;
-    strokes.forEach(s => s.forEach(p => { minx = Math.min(minx,p.x); miny = Math.min(miny,p.y); maxx = Math.max(maxx,p.x); maxy = Math.max(maxy,p.y); }));
-    const w = Math.max(maxx-minx, 1), h = Math.max(maxy-miny, 1);
-    // preserve aspect ratio so letters aren't distorted; pad by 1 cell all round
-    const H = 22, W = Math.max(6, Math.min(42, Math.round(H * w / h)));
-    const rows = H + 2, cols = W + 2;
-    const g = Array.from({length:rows}, () => new Array(cols).fill(0));
-    const mark = (x,y) => {
-      const gx = 1 + Math.round((x-minx)/w*(W-1)), gy = 1 + Math.round((y-miny)/h*(H-1));
-      for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const a = gx+dx, b = gy+dy; if (a>=0&&a<cols&&b>=0&&b<rows) g[b][a] = 1; }
-    };
-    strokes.forEach(s => {
-      if (s.length === 1) { mark(s[0].x, s[0].y); return; }
-      for (let k = 0; k < s.length-1; k++) { const a = s[k], b = s[k+1]; const steps = Math.ceil(Math.hypot(b.x-a.x, b.y-a.y)/1.5)+1; for (let t = 0; t <= steps; t++) mark(a.x+(b.x-a.x)*t/steps, a.y+(b.y-a.y)*t/steps); }
-    });
-    return g.map(r => r.map(c => c ? '#' : ' ').join('')).join('\n');
-  }
-  _heuristic(ss) {
-    const pts = [].concat(...ss);
-    if (!pts.length) return { glyph: '?', label: 'no ink found', conf: .4 };
-    let minx=1e9,miny=1e9,maxx=-1e9,maxy=-1e9;
-    pts.forEach(p => { minx=Math.min(minx,p.x); miny=Math.min(miny,p.y); maxx=Math.max(maxx,p.x); maxy=Math.max(maxy,p.y); });
-    const w = maxx-minx, h = maxy-miny;
-    const a = ss[0][0], last = ss[ss.length-1], b = last[last.length-1];
-    const closed = Math.hypot(a.x-b.x, a.y-b.y) < Math.max(w,h)*0.32;
-    if (ss.length === 1 && w < h*0.4) return { glyph: 'I', label: 'vertical stroke', conf: .61 };
-    if (ss.length === 1 && h < w*0.4) return { glyph: '—', label: 'horizontal stroke', conf: .61 };
-    if (closed && ss.length <= 2) return { glyph: 'O', label: 'closed loop', conf: .6 };
-    if (ss.length >= 2) return { glyph: '+', label: 'crossed strokes', conf: .56 };
-    return { glyph: '∿', label: 'free-form stroke', conf: .5 };
-  }
-  _imageData(ss) {
-    let minx = 1e9, miny = 1e9, maxx = -1e9, maxy = -1e9;
-    ss.forEach(s => s.forEach(p => { minx = Math.min(minx,p.x); miny = Math.min(miny,p.y); maxx = Math.max(maxx,p.x); maxy = Math.max(maxy,p.y); }));
-    const w = Math.max(maxx-minx, 1), h = Math.max(maxy-miny, 1);
-    const S = 320, pad = 46, span = Math.max(w, h), sc = (S - 2*pad) / span;
-    const ox = (S - w*sc)/2 - minx*sc, oy = (S - h*sc)/2 - miny*sc;
-    const cv = document.createElement('canvas'); cv.width = S; cv.height = S;
-    const c = cv.getContext('2d'); c.fillStyle = '#fff'; c.fillRect(0,0,S,S);
-    c.strokeStyle = '#000'; c.lineWidth = 8; c.lineCap = 'round'; c.lineJoin = 'round';
-    ss.forEach(s => { c.beginPath(); s.forEach((p,k) => { const x = p.x*sc+ox, y = p.y*sc+oy; k ? c.lineTo(x,y) : c.moveTo(x,y); }); if (s.length === 1) { c.arc(s[0].x*sc+ox, s[0].y*sc+oy, 5, 0, 7); } c.stroke(); });
-    return cv.toDataURL('image/png').split(',')[1];
-  }
-  _parseRes(raw) {
-    const all = raw && raw.match(/\{[^{}]*\}/g);
-    if (all && all.length) { try { const o = JSON.parse(all[all.length-1]); if (o && o.char != null && String(o.char).trim()) return { glyph: String(o.char).trim().slice(0,3), label: o.name || 'character', conf: Math.max(.55, Math.min(.99, Number(o.conf) || .85)) }; } catch (e) {} }
-    return null;
-  }
-  _recognise = async () => {
-    const ss = this._recogStrokes || [];
-    let res = null;
-    const ready = window.claude && window.claude.complete && ss.length;
-    // 1) vision, render the strokes to an image and let Claude read it (most accurate)
-    if (ready) { try {
-      const data = this._imageData(ss);
-      const raw = await window.claude.complete({ messages: [{ role: 'user', content: [
-        { type: 'text', text: 'This image shows ONE handwritten character (black ink on a white background) drawn by a user. Identify the single most likely character, it is usually a letter (A-Z, upper or lower case), a digit (0-9), or a simple symbol (+ - = / ? ! etc). Reply with ONLY this JSON and nothing else: {"char":"<the character>","name":"<short label e.g. letter A / digit 7 / plus sign>","conf":<your confidence 0..1>}' },
-        { type: 'image', source: { type: 'base64', media_type: 'image/png', data } }
-      ] }] });
-      res = this._parseRes(raw);
-    } catch (e) {} }
-    // 2) text-raster fallback if vision unavailable
-    if (!res && ready) { try {
-      const art = this._grid(ss);
-      const raw = await window.claude.complete('Low-resolution bitmap of ONE handwritten character ("#" = ink, spaces = blank). Read the overall shape.\n\n' + art + '\n\nUsually a letter (A-Z), digit (0-9), or simple symbol. Reply ONLY this JSON: {"char":"<character>","name":"<short label>","conf":<0..1>}');
-      res = this._parseRes(raw);
-    } catch (e) {} }
-    if (!res) res = this._heuristic(ss);
-    this.setState({ result: res, demoState: 'done', pipeStep: 4 });
-  };
-  clearDemo = () => {
-    if (this._anim) { this._anim.forEach(clearTimeout); this._anim = []; }
-    if (this._auto) { clearTimeout(this._auto); this._auto = null; }
-    this.strokes = [];
-    this._sampleCount = 0; this._packetCount = 0; this._packetFill = 0; this._cur = 0; this._penSpeed = 0;
-    if (this._sampleEl) this._sampleEl.textContent = '0 samples';
-    if (this._packetEl) this._packetEl.textContent = '0 packets sent';
-    if (this.bars) this.bars.forEach((b) => { b.style.height = '3px'; });
-    if (this._bleTrack) { const ch = this._bleTrack.children; for (let i = ch.length - 1; i >= 1; i--) ch[i].remove(); }
-    if (this.inCtx) this.inCtx.clearRect(0, 0, this.cssW, this.cssH);
-    if (this.outCtx) this.outCtx.clearRect(0, 0, this.outW, this.outH);
-    this.setState({ demoState: 'idle', pipeStep: -1, result: null, locked: false });
-  };
-
   renderVals() {
     const cur = this.state.cur;
     const idx = this.order.indexOf(cur);
@@ -1646,38 +1237,6 @@ class Component extends DCLogic {
       };
     });
     const sel = appData[this.state.selApp];
-
-    const dm = this.state.demoState;
-    const demoStatus = dm==='idle' ? 'Awaiting strokes…' : dm==='empty' ? 'Draw a character first.' : dm==='processing' ? 'Processing…' : dm==='done' ? 'Done' : '';
-    const demoDotColor = dm==='done' ? 'var(--accent-lite)' : dm==='processing' ? '#e2a32b' : dm==='empty' ? 'var(--bk-red)' : '#5e74a8';
-
-    const step = this.state.pipeStep ?? -1;
-    const stageDefs = [
-      { name: 'Capture motion', sub: '16 axes · 208 Hz' },
-      { name: 'Remove noise', sub: 'Kalman filter' },
-      { name: 'Reconstruct', sub: 'pen-tip path' },
-      { name: 'Recognise', sub: 'letter / symbol' }
-    ];
-    const pipe = stageDefs.map((d, i) => {
-      const done = step > i, active = step === i;
-      const base = 'flex:1;min-width:0;border-radius:7px;padding:8px 9px;border:1.4px solid;transition:all .3s;';
-      const style = base + (done
-        ? 'border-color:var(--accent-deep);background:rgba(58,166,146,.16);color:#bfeee5;'
-        : active
-        ? 'border-color:var(--accent-lite);background:rgba(127,212,200,.13);color:#eafffb;box-shadow:0 0 0 2px rgba(127,212,200,.22);'
-        : 'border-color:#2c477f;background:rgba(255,255,255,.02);color:#6f83b3;');
-      const dotBase = 'width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-family:Patrick Hand,cursive;flex:none;';
-      const dotStyle = dotBase + (done ? 'background:var(--accent-deep);color:#06241e;' : active ? 'background:var(--accent-lite);color:#06241e;' : 'background:#23396a;color:#6f83b3;');
-      return { name: d.name, sub: d.sub, icon: done ? '✓' : String(i+1), style, dotStyle };
-    });
-    const r = this.state.result;
-    const hasR = dm === 'done' && r;
-    const resultBoxStyle = 'margin-top:10px;border-radius:8px;padding:11px 13px;background:rgba(127,212,200,.07);border:1.4px dashed #3a5a8c;align-items:center;gap:13px;display:' + (hasR ? 'flex' : 'none') + ';';
-    const resultGlyphStyle = 'flex:none;width:56px;height:56px;border-radius:8px;background:#0f203f;border:1.5px solid #2c477f;display:flex;align-items:center;justify-content:center;font-family:Caveat,cursive;font-size:40px;color:var(--accent-lite);';
-    const resultGlyph = hasR ? r.glyph : '';
-    const resultLabel = hasR ? r.label : '';
-    const resultConfPct = hasR ? Math.round(r.conf*100) + '%' : '0%';
-    const resultConfLabel = hasR ? 'confidence ' + Math.round(r.conf*100) + '%' : '';
 
     const navAll = Object.keys(this.labels).map((k, i) => ({
       key:k, label:this.labels[k], num:String(i+1).padStart(2,'0'),
@@ -1717,16 +1276,16 @@ class Component extends DCLogic {
       pageCounter,
       toggleFS: this.toggleFS,
       isCover:is('cover'), isIndex:is('index'), isProblem:is('problem'), isPen:is('pen'),
-      isDemo:is('demo'), isSpecs:is('specs'), isPatents:is('patents'), isBeyond:is('beyond'), isMethods:is('methods'), isEconomics:is('economics'), isFunding:is('funding'),
+      isSpecs:is('specs'), isPatents:is('patents'), isBeyond:is('beyond'), isMethods:is('methods'), isEconomics:is('economics'),
       isAwards:is('awards'), isTeam:is('team'), isNews:is('news'), isContact:is('contact'), isBack:is('back'),
       isWhynow:is('whynow'), isCompetition:is('competition'), isGtm:is('gtm'), isQuestions:is('questions'), isVision:is('vision'),
       showStitch: !is('cover') && !is('back'),
-      showFooter: !is('demo'),
+      showFooter: true,
       flipping: this.state.flipping, flipNext: this.state.dir==='next', flipPrev: this.state.dir==='prev',
       canNext: idx < this.order.length - 1, canPrev: idx > 0,
       next: this.next, prev: this.prev,
       goCover: () => this.go('cover'), goIndex: () => this.go('index'),
-      goDemo: () => this.go('demo'), goMoat: () => this.go('problem'),
+      goMoat: () => this.go('problem'),
       pageLabel: is('cover') ? '' : is('index') ? 'i' : is('back') ? '' : String(idx - 1),
 
       navLeft: navAll.slice(0, 9), navRight: navAll.slice(9),
@@ -1739,13 +1298,6 @@ class Component extends DCLogic {
       ],
 
       apps, selApp: sel, selColor: sel.color, selKey: sel.name,
-      inputCanvasRef: this.initInput, outputCanvasRef: this.initOutput,
-      sensorBusRef: this._initSensorBus, sampleCountRef: this.initSampleCount,
-      packetCountRef: this.initPacketCount, bleTrackRef: this.initBleTrack,
-      locked: this.state.locked,
-      digitize: this.digitize, clearDemo: this.clearDemo, demoStatus, demoDotColor,
-      pipe, resultBoxStyle, resultGlyphStyle, resultGlyph, resultLabel, resultConfPct, resultConfLabel,
-
       specs: [
         { k:'Dataset', v:'India’s first motion corpus' },
         { k:'Sample rate', v:'208 Hz' },
@@ -1775,14 +1327,6 @@ class Component extends DCLogic {
         { k:'Storage, compute & overhead', v:'₹3.5', bg:'#fff', bd:'var(--bk-paper-line)', tc:'var(--bk-text)', vc:'var(--bk-text)', fw:'400' },
         { k:'Cost / labelled sample', v:'₹15', bg:'var(--accent-soft)', bd:'color-mix(in srgb, var(--bk-ink) 26%, var(--surface))', tc:'var(--bk-ink)', vc:'var(--bk-ink)', fw:'600' }
       ],
-      useOfFunds: [
-        { name:'Dataset collection & stipends', pct:'40%', c:'var(--bk-ink)', note:'field teams, paid contributors, English→Hindi coverage' },
-        { name:'Engineering & ML', pct:'24%', c:'var(--bk-teal)', note:'sensor fusion, recognition model, SDK' },
-        { name:'Pen hardware & procurement', pct:'14%', c:'var(--dev)', note:'v1 tooling, firmware, collection-unit pens' },
-        { name:'Storage, compute & staff', pct:'14%', c:'#7a4bd0', note:'DPDP data store, ops & support staff' },
-        { name:'Travel, advertising & misc', pct:'8%', c:'var(--bk-red)', note:'recruitment, outreach, legal & DPDP' }
-      ],
-
       pending: [
         { no:'202541020023', t:'Second patent, in examination (signal & applications)' },
         { no:'VAHINI™', t:'Trademark filed in classes 9 · 16 · 38 · 42' }
@@ -1859,13 +1403,6 @@ class Component extends DCLogic {
         { ph:'LATER', name:'Dataset & SDK licensing', who:'banks · health · AI labs', c:'#7a4bd0' }
       ],
       costCurve: [ { v:'₹15', n:'phase 1' }, { v:'₹12', n:'10× volume' }, { v:'₹9', n:'50× volume' }, { v:'₹5', n:'at scale' } ],
-      askMilestones: [
-        '5M motion strokes collected',
-        '100k labelled characters (Eng + Hindi)',
-        '500 schools on the coaching SaaS',
-        '₹1 Cr ARR from pilots & seats',
-        'First dataset / SDK customer signed'
-      ]
     };
   }
 }
