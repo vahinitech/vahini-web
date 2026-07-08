@@ -105,8 +105,8 @@
   justify-content:center; transition:opacity .45s var(--ease), visibility .45s;}
 .pf-stage[data-phase="0"] .pf-phase--write,
 .pf-stage[data-phase="1"] .pf-phase--cap,
-.pf-stage[data-phase="2"] .pf-phase--grow,
-.pf-stage[data-phase="3"] .pf-phase--learn,
+.pf-stage[data-phase="3"] .pf-phase--grow,
+.pf-stage[data-phase="2"] .pf-phase--learn,
 .pf-stage[data-phase="4"] .pf-phase--apply{opacity:1; visibility:visible;}
 
 .pf-phase__lab{position:absolute; left:2px; right:2px; bottom:0; font-size:12.5px; color:var(--muted); line-height:1.4;}
@@ -221,8 +221,8 @@
   /* phase enter */
   .pf-stage[data-phase="0"] .pf-phase--write,
   .pf-stage[data-phase="1"] .pf-phase--cap,
-  .pf-stage[data-phase="2"] .pf-phase--grow,
-  .pf-stage[data-phase="3"] .pf-phase--learn,
+  .pf-stage[data-phase="3"] .pf-phase--grow,
+  .pf-stage[data-phase="2"] .pf-phase--learn,
   .pf-stage[data-phase="4"] .pf-phase--apply{animation:pfPhaseIn .5s var(--ease) both;}
 
   /* the twin-priority loop glyph slowly spins — the flywheel, literally */
@@ -252,26 +252,26 @@
   .pf-stage[data-phase="1"] .pf-metrow:nth-child(5) .pf-metrow__t b{animation-delay:.4s}
   @keyframes pfBar{from{width:0}to{width:var(--w)}}
 
-  /* 2 · grow — multi-script pages stack into the corpus, meter fills */
-  .pf-stage[data-phase="2"] .pf-pagecard{animation:pfPop .5s var(--ease) both;}
-  .pf-stage[data-phase="2"] .pf-pagecard:nth-child(2){animation-delay:.08s}
-  .pf-stage[data-phase="2"] .pf-pagecard:nth-child(3){animation-delay:.16s}
-  .pf-stage[data-phase="2"] .pf-pagecard:nth-child(4){animation-delay:.24s}
-  .pf-stage[data-phase="2"] .pf-pagecard:nth-child(5){animation-delay:.32s}
-  .pf-stage[data-phase="2"] .pf-pagecard:nth-child(6){animation-delay:.40s}
-  .pf-stage[data-phase="2"] .pf-corpus__t b{animation:pfBar 1.3s var(--ease) both; animation-delay:.45s;}
+  /* 3 · grow — multi-script pages stack into the corpus, meter fills */
+  .pf-stage[data-phase="3"] .pf-pagecard{animation:pfPop .5s var(--ease) both;}
+  .pf-stage[data-phase="3"] .pf-pagecard:nth-child(2){animation-delay:.08s}
+  .pf-stage[data-phase="3"] .pf-pagecard:nth-child(3){animation-delay:.16s}
+  .pf-stage[data-phase="3"] .pf-pagecard:nth-child(4){animation-delay:.24s}
+  .pf-stage[data-phase="3"] .pf-pagecard:nth-child(5){animation-delay:.32s}
+  .pf-stage[data-phase="3"] .pf-pagecard:nth-child(6){animation-delay:.40s}
+  .pf-stage[data-phase="3"] .pf-corpus__t b{animation:pfBar 1.3s var(--ease) both; animation-delay:.45s;}
   @keyframes pfPop{from{opacity:0; transform:scale(.85) translateY(6px)} to{opacity:1; transform:scale(1) translateY(0)}}
 
-  /* 3 · learn — signal flows, nodes fire, output glows */
-  .pf-stage[data-phase="3"] .pf-net__edges path{stroke-dasharray:5 7; animation:pfSignal 1.9s linear infinite;}
+  /* 2 · learn — signal flows, nodes fire, output glows */
+  .pf-stage[data-phase="2"] .pf-net__edges path{stroke-dasharray:5 7; animation:pfSignal 1.9s linear infinite;}
   @keyframes pfSignal{to{stroke-dashoffset:-48}}
-  .pf-stage[data-phase="3"] .pf-net__nodes circle{animation:pfNode 2s ease-in-out infinite;}
-  .pf-stage[data-phase="3"] .pf-net__nodes circle:nth-child(2){animation-delay:.22s}
-  .pf-stage[data-phase="3"] .pf-net__nodes circle:nth-child(3){animation-delay:.34s}
-  .pf-stage[data-phase="3"] .pf-net__nodes circle:nth-child(4){animation-delay:.46s}
-  .pf-stage[data-phase="3"] .pf-net__nodes circle:nth-child(5){animation-delay:.64s}
-  .pf-stage[data-phase="3"] .pf-net__nodes circle:nth-child(6){animation-delay:.76s}
-  .pf-stage[data-phase="3"] .pf-net__nodes circle:nth-child(7){animation:pfNode 2s ease-in-out infinite, pfGlow 2s ease-in-out infinite; animation-delay:1s, 1s;}
+  .pf-stage[data-phase="2"] .pf-net__nodes circle{animation:pfNode 2s ease-in-out infinite;}
+  .pf-stage[data-phase="2"] .pf-net__nodes circle:nth-child(2){animation-delay:.22s}
+  .pf-stage[data-phase="2"] .pf-net__nodes circle:nth-child(3){animation-delay:.34s}
+  .pf-stage[data-phase="2"] .pf-net__nodes circle:nth-child(4){animation-delay:.46s}
+  .pf-stage[data-phase="2"] .pf-net__nodes circle:nth-child(5){animation-delay:.64s}
+  .pf-stage[data-phase="2"] .pf-net__nodes circle:nth-child(6){animation-delay:.76s}
+  .pf-stage[data-phase="2"] .pf-net__nodes circle:nth-child(7){animation:pfNode 2s ease-in-out infinite, pfGlow 2s ease-in-out infinite; animation-delay:1s, 1s;}
   @keyframes pfNode{0%,100%{transform:scale(1); opacity:.85} 50%{transform:scale(1.3); opacity:1}}
   @keyframes pfGlow{0%,100%{filter:drop-shadow(0 0 0 transparent)} 50%{filter:drop-shadow(0 0 8px var(--accent))}}
 
