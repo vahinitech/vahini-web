@@ -65,6 +65,9 @@ make help        # every target, including release + certbot wrappers
 Without make, the equivalent is `docker compose up --build -d --wait`.
 For front-end-only work with no Docker: `make site` (static server on :4173).
 
+Every target (docker cleanup, `deploy-check` preflight, releases,
+certificate status/renewal) is documented in [docs/MAKE.md](docs/MAKE.md).
+
 To pull in a newer analyser release later:
 
 ```bash

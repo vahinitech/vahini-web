@@ -105,6 +105,23 @@ logs: ## follow logs (all services, or one: make logs S=analyser)
 clean: ## down + DELETE volumes (model cache, persisted uploads) + local images
 	$(COMPOSE) -f $(COMPOSE_FILE) down -v --rmi local --remove-orphans
 
+# ------------------------------------------------ docker housekeeping
+.PHONY: docker-clean
+docker-clean: ## stop the stack and remove its local images (volumes kept)
+	$(COMPOSE) -f $(COMPOSE_FILE) down --rmi local --remove-orphans
+	@echo "local stack images removed; model-cache/upload volumes kept"
+
+.PHONY: docker-prune
+docker-prune: ## remove EVERY vahini/* image (local+stag+prod) + dangling layers + build cache
+	@imgs=$$(docker image ls --format '{{.Repository}}:{{.Tag}}' | grep '^vahini/' || true); \
+	if [ -n "$$imgs" ]; then \
+		echo "removing vahini images:"; echo "$$imgs" | sed 's/^/  /'; \
+		echo "$$imgs" | xargs docker rmi -f; \
+	else echo "no vahini/* images found"; fi
+	docker image prune -f
+	docker builder prune -f
+	@echo "vahini images, dangling layers and build cache pruned (volumes untouched)"
+
 # ------------------------------------------------ site-only dev loop
 .PHONY: site
 site: ## static site only on :4173, no docker (front-end quick loop)
@@ -116,10 +133,46 @@ test: ## node test suite (static smoke + playwright e2e)
 	npm run test:e2e
 
 # ------------------------------------------- deploy (run on the server)
+# every file a deployment depends on; deploy-check asserts each one exists
+DEPLOY_FILES := \
+	Dockerfile docker-compose.yml \
+	analyser/deployment/Dockerfile \
+	services/persist-api/Dockerfile \
+	deploy/nginx.conf \
+	deploy/docker-compose.stag.yml deploy/docker-compose.prod.yml \
+	deploy/release.sh deploy/prewarm-models.sh \
+	deploy/vahinitech.com.nginx.conf deploy/stag.vahinitech.com.nginx.conf \
+	deploy/api.vahinitech.com.nginx.conf deploy/analyser.vhost.nginx.conf \
+	deploy/http-redirect.vahinitech.com.nginx.conf \
+	deploy/snippets/tls-vahinitech.conf \
+	deploy/certbot/setup-wildcard-cert.sh deploy/certbot/install-renew-hook.sh \
+	deploy/certbot/reload-nginx-hook.sh deploy/certbot/check-renew-timer.sh \
+	deploy/certbot/cloudflare-credentials.ini.example \
+	site/index.html site/js/site.js site/css/theme.css site/css/site.css
+
+.PHONY: deploy-check
+deploy-check: ## preflight: every deployment file present, scripts executable, compose valid
+	@missing=0; \
+	for f in $(DEPLOY_FILES); do \
+		if [ ! -f "$$f" ]; then echo "  MISSING  $$f"; missing=$$((missing+1)); \
+		else echo "  ok       $$f"; fi; \
+	done; \
+	for s in deploy/release.sh deploy/prewarm-models.sh deploy/certbot/*.sh; do \
+		[ -x "$$s" ] || { echo "  NOT EXECUTABLE  $$s (fix: chmod +x $$s)"; missing=$$((missing+1)); }; \
+	done; \
+	if command -v docker >/dev/null 2>&1 && docker info >/dev/null 2>&1; then \
+		for c in $(COMPOSE_FILE) deploy/docker-compose.stag.yml deploy/docker-compose.prod.yml; do \
+			$(COMPOSE) -f $$c config -q && echo "  ok       $$c (compose config valid)" \
+				|| { echo "  INVALID  $$c"; missing=$$((missing+1)); }; \
+		done; \
+	else echo "  (docker unavailable: skipped compose-config validation)"; fi; \
+	if [ "$$missing" -gt 0 ]; then echo "deploy-check FAILED: $$missing problem(s)"; exit 1; fi; \
+	echo "deploy-check OK: all deployment files present"
+
 .PHONY: release-stag release-prod prewarm-stag prewarm-prod
-release-stag: ## build + roll out the staging stack (deploy/release.sh stag)
+release-stag: deploy-check ## build + roll out the staging stack (deploy/release.sh stag)
 	./deploy/release.sh stag
-release-prod: ## build + roll out the production stack (deploy/release.sh prod)
+release-prod: deploy-check ## build + roll out the production stack (deploy/release.sh prod)
 	./deploy/release.sh prod
 prewarm-stag: ## pre-download OCR models into the staging volume
 	./deploy/prewarm-models.sh stag
@@ -127,10 +180,19 @@ prewarm-prod: ## pre-download OCR models into the production volume
 	./deploy/prewarm-models.sh prod
 
 # ---------------------------------------- certificates (host-level, sudo)
-.PHONY: certbot-setup certbot-hook certbot-check
+.PHONY: certbot-setup certbot-hook certbot-check cert-status cert-renew-dry cert-renew
 certbot-setup: ## one-time: issue the wildcard cert (DNS-01 via Cloudflare)
 	sudo ./deploy/certbot/setup-wildcard-cert.sh
 certbot-hook: ## one-time: install the nginx-reload deploy hook
 	sudo ./deploy/certbot/install-renew-hook.sh
 certbot-check: ## verify the auto-renew timer + hook are in place
 	sudo ./deploy/certbot/check-renew-timer.sh
+cert-status: ## show every cert's domains + expiry, then verify the renew timer
+	sudo certbot certificates
+	@echo ""
+	sudo ./deploy/certbot/check-renew-timer.sh
+cert-renew-dry: ## rehearse renewal end-to-end (DNS-01 + hook), changes nothing
+	sudo certbot renew --dry-run
+cert-renew: ## renew the site certificates now (only certs within 30 days of expiry)
+	sudo certbot renew
+	@echo "renewed where due; nginx reloaded by the deploy hook. 'make cert-status' to confirm."
