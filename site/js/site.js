@@ -78,6 +78,7 @@
     { t:"Investor Book", u:P("investor.html"), d:"The motion-data field notebook", k:"investors funding round roadmap motion data moat deep tech notebook" },
     { t:"Developer SDK & API", u:P("developers.html"), d:"Scan scoring & pen motion as an API", k:"developer sdk api endpoints rest keys metering pricing saas partners integrate motion scan ocr" },
     { t:"See it in Action", u:P("see-in-action.html"), d:"Motion to meaning, live", k:"demo live action motion capture reconstruct score" },
+    { t:"Terms of Use", u:P("terms.html"), d:"Rules for using the site & analyser", k:"terms of use conditions legal ip copyright trademark liability governing law" },
     { t:"Privacy statement", u:P("privacy.html"), d:"What we collect, why, and your rights (DPDP)", k:"privacy data protection dpdp gdpr consent cookies rights erase delete grievance" },
     { t:"Reach us", u:P("reach.html"), d:"Partner, invest or say hello", k:"contact reach partner invest email" }
   ];
@@ -208,7 +209,7 @@
           '</div>'+
         '</div>'+
       '</div>'+
-      '<div class="foot__bot"><span>© 2026 Vahini Technologies · vahinitech.com · <a href="https://github.com/vahinitech/20factor-analyser" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:2px;">Open source (AGPL-3.0)</a> · <a href="'+P("licenses.html")+'" data-nav style="color:inherit;text-decoration:underline;text-underline-offset:2px;">Licenses</a> · <a href="'+P("privacy.html")+'" data-nav style="color:inherit;text-decoration:underline;text-underline-offset:2px;">Privacy</a> · <a href="#" onclick="VahiniOpenCookieSettings&&VahiniOpenCookieSettings();return false;" style="color:inherit;text-decoration:underline;text-underline-offset:2px;">Cookie settings</a></span>'+
+      '<div class="foot__bot"><span>© 2026 Vahini Technologies · vahinitech.com · <a href="https://github.com/vahinitech/20factor-analyser" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:2px;">Open source (AGPL-3.0)</a> · <a href="'+P("licenses.html")+'" data-nav style="color:inherit;text-decoration:underline;text-underline-offset:2px;">Licenses</a> · <a href="'+P("privacy.html")+'" data-nav style="color:inherit;text-decoration:underline;text-underline-offset:2px;">Privacy</a> · <a href="'+P("terms.html")+'" data-nav style="color:inherit;text-decoration:underline;text-underline-offset:2px;">Terms</a> · <a href="#" onclick="VahiniOpenCookieSettings&&VahiniOpenCookieSettings();return false;" style="color:inherit;text-decoration:underline;text-underline-offset:2px;">Cookie settings</a></span>'+
         '<div class="foot__marks"><span>DPIIT-recognised</span><span>Indian Patent No. 584433</span><span>Made in India</span></div>'+
       '</div>'+
     '</div></footer>';
