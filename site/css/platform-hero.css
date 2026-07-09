@@ -222,7 +222,11 @@
   .pf-pagecards{grid-template-columns:repeat(2,1fr);}
   .pf-pagecard:nth-child(n+5){display:none;} /* keep the Grow phase inside the stage on tiny screens */
   .pf-duo{flex-direction:column;}
-  .pf-duo__loop{transform:rotate(90deg);}
+  /* stacked cards: the connector becomes a horizontal row (icon spins,
+     labels stay upright) instead of rotating the whole column sideways,
+     which used to wrap "captures"/"improves" into a vertical letter-stack */
+  .pf-duo__loop{flex-direction:row; gap:7px;}
+  .pf-duo__loop svg{transform:rotate(90deg);}
 }
 @media (max-width:430px){
   .pf-appgrid{grid-template-columns:1fr;}
