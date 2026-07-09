@@ -104,9 +104,12 @@
   <!-- the frame reserves real layout height for the scaled book, so the
        toolbar below never overlaps it at any scale -->
   <div style="height:{{ frameH }}px;width:100%;display:flex;justify-content:center;overflow:visible;">
-  <div style="transform:scale({{ scale }});transform-origin:top center;transition:transform .25s ease;flex:none;position:relative;padding-top:36px;">
+  <div style="transform:scale({{ scale }});transform-origin:top center;transition:transform .25s ease;flex:none;position:relative;padding-top:184px;">
 
-    <!-- ribbon bookmarks (hang over the cover's top edge like real ribbons) -->
+    <!-- ribbon bookmarks: a dedicated clear zone above the book (padding-top
+         above matches the tallest ribbon + a gap) so they never drape over
+         page content -- content differs per chapter, but "above the book
+         rectangle entirely" is safe on all 19 of them. -->
     <div class="ibk-tabs" style="position:absolute;top:0;right:150px;z-index:40;display:flex;align-items:flex-start;gap:9px;font-family:'Patrick Hand',cursive;">
       <div onClick="{{ goCover }}" class="lnk ibk-rib" style="--tabc:#3a2a06;height:104px;background:linear-gradient(180deg,#eab143,#e2a32b);color:#3a2a06;">COVER</div>
       <div onClick="{{ goIndex }}" class="lnk ibk-rib" style="height:138px;background:linear-gradient(180deg,color-mix(in srgb, var(--bk-red) 88%, #fff),var(--bk-red));color:#fff;">CONTENTS</div>
@@ -1194,7 +1197,8 @@ class Component extends DCLogic {
     const availW = Math.max(260, w - 18);
     const chrome = document.fullscreenElement ? 110 : 220; /* toolbar + nav + breathing room */
     const availH = Math.max(400, window.innerHeight - chrome);
-    const s = Math.min(availW / bookW, availH / 766, 1.06);
+    /* 730 book + 184 reserved above it for the tallest ribbon bookmark, clear of any page content */
+    const s = Math.min(availW / bookW, availH / 914, 1.06);
     this.setState({ scale: Math.max(0.28, s), halfMode, half: halfMode ? this.state.half : 0 });
   };
   toggleFS = () => {
@@ -1278,7 +1282,7 @@ class Component extends DCLogic {
       compRows,
       scale: this.state.scale,
       stageRef: this.stageRef,
-      frameH: Math.round(766 * this.state.scale) + 8,
+      frameH: Math.round(914 * this.state.scale) + 8,
       viewW: halfMode ? 560 : 1120,
       innerShift: halfMode && half === 1 ? -560 : 0,
       pageCounter,
