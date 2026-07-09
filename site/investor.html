@@ -82,16 +82,21 @@
   .corner:hover{filter:brightness(.96);}
   .lnk{cursor:pointer;transition:color .15s,transform .15s;}
   .lnk:hover{color:var(--bk-red) !important;transform:translateX(3px);}
-  /* ribbon bookmarks: tall vertical strips hanging down over the cover,
-     label reading top-to-bottom, forked tail cut at the bottom. box-shadow
-     would be clipped by the notch, so the shadow is a drop-shadow filter. */
-  .ibk-rib{writing-mode:vertical-rl;width:32px;padding:13px 0 22px;text-align:start;
-    display:flex;align-items:center;font-size:12.5px;letter-spacing:2.5px;white-space:nowrap;line-height:1;
-    clip-path:polygon(0 0, 100% 0, 100% calc(100% - 1px), 50% calc(100% - 12px), 0 calc(100% - 1px));
-    filter:drop-shadow(0 6px 7px rgba(20,26,34,.30));transition:transform .18s ease, color .15s;}
-  /* hovering a ribbon must not repaint the label crimson (red-on-red is
-     invisible); the ribbon slips down a little instead */
-  .ibk-tabs .lnk:hover{color:var(--tabc,#fff) !important;transform:translateY(3px);}
+  /* ribbon bookmarks: short tabs tucked onto the book's top edge, like a
+     real ribbon marker peeking out. Label reads top-to-bottom but is
+     clipped to a short peek by default (overflow:hidden), then the ribbon
+     pulls out taller on hover/focus to reveal the rest of the word --
+     exactly how you'd tug a real bookmark ribbon. box-shadow would be
+     clipped by the forked tail, so the shadow is a drop-shadow filter. */
+  .ibk-rib{writing-mode:vertical-rl;width:30px;height:var(--h0,42px);padding:9px 0 14px;text-align:start;
+    display:flex;align-items:center;overflow:hidden;font-size:12px;letter-spacing:2px;white-space:nowrap;line-height:1;
+    clip-path:polygon(0 0, 100% 0, 100% calc(100% - 1px), 50% calc(100% - 9px), 0 calc(100% - 1px));
+    filter:drop-shadow(0 4px 5px rgba(20,26,34,.26));
+    transition:height .22s cubic-bezier(.2,.8,.3,1.2), filter .18s ease, color .15s;}
+  .ibk-tabs .lnk:hover, .ibk-tabs .lnk:focus-visible{
+    height:var(--h1,120px); filter:drop-shadow(0 9px 11px rgba(20,26,34,.34));
+    color:var(--tabc,#fff) !important; /* hovering must not repaint the label crimson (red-on-red is invisible) */
+  }
   ::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#cdbfa0;border-radius:8px}
 </style>
 </helmet>
@@ -104,16 +109,15 @@
   <!-- the frame reserves real layout height for the scaled book, so the
        toolbar below never overlaps it at any scale -->
   <div style="height:{{ frameH }}px;width:100%;display:flex;justify-content:center;overflow:visible;">
-  <div style="transform:scale({{ scale }});transform-origin:top center;transition:transform .25s ease;flex:none;position:relative;padding-top:184px;">
+  <div style="transform:scale({{ scale }});transform-origin:top center;transition:transform .25s ease;flex:none;position:relative;padding-top:56px;">
 
-    <!-- ribbon bookmarks: a dedicated clear zone above the book (padding-top
-         above matches the tallest ribbon + a gap) so they never drape over
-         page content -- content differs per chapter, but "above the book
-         rectangle entirely" is safe on all 19 of them. -->
+    <!-- ribbon bookmarks: short by default (a real peek at the top edge,
+         like an actual ribbon marker), pull out taller on hover/focus to
+         reveal the full label -- see .ibk-rib. -->
     <div class="ibk-tabs" style="position:absolute;top:0;right:150px;z-index:40;display:flex;align-items:flex-start;gap:9px;font-family:'Patrick Hand',cursive;">
-      <div onClick="{{ goCover }}" class="lnk ibk-rib" style="--tabc:#3a2a06;height:104px;background:linear-gradient(180deg,#eab143,#e2a32b);color:#3a2a06;">COVER</div>
-      <div onClick="{{ goIndex }}" class="lnk ibk-rib" style="height:138px;background:linear-gradient(180deg,color-mix(in srgb, var(--bk-red) 88%, #fff),var(--bk-red));color:#fff;">CONTENTS</div>
-      <div onClick="{{ goMoat }}" class="lnk ibk-rib" title="the dataset moat" style="height:170px;background:linear-gradient(180deg,color-mix(in srgb, var(--bk-ink) 82%, #fff),var(--bk-ink));color:#fff;">THE PROBLEM</div>
+      <div onClick="{{ goCover }}" class="lnk ibk-rib" style="--tabc:#3a2a06;--h0:34px;--h1:96px;background:linear-gradient(180deg,#eab143,#e2a32b);color:#3a2a06;">COVER</div>
+      <div onClick="{{ goIndex }}" class="lnk ibk-rib" style="--h0:40px;--h1:124px;background:linear-gradient(180deg,color-mix(in srgb, var(--bk-red) 88%, #fff),var(--bk-red));color:#fff;">CONTENTS</div>
+      <div onClick="{{ goMoat }}" class="lnk ibk-rib" title="the dataset moat" style="--h0:46px;--h1:152px;background:linear-gradient(180deg,color-mix(in srgb, var(--bk-ink) 82%, #fff),var(--bk-ink));color:#fff;">THE PROBLEM</div>
     </div>
 
     <!-- the book. On narrow screens the outer viewport shows a single page
@@ -1197,8 +1201,8 @@ class Component extends DCLogic {
     const availW = Math.max(260, w - 18);
     const chrome = document.fullscreenElement ? 110 : 220; /* toolbar + nav + breathing room */
     const availH = Math.max(400, window.innerHeight - chrome);
-    /* 730 book + 184 reserved above it for the tallest ribbon bookmark, clear of any page content */
-    const s = Math.min(availW / bookW, availH / 914, 1.06);
+    /* 730 book + 56 reserved above it for the resting-height ribbons */
+    const s = Math.min(availW / bookW, availH / 786, 1.06);
     this.setState({ scale: Math.max(0.28, s), halfMode, half: halfMode ? this.state.half : 0 });
   };
   toggleFS = () => {
@@ -1282,7 +1286,7 @@ class Component extends DCLogic {
       compRows,
       scale: this.state.scale,
       stageRef: this.stageRef,
-      frameH: Math.round(914 * this.state.scale) + 8,
+      frameH: Math.round(786 * this.state.scale) + 8,
       viewW: halfMode ? 560 : 1120,
       innerShift: halfMode && half === 1 ? -560 : 0,
       pageCounter,
