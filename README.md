@@ -47,15 +47,23 @@ git submodule update --init
 
 ## Run it
 
-```bash
-# Whole site + analyser + OCR, locally:
-docker compose up -d --wait
-# http://localhost:8080                          -> marketing site
-# http://localhost:8080/analyser/analyser.html    -> the analyser
+One command runs everything (website + 20-factor analyser + persist),
+waits for health, and prints the URLs:
 
-# Or just open the static site without a build:
-#   site/index.html
+```bash
+make up          # build + start all containers, wait until healthy
+make smoke       # prove every service answers through nginx
+make e2e         # both of the above in one shot
+make logs        # follow logs (one service: make logs S=analyser)
+make down        # stop everything
+make help        # every target, including release + certbot wrappers
 ```
+
+- http://localhost:8080 -> marketing site
+- http://localhost:8080/analyser/analyser.html -> the analyser
+
+Without make, the equivalent is `docker compose up --build -d --wait`.
+For front-end-only work with no Docker: `make site` (static server on :4173).
 
 To pull in a newer analyser release later:
 
