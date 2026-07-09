@@ -109,7 +109,7 @@
   <!-- the frame reserves real layout height for the scaled book, so the
        toolbar below never overlaps it at any scale -->
   <div style="height:{{ frameH }}px;width:100%;display:flex;justify-content:center;overflow:visible;">
-  <div style="transform:scale({{ scale }});transform-origin:top center;transition:transform .25s ease;flex:none;position:relative;padding-top:56px;">
+  <div style="transform:scale({{ scale }});transform-origin:top center;transition:transform .25s ease;flex:none;position:relative;padding-top:38px;">
 
     <!-- ribbon bookmarks: short by default (a real peek at the top edge,
          like an actual ribbon marker), pull out taller on hover/focus to
@@ -1201,8 +1201,10 @@ class Component extends DCLogic {
     const availW = Math.max(260, w - 18);
     const chrome = document.fullscreenElement ? 110 : 220; /* toolbar + nav + breathing room */
     const availH = Math.max(400, window.innerHeight - chrome);
-    /* 730 book + 56 reserved above it for the resting-height ribbons */
-    const s = Math.min(availW / bookW, availH / 786, 1.06);
+    /* 730 book + 38 reserved above it -- just short of the tallest resting
+       ribbon (46px), so ribbons tuck into the page edge instead of hovering
+       above it with a gap */
+    const s = Math.min(availW / bookW, availH / 768, 1.06);
     this.setState({ scale: Math.max(0.28, s), halfMode, half: halfMode ? this.state.half : 0 });
   };
   toggleFS = () => {
@@ -1286,7 +1288,7 @@ class Component extends DCLogic {
       compRows,
       scale: this.state.scale,
       stageRef: this.stageRef,
-      frameH: Math.round(786 * this.state.scale) + 8,
+      frameH: Math.round(768 * this.state.scale) + 8,
       viewW: halfMode ? 560 : 1120,
       innerShift: halfMode && half === 1 ? -560 : 0,
       pageCounter,
