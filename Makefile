@@ -133,15 +133,21 @@ test: ## node test suite (static smoke + playwright e2e)
 	npm run test:e2e
 
 .PHONY: security-test
-security-test: ## abuse-resistance tests for the persist API (rate limits, quotas, CORS, size caps)
+security-test: ## abuse-resistance tests for the persist API + OCR input guard (rate limits, quotas, CORS, sizes, homoglyph/SSRF)
 	node tests/security-abuse.test.mjs
+	node tests/ocr-input-guard.test.mjs
+
+.PHONY: security-scan
+security-scan: ## external scan: open ports (nmap) + TLS grade (testssl.sh) of HOST (default vahinitech.com). Authorized targets only.
+	tools/security-scan.sh $(or $(HOST),vahinitech.com) $(SCAN_ARGS)
 
 # ------------------------------------------- deploy (run on the server)
 # every file a deployment depends on; deploy-check asserts each one exists
 DEPLOY_FILES := \
 	Dockerfile docker-compose.yml \
 	analyser/deployment/Dockerfile \
-	services/persist-api/Dockerfile \
+	services/persist-api/Dockerfile services/persist-api/server.js \
+	services/persist-api/lib/textguard.js \
 	deploy/nginx.conf deploy/nginx-security.conf deploy/nginx-headers.inc \
 	deploy/docker-compose.stag.yml deploy/docker-compose.prod.yml \
 	deploy/release.sh deploy/prewarm-models.sh \
@@ -152,6 +158,7 @@ DEPLOY_FILES := \
 	deploy/certbot/setup-wildcard-cert.sh deploy/certbot/install-renew-hook.sh \
 	deploy/certbot/reload-nginx-hook.sh deploy/certbot/check-renew-timer.sh \
 	deploy/certbot/cloudflare-credentials.ini.example \
+	tools/security-scan.sh \
 	site/index.html site/js/site.js site/css/theme.css site/css/site.css
 
 .PHONY: deploy-check

@@ -1,0 +1,59 @@
+# SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+# © 2026 Vahini Technologies. All rights reserved.
+#
+# External security posture scan: open ports (nmap) + TLS grade (testssl.sh)
+# + security headers, against a host WE operate. This does NOT run on every
+# push -- it is manual (workflow_dispatch) plus a weekly schedule, because it
+# probes a live host and only makes sense against deployed infrastructure.
+#
+# Authorized targets only: tools/security-scan.sh refuses anything outside
+# the *.vahinitech.com allowlist. Do not point this at third-party hosts.
+name: security-scan
+
+on:
+  workflow_dispatch:
+    inputs:
+      host:
+        description: "Host to scan (must be a vahinitech.com domain)"
+        required: true
+        default: "vahinitech.com"
+      mode:
+        description: "quick (common ports) or full (all 65535)"
+        required: true
+        default: "quick"
+        type: choice
+        options: [quick, full]
+  schedule:
+    # Mondays 06:00 UTC -- catch config drift / an accidentally exposed port.
+    - cron: "0 6 * * 1"
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install scanners
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y nmap bsdextrautils dnsutils
+          git clone --depth 1 https://github.com/testssl/testssl.sh "$RUNNER_TEMP/testssl"
+      - name: Run scan
+        env:
+          TESTSSL_HOME: ${{ runner.temp }}/testssl
+          VAHINI_SCAN_OUT: scan-reports
+        run: |
+          HOST="${{ github.event.inputs.host || 'vahinitech.com' }}"
+          MODE="${{ github.event.inputs.mode || 'quick' }}"
+          ARGS=""
+          [ "$MODE" = "quick" ] && ARGS="--quick"
+          # Don't fail the whole job on findings -- upload the report and let
+          # a human triage. A hard-fail gate can be added once the baseline
+          # is known clean.
+          tools/security-scan.sh "$HOST" $ARGS || echo "scan reported findings (see artifact)"
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-scan-report
+          path: scan-reports/
+          if-no-files-found: warn

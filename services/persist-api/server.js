@@ -6,6 +6,7 @@ const fsp = require("node:fs/promises");
 const path = require("node:path");
 const http = require("node:http");
 const crypto = require("node:crypto");
+const { sanitizeText, validatePublicUrl } = require("./lib/textguard");
 
 const PORT = Number(process.env.PORT || 8090);
 
@@ -284,14 +285,26 @@ async function handleGeneratedReport(req, res, clientIp) {
   const htmlPath = path.join(DIR_REPORTS, `${reportId}.html`);
 
   const reportHtml = typeof json.reportHtml === "string" ? json.reportHtml : "";
+
+  // reportText is assembled from OCR of a user image: clean homoglyphs,
+  // diacritic stacking, invisible characters and flag prompt-injection
+  // markers before it lands on disk or is fed to anything downstream
+  // (docs/SECURITY.md, "OCR attack surface").
+  const cleanReport = sanitizeText(json.reportText || "");
+  // The url field is stored, never fetched; validate it anyway so a stored
+  // value can never be turned into an SSRF target later.
+  const urlCheck = validatePublicUrl(json.url || "");
+
   const body = {
     id: reportId,
     ts: new Date().toISOString(),
     trigger: json.trigger || "unknown",
-    url: json.url || "",
+    url: urlCheck.ok ? urlCheck.url : "",
+    urlRejected: urlCheck.ok ? undefined : (json.url ? urlCheck.reason : undefined),
     lead: json.lead || null,
     upload: json.upload || null,
-    reportText: json.reportText || "",
+    reportText: cleanReport.text,
+    textFlags: cleanReport.flags,
     userAgent: req.headers["user-agent"] || "",
     ip: clientIp,
     extra: json.extra || null,

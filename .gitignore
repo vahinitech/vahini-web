@@ -42,3 +42,6 @@ venv/
 # Build artifacts / local exports
 export/
 *.log
+
+# External security scan reports (tools/security-scan.sh output)
+scan-reports/

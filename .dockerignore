@@ -46,3 +46,4 @@ scraps/
 .thumbnail
 .image-slots.state.json
 *.md
+scan-reports/

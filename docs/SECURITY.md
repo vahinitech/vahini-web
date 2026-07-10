@@ -27,7 +27,8 @@ internet
    │   deploy/nginx-security.conf
    ▼
 [3] services                  persist-api's own rate limits, daily quotas,
-       services/persist-api   CORS allowlist; analyser behind heavy zone
+       services/persist-api   CORS allowlist, OCR-text sanitization +
+                              SSRF-safe URL guard (lib/textguard.js)
 ```
 
 An honest caveat up front: **nginx cannot stop a true volumetric DDoS.**
@@ -137,11 +138,83 @@ network hits it directly:
 All limits are env-tunable in `deploy/docker-compose.{stag,prod}.yml`.
 Throttled clients get `429` + `Retry-After`.
 
+## SSRF posture
+
+**There is no server-side SSRF sink today, by design.** The relevant facts:
+
+- No server-side code fetches a user-supplied URL. Images reach the analyser
+  as multipart/base64 uploads, never as URLs; the analyser's `vl_analyze` is
+  classic computer vision, not a model that dereferences remote content.
+- nginx `proxy_pass` targets are all **fixed internal upstreams** (`analyser`,
+  `persist`) — never built from a request variable, so the reverse proxy
+  can't be coerced into an open proxy.
+- The one URL the API accepts (`persist` report `url`) is **stored, never
+  fetched**, and is now run through an SSRF-safe validator anyway
+  (`services/persist-api/lib/textguard.js › validatePublicUrl`): it rejects
+  loopback, private (RFC 1918), CGNAT, link-local (incl. the
+  `169.254.169.254` cloud-metadata address), unique-local IPv6, IPv4-mapped
+  IPv6, `file:`/`gopher:` schemes, embedded credentials and `*.internal`
+  names. A rejected URL is blanked and the reason recorded.
+
+If a fetch is ever added (e.g. "analyse an image by URL"), it **must** gate on
+`validatePublicUrl` *and* pin the resolved IP against DNS-rebinding — the
+validator alone is necessary but not sufficient once you actually dereference.
+
+## OCR attack surface
+
+The analyser turns a user-supplied image into text, which opens a class of
+attacks distinct from web floods. Honesty matters here: some of these are
+mitigable at our boundary, some belong to the OCR **model** (the analyser
+submodule, a separate repo), and one isn't our threat at all. The table says
+which is which; don't read a checkmark where there isn't one.
+
+| Attack | Where it's mitigable | What we do |
+|---|---|---|
+| **Homoglyph** (Cyrillic `а` for Latin `a`) | Text layer — **ours** | `sanitizeText` NFKC-normalizes (folds most confusables) and **flags** any token mixing scripts; the flag rides with the stored record |
+| **Unicode diacritic stacking** (Zalgo) | Text layer — **ours** | zero-width chars stripped; combining marks capped at 2 per base char, so a stacked blob collapses to readable text before storage/echo |
+| **Visual prompt injection** ("ignore all previous instructions" in the image) | Prompt-assembly layer — **ours for any downstream LLM** | `sanitizeText` detects and flags injection markers; `wrapUntrustedForPrompt` delimits OCR text as **untrusted data, never instructions**, and neutralizes backticks. No LLM consumes OCR output on the default path today, so this is defense-in-depth for the optional VLM backend |
+| **Adversarial pixel perturbations** (invisible watermark flips a letter) | **Model layer — submodule, not here** | Cannot be undone from output text. Belongs in the OCR engine (input preprocessing / adversarial-robust models). We flag it as a known limitation, not a solved problem |
+| **Screen-scraping malware** (Trojan OCRs a victim's photo library) | **The victim's device — not our server** | Out of scope entirely. No server-side control exists over malware on someone else's phone |
+
+Sanitization runs at the **persist boundary** (`generated-report`), which is
+the point where OCR-derived text becomes durable and could later feed a
+report renderer, an analyst, or a model. The browser's reflected-XSS risk from
+recognized text is separately covered by the strict CSP (`object-src 'none'`,
+no third-party script origins).
+
+What this explicitly does **not** claim: it does not restore OCR accuracy
+against a determined adversarial-perturbation attack (that's the model's job),
+and the injection detector is a flag-and-delimit safeguard, not a complete
+jailbreak filter — the durable defense is the architectural rule that OCR text
+is always data, never instructions.
+
+## External scanning (`make security-scan`)
+
+`tools/security-scan.sh <host>` probes a host **we operate** from the outside:
+
+- **nmap** open-port scan — flags anything answering beyond 80/443 (a stray
+  SSH, database or debug port is a finding). `--quick` (common ports) or full
+  (all 65535).
+- **testssl.sh** — confirms from outside what the TLS snippet sets: TLS 1.2/1.3
+  only, forward-secret ciphers, HSTS, no known protocol bugs (Heartbleed, CCS,
+  insecure renegotiation).
+- **curl header cross-check** — fast pass/fail on the security headers, works
+  even when testssl is absent.
+
+Authorized targets only: the script refuses anything outside the
+`*.vahinitech.com` allowlist (override with `VAHINI_SCAN_ALLOW` or
+`--i-have-authorization` for a written-authorized engagement). CI runs it via
+`.github/workflows/security-scan.yml` — **manual dispatch + weekly cron**, not
+on every push, because it probes live infrastructure. Reports upload as an
+artifact for triage.
+
 ## Testing
 
 - `make security-test` — spins the real persist-api with tiny limits and
   proves floods, oversized bodies, cross-site posts, quota exhaustion and
-  path leaks are refused (`tests/security-abuse.test.mjs`, 15 checks).
+  path leaks are refused (`tests/security-abuse.test.mjs`, 15 checks), then
+  runs the OCR sanitizer + SSRF-guard unit tests
+  (`tests/ocr-input-guard.test.mjs`, 31 checks).
 - `docker build .` — fails on any nginx config error (`RUN nginx -t`).
 - `make deploy-check` — asserts every security config file exists before a
   release (they're part of `DEPLOY_FILES`).
