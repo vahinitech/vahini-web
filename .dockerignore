@@ -31,6 +31,14 @@ deploy/*
 # Defense in depth: even if deploy/ exclusions above are ever loosened, never
 # let a real, locally-created Cloudflare API token leak into the image.
 deploy/certbot/cloudflare-credentials.ini
+# The persist-api Dockerfile's build context is also the repo root (see
+# deploy/docker-compose.prod.yml / root docker-compose.yml), so this file
+# must NOT exclude services/ -- that would also strip persist-api's own
+# source from its own build. services/persist-api/Dockerfile.dockerignore
+# (BuildKit's per-Dockerfile override, which fully replaces this file for
+# that build) is where persist-api's context is scoped down instead. nginx
+# also blocks public /services/ regardless (deploy/nginx.conf), so the web
+# image not shipping it is belt-and-suspenders, not the only protection.
 services/
 tools/
 node_modules/

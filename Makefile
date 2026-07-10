@@ -146,8 +146,8 @@ security-scan: ## external scan: open ports (nmap) + TLS grade (testssl.sh) of H
 DEPLOY_FILES := \
 	Dockerfile docker-compose.yml \
 	analyser/deployment/Dockerfile \
-	services/persist-api/Dockerfile services/persist-api/server.js \
-	services/persist-api/lib/textguard.js \
+	services/persist-api/Dockerfile services/persist-api/Dockerfile.dockerignore \
+	services/persist-api/server.js services/persist-api/lib/textguard.js \
 	deploy/nginx.conf deploy/nginx-security.conf deploy/nginx-headers.inc \
 	deploy/docker-compose.stag.yml deploy/docker-compose.prod.yml \
 	deploy/release.sh deploy/prewarm-models.sh \
