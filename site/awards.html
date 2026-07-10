@@ -76,6 +76,14 @@
 }
 /* granted patent certificate */
 .aw-patent{display:grid; grid-template-columns:1.1fr .9fr; gap:44px; align-items:center; margin-top:10px;}
+.aw-patent__story{display:flex; flex-direction:column; gap:14px; margin:20px 0 4px;}
+.aw-patent__story > div{display:flex; gap:13px; align-items:flex-start;}
+.aw-patent__story .ic{flex:0 0 auto; width:38px; height:38px; border-radius:10px; display:grid; place-items:center;
+  background:var(--accent-soft); color:var(--accent-deep);}
+.aw-patent__story .ic svg{width:19px; height:19px;}
+.aw-patent__story b{display:block; font-size:12px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--accent-deep); margin-bottom:2px;}
+.aw-patent__story p{font-size:14px; color:var(--muted); line-height:1.6; margin:0;}
+.aw-patent__story p strong{color:var(--ink);}
 .aw-patent__facts{display:grid; grid-template-columns:1fr 1fr; gap:12px 24px; margin:20px 0 24px;}
 .aw-patent__facts div{border-left:3px solid var(--accent); padding-left:12px;}
 .aw-patent__facts b{display:block; font-family:var(--serif); font-size:17px; color:var(--ink); line-height:1.2;}
@@ -160,6 +168,24 @@
       <div class="aw-patent">
         <div class="reveal">
           <p class="body">The Patent Office, Government of India has granted Vahini Technologies <strong>Patent No. 584433</strong> for <em>"Handwriting Recognition with an Intelligent Ballpoint Pen using IMU Sensors"</em>, the dual-IMU sensing method at the core of everything on this site. Twenty years of protection, from the day we filed.</p>
+          <div class="aw-patent__story">
+            <div>
+              <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.5 2.5M16.5 16.5 19 19M19 5l-2.5 2.5M7.5 16.5 5 19"/><circle cx="12" cy="12" r="3.5"/></svg></span>
+              <p><b>Why it's new</b>Two IMU sensors read the <strong>writing, not the page</strong>: pressure, tilt, rhythm and pen-lifts at 208 times a second, recognised on the pen itself. It works on ordinary paper, offline, with no screen, no camera and no special notebook, which is exactly what a scan or a tablet can never capture.</p>
+            </div>
+            <div>
+              <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg></span>
+              <p><b>The problem it solves</b>Handwriting struggle is everywhere and invisible to software: teachers grade by eye, therapists track recovery on gut feel. The patent makes the invisible <strong>measurable</strong>, so a child's effort can be seen, tracked and coached instead of guessed at.</p>
+            </div>
+            <div>
+              <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.6-9.3-9A5.4 5.4 0 0 1 12 6.3 5.4 5.4 0 0 1 21.3 12c-2.3 4.4-9.3 9-9.3 9z"/></svg></span>
+              <p><b>Who it supports</b>The pen is dedicated first to <strong>assistive technology for autism and children with special needs (CwSN)</strong>. Its inbuilt LED gives a child gentle, immediate light feedback as they write, on-pen recognition responds without any screen time, and progress is measured against the child's <strong>own baseline</strong>, never a norm. Built with special educators and clinicians as support, not diagnosis.</p>
+            </div>
+            <div>
+              <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 13l4-4 3 3 5-6"/></svg></span>
+              <p><b>The business it unlocks</b>One protected signal, many products: handwriting coaching for schools, motor-assessment research with clinics, signature verification for banks, and India's first consented handwriting-motion dataset, the moat every product feeds.</p>
+            </div>
+          </div>
           <div class="aw-patent__facts">
             <div><b>584433</b><span>Patent number</span></div>
             <div><b>202541020024</b><span>Application number</span></div>
