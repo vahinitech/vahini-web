@@ -1,6 +1,12 @@
 # SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
 # © 2026 Vahini Technologies. All rights reserved.
 # Vahini CI — runs on every commit (push + PR).
+#  - security       : pure-Node unit tests for the persist API's abuse limits
+#                     and the OCR-input guard (rate limits, quotas, CORS,
+#                     homoglyph/SSRF). No Docker/browser -- runs in seconds,
+#                     so it's a separate job rather than tacked onto e2e.
+#                     (External nmap/testssl scanning of live infra is a
+#                     separate, non-blocking workflow: security-scan.yml.)
 #  - e2e            : headless Chrome — marketing pages load, analyser smoke check.
 #  - e2e-recognition: full stack WITH the OCR backend; proves server recognition
 #                     works on a sample. Kept to ~3 min on warm runs via Docker
@@ -21,6 +27,16 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Persist API abuse limits + OCR input guard
+        run: npm run test:security
+
   e2e:
     runs-on: ubuntu-latest
     steps:
