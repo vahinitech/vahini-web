@@ -31,6 +31,26 @@ All four fonts are licensed under the **SIL Open Font License 1.1 (OFL-1.1)**.
 
 ---
 
+## Self-hosted browser libraries (`site/js/vendor/`)
+
+Served from our own origin (no third-party CDN at runtime — a security and
+availability choice; see `docs/SECURITY.md`). Each file is the unmodified
+published build of its npm package.
+
+| Library | Version | Copyright | Licence |
+|---|---|---|---|
+| **React** (`react.production.min.js`) | 18.3.1 | © Meta Platforms, Inc. and affiliates | MIT |
+| **ReactDOM** (`react-dom.production.min.js`) | 18.3.1 | © Meta Platforms, Inc. and affiliates | MIT |
+| **Babel standalone** (`babel.min.js`) | 7.29.0 | © 2014-present Sebastian McKenzie and contributors | MIT |
+| **GSAP** (`gsap.min.js`) | 3.12.5 | © 2024 GreenSock, Inc. | [GreenSock Standard License](https://gsap.com/standard-license/) — free to use in commercial sites; not resold on its own |
+
+> The MIT licence requires this copyright notice to accompany redistribution.
+> GSAP's standard "no charge" licence permits use in commercial projects
+> delivered to end users at no direct charge for the GSAP-powered feature,
+> which covers this marketing site.
+
+---
+
 ## Optional / server-side
 
 **PaddleOCR (PP-OCRv5)** — © PaddlePaddle Authors — **Apache License 2.0**

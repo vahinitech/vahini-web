@@ -55,6 +55,7 @@ make up COMPOSE=docker-compose      # legacy compose v1 binary
 |---|---|
 | `make site` | Static server on http://127.0.0.1:4173 — instant HTML/CSS/JS loop. The analyser app is **not** served here (it lives in its own container). |
 | `make test` | Node test suite: `npm test` (HTTP smoke) + `npm run test:e2e` (Playwright page checks). Run `npm install` and `npm run test:regression:install` once first. |
+| `make security-test` | Abuse-resistance suite for the persist API: rate limits, daily quotas, CORS allowlist, body-size caps, no path leakage (`tests/security-abuse.test.mjs`). The full mitigation model is documented in [SECURITY.md](SECURITY.md). |
 
 ## 3 · Docker housekeeping
 

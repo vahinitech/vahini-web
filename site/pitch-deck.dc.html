@@ -10,6 +10,9 @@
      already exists, so the page keeps working without third-party CDNs -->
 <script src="js/vendor/react.production.min.js"></script>
 <script src="js/vendor/react-dom.production.min.js"></script>
+<!-- self-hosted Babel standalone: same deal -- support.js skips its unpkg
+     fallback when window.Babel already exists -->
+<script src="js/vendor/babel.min.js"></script>
 <script src="js/support.js"></script>
 </head>
 <body>

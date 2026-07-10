@@ -132,19 +132,23 @@ test: ## node test suite (static smoke + playwright e2e)
 	npm test
 	npm run test:e2e
 
+.PHONY: security-test
+security-test: ## abuse-resistance tests for the persist API (rate limits, quotas, CORS, size caps)
+	node tests/security-abuse.test.mjs
+
 # ------------------------------------------- deploy (run on the server)
 # every file a deployment depends on; deploy-check asserts each one exists
 DEPLOY_FILES := \
 	Dockerfile docker-compose.yml \
 	analyser/deployment/Dockerfile \
 	services/persist-api/Dockerfile \
-	deploy/nginx.conf \
+	deploy/nginx.conf deploy/nginx-security.conf deploy/nginx-headers.inc \
 	deploy/docker-compose.stag.yml deploy/docker-compose.prod.yml \
 	deploy/release.sh deploy/prewarm-models.sh \
 	deploy/vahinitech.com.nginx.conf deploy/stag.vahinitech.com.nginx.conf \
 	deploy/api.vahinitech.com.nginx.conf deploy/analyser.vhost.nginx.conf \
 	deploy/http-redirect.vahinitech.com.nginx.conf \
-	deploy/snippets/tls-vahinitech.conf \
+	deploy/snippets/tls-vahinitech.conf deploy/snippets/http-context-vahinitech.conf \
 	deploy/certbot/setup-wildcard-cert.sh deploy/certbot/install-renew-hook.sh \
 	deploy/certbot/reload-nginx-hook.sh deploy/certbot/check-renew-timer.sh \
 	deploy/certbot/cloudflare-credentials.ini.example \

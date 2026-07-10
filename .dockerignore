@@ -15,17 +15,31 @@ docs/
 # never needs its files, it only reverse-proxies to it.
 analyser/
 tests/
-!tests/
-tests/*
-!tests/smoke-http.mjs
 samples/
 archive/
 screenshots/
 # Remotion video source (not served, no runtime dependency on the site).
 site/video-src/
-# Defense in depth: even though this is gitignored, never let a real,
-# locally-created Cloudflare API token leak into the image via `COPY . .`.
+# `COPY . .` puts the build context into the public web root, so anything not
+# excluded here becomes downloadable at https://vahinitech.com/<path>. Ship
+# only /site plus the nginx configs the Dockerfile installs into /etc/nginx
+# (those never land in the web root -- and nginx blocks /deploy/* regardless).
+deploy/*
+!deploy/nginx.conf
+!deploy/nginx-security.conf
+!deploy/nginx-headers.inc
+# Defense in depth: even if deploy/ exclusions above are ever loosened, never
+# let a real, locally-created Cloudflare API token leak into the image.
 deploy/certbot/cloudflare-credentials.ini
+services/
+tools/
+node_modules/
+package.json
+package-lock.json
+sbom.spdx.json
+Makefile
+Dockerfile.npm-test
+THIRD-PARTY-NOTICES.md
 uploads/
 shots/
 scraps/

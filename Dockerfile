@@ -14,9 +14,19 @@
 
 FROM nginx:1.27-alpine
 
-# Drop the default nginx site config and add ours.
+# Drop the default nginx site config and add ours. 00-security.conf loads
+# first (conf.d is included alphabetically) so its rate-limit zones and maps
+# exist before vahini.conf references them; the headers include lives outside
+# conf.d because it is a server/location-level fragment, not an http-context file.
 RUN rm /etc/nginx/conf.d/default.conf
+COPY deploy/nginx-security.conf /etc/nginx/conf.d/00-security.conf
+COPY deploy/nginx-headers.inc /etc/nginx/vahini-headers.inc
 COPY deploy/nginx.conf /etc/nginx/conf.d/vahini.conf
+
+# Fail the image build -- not the production rollout -- on a broken config.
+# The compose service names (proxy upstreams) only resolve on the compose
+# network, so satisfy them via /etc/hosts for the duration of this check.
+RUN printf "127.0.0.1 analyser\n127.0.0.1 persist\n" >> /etc/hosts && nginx -t
 
 # Copy the whole project (the .dockerignore keeps source/scratch out).
 WORKDIR /usr/share/nginx/html
