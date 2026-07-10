@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+   © 2026 Vahini Technologies. All rights reserved. */
 /**
  * Vahini — feedback → email backend (Google Apps Script)
  * ======================================================

@@ -9,9 +9,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="theme.config.js"></script>
-<link rel="stylesheet" href="theme.css">
-<link rel="stylesheet" href="site.css">
+<script src="js/theme.config.js"></script>
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/site.css">
 <style>
 .aw-hero{display:grid; grid-template-columns:1.05fr .95fr; gap:48px; align-items:center;}
 .aw-badge{display:inline-flex; align-items:center; gap:9px; font-size:12.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--crimson-deep); background:var(--crimson-soft); padding:6px 14px; border-radius:30px;}
@@ -74,6 +74,21 @@
   .aw-gallery{grid-template-columns:1fr;}
   .lb-btn{width:42px;height:42px;}
 }
+/* granted patent certificate */
+.aw-patent{display:grid; grid-template-columns:1.1fr .9fr; gap:44px; align-items:center; margin-top:10px;}
+.aw-patent__facts{display:grid; grid-template-columns:1fr 1fr; gap:12px 24px; margin:20px 0 24px;}
+.aw-patent__facts div{border-left:3px solid var(--accent); padding-left:12px;}
+.aw-patent__facts b{display:block; font-family:var(--serif); font-size:17px; color:var(--ink); line-height:1.2;}
+.aw-patent__facts span{display:block; font-size:12px; color:var(--hint); margin-top:2px;}
+.aw-cert{display:block; position:relative; border-radius:var(--radius-lg); overflow:hidden; background:var(--surface);
+  border:1px solid var(--rule); box-shadow:var(--shadow-2); transition:transform .25s var(--ease), box-shadow .25s var(--ease);}
+.aw-cert:hover{transform:translateY(-4px); box-shadow:var(--shadow-2), 0 18px 40px rgba(20,26,34,.18);}
+.aw-cert img{display:block; width:100%; height:auto;}
+.aw-cert figcaption{position:absolute; left:0; right:0; bottom:0; display:flex; align-items:center; gap:8px; justify-content:center;
+  padding:26px 14px 12px; font-size:12.5px; font-weight:700; color:#fff; background:linear-gradient(transparent, rgba(34,40,49,.85));}
+.aw-cert figcaption svg{width:15px; height:15px;}
+@media (max-width:900px){ .aw-patent{grid-template-columns:1fr; gap:28px;} .aw-cert{max-width:440px;} }
+@media (max-width:520px){ .aw-patent__facts{grid-template-columns:1fr;} }
 </style>
 </head>
 <body class="booting">
@@ -138,6 +153,36 @@
     </div>
   </section>
 
+  <section class="block" data-screen-label="Granted patent">
+    <div class="wrap">
+      <div class="block__head reveal"><p class="eyebrow">Granted IP · 2026</p>
+        <h2 style="margin-top:14px;">The patent, granted. Certificate in hand.</h2></div>
+      <div class="aw-patent">
+        <div class="reveal">
+          <p class="body">The Patent Office, Government of India has granted Vahini Technologies <strong>Patent No. 584433</strong> for <em>"Handwriting Recognition with an Intelligent Ballpoint Pen using IMU Sensors"</em>, the dual-IMU sensing method at the core of everything on this site. Twenty years of protection, from the day we filed. It's why this award means more than a trophy: the technology behind it is legally ours.</p>
+          <div class="aw-patent__facts">
+            <div><b>584433</b><span>Patent number</span></div>
+            <div><b>202541020024</b><span>Application number</span></div>
+            <div><b>6 March 2025</b><span>Date of filing</span></div>
+            <div><b>23 March 2026</b><span>Date of grant</span></div>
+            <div><b>20 years</b><span>Term, from filing</span></div>
+            <div><b>Vahini Technologies</b><span>Patentee</span></div>
+          </div>
+          <div style="display:flex; gap:14px; flex-wrap:wrap;">
+            <a class="btn btn--crimson" href="assets/docs/Vahini-Patent-202541020024-Grant.pdf" target="_blank" rel="noopener">View the certificate (PDF)</a>
+            <a class="btn btn--ghost" href="patents.html" data-nav>How the patent works</a>
+          </div>
+        </div>
+        <figure class="reveal" data-d="1" style="margin:0;">
+          <a class="aw-cert" href="assets/docs/Vahini-Patent-202541020024-Grant.pdf" target="_blank" rel="noopener" aria-label="Open the patent grant certificate PDF">
+            <img src="assets/docs/Vahini-Patent-202541020024-Grant-preview.jpg" alt="Patent Certificate issued by The Patent Office, Government of India: Patent No. 584433 granted to Vahini Technologies" loading="lazy" width="760" height="1076">
+            <figcaption><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>Open the original PDF</figcaption>
+          </a>
+        </figure>
+      </div>
+    </div>
+  </section>
+
   <section class="block" data-screen-label="Summit">
     <div class="wrap"><div class="aw-summit">
       <div class="reveal">
@@ -188,8 +233,8 @@
   <figure><img id="lbImg" src="" alt=""><figcaption class="lb-cap" id="lbCap"></figcaption></figure>
 </div>
 
-<script src="site-data.js"></script>
-<script src="site.js"></script>
+<script src="js/site-data.js"></script>
+<script src="js/site.js"></script>
 <script>
 (function(){
   var PHOTOS=[

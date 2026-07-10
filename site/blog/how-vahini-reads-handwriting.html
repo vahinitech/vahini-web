@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en" data-site-base="../">
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. All rights reserved. -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>How Vahini reads handwriting: from a photo to a 20-factor report | Vahini Blog</title>
+<meta name="description" content="A plain-language tour of how Vahini turns a photo of handwriting into twenty quality scores and a coaching report, what goes in, what comes out, and what happens in between.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="../js/theme.config.js"></script>
+<link rel="stylesheet" href="../css/theme.css">
+<link rel="stylesheet" href="../css/site.css">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
+
+  <article>
+  <section class="post-hero" data-screen-label="Post hero">
+    <div class="wrap">
+      <a class="post-back" href="index.html" data-nav><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All posts</a>
+      <span class="btag btag--technology">Technology</span>
+      <h1>How Vahini reads handwriting: from a photo to a 20-factor report</h1>
+      <div class="post-meta"><span class="post-author"><span class="pa-av">MK</span>Malli Kosuri</span><span class="dot"></span><span>Jun 2026</span><span class="dot"></span><span>7 min read</span></div>
+    </div>
+  </section>
+
+  <section class="post-ai" data-screen-label="AI summary">
+    <div class="wrap">
+      <div class="post-ai__card">
+        <span class="post-ai__tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9z"/><path d="M19 14l.7 1.8L21 16.5l-1.3.6L19 19l-.7-1.8L17 16.5z"/></svg>AI summary</span>
+        <p>Vahini takes an ordinary photo of handwriting and returns twenty quality scores and a coaching plan. In between, it finds the writing on the page, measures the geometry a human eye reacts to, and, when it can read the words, checks the writing itself.</p>
+        <p><strong>The promise is honesty:</strong> Vahini measures what it can see, reads what it can recognise, names what it can only estimate, and never dresses a guess up as a fact.</p>
+        <p class="post-ai__note">A quick machine-generated overview. The full post has the detail and the why.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="post-body">
+    <div class="wrap">
+      <div class="post-toc">
+        <h4>In this post</h4>
+        <ol>
+          <li><a href="#s1">One photo in, one report out</a></li>
+          <li><a href="#s2">Step 1, finding the writing</a></li>
+          <li><a href="#s3">Step 2, measuring the twenty factors</a></li>
+          <li><a href="#s4">Step 3, reading the words</a></li>
+          <li><a href="#s5">Step 4, the report</a></li>
+          <li><a href="#s6">Why we draw the line where we do</a></li>
+          <li><a href="#takeaways">Key takeaways</a></li>
+        </ol>
+      </div>
+
+      <p class="lede-para">Someone hands you a child's notebook page and asks, "is this neat?" You answer in a second, but if they ask <em>why</em>, you struggle. "It just… looks messy." Vahini exists to turn that instinct into something specific, fair and improvable. Here is how it works, from the outside in.</p>
+
+      <p>I'll keep this at the level that matters to you as a user or a partner: what goes <em>in</em>, what comes <em>out</em>, and what the system is doing in between, without the engine-room detail. Think of Vahini as a careful reader who looks at a page in four passes.</p>
+
+      <h2 id="s1">One photo in, one report out</h2>
+
+      <p>You take a photo of a few lines of handwriting on ordinary paper, or capture it live with the Vahini pen. Vahini gives back a report: an overall score out of 100, twenty individual quality factors, the strengths worth keeping, the two or three things worth practising next, and a forecast of where the writing is heading. Everything else happens automatically in between.</p>
+
+      <figure class="post-fig">
+        <svg viewBox="0 0 760 200" role="img" aria-label="The Vahini pipeline: a photo goes in, passes through find, measure and read stages, and a report comes out">
+          <rect width="760" height="200" fill="#FFFFFF"/>
+          <!-- input -->
+          <rect x="24" y="74" width="92" height="64" rx="9" fill="#EEEEEE" stroke="#222831" stroke-width="2"/>
+          <path d="M40 120 q14 -22 28 0 t28 0" fill="none" stroke="#222831" stroke-width="2.2" stroke-linecap="round"/>
+          <text x="70" y="160" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="12" font-weight="700" fill="#565D66">Your photo</text>
+          <!-- arrow -->
+          <path d="M122 106h34" stroke="#828A93" stroke-width="2"/><path d="M150 100l8 6-8 6" fill="none" stroke="#828A93" stroke-width="2"/>
+          <!-- 3 boxes -->
+          <g>
+            <rect x="166" y="78" width="120" height="56" rx="9" fill="#DCF3F4" stroke="#00ADB5" stroke-width="2"/>
+            <text x="226" y="103" text-anchor="middle" font-family="Spectral,serif" font-size="14" font-weight="700" fill="#075E63">1 · Find</text>
+            <text x="226" y="121" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="10.5" fill="#075E63">letters, words, lines</text>
+          </g>
+          <path d="M290 106h20" stroke="#828A93" stroke-width="2"/><path d="M304 100l8 6-8 6" fill="none" stroke="#828A93" stroke-width="2"/>
+          <g>
+            <rect x="316" y="78" width="120" height="56" rx="9" fill="#DCF3F4" stroke="#00ADB5" stroke-width="2"/>
+            <text x="376" y="103" text-anchor="middle" font-family="Spectral,serif" font-size="14" font-weight="700" fill="#075E63">2 · Measure</text>
+            <text x="376" y="121" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="10.5" fill="#075E63">the 20 factors</text>
+          </g>
+          <path d="M440 106h20" stroke="#828A93" stroke-width="2"/><path d="M454 100l8 6-8 6" fill="none" stroke="#828A93" stroke-width="2"/>
+          <g>
+            <rect x="466" y="78" width="120" height="56" rx="9" fill="#DCF3F4" stroke="#00ADB5" stroke-width="2"/>
+            <text x="526" y="103" text-anchor="middle" font-family="Spectral,serif" font-size="14" font-weight="700" fill="#075E63">3 · Read</text>
+            <text x="526" y="121" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="10.5" fill="#075E63">the words (when clear)</text>
+          </g>
+          <path d="M590 106h28" stroke="#828A93" stroke-width="2"/><path d="M612 100l8 6-8 6" fill="none" stroke="#828A93" stroke-width="2"/>
+          <!-- output -->
+          <rect x="624" y="70" width="112" height="72" rx="9" fill="#222831"/>
+          <circle cx="656" cy="100" r="15" fill="none" stroke="#3FD0D6" stroke-width="4"/><text x="656" y="105" text-anchor="middle" font-family="Spectral,serif" font-size="13" font-weight="700" fill="#fff">81</text>
+          <rect x="678" y="92" width="44" height="6" rx="3" fill="#3FD0D6"/><rect x="678" y="104" width="44" height="6" rx="3" fill="#5a6472"/>
+          <text x="680" y="160" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="12" font-weight="700" fill="#565D66">Your report</text>
+        </svg>
+        <figcaption>Four passes over one page. Each stage only does its own job, and each one is honest about how confident it is.</figcaption>
+      </figure>
+
+      <h2 id="s2">Step 1, finding the writing</h2>
+
+      <p>Before anything can be judged, Vahini has to find the writing in the photo and ignore the rest. It separates ink from paper, groups the strokes into individual letters, then groups letters into words and words into lines, the same structure your eye builds without thinking.</p>
+
+      <p>This pass also does the quiet, important work that keeps a score fair. It throws out smudges, ruled lines and background texture. It corrects for a page photographed at a slight angle. And crucially, it sets aside anything that is <strong>printed</strong>, a letterhead, a form's pre-printed labels, a textbook line, so that only the handwriting is ever scored. If the page is too sparse, blurry or dark to read reliably, Vahini says so up front rather than inventing a confident-looking score.</p>
+
+      <figure class="post-fig">
+        <svg viewBox="0 0 720 230" role="img" aria-label="A page of handwriting with boxes drawn around each letter, word and line, and the baseline detected">
+          <rect width="720" height="230" fill="#FFFFFF"/>
+          <rect x="40" y="24" width="640" height="182" rx="8" fill="#FAFAF8" stroke="#E3E5E7" stroke-width="2"/>
+          <!-- line 1 baseline -->
+          <line x1="70" y1="86" x2="650" y2="86" stroke="#00ADB5" stroke-width="1.6" stroke-dasharray="5 5"/>
+          <line x1="70" y1="150" x2="650" y2="150" stroke="#00ADB5" stroke-width="1.6" stroke-dasharray="5 5"/>
+          <!-- word boxes line 1 -->
+          <g fill="none" stroke="#C0080B" stroke-width="1.6" opacity="0.85">
+            <rect x="78" y="58" width="120" height="32" rx="3"/><rect x="214" y="58" width="86" height="32" rx="3"/><rect x="316" y="58" width="150" height="32" rx="3"/><rect x="482" y="58" width="96" height="32" rx="3"/>
+          </g>
+          <!-- word boxes line 2 -->
+          <g fill="none" stroke="#C0080B" stroke-width="1.6" opacity="0.85">
+            <rect x="78" y="122" width="96" height="32" rx="3"/><rect x="190" y="122" width="132" height="32" rx="3"/><rect x="338" y="122" width="80" height="32" rx="3"/>
+          </g>
+          <!-- squiggly "ink" -->
+          <g stroke="#222831" stroke-width="2.4" fill="none" stroke-linecap="round" opacity="0.85">
+            <path d="M86 84 q8 -22 16 0 t16 0 t16 0 t16 0 t16 0 t16 0"/>
+            <path d="M222 84 q8 -20 16 0 t16 0 t16 0 t16 0"/>
+            <path d="M324 84 q8 -22 16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0"/>
+            <path d="M490 84 q8 -20 16 0 t16 0 t16 0 t16 0"/>
+            <path d="M86 148 q8 -20 16 0 t16 0 t16 0 t16 0"/>
+            <path d="M198 148 q8 -22 16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0"/>
+            <path d="M346 148 q8 -20 16 0 t16 0 t16 0"/>
+          </g>
+          <text x="70" y="194" font-family="Hanken Grotesk,sans-serif" font-size="12" font-weight="700" fill="#828A93">words (red) · baseline (teal) · printed text &amp; noise removed</text>
+        </svg>
+        <figcaption>Vahini rebuilds the structure of the page, the lines, the words, and the invisible baseline each line sits on, so everything after this has something real to measure.</figcaption>
+      </figure>
+
+      <h2 id="s3">Step 2, measuring the twenty factors</h2>
+
+      <p>Now the heart of it. "Neat" is not one thing; it is the sum of about twenty smaller, nameable qualities. Vahini measures each one and grades it from 0 to 10, then groups them into four families:</p>
+
+      <figure class="post-fig">
+        <svg viewBox="0 0 720 250" role="img" aria-label="The four families of factors: Structure, Spatial, Dynamics and Style, with their weightings">
+          <rect width="720" height="250" fill="#FFFFFF"/>
+          <g font-family="Hanken Grotesk,sans-serif">
+            <!-- Structure -->
+            <rect x="28" y="30" width="320" height="92" rx="11" fill="#DCF3F4"/>
+            <text x="48" y="60" font-family="Spectral,serif" font-size="18" font-weight="700" fill="#075E63">Structure</text>
+            <text x="320" y="60" text-anchor="end" font-size="14" font-weight="800" fill="#00ADB5">30%</text>
+            <text x="48" y="84" font-size="11.5" fill="#0a5e63">Letter formation · loop closure · line</text>
+            <text x="48" y="102" font-size="11.5" fill="#0a5e63">quality · size · ascenders &amp; descenders</text>
+            <!-- Spatial -->
+            <rect x="372" y="30" width="320" height="92" rx="11" fill="#DCF1E8"/>
+            <text x="392" y="60" font-family="Spectral,serif" font-size="18" font-weight="700" fill="#0A4D3C">Spatial</text>
+            <text x="664" y="60" text-anchor="end" font-size="14" font-weight="800" fill="#0F6E56">30%</text>
+            <text x="392" y="84" font-size="11.5" fill="#0A4D3C">Baseline · word &amp; letter spacing ·</text>
+            <text x="392" y="102" font-size="11.5" fill="#0A4D3C">margins · line straightness · alignment</text>
+            <!-- Dynamics -->
+            <rect x="28" y="134" width="320" height="92" rx="11" fill="#F6E9D4"/>
+            <text x="48" y="164" font-family="Spectral,serif" font-size="18" font-weight="700" fill="#8A5410">Dynamics</text>
+            <text x="320" y="164" text-anchor="end" font-size="14" font-weight="800" fill="#B57211">20%</text>
+            <text x="48" y="188" font-size="11.5" fill="#7e4d10">Speed · pressure · stroke flow ·</text>
+            <text x="48" y="206" font-size="11.5" fill="#7e4d10">pen-lifts, measured by the Vahini pen</text>
+            <!-- Style -->
+            <rect x="372" y="134" width="320" height="92" rx="11" fill="#DCF3F4"/>
+            <text x="392" y="164" font-family="Spectral,serif" font-size="18" font-weight="700" fill="#075E63">Style &amp; Readability</text>
+            <text x="664" y="164" text-anchor="end" font-size="14" font-weight="800" fill="#048A91">20%</text>
+            <text x="392" y="188" font-size="11.5" fill="#0a5e63">Slant consistency · legibility ·</text>
+            <text x="392" y="206" font-size="11.5" fill="#0a5e63">character distinction · overall neatness</text>
+          </g>
+        </svg>
+        <figcaption>Twenty factors in four families. Structure and Spatial, the fundamentals of legibility, carry the most weight; Dynamics describes how the hand <em>moves</em>, which the pen measures best.</figcaption>
+      </figure>
+
+      <p>Most of these are <strong>measurements, not opinions</strong>. "Are the letters a consistent height?" is a fact about the page; so is "do the words sit on the line?" and "are the loops on your a's and o's closed?". Because they are measured the same way every time, the same photo always earns the same score, which is exactly what you need to track real progress.</p>
+
+      <p>Four of the factors, speed, pressure, stroke flow and how often the pen lifts, describe <em>movement</em>, which a still photo simply cannot see. From a photo, Vahini labels these honestly as estimates. With the Vahini pen, which feels every stroke as you write, they become true measurements.</p>
+
+      <h2 id="s3b" class="visually-quiet">&nbsp;</h2>
+      <h2 id="s4">Step 3, reading the words</h2>
+
+      <p>The twenty factors judge how the writing <em>looks</em>. A good coach also reads what was actually written, and so does Vahini, when the writing is clear enough to recognise. This pass reads the words and then checks the things a teacher circles in red: spelling, punctuation that is missing or misplaced, a stray capital in the middle of a word, the same letter formed three different ways, or a confusing mix of print and cursive on one line.</p>
+
+      <p>This is the one pass that depends on legibility. When the words can be recognised, these checks light up with examples cropped from the writer's own page. When the writing is too unclear to read confidently, Vahini doesn't guess, it shows the shape-and-spacing scores and quietly skips the word-level notes. That restraint is deliberate: a wrong "you spelled this wrong" destroys trust faster than a missing one.</p>
+
+      <figure class="post-fig">
+        <svg viewBox="0 0 720 180" role="img" aria-label="Examples of the word-level checks: spelling, a stray capital, mixed styles and punctuation">
+          <rect width="720" height="180" fill="#FFFFFF"/>
+          <g font-family="Hanken Grotesk,sans-serif">
+            <rect x="28" y="34" width="156" height="112" rx="10" fill="#FAFAF8" stroke="#E3E5E7" stroke-width="2"/>
+            <text x="106" y="60" text-anchor="middle" font-size="12" font-weight="700" fill="#828A93">Spelling</text>
+            <text x="106" y="96" text-anchor="middle" font-family="Spectral,serif" font-size="20" fill="#222831" font-style="italic">recieve</text>
+            <path d="M70 104h72" stroke="#C0080B" stroke-width="2.4"/><text x="106" y="128" text-anchor="middle" font-size="11" fill="#C0080B">→ receive</text>
+
+            <rect x="200" y="34" width="156" height="112" rx="10" fill="#FAFAF8" stroke="#E3E5E7" stroke-width="2"/>
+            <text x="278" y="60" text-anchor="middle" font-size="12" font-weight="700" fill="#828A93">Stray capital</text>
+            <text x="278" y="98" text-anchor="middle" font-family="Spectral,serif" font-size="20" fill="#222831">ga<tspan fill="#C0080B">R</tspan>den</text>
+            <circle cx="284" cy="92" r="13" fill="none" stroke="#C0080B" stroke-width="2"/>
+
+            <rect x="372" y="34" width="156" height="112" rx="10" fill="#FAFAF8" stroke="#E3E5E7" stroke-width="2"/>
+            <text x="450" y="60" text-anchor="middle" font-size="12" font-weight="700" fill="#828A93">Mixed style</text>
+            <text x="424" y="98" text-anchor="middle" font-family="Spectral,serif" font-size="19" fill="#222831">pr</text>
+            <text x="470" y="98" text-anchor="middle" font-family="Caveat,Spectral,cursive" font-size="22" fill="#222831" font-style="italic">int</text>
+            <text x="450" y="128" text-anchor="middle" font-size="10.5" fill="#8A5410">print + cursive in one word</text>
+
+            <rect x="544" y="34" width="148" height="112" rx="10" fill="#FAFAF8" stroke="#E3E5E7" stroke-width="2"/>
+            <text x="618" y="60" text-anchor="middle" font-size="12" font-weight="700" fill="#828A93">Punctuation</text>
+            <text x="618" y="98" text-anchor="middle" font-family="Spectral,serif" font-size="18" fill="#222831">today</text>
+            <text x="664" y="98" font-family="Spectral,serif" font-size="22" fill="#C0080B">_</text>
+            <text x="618" y="128" text-anchor="middle" font-size="10.5" fill="#C0080B">missing full stop</text>
+          </g>
+        </svg>
+        <figcaption>When the words can be read, Vahini surfaces the content notes a coach would, each one tied to a clip of the writer's own page, never a generic warning.</figcaption>
+      </figure>
+
+      <h2 id="s5">Step 4, the report</h2>
+
+      <p>Finally Vahini assembles everything into a report built to be acted on, not just admired. The four families combine into one overall score out of 100. A one-page scorecard shows the dials at a glance, names the top strengths, and, most importantly, picks the two or three factors worth practising next, each with a specific drill and a plain reason why. A growth forecast sketches where the score is likely to head with steady practice, and a returning writer sees how far they've come since last time.</p>
+
+      <figure class="post-fig">
+        <svg viewBox="0 0 720 210" role="img" aria-label="The report: an overall score ring, factor dials, and a short list of recommended drills">
+          <rect width="720" height="210" fill="#FFFFFF"/>
+          <!-- ring -->
+          <circle cx="118" cy="105" r="58" fill="none" stroke="#E3E5E7" stroke-width="14"/>
+          <circle cx="118" cy="105" r="58" fill="none" stroke="#00ADB5" stroke-width="14" stroke-linecap="round" stroke-dasharray="295 365" transform="rotate(-90 118 105)"/>
+          <text x="118" y="100" text-anchor="middle" font-family="Spectral,serif" font-size="34" font-weight="700" fill="#222831">81</text>
+          <text x="118" y="124" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="11" fill="#565D66">out of 100</text>
+          <!-- dials -->
+          <g font-family="Hanken Grotesk,sans-serif" font-size="11.5" font-weight="600">
+            <text x="232" y="58" fill="#222831">Structure</text><rect x="332" y="50" width="180" height="9" rx="4" fill="#E3E5E7"/><rect x="332" y="50" width="138" height="9" rx="4" fill="#00ADB5"/>
+            <text x="232" y="88" fill="#222831">Spatial</text><rect x="332" y="80" width="180" height="9" rx="4" fill="#E3E5E7"/><rect x="332" y="80" width="150" height="9" rx="4" fill="#0F6E56"/>
+            <text x="232" y="118" fill="#222831">Dynamics</text><rect x="332" y="110" width="180" height="9" rx="4" fill="#E3E5E7"/><rect x="332" y="110" width="96" height="9" rx="4" fill="#B57211"/>
+            <text x="232" y="148" fill="#222831">Style</text><rect x="332" y="140" width="180" height="9" rx="4" fill="#E3E5E7"/><rect x="332" y="140" width="160" height="9" rx="4" fill="#048A91"/>
+          </g>
+          <!-- drills -->
+          <rect x="540" y="44" width="156" height="122" rx="10" fill="#DCF3F4"/>
+          <text x="558" y="68" font-family="Hanken Grotesk,sans-serif" font-size="11" font-weight="800" letter-spacing="0.5" fill="#075E63">PRACTISE NEXT</text>
+          <g font-family="Hanken Grotesk,sans-serif" font-size="11.5" fill="#0a5e63">
+            <circle cx="560" cy="92" r="3" fill="#00ADB5"/><text x="572" y="96">Close your loops</text>
+            <circle cx="560" cy="116" r="3" fill="#00ADB5"/><text x="572" y="120">Even word gaps</text>
+            <circle cx="560" cy="140" r="3" fill="#00ADB5"/><text x="572" y="144">Steady the baseline</text>
+          </g>
+        </svg>
+        <figcaption>The output is a black box you can trust: a clear score, the factors behind it, and a short, specific plan, not a verdict, but a next step.</figcaption>
+      </figure>
+
+      <h2 id="s6">Why we draw the line where we do</h2>
+
+      <p>You'll notice a theme: Vahini is careful about the difference between <em>measuring</em>, <em>reading</em> and <em>estimating</em>. The shape-and-spacing factors are measured and stable. The word-level notes appear only when the writing can be read. The movement factors are honest estimates from a photo and true measurements from the pen. We label all three so a parent, a teacher or a clinician always knows how much weight to put on each number.</p>
+
+      <p>That honesty is the whole point. A handwriting tool that quietly guesses is worse than useless, it erodes the trust of exactly the people, children and learners, it's meant to help. Vahini would rather tell you "we couldn't read this clearly, here's a better photo to take" than hand you a confident score built on sand.</p>
+
+      <div class="post-key" id="takeaways">
+        <h4>Key takeaways</h4>
+        <ul>
+          <li>Vahini turns one photo of handwriting into twenty quality scores and a coaching plan, automatically.</li>
+          <li>It works in four passes: find the writing, measure the factors, read the words, build the report.</li>
+          <li>Most factors are measurements, not opinions, so the same page always scores the same.</li>
+          <li>Word-level checks (spelling, punctuation, mixed styles) appear only when the writing can be read clearly.</li>
+          <li>Movement factors are estimated from a photo and truly measured by the Vahini pen, and always labelled.</li>
+          <li>The guiding rule: measure what we can see, read what we can recognise, and never disguise a guess as a fact.</li>
+        </ul>
+      </div>
+
+      <p>If you'd like to see it on your own writing, the analyser is free, a clear photo of four or five lines is all it needs. And if you're curious about the movement factors, that's where the Vahini pen comes in: it feels the speed, pressure and rhythm a photo can only guess at, and turns the last four factors from estimates into measurements.</p>
+
+      <p class="post-disclaimer">Vahini measures handwriting quality for practice and improvement only. It is not a medical, psychological or diagnostic test, and it never infers ability, intelligence or personality from handwriting.</p>
+    </div>
+  </section>
+  </article>
+
+  <section class="block block--alt" data-screen-label="Read next">
+    <div class="wrap">
+      <div class="block__head reveal" style="margin-bottom:6px;"><p class="eyebrow">Read next</p></div>
+      <div class="post-next" id="readNext"></div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+<script src="blog-data.js"></script>
+<script src="../js/site.js"></script>
+<script>
+(function(){
+  var SLUG="how-vahini-reads-handwriting";
+  if(!window.VahiniPosts) return;
+  var CAT={research:"Research",technology:"Technology",health:"Health",signals:"Signals",explainer:"Guide"};
+  var arrow='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+  var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+  var next=window.VahiniPosts.filter(function(p){return p.slug!==SLUG;}).slice(0,3);
+  document.getElementById('readNext').innerHTML=next.map(function(p){
+    return '<a class="bpost reveal" href="'+p.url+'">'+
+      '<div class="bpost__art">'+window.VahiniPostArt(p,0)+'</div>'+
+      '<div class="bpost__body"><div class="bpost__meta"><span class="btag btag--'+p.cat+'">'+CAT[p.cat]+'</span><span class="bpost__date">'+esc(p.date)+'</span></div>'+
+      '<h3>'+esc(p.title)+'</h3><p>'+esc(p.excerpt)+'</p><span class="bpost__more">Read '+arrow+'</span></div></a>';
+  }).join('');
+  if(window.VahiniRevealScan) window.VahiniRevealScan();
+})();
+</script>
+</body>
+</html>

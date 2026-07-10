@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. All rights reserved. -->
+
 # Writing and publishing a blog post
 
 This is the step-by-step for adding a post to the Vahini blog. Every post is a
@@ -6,27 +9,27 @@ filters, "read next" rail, search and SEO stay in sync automatically.
 
 ## How the blog fits together
 
-- **`site/blog-data.js`** is the single source of truth. It holds the list of
+- **`site/blog/blog-data.js`** is the single source of truth. It holds the list of
   posts (`VahiniPosts`), the per-post SEO keywords (`VahiniPostKW`), and the
   cover-art generator (`VahiniPostArt`, with a per-post motif map `THUMB`).
-- **`site/blog.html`** is the index: it reads `VahiniPosts`, renders the featured
+- **`site/blog/index.html`** is the index: it reads `VahiniPosts`, renders the featured
   card plus the filterable grid, and powers the category chips.
-- **`site/blog-<slug>.html`** is one article per file.
-- **`site/blog.css`** styles posts (AI summary, table of contents, share bar,
+- **`site/blog/<slug>.html`** is one article per file.
+- **`site/blog/blog.css`** styles posts (AI summary, table of contents, share bar,
   highlights, cover art).
-- **`site/site.js`** auto-injects the nav, footer, favicons, analytics, the
+- **`site/js/site.js`** auto-injects the nav, footer, favicons, analytics, the
   share bar, and the per-post SEO/Open Graph tags. You do not hand-write any of
   those into a post.
 
 ## Step 1: add the post to the data file
 
-Open `site/blog-data.js` and add an entry at the **top** of the `VahiniPosts`
+Open `site/blog/blog-data.js` and add an entry at the **top** of the `VahiniPosts`
 array (newest first). The first entry becomes the featured card on the index.
 
 ```js
 {
   slug: "my-new-post",                       // unique, kebab-case
-  url: "blog-my-new-post.html",              // must match the file you create
+  url: "my-new-post.html",                   // must match the file you create
   cat: "signals",                            // research | signals | technology | health | explainer
   title: "My new post title",
   date: "Jul 2026", read: "6 min read",
@@ -48,10 +51,10 @@ category's default art, which is fine.
 ## Step 2: create the post file
 
 Copy an existing post as a starting point. The closest match to your topic is
-easiest, e.g. `site/blog-reading-pressure.html` for a "signals" post.
+easiest, e.g. `site/blog/reading-pressure.html` for a "signals" post.
 
 ```
-cp "site/blog-reading-pressure.html" "site/blog-my-new-post.html"
+cp "site/blog/reading-pressure.html" "site/blog/my-new-post.html"
 ```
 
 Then edit the new file and update, in order:
@@ -84,7 +87,7 @@ injects those on load.
 
 ## Step 4: preview
 
-Open `site/blog.html` and your new `site/blog-my-new-post.html` in a browser
+Open `site/blog/index.html` and your new `site/blog/my-new-post.html` in a browser
 (or via the Docker image below). Check: the card shows on the index, the right
 category filter includes it, the table of contents anchors jump correctly, and
 the share + read-next rails render.
@@ -97,7 +100,7 @@ The site is static, so "publishing" is just shipping the files.
   ```
   docker build -t vahini-site .
   docker run --rm -p 8080:80 vahini-site
-  # http://localhost:8080/site/blog.html
+  # http://localhost:8080/site/blog/index.html
   ```
 - **Any static host** (Netlify, Vercel, S3 + CloudFront, GitHub Pages, nginx):
   deploy the repository as-is. The marketing site is under `/site`; the Analyser

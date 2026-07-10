@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" data-site-base="../">
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. All rights reserved. -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>Reading pen tilt from an IMU | Vahini Blog</title>
+<meta name="description" content="Gravity always points down. By reading how it splits across an IMU's axes, and fusing gyroscope data to fight drift, the pen knows exactly how it's being held.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="../js/theme.config.js"></script>
+<link rel="stylesheet" href="../css/theme.css">
+<link rel="stylesheet" href="../css/site.css">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
+
+  <article>
+  <section class="post-hero" data-screen-label="Post hero">
+    <div class="wrap">
+      <a class="post-back" href="index.html" data-nav><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All posts</a>
+      <span class="btag btag--signals">Signals</span>
+      <h1>Reading pen tilt from an IMU</h1>
+      <div class="post-meta"><span class="post-author"><span class="pa-av malli">MK</span>Malli Kosuri</span><span class="dot"></span><span>Jun 2026</span><span class="dot"></span><span>6 min read</span></div>
+    </div>
+  </section>
+
+  <section class="post-ai" data-screen-label="AI summary">
+    <div class="wrap">
+      <div class="post-ai__card">
+        <span class="post-ai__tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9z"/><path d="M19 14l.7 1.8L21 16.5l-1.3.6L19 19l-.7-1.8L17 16.5z"/></svg>AI summary</span>
+        <p>An accelerometer at rest feels gravity pulling straight down; by measuring how that pull splits across its three axes, the pen computes its <strong>tilt</strong>. But during writing, hand motion contaminates that reading, so a gyroscope, which senses rotation directly, is fused in to hold the estimate steady.</p>
+        <p>Knowing tilt precisely is what lets the analyser measure slant honestly. For the rounded, looping aksharas of Telugu, Kannada, Malayalam, Tamil and Hindi, a consistent pen angle is the difference between clean curves and wobbling ones.</p>
+        <p class="post-ai__note">A quick machine-generated overview. The full post has the detail and the why.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="post-body">
+    <div class="wrap">
+      <div class="post-toc">
+        <h4>In this post</h4>
+        <ol>
+          <li><a href="#s1">Gravity as a built-in reference</a></li>
+          <li><a href="#s2">The problem: motion looks like tilt</a></li>
+          <li><a href="#s3">Sensor fusion: accelerometer + gyroscope</a></li>
+          <li><a href="#s4">Tilt and Indic letterforms</a></li>
+        </ol>
+      </div>
+
+      <p class="lede-para">Hold a pen and tip it. Nothing on the page changes, but everything about how the next stroke lands does. Tilt is the pen's posture, and an IMU can read it with surprising precision, if it handles one tricky problem.</p>
+
+      <h2 id="s1">Gravity as a built-in reference</h2>
+      <p>An accelerometer measures acceleration on three axes, and gravity is a constant downward acceleration of about 9.8 m/s². When the pen is still, the only thing it feels is that downward pull. If the pen is perfectly upright, gravity sits entirely on one axis; as you tilt the pen, the pull <strong>redistributes across the axes</strong>. A little trigonometry (the arctangent of the axis readings) converts that split into two tilt angles, pitch and roll, the pen's lean forward/back and side to side.</p>
+      <p>In other words, gravity is a free, always-available reference direction. At rest, the accelerometer is an excellent tilt sensor.</p>
+
+      <h2 id="s2">The problem: motion looks like tilt</h2>
+      <p>Writing is not "at rest." As you push the pen through a stroke, that motion is also acceleration, and the accelerometer can't tell it apart from gravity. A quick flick can momentarily look exactly like a tilt. Rely on the accelerometer alone during writing and the tilt estimate jitters with every stroke.</p>
+
+      <h2 id="s3">Sensor fusion: accelerometer + gyroscope</h2>
+      <p>The gyroscope solves the short-term problem. It measures <strong>rotation rate</strong> directly and doesn't care about gravity or sliding, so over short intervals it tracks how the pen is turning very cleanly. Its weakness is the mirror image of the accelerometer's: integrate its rate over time and tiny errors accumulate into <em>drift</em>, the estimate slowly wanders.</p>
+      <p>So the two are <strong>fused</strong>. A complementary filter, or a Kalman filter, leans on the gyroscope for fast, smooth changes and on the accelerometer's gravity reference to correct the slow drift. Each covers the other's blind spot:</p>
+      <ul>
+        <li>Gyroscope, accurate over the short term, drifts over the long term.</li>
+        <li>Accelerometer, stable over the long term, noisy during motion.</li>
+        <li>Fused, a tilt estimate that is both steady and drift-free.</li>
+      </ul>
+
+      <figure class="post-fig">
+        <svg viewBox="0 0 720 210" role="img" aria-label="Gravity vector splitting across a tilted pen's axes, with gyroscope correcting drift">
+          <rect width="720" height="210" fill="#FFFFFF"/>
+          <g transform="rotate(22 250 110)">
+            <rect x="170" y="100" width="160" height="18" rx="9" fill="#222831"/>
+            <line x1="250" y1="60" x2="250" y2="160" stroke="#00ADB5" stroke-width="2" stroke-dasharray="4 4"/>
+          </g>
+          <line x1="250" y1="60" x2="250" y2="175" stroke="#C0080B" stroke-width="3"/>
+          <polygon points="244,170 256,170 250,184" fill="#C0080B"/>
+          <text x="262" y="172" font-family="Hanken Grotesk,sans-serif" font-size="12" font-weight="700" fill="#C0080B">gravity</text>
+          <text x="330" y="78" font-family="Hanken Grotesk,sans-serif" font-size="12" font-weight="700" fill="#048A91">pen axis</text>
+          <path d="M250 110 a40 40 0 0 1 16 -30" fill="none" stroke="#565D66" stroke-width="2"/>
+          <text x="300" y="120" font-family="Hanken Grotesk,sans-serif" font-size="13" font-weight="700" fill="#565D66">tilt = angle between</text>
+          <g transform="translate(470,40)">
+            <text x="0" y="14" font-family="Hanken Grotesk,sans-serif" font-size="12" font-weight="700" fill="#9A7B25">gyro: smooth, drifts →</text>
+            <text x="0" y="48" font-family="Hanken Grotesk,sans-serif" font-size="12" font-weight="700" fill="#048A91">accel: steady, noisy →</text>
+            <text x="0" y="92" font-family="Hanken Grotesk,sans-serif" font-size="13" font-weight="800" fill="#222831">fused = both, clean</text>
+          </g>
+        </svg>
+        <figcaption>Tilt is the angle between the pen's axis and gravity. The accelerometer reads it at rest; the gyroscope keeps it steady during motion; fusion gives the best of both.</figcaption>
+      </figure>
+
+      <h2 id="s4">Tilt and Indic letterforms</h2>
+      <p>Why measure tilt so carefully? Because the angle you hold the pen at shapes the slant and consistency of your writing. A steady tilt produces an even, confident slant; a tilt that wanders shows up as letters leaning in different directions, one of the twenty factors the analyser scores.</p>
+      <p>This is acutely true for <strong>Indic scripts</strong>. The aksharas of Telugu and Kannada are built from rounded loops; Malayalam flows in generous curves; Tamil balances loops and straights; Devanagari (Hindi) hangs its letters from a continuous top line, the <em>shirorekha</em>. Each of these demands a consistent pen angle to keep curves smooth and that head-line straight. A small, steady tilt reads as graceful; an unsteady one makes the same loops look shaky. Measuring tilt precisely lets Vahini tell the difference, and coach toward a grip that holds the angle.</p>
+
+      <div class="post-key">
+        <h4>Key takeaways</h4>
+        <ul>
+          <li>An accelerometer reads tilt from how gravity splits across its axes, when the pen is still.</li>
+          <li>During writing, motion masquerades as tilt and corrupts that reading.</li>
+          <li>Fusing the gyroscope (smooth but drifting) with the accelerometer (steady but noisy) yields a clean tilt estimate.</li>
+          <li>A consistent tilt underpins even slant, vital for the curves and head-line of Indic scripts.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  </article>
+
+  <section class="block block--alt" data-screen-label="Read next">
+    <div class="wrap">
+      <div class="block__head reveal" style="margin-bottom:6px;"><p class="eyebrow">Read next</p></div>
+      <div class="post-next" id="readNext"></div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+<script src="blog-data.js"></script>
+<script src="../js/site.js"></script>
+<script>
+(function(){
+  var SLUG="reading-tilt";
+  if(!window.VahiniPosts) return;
+  var CAT={research:"Research",technology:"Technology",health:"Health",signals:"Signals",explainer:"Guide"};
+  var arrow='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+  var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+  var next=window.VahiniPosts.filter(function(p){return p.slug!==SLUG;}).slice(0,3);
+  document.getElementById('readNext').innerHTML=next.map(function(p){
+    return '<a class="bpost reveal" href="'+p.url+'">'+
+      '<div class="bpost__art">'+window.VahiniPostArt(p,0)+'</div>'+
+      '<div class="bpost__body"><div class="bpost__meta"><span class="btag btag--'+p.cat+'">'+CAT[p.cat]+'</span><span class="bpost__date">'+esc(p.date)+'</span></div>'+
+      '<h3>'+esc(p.title)+'</h3><p>'+esc(p.excerpt)+'</p><span class="bpost__more">Read '+arrow+'</span></div></a>';
+  }).join('');
+  if(window.VahiniRevealScan) window.VahiniRevealScan();
+})();
+</script>
+</body>
+</html>

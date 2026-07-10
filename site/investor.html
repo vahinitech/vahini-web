@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html>
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. All rights reserved. -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>Investor Book · Vahini Technologies</title>
+<meta name="description" content="The Vahini investor field notebook: the handwriting-motion dataset thesis, live demo, patents, economics and the ask, as a page-turning book.">
+<script src="js/theme.config.js"></script>
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/site.css">
+<!-- self-hosted React: support.js skips its unpkg fallback when window.React
+     already exists, so the book keeps working without third-party CDNs -->
+<script src="js/vendor/react.production.min.js"></script>
+<script src="js/vendor/react-dom.production.min.js"></script>
+<!-- self-hosted Babel standalone: same deal -- support.js skips its unpkg
+     fallback when window.Babel already exists -->
+<script src="js/vendor/babel.min.js"></script>
+<script src="js/support.js"></script>
+</head>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Shantell+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Patrick+Hand&family=Oswald:wght@300;500;600;700&family=Ramaraja&family=Hind+Guntur:wght@400;600&family=Noto+Sans+Devanagari:wght@600&family=Noto+Sans+Telugu:wght@600&family=Noto+Sans+Kannada:wght@600&family=Noto+Sans+Tamil:wght@600&family=Noto+Sans+Malayalam:wght@600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/ev/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/ev/favicon-16x16.png">
+<link rel="apple-touch-icon" href="assets/ev/apple-touch-icon.png">
+<style>
+  /* the book lives inside a normal, scrollable subpage; support.js appends
+     "#dc-root{height:100%}" at boot, so the auto override needs !important */
+  #dc-root, #dc-root > .sc-host{height:auto !important;}
+  *{box-sizing:border-box;-webkit-font-smoothing:antialiased;}
+  /* ---- notebook palette, driven by the site theme (css/theme.css) ----
+     Every colour in the book resolves through these tokens, so switching
+     ACTIVE_THEME in theme.config.js recolours the whole notebook too. */
+  .ibk-stage{
+    --bk-ink:        var(--accent-ink);   /* fountain-pen ink: headings, links */
+    --bk-red:        var(--hot);          /* crimson margin notes & highlights */
+    --bk-teal:       var(--accent-deep);  /* teal annotations                  */
+    --bk-text:       var(--ink);          /* body text on paper                */
+    --bk-text-2:     var(--elephant);
+    --bk-text-3:     var(--muted);
+    --bk-hint:       var(--hint);         /* page numbers, faint labels        */
+    --bk-paper:      var(--ivory-2);      /* the paper itself                  */
+    --bk-paper-dot:  var(--rule-2);       /* dotted-grid texture               */
+    --bk-paper-line: var(--surface-2);    /* card borders on paper             */
+    /* the book's binding: bound in the theme's accent colour */
+    --bk-cover-hi: color-mix(in srgb, var(--accent-ink) 62%, var(--accent));
+    --bk-cover:    var(--accent-ink);
+    --bk-cover-lo: color-mix(in srgb, var(--accent-ink) 60%, #000);
+  }
+  .ibk-stage{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    /* light desk, same ivory family as every other page of the site */
+    background:radial-gradient(120% 100% at 50% 0%, var(--ivory-2) 0%, var(--ivory) 55%, var(--surface-2) 100%);
+    font-family:'Shantell Sans',cursive;padding:26px 0 16px;overflow:hidden;min-height:calc(100vh - 76px);}
+  .ibk-stage:fullscreen{min-height:100vh;}
+  /* flipbook toolbar (FlippingBook-style controls, unscaled) */
+  .ibk-bar{position:relative;z-index:45;display:flex;align-items:center;gap:10px;margin-top:16px;
+    background:color-mix(in srgb, var(--surface) 90%, transparent);border:1px solid var(--rule-2);border-radius:999px;
+    padding:7px 14px;box-shadow:0 10px 26px rgba(20,26,34,.16);backdrop-filter:blur(4px);}
+  .ibk-bar button{appearance:none;border:0;background:transparent;color:var(--ink);font-family:'Patrick Hand',cursive;
+    font-size:16px;line-height:1;padding:7px 11px;border-radius:999px;cursor:pointer;transition:background .15s,color .15s;}
+  .ibk-bar button:hover{background:var(--accent-soft);color:var(--accent-ink);}
+  .ibk-bar .ibk-pg{font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:1px;color:var(--muted);min-width:74px;text-align:center;}
+  .ibk-bar .ibk-sep{width:1px;height:20px;background:var(--rule-2);}
+  @media (max-width:520px){ .ibk-bar{gap:4px;padding:6px 8px;} .ibk-bar .ibk-pg{min-width:58px;} .ibk-bar button{padding:7px 8px;} }
+  @keyframes flipNext{from{transform:rotateY(0deg)}to{transform:rotateY(-178deg)}}
+  @keyframes flipPrev{from{transform:rotateY(0deg)}to{transform:rotateY(178deg)}}
+  @keyframes leafShade{from{opacity:.05}50%{opacity:.45}to{opacity:.05}}
+  @keyframes drift{0%{transform:translateX(0);opacity:0}15%{opacity:1}85%{opacity:1}100%{transform:translateX(120px);opacity:0}}
+  @keyframes pulse{0%,100%{transform:scale(1);opacity:.55}50%{transform:scale(1.35);opacity:0}}
+  @keyframes nib{0%,100%{transform:translate(0,0) rotate(-32deg)}25%{transform:translate(6px,-5px) rotate(-32deg)}50%{transform:translate(13px,2px) rotate(-32deg)}75%{transform:translate(6px,8px) rotate(-32deg)}}
+  @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+  @keyframes floaty{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(-7px) rotate(var(--r,0deg))}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes glow{0%,100%{opacity:.3}50%{opacity:.72}}
+  @keyframes march{to{stroke-dashoffset:-24px}}
+  .spd{animation:fadeUp .5s ease both;}
+  .corner{cursor:pointer;}
+  .corner:hover{filter:brightness(.96);}
+  .lnk{cursor:pointer;transition:color .15s,transform .15s;}
+  .lnk:hover{color:var(--bk-red) !important;transform:translateX(3px);}
+  /* ribbon bookmarks: short tabs tucked onto the book's top edge, like a
+     real ribbon marker peeking out. Label reads top-to-bottom but is
+     clipped to a short peek by default (overflow:hidden), then the ribbon
+     pulls out taller on hover/focus to reveal the rest of the word --
+     exactly how you'd tug a real bookmark ribbon. box-shadow would be
+     clipped by the forked tail, so the shadow is a drop-shadow filter. */
+  .ibk-rib{writing-mode:vertical-rl;width:30px;height:var(--h0,42px);padding:9px 0 14px;text-align:start;
+    display:flex;align-items:center;overflow:hidden;font-size:12px;letter-spacing:2px;white-space:nowrap;line-height:1;
+    clip-path:polygon(0 0, 100% 0, 100% calc(100% - 1px), 50% calc(100% - 9px), 0 calc(100% - 1px));
+    filter:drop-shadow(0 4px 5px rgba(20,26,34,.26));
+    transition:height .22s cubic-bezier(.2,.8,.3,1.2), filter .18s ease, color .15s;}
+  .ibk-tabs .lnk:hover, .ibk-tabs .lnk:focus-visible{
+    height:var(--h1,120px); filter:drop-shadow(0 9px 11px rgba(20,26,34,.34));
+    color:var(--tabc,#fff) !important; /* hovering must not repaint the label crimson (red-on-red is invisible) */
+  }
+  ::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#cdbfa0;border-radius:8px}
+</style>
+</helmet>
+
+<div class="ibk-stage" ref="{{ stageRef }}">
+
+  <svg width="0" height="0" style="position:absolute;pointer-events:none;"><defs><filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.014" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.6"/></filter></defs></svg>
+  <div style="position:absolute;inset:0;background-image:radial-gradient(circle at 50% 42%, transparent 55%, rgba(34,40,49,.07) 100%);pointer-events:none;"></div>
+
+  <!-- the frame reserves real layout height for the scaled book, so the
+       toolbar below never overlaps it at any scale -->
+  <div style="height:{{ frameH }}px;width:100%;display:flex;justify-content:center;overflow:visible;">
+  <div style="transform:scale({{ scale }});transform-origin:top center;transition:transform .25s ease;flex:none;position:relative;padding-top:38px;">
+
+    <!-- ribbon bookmarks: short by default (a real peek at the top edge,
+         like an actual ribbon marker), pull out taller on hover/focus to
+         reveal the full label -- see .ibk-rib. -->
+    <div class="ibk-tabs" style="position:absolute;top:0;right:150px;z-index:40;display:flex;align-items:flex-start;gap:9px;font-family:'Patrick Hand',cursive;">
+      <div onClick="{{ goCover }}" class="lnk ibk-rib" style="--tabc:#3a2a06;--h0:34px;--h1:96px;background:linear-gradient(180deg,#eab143,#e2a32b);color:#3a2a06;">COVER</div>
+      <div onClick="{{ goIndex }}" class="lnk ibk-rib" style="--h0:40px;--h1:124px;background:linear-gradient(180deg,color-mix(in srgb, var(--bk-red) 88%, #fff),var(--bk-red));color:#fff;">CONTENTS</div>
+      <div onClick="{{ goMoat }}" class="lnk ibk-rib" title="the dataset moat" style="--h0:46px;--h1:152px;background:linear-gradient(180deg,color-mix(in srgb, var(--bk-ink) 82%, #fff),var(--bk-ink));color:#fff;">THE PROBLEM</div>
+    </div>
+
+    <!-- the book. On narrow screens the outer viewport shows a single page
+         (half the spread) and slides between halves, flipbook-reader style. -->
+    <div style="position:relative;width:{{ viewW }}px;height:730px;overflow:hidden;border-radius:8px;filter:drop-shadow(0 26px 44px rgba(20,26,34,.30)) drop-shadow(0 4px 10px rgba(20,26,34,.14));">
+    <div style="position:relative;width:1120px;height:730px;perspective:2600px;transform:translateX({{ innerShift }}px);transition:transform .4s ease;">
+
+      <!-- shared spread frame -->
+      <div style="position:absolute;inset:0;display:flex;background:var(--surface-2);border-radius:8px;">
+
+        <!-- ============ LEFT + RIGHT pages, one spread visible ============ -->
+
+        <!-- COVER -->
+        <sc-if value="{{ isCover }}" hint-placeholder-val="{{ true }}">
+          <div class="spd" style="display:flex;width:100%;height:100%;">
+            <div style="flex:1;height:100%;background:radial-gradient(120% 120% at 30% 18%,var(--bk-cover-hi) 0%,var(--bk-cover) 55%,var(--bk-cover-lo) 100%);border-radius:8px 0 0 8px;border-right:2px solid color-mix(in srgb, var(--bk-cover-lo) 70%, #000);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#ecd49a;position:relative;">
+              <div style="position:absolute;inset:14px;border:1.5px dashed rgba(236,212,154,.42);border-radius:6px;"></div>
+              <div style="position:absolute;inset:0;pointer-events:none;filter:url(#rough);">
+                <svg style="position:absolute;top:30px;left:34px;" width="30" height="30" viewBox="0 0 30 30"><path d="M22 5 a11 11 0 1 0 3 19 a8.5 8.5 0 1 1 -3 -19 z" fill="none" stroke="rgba(236,212,154,.6)" stroke-width="2"/></svg>
+                <svg style="position:absolute;top:62px;left:80px;" width="20" height="20" viewBox="-10 -10 20 20"><path d="M0,-8 C1,-2 2,-1 8,0 C2,1 1,2 0,8 C-1,2 -2,1 -8,0 C-2,-1 -1,-2 0,-8 Z" fill="none" stroke="rgba(236,212,154,.6)" stroke-width="1.6"/></svg>
+                <svg style="position:absolute;bottom:70px;right:40px;" width="24" height="24" viewBox="-10 -10 20 20"><path d="M0,-8 C1,-2 2,-1 8,0 C2,1 1,2 0,8 C-1,2 -2,1 -8,0 C-2,-1 -1,-2 0,-8 Z" fill="none" stroke="rgba(236,212,154,.55)" stroke-width="1.6"/></svg>
+                <svg style="position:absolute;bottom:64px;left:44px;" width="30" height="36" viewBox="0 0 30 36"><path d="M15 3 a9 9 0 0 1 6 16 c-1 2 -1 3 -1 5 h-10 c0 -2 0 -3 -1 -5 a9 9 0 0 1 6 -16 z M11 28 h8 M12 32 h6" fill="none" stroke="rgba(236,212,154,.6)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg style="position:absolute;top:120px;right:58px;" width="16" height="16" viewBox="-8 -8 16 16"><path d="M0,-6 L1.5,-1.5 L6,0 L1.5,1.5 L0,6 L-1.5,1.5 L-6,0 L-1.5,-1.5 Z" fill="rgba(236,212,154,.5)"/></svg>
+              </div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:17px;letter-spacing:3px;color:#e3c66b;opacity:.9;">MOTION DATASET · FIELD NOTEBOOK</div>
+              <div style="font-family:'Caveat',cursive;font-size:30px;margin-top:10px;color:#f1d894;opacity:.95;">no. 584433</div>
+              <div style="margin-top:26px;position:relative;width:156px;height:156px;filter:drop-shadow(0 11px 15px rgba(0,0,0,.55));">
+                <svg width="156" height="156" viewBox="0 0 160 160" style="position:absolute;inset:0;overflow:visible;display:block;">
+                  <defs>
+                    <radialGradient id="waxg" cx="38%" cy="32%" r="72%"><stop offset="0%" stop-color="#df5446"/><stop offset="40%" stop-color="#b1212c"/><stop offset="80%" stop-color="#7d1421"/><stop offset="100%" stop-color="#530b13"/></radialGradient>
+                    <radialGradient id="waxc" cx="42%" cy="36%" r="68%"><stop offset="0%" stop-color="#a82028"/><stop offset="72%" stop-color="#871521"/><stop offset="100%" stop-color="#5f0d16"/></radialGradient>
+                    <filter id="waxedge"><feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="2" seed="11" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="8"/></filter>
+                  </defs>
+                  <g filter="url(#waxedge)"><circle cx="80" cy="80" r="64" fill="url(#waxg)"/></g>
+                  <circle cx="80" cy="80" r="62" fill="none" stroke="#4a0a11" stroke-width="2" opacity=".5"/>
+                  <circle cx="80" cy="80" r="50" fill="url(#waxc)"/>
+                </svg>
+                <img src="assets/ev/vahini-mark.png" alt="Vahini seal" style="position:absolute;left:50%;top:50%;width:92px;height:92px;transform:translate(-50%,-50%);border-radius:50%;object-fit:cover;filter:saturate(.92) brightness(.96);">
+                <div style="position:absolute;left:50%;top:50%;width:94px;height:94px;transform:translate(-50%,-50%);border-radius:50%;box-shadow:inset 0 7px 13px rgba(58,6,11,.55),inset 0 -3px 8px rgba(255,180,170,.12);pointer-events:none;"></div>
+                <div style="position:absolute;left:50%;top:50%;width:86px;height:86px;transform:translate(-50%,-50%);border-radius:50%;border:1px dashed rgba(240,211,160,.5);pointer-events:none;"></div>
+                <div style="position:absolute;left:50%;top:50%;width:100px;height:100px;transform:translate(-50%,-50%);border-radius:50%;box-shadow:0 0 0 1.5px rgba(76,10,18,.5);pointer-events:none;"></div>
+                <div style="position:absolute;top:20px;left:28px;width:50px;height:28px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.34),transparent 70%);filter:blur(2px);pointer-events:none;"></div>
+              </div>
+              <div style="margin-top:28px;font-family:'Patrick Hand',cursive;font-size:15px;color:#e3c66b;opacity:.85;">Property of: Investors &amp; Partners</div>
+              <div style="margin-top:5px;font-family:'Patrick Hand',cursive;font-size:13px;color:#e3c66b;opacity:.72;">RTIH, Tirupati · AP Incubated 2026</div>
+            </div>
+            <div style="flex:1;height:100%;background:radial-gradient(120% 120% at 70% 28%,var(--bk-cover-hi) 0%,var(--bk-cover) 55%,var(--bk-cover-lo) 100%);border-radius:0 8px 8px 0;display:flex;flex-direction:column;justify-content:center;padding:0 60px 0 96px;color:#f3e3b4;position:relative;">
+              <div style="position:absolute;top:104px;right:34px;font-family:'Patrick Hand',cursive;font-size:14px;color:#e3c66b;opacity:.88;transform:rotate(4deg);border:1px solid rgba(231,205,134,.5);padding:5px 9px;border-radius:4px;">Hyderabad · 2025</div>
+              <div style="font-family:'Caveat',cursive;font-size:88px;line-height:.95;color:#f4e2a4;text-shadow:0 2px 0 color-mix(in srgb, var(--dark-2) 70%, #000),0 4px 12px rgba(0,0,0,.45);">Vahini<br>Technologies</div>
+              <div style="width:120px;height:3px;background:linear-gradient(90deg,#c39a3f,#f6e6a8,#c39a3f);margin:22px 0;border-radius:3px;"></div>
+              <div style="font-family:'Shantell Sans',cursive;font-size:19px;line-height:1.5;max-width:400px;color:#f1e6c4;opacity:.95;">Every AI company is built on data. We are building <b>the world's first longitudinal handwriting-motion dataset</b>, collected from real humans writing on ordinary paper. The pen is how we collect it; <b>the dataset is what we own.</b></div>
+              <div onClick="{{ goIndex }}" class="lnk" style="margin-top:40px;font-family:'Patrick Hand',cursive;font-size:22px;color:#f4d97a;display:inline-flex;align-items:center;gap:10px;width:max-content;">Open the notebook →</div>
+              <div style="position:absolute;right:30px;bottom:36px;width:124px;transform:rotate(-5deg);pointer-events:none;text-align:center;">
+                <svg width="104" height="72" viewBox="0 0 104 74" style="display:block;margin:0 auto;overflow:visible;filter:drop-shadow(0 4px 6px rgba(0,0,0,.4));">
+                  <rect x="7" y="4" width="3.4" height="66" rx="1.7" fill="#caa54a"/>
+                  <circle cx="8.7" cy="4" r="3.4" fill="#f0d89a"/>
+                  <path d="M11 11 q19 -8 38 0 t38 0 l0 16 q-19 8 -38 0 t-38 0 Z" fill="#ff9933"/>
+                  <path d="M11 27 q19 -8 38 0 t38 0 l0 16 q-19 8 -38 0 t-38 0 Z" fill="#fbf8f1"/>
+                  <path d="M11 43 q19 -8 38 0 t38 0 l0 16 q-19 8 -38 0 t-38 0 Z" fill="#138808"/>
+                  <path d="M11 11 q19 -8 38 0 t38 0 l0 48 q-19 8 -38 0 t-38 0 Z" fill="none" stroke="rgba(60,20,8,.25)" stroke-width="1"/>
+                  <g stroke="#0a3d91" stroke-width="0.8" stroke-linecap="round">
+                    <circle cx="49" cy="35" r="7" fill="none" stroke-width="1.2"/>
+                    <circle cx="49" cy="35" r="1.5" fill="#0a3d91" stroke="none"/>
+                    <line x1="42" y1="35" x2="56" y2="35"/>
+                    <line x1="42" y1="35" x2="56" y2="35" transform="rotate(22.5 49 35)"/>
+                    <line x1="42" y1="35" x2="56" y2="35" transform="rotate(45 49 35)"/>
+                    <line x1="42" y1="35" x2="56" y2="35" transform="rotate(67.5 49 35)"/>
+                    <line x1="42" y1="35" x2="56" y2="35" transform="rotate(90 49 35)"/>
+                    <line x1="42" y1="35" x2="56" y2="35" transform="rotate(112.5 49 35)"/>
+                    <line x1="42" y1="35" x2="56" y2="35" transform="rotate(135 49 35)"/>
+                    <line x1="42" y1="35" x2="56" y2="35" transform="rotate(157.5 49 35)"/>
+                  </g>
+                </svg>
+                <div style="font-family:'Oswald',sans-serif;font-weight:600;font-size:15px;letter-spacing:2.5px;color:#f0d89a;margin-top:6px;line-height:1;">MADE IN INDIA</div>
+                <div style="font-family:'Oswald',sans-serif;font-weight:300;font-size:8px;letter-spacing:3.5px;color:#e3c66b;opacity:.8;margin-top:3px;">INNOVATE</div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- INDEX -->
+        <sc-if value="{{ isIndex }}" hint-placeholder-val="{{ false }}">
+          <div class="spd" style="display:flex;width:100%;height:100%;position:relative;">
+            <div style="flex:1;height:100%;padding:56px 44px 40px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
+              <div style="position:absolute;top:0;bottom:0;left:56px;width:0;background:transparent;"></div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">PAGE i</div>
+              <div style="font-family:'Caveat',cursive;font-size:60px;color:var(--bk-ink);line-height:1;margin:2px 0 18px;">Contents</div>
+              <sc-for list="{{ navLeft }}" as="n" hint-placeholder-count="6">
+                <div onClick="{{ n.onGo }}" class="lnk" style="display:flex;align-items:baseline;gap:10px;font-family:'Shantell Sans',cursive;font-size:16px;color:var(--bk-text);line-height:29px;">
+                  <span style="font-family:'Patrick Hand',cursive;color:var(--bk-red);width:26px;">{{ n.num }}</span>
+                  <span>{{ n.label }}</span>
+                  <span style="flex:1;border-bottom:2px dotted #c3b89a;transform:translateY(-5px);"></span>
+                </div>
+              </sc-for>
+
+              <!-- crayon / colour-pencil patriotic doodle -->
+              <div style="position:absolute;left:42px;bottom:18px;width:300px;transform:rotate(-3deg) scale(.58);transform-origin:bottom left;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:0;">
+                <svg viewBox="0 0 360 214" style="width:224px;height:auto;overflow:visible;">
+                  <defs>
+                    <filter id="crayonEdge" x="-6%" y="-6%" width="112%" height="112%"><feTurbulence type="fractalNoise" baseFrequency="0.024" numOctaves="3" seed="9" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3.4"/></filter>
+                    <clipPath id="cS"><rect x="66" y="22" width="238" height="45"/></clipPath>
+                    <clipPath id="cW"><rect x="66" y="67" width="238" height="45"/></clipPath>
+                    <clipPath id="cG"><rect x="66" y="112" width="238" height="45"/></clipPath>
+                  </defs>
+                  <g filter="url(#crayonEdge)">
+                    <rect x="58" y="12" width="6" height="194" rx="3" fill="#9c6b35"/>
+                    <circle cx="61" cy="12" r="6" fill="#e4b34a"/>
+                    <rect x="66" y="22" width="238" height="45" fill="#ff9933" opacity="0.9"/>
+                    <rect x="66" y="67" width="238" height="45" fill="#fdfdfb"/>
+                    <rect x="66" y="112" width="238" height="45" fill="#138808" opacity="0.9"/>
+                    <g clip-path="url(#cS)"><path d="M74,62 L90,28 L106,62 L122,28 L138,62 L154,28 L170,62 L186,28 L202,62 L218,28 L234,62 L250,28 L266,62 L282,28 L298,62" fill="none" stroke="#e0761b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.32"/></g>
+                    <g clip-path="url(#cW)"><path d="M74,108 L90,72 L106,108 L122,72 L138,108 L154,72 L170,108 L186,72 L202,108 L218,72 L234,108 L250,72 L266,108 L282,72 L298,108" fill="none" stroke="#d6dde1" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.65"/></g>
+                    <g clip-path="url(#cG)"><path d="M74,152 L90,118 L106,152 L122,118 L138,152 L154,118 L170,152 L186,118 L202,152 L218,118 L234,152 L250,118 L266,152 L282,118 L298,152" fill="none" stroke="#0b6b05" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.34"/></g>
+                    <rect x="66" y="22" width="238" height="135" fill="none" stroke="#2c2c2c" stroke-width="2.4"/>
+                    <line x1="66" y1="67" x2="304" y2="67" stroke="#2c2c2c" stroke-width="1.4" opacity="0.45"/>
+                    <line x1="66" y1="112" x2="304" y2="112" stroke="#2c2c2c" stroke-width="1.4" opacity="0.45"/>
+                    <g stroke="#0a3d91" stroke-linecap="round" fill="none">
+                      <circle cx="185" cy="90" r="34" stroke-width="2.6"/>
+                      <circle cx="185" cy="90" r="4" fill="#0a3d91" stroke="none"/>
+                      <g stroke-width="1.7">
+                        <line x1="151" y1="90" x2="219" y2="90"/>
+                        <line x1="151" y1="90" x2="219" y2="90" transform="rotate(15 185 90)"/>
+                        <line x1="151" y1="90" x2="219" y2="90" transform="rotate(30 185 90)"/>
+                        <line x1="151" y1="90" x2="219" y2="90" transform="rotate(45 185 90)"/>
+                        <line x1="151" y1="90" x2="219" y2="90" transform="rotate(60 185 90)"/>
+                        <line x1="151" y1="90" x2="219" y2="90" transform="rotate(75 185 90)"/>
+                        <line x1="151" y1="90" x2="219" y2="90" transform="rotate(90 185 90)"/>
+                        <line x1="151" y1="90" x2="219" y2="90" transform="rotate(105 185 90)"/>
+                        <line x1="151" y1="90" x2="219" y2="90" transform="rotate(120 185 90)"/>
+                        <line x1="151" y1="90" x2="219" y2="90" transform="rotate(135 185 90)"/>
+                        <line x1="151" y1="90" x2="219" y2="90" transform="rotate(150 185 90)"/>
+                        <line x1="151" y1="90" x2="219" y2="90" transform="rotate(165 185 90)"/>
+                      </g>
+                    </g>
+                  </g>
+                </svg>
+                <div style="display:flex;flex-direction:column;align-items:center;margin-top:16px;">
+                  <div style="font-family:'Ramaraja',serif;font-style:italic;font-size:37px;line-height:.9;color:#138808;text-align:center;transform:rotate(-3deg) skewX(-10deg);text-shadow:0 1px 0 rgba(0,0,0,.08);">వందే మాతరం</div>
+                  <svg viewBox="0 0 200 26" style="width:172px;height:auto;margin-top:-1px;filter:url(#rough);overflow:visible;"><path d="M8 16 C50 6 80 22 120 12 C150 5 176 14 192 8 C184 12 176 16 168 14" fill="none" stroke="#138808" stroke-width="2.4" stroke-linecap="round"/></svg>
+                </div>
+                <svg viewBox="0 0 220 220" style="width:114px;height:auto;overflow:visible;filter:url(#rough);margin-top:14px;">
+                  <g stroke="#e2a32b" stroke-width="2.2" stroke-linecap="round" fill="none">
+                    <path d="M110 26 V14"/>
+                    <path d="M74 36 L66 27"/>
+                    <path d="M146 36 L154 27"/>
+                    <path d="M44 72 L33 68"/>
+                    <path d="M176 72 L187 68"/>
+                  </g>
+                  <g fill="#fff7d6" stroke="#e2a32b" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
+                    <path d="M70 206 Q66 184 110 182 Q154 184 150 206 Z"/>
+                    <rect x="56" y="154" width="108" height="26" rx="5"/>
+                    <circle cx="78" cy="108" r="31"/>
+                    <circle cx="142" cy="108" r="31"/>
+                    <circle cx="110" cy="94" r="37"/>
+                    <circle cx="110" cy="99" r="20" fill="#fffaf0"/>
+                    <path d="M90 72 q-5 -11 6 -11 q5 4 3 13 Z"/>
+                    <path d="M130 72 q5 -11 -6 -11 q-5 4 -3 13 Z"/>
+                    <path d="M50 108 q-11 1 -10 10 q8 4 12 -2 Z" fill="#fffaf0"/>
+                    <path d="M170 108 q11 1 10 10 q-8 4 -12 -2 Z" fill="#fffaf0"/>
+                  </g>
+                  <g fill="none" stroke="#b07d12" stroke-width="1.5" stroke-linecap="round">
+                    <path d="M84 204 q5 -15 0 -21 M97 206 q3 -17 0 -23 M110 206 q0 -19 0 -24 M123 206 q-3 -17 0 -23 M136 204 q-5 -15 0 -21"/>
+                  </g>
+                  <g fill="#b07d12" stroke="none">
+                    <circle cx="103" cy="97" r="2.4"/><circle cx="117" cy="97" r="2.4"/>
+                    <path d="M110 103 l-4 5 h8 z"/>
+                    <circle cx="64" cy="101" r="2"/><circle cx="156" cy="101" r="2"/>
+                  </g>
+                  <g fill="none" stroke="#b07d12" stroke-width="1.6" stroke-linecap="round">
+                    <path d="M110 108 v5 M110 113 q-5 3 -9 1 M110 113 q5 3 9 1"/>
+                  </g>
+                  <g fill="#fff7d6" stroke="#e2a32b" stroke-width="1.8" stroke-linejoin="round">
+                    <rect x="98" y="146" width="11" height="10" rx="3"/>
+                    <rect x="111" y="146" width="11" height="10" rx="3"/>
+                  </g>
+                  <g fill="none" stroke="#b07d12" stroke-width="1.4">
+                    <circle cx="110" cy="167" r="9" fill="#fffaf0"/>
+                    <circle cx="110" cy="167" r="1.4" fill="#b07d12" stroke="none"/>
+                    <g stroke-width="1">
+                      <line x1="101" y1="167" x2="119" y2="167"/>
+                      <line x1="101" y1="167" x2="119" y2="167" transform="rotate(30 110 167)"/>
+                      <line x1="101" y1="167" x2="119" y2="167" transform="rotate(60 110 167)"/>
+                      <line x1="101" y1="167" x2="119" y2="167" transform="rotate(90 110 167)"/>
+                      <line x1="101" y1="167" x2="119" y2="167" transform="rotate(120 110 167)"/>
+                      <line x1="101" y1="167" x2="119" y2="167" transform="rotate(150 110 167)"/>
+                    </g>
+                  </g>
+                  <text x="110" y="198" text-anchor="middle" font-family="'Patrick Hand',cursive" font-size="11" letter-spacing="1" fill="#b07d12">सत्यमेव जयते</text>
+                </svg>
+              </div>
+            </div>
+            <div style="flex:1;height:100%;padding:56px 64px 40px 64px;border-radius:0 8px 8px 0;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
+              <div style="position:absolute;top:0;bottom:0;left:46px;width:0;background:transparent;"></div>
+              <sc-for list="{{ navRight }}" as="n" hint-placeholder-count="7">
+                <div onClick="{{ n.onGo }}" class="lnk" style="display:flex;align-items:baseline;gap:10px;font-family:'Shantell Sans',cursive;font-size:16px;color:var(--bk-text);line-height:29px;padding-left:20px;">
+                  <span style="font-family:'Patrick Hand',cursive;color:var(--bk-red);width:26px;">{{ n.num }}</span>
+                  <span>{{ n.label }}</span>
+                  <span style="flex:1;border-bottom:2px dotted #c3b89a;transform:translateY(-5px);"></span>
+                </div>
+              </sc-for>
+              <!-- dataset moat highlight -->
+              <div onClick="{{ goMoat }}" class="lnk" style="position:absolute;left:58px;bottom:188px;width:230px;background:var(--dev-bg);border:1px solid color-mix(in srgb, var(--dev) 35%, var(--surface));border-radius:7px;padding:11px 14px 12px;transform:rotate(-1.5deg);box-shadow:2px 4px 0 rgba(0,0,0,.07);">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
+                  <svg width="24" height="24" viewBox="0 0 26 26" style="filter:url(#rough);flex:none;"><rect x="5" y="11" width="16" height="12" rx="2" fill="none" stroke="#b07d12" stroke-width="2"/><path d="M8 11 V8 a5 5 0 0 1 10 0 V11" fill="none" stroke="#b07d12" stroke-width="2"/><circle cx="13" cy="16.5" r="1.8" fill="#b07d12"/><path d="M13 18 v2.5" stroke="#b07d12" stroke-width="2" stroke-linecap="round"/></svg>
+                  <div style="font-family:'Patrick Hand',cursive;font-size:13px;letter-spacing:1.5px;color:var(--dev);line-height:1.1;">THE PROBLEM</div>
+                </div>
+                <div style="font-family:'Shantell Sans',cursive;font-size:14.5px;line-height:1.45;color:#6b5212;">India's first handwriting-<b style="color:var(--bk-red);">motion</b> dataset, a first in the country's history.</div>
+                <div style="font-family:'Patrick Hand',cursive;font-size:13px;color:var(--bk-ink);margin-top:6px;">see what it solves →</div>
+              </div>
+              <div style="position:absolute;bottom:38px;right:54px;font-family:'Caveat',cursive;font-size:22px;color:var(--bk-teal);transform:rotate(-6deg);">one signal → many products ✎</div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- PROBLEM -->
+        <sc-if value="{{ isProblem }}" hint-placeholder-val="{{ false }}">
+          <div class="spd" style="display:flex;width:100%;height:100%;">
+            <div style="flex:1;height:100%;padding:56px 44px 40px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
+              <div style="position:absolute;top:0;bottom:0;left:56px;width:0;background:transparent;"></div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 01 · THE PROBLEM</div>
+              <div style="font-family:'Caveat',cursive;font-size:54px;color:var(--bk-ink);line-height:1;margin:2px 0 4px;">The data nobody is building</div>
+              <svg viewBox="0 0 230 14" style="display:block;width:240px;height:14px;margin:0 0 16px;filter:url(#rough);"><path d="M4 8 C60 2 110 12 150 6 C180 2 205 8 226 5" fill="none" stroke="#e2a32b" stroke-width="3" stroke-linecap="round"/></svg>
+              <div style="display:flex;flex-direction:column;gap:17px;">
+                <div style="display:flex;gap:13px;align-items:flex-start;">
+                  <div style="flex:none;width:52px;height:52px;border-radius:14px;background:var(--hot-soft);border:1.5px solid color-mix(in srgb, var(--bk-red) 28%, var(--surface));display:flex;align-items:center;justify-content:center;"><svg width="30" height="30" viewBox="0 0 32 32" style="filter:url(#rough);"><g fill="none" stroke="#c0392b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="16" cy="9" rx="9" ry="3.3"/><path d="M7 9 V23 c0 1.8 4 3.3 9 3.3 s9 -1.5 9 -3.3 V9"/><path d="M7 16 c0 1.8 4 3.3 9 3.3 s9 -1.5 9 -3.3"/></g><path d="M6 27 L26 6" stroke="#c0392b" stroke-width="2.4" stroke-linecap="round"/></svg></div>
+                  <div style="flex:1;padding-top:1px;"><div style="font-family:'Patrick Hand',cursive;font-size:13px;letter-spacing:2px;color:var(--bk-red);">THE HUMAN COST</div><div style="font-family:'Shantell Sans',cursive;font-size:16.5px;line-height:1.35;color:var(--bk-text);margin-top:1px;">Children spend years failing to form letters. Teachers grade by eye. Therapists track recovery on gut feel. Handwriting struggle is everywhere, and invisible to software.</div></div>
+                </div>
+                <div style="display:flex;gap:13px;align-items:flex-start;">
+                  <div style="flex:none;width:52px;height:52px;border-radius:14px;background:var(--accent-soft);border:1.5px solid color-mix(in srgb, var(--bk-ink) 26%, var(--surface));display:flex;align-items:center;justify-content:center;"><svg width="30" height="30" viewBox="0 0 32 32" style="filter:url(#rough);"><g fill="none" stroke="#27408f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="16" cy="10" rx="9" ry="3.3"/><path d="M7 10 V23 c0 1.8 4 3.3 9 3.3 s9 -1.5 9 -3.3 V10"/><path d="M16 25 V13 M11 18 L16 12 L21 18"/></g></svg></div>
+                  <div style="flex:1;padding-top:1px;"><div style="font-family:'Patrick Hand',cursive;font-size:13px;letter-spacing:2px;color:var(--bk-ink);">THE ROOT CAUSE</div><div style="font-family:'Shantell Sans',cursive;font-size:16.5px;line-height:1.35;color:var(--bk-text);margin-top:1px;">Machines can read a finished page, but none can see how the hand <i>moved</i> to make it. The data linking movement, feedback and improvement over time simply does not exist.</div></div>
+                </div>
+                <div style="display:flex;gap:13px;align-items:flex-start;">
+                  <div style="flex:none;width:52px;height:52px;border-radius:14px;background:var(--accent-soft);border:1.5px solid color-mix(in srgb, var(--bk-teal) 30%, var(--surface));display:flex;align-items:center;justify-content:center;"><svg width="30" height="30" viewBox="0 0 32 32" style="filter:url(#rough);"><path d="M16 3 l10 3.4 v8.6 c0 6 -4.6 9.4 -10 11.4 c-5.4 -2 -10 -5.4 -10 -11.4 v-8.6 z" fill="none" stroke="#2a8c82" stroke-width="2" stroke-linejoin="round"/><path d="M11.5 15.5 l3 3.4 l6 -7" fill="none" stroke="#2a8c82" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                  <div style="flex:1;padding-top:1px;"><div style="font-family:'Patrick Hand',cursive;font-size:13px;letter-spacing:2px;color:var(--bk-teal);">THE OPENING</div><div style="font-family:'Shantell Sans',cursive;font-size:16.5px;line-height:1.35;color:var(--bk-text);margin-top:1px;">Build that dataset and the unsolvable turns routine: objective coaching, early screening, generative handwriting. Own it now, or watch it get built without us.</div></div>
+                </div>
+              </div>
+              <div style="position:absolute;left:74px;right:44px;bottom:34px;display:flex;align-items:center;gap:16px;">
+                <div style="flex:none;display:flex;flex-direction:column;align-items:flex-start;line-height:.82;transform:rotate(-3deg);">
+                  <span style="font-family:'Caveat',cursive;font-size:62px;font-weight:700;color:var(--bk-red);">1<span style="font-size:38px;">ST</span> IN INDIA</span>
+                  <svg viewBox="0 0 260 16" style="width:230px;height:auto;margin-top:-2px;filter:url(#rough);overflow:visible;"><path d="M5 9 C70 3 130 15 180 7 C215 2 244 11 256 6" fill="none" stroke="#e2a32b" stroke-width="3.5" stroke-linecap="round"/></svg>
+                </div>
+                <div style="font-family:'Shantell Sans',cursive;font-size:15px;line-height:1.4;color:var(--bk-text-3);">No one is collecting how humans <i>learn</i> to write. We are the first.</div>
+              </div>
+            </div>
+            <div style="flex:1;height:100%;padding:34px 38px 30px;border-radius:0 8px 8px 0;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:12px;">
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;color:var(--bk-hint);">fig. 1 · why the data wins</div>
+              <div style="background:#f2f0ea;border:1.5px dashed #cdc4ad;border-radius:11px;padding:11px 14px;">
+                <div style="font-family:'Patrick Hand',cursive;font-size:12px;letter-spacing:1.5px;color:#9a9079;margin-bottom:8px;">EVERYONE TODAY</div>
+                <div style="display:flex;align-items:center;gap:9px;justify-content:center;"><div style="font-family:'Shantell Sans',cursive;font-size:14px;color:var(--bk-hint);background:#fff;border:1.5px solid #cdc4ad;border-radius:8px;padding:5px 14px;">App</div><span style="font-family:'Patrick Hand',cursive;color:#b0a585;font-size:18px;">→</span><div style="font-family:'Shantell Sans',cursive;font-size:14px;color:var(--bk-hint);background:#fff;border:1.5px solid #cdc4ad;border-radius:8px;padding:5px 14px;">Reports</div><span style="font-family:'Caveat',cursive;color:#b0a585;font-size:21px;margin-left:4px;transform:rotate(-4deg);display:inline-block;">a dead end</span></div>
+              </div>
+              <div style="border:2px solid var(--bk-ink);border-radius:13px;padding:13px 14px 15px;background:#fff;box-shadow:3px 4px 0 rgba(39,64,143,.12);">
+                <div style="font-family:'Patrick Hand',cursive;font-size:12px;letter-spacing:1.5px;color:var(--bk-ink);margin-bottom:10px;">THE PRIZE · NOBODY IS BUILDING IT</div>
+                <div style="background:var(--accent-soft);border:1.5px solid var(--bk-ink);border-radius:9px;padding:9px 12px;text-align:center;"><div style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:15px;color:var(--bk-ink);line-height:1.15;">Longitudinal motion + outcome dataset</div><div style="font-family:'Shantell Sans',cursive;font-size:11.5px;color:var(--bk-ink);opacity:.75;margin-top:1px;">movement, intervention &amp; learning, over years</div></div>
+                <div style="text-align:center;font-family:'Patrick Hand',cursive;font-size:20px;color:var(--bk-hint);line-height:1;margin:4px 0;">↓</div>
+                <div style="background:var(--accent-soft);border:1.5px solid var(--bk-teal);border-radius:9px;padding:9px 12px;text-align:center;"><div style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:15px;color:var(--accent-ink);line-height:1.15;">Handwriting foundation model</div></div>
+                <div style="text-align:center;font-family:'Patrick Hand',cursive;font-size:20px;color:var(--bk-hint);line-height:1;margin:4px 0;">↓</div>
+                <div style="background:var(--dev-bg);border:1.5px solid #e2a32b;border-radius:9px;padding:9px 12px;text-align:center;"><div style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:15px;color:var(--dev);line-height:1.15;">Education · rehab · robotics · tutors</div><div style="font-family:'Shantell Sans',cursive;font-size:11.5px;color:var(--dev);opacity:.75;margin-top:1px;">thousands of future AI apps</div></div>
+              </div>
+              <div style="font-family:'Shantell Sans',cursive;font-size:15px;color:var(--bk-text-2);text-align:center;line-height:1.5;margin-top:2px;">OpenAI didn't win with ChatGPT. It won with the <b style="color:var(--bk-ink);">dataset underneath</b> it.</div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- WHY NOW -->
+        <sc-if value="{{ isWhynow }}" hint-placeholder-val="{{ false }}">
+          <div class="spd" style="display:flex;width:100%;height:100%;">
+            <div style="flex:1;height:100%;padding:54px 42px 36px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
+              <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 02 · WHY NOW</div>
+              <div style="font-family:'Caveat',cursive;font-size:50px;color:var(--bk-ink);line-height:1;margin:2px 0 4px;">Why the window is open</div>
+              <svg viewBox="0 0 250 14" style="display:block;width:250px;height:13px;margin:0 0 16px;filter:url(#rough);"><path d="M4 8 C60 2 120 12 165 6 C200 2 228 9 246 5" fill="none" stroke="#e2a32b" stroke-width="3" stroke-linecap="round"/></svg>
+              <div style="display:flex;flex-direction:column;gap:6px;">
+                <sc-for list="{{ whyNow }}" as="w" hint-placeholder-count="4">
+                  <div style="display:flex;gap:13px;align-items:flex-start;">
+                    <div style="flex:none;width:74px;text-align:right;padding-top:3px;"><span style="font-family:'Patrick Hand',cursive;font-size:14px;color:{{ w.c }};line-height:1.1;">{{ w.y }}</span></div>
+                    <div style="flex:none;display:flex;flex-direction:column;align-items:center;padding-top:5px;"><span style="width:13px;height:13px;border-radius:50%;background:{{ w.c }};"></span><span style="width:2px;flex:1;min-height:26px;background:#dcd3bd;"></span></div>
+                    <div style="flex:1;padding-bottom:12px;"><div style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:17px;color:var(--bk-text);line-height:1.1;">{{ w.t }}</div><div style="font-family:'Shantell Sans',cursive;font-size:14px;line-height:1.38;color:var(--bk-text-3);margin-top:2px;">{{ w.d }}</div></div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="flex:1;height:100%;padding:54px 48px 36px;border-radius:0 8px 8px 0;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;">
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">fig. 2 · the data that's already claimed</div>
+              <div style="font-family:'Caveat',cursive;font-size:34px;color:var(--bk-ink);line-height:1.05;margin:2px 0 16px;">Every modality has an owner, except one</div>
+              <div style="display:flex;flex-direction:column;gap:9px;">
+                <div style="display:flex;align-items:center;gap:11px;background:#fff;border:1.5px solid var(--bk-paper-line);border-radius:9px;padding:9px 13px;opacity:.62;"><span style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:15px;color:var(--bk-text);flex:1;">Text</span><span style="font-family:'Patrick Hand',cursive;font-size:13px;color:var(--bk-hint);">CommonCrawl · Books</span></div>
+                <div style="display:flex;align-items:center;gap:11px;background:#fff;border:1.5px solid var(--bk-paper-line);border-radius:9px;padding:9px 13px;opacity:.62;"><span style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:15px;color:var(--bk-text);flex:1;">Images</span><span style="font-family:'Patrick Hand',cursive;font-size:13px;color:var(--bk-hint);">LAION · ImageNet</span></div>
+                <div style="display:flex;align-items:center;gap:11px;background:#fff;border:1.5px solid var(--bk-paper-line);border-radius:9px;padding:9px 13px;opacity:.62;"><span style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:15px;color:var(--bk-text);flex:1;">Voice</span><span style="font-family:'Patrick Hand',cursive;font-size:13px;color:var(--bk-hint);">LibriSpeech · podcasts</span></div>
+                <div style="display:flex;align-items:center;gap:11px;background:var(--accent-soft);border:2px solid var(--bk-ink);border-radius:9px;padding:11px 13px;box-shadow:3px 4px 0 rgba(39,64,143,.12);"><span style="font-family:'Shantell Sans',cursive;font-weight:700;font-size:16px;color:var(--bk-ink);flex:1;">Handwriting motion</span><span style="font-family:'Caveat',cursive;font-size:24px;color:var(--bk-red);line-height:1;">unclaimed</span></div>
+              </div>
+              <div style="margin-top:18px;font-family:'Shantell Sans',cursive;font-size:15px;color:var(--bk-text-2);text-align:center;line-height:1.5;">There is no scrape for how a hand moves on paper. <b style="color:var(--bk-ink);">It has to be collected, by us, now.</b></div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- BEYOND THE PEN -->
+        <sc-if value="{{ isBeyond }}" hint-placeholder-val="{{ false }}">
+          <div class="spd" style="display:flex;width:100%;height:100%;">
+            <div style="flex:1;height:100%;padding:54px 42px 36px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
+              <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 03 · THE MOAT</div>
+              <div style="font-family:'Caveat',cursive;font-size:47px;color:var(--bk-ink);line-height:1;margin:2px 0 4px;">Why no one can copy it</div>
+              <svg viewBox="0 0 250 14" style="display:block;width:250px;height:13px;margin:0 0 13px;filter:url(#rough);"><path d="M4 8 C60 2 120 12 165 6 C200 2 228 9 246 5" fill="none" stroke="#e2a32b" stroke-width="3" stroke-linecap="round"/></svg>
+              <div style="font-family:'Shantell Sans',cursive;font-size:16px;line-height:24px;color:var(--bk-text);margin:0 0 10px;">Apple, Google and Samsung all have handwriting samples. None of them have what <b style="color:var(--bk-ink);">connects</b> the samples together.</div>
+              <div style="background:#fff;border:2px solid var(--bk-ink);border-radius:12px;padding:12px 16px 13px;box-shadow:3px 4px 0 rgba(39,64,143,.1);">
+                <div style="font-family:'Patrick Hand',cursive;font-size:12px;letter-spacing:1.5px;color:var(--bk-ink);margin-bottom:8px;">WHAT ONLY WE CONNECT</div>
+                <div style="display:flex;align-items:baseline;gap:8px;"><span style="font-family:'Caveat',cursive;font-size:20px;color:var(--bk-hint);width:16px;line-height:1;"></span><span style="font-family:'Shantell Sans',cursive;font-size:15px;font-weight:500;color:var(--bk-text);line-height:1.15;">Motion, how the hand actually moves</span></div>
+                <div style="display:flex;align-items:baseline;gap:8px;"><span style="font-family:'Caveat',cursive;font-size:20px;color:var(--bk-hint);width:16px;line-height:1;">+</span><span style="font-family:'Shantell Sans',cursive;font-size:15px;font-weight:500;color:var(--bk-text);line-height:1.15;">Teacher feedback &amp; interventions</span></div>
+                <div style="display:flex;align-items:baseline;gap:8px;"><span style="font-family:'Caveat',cursive;font-size:20px;color:var(--bk-hint);width:16px;line-height:1;">+</span><span style="font-family:'Shantell Sans',cursive;font-size:15px;font-weight:500;color:var(--bk-text);line-height:1.15;">Exercises the writer practised</span></div>
+                <div style="display:flex;align-items:baseline;gap:8px;"><span style="font-family:'Caveat',cursive;font-size:20px;color:var(--bk-hint);width:16px;line-height:1;">+</span><span style="font-family:'Shantell Sans',cursive;font-size:15px;font-weight:500;color:var(--bk-text);line-height:1.15;">Improvement over months and years</span></div>
+                <div style="display:flex;align-items:baseline;gap:8px;"><span style="font-family:'Caveat',cursive;font-size:20px;color:var(--bk-hint);width:16px;line-height:1;">+</span><span style="font-family:'Shantell Sans',cursive;font-size:15px;font-weight:500;color:var(--bk-text);line-height:1.15;">Age, language &amp; learning stage</span></div>
+                <div style="display:flex;align-items:baseline;gap:8px;margin-top:7px;padding-top:8px;border-top:1.5px dashed color-mix(in srgb, var(--bk-ink) 26%, var(--surface));"><span style="font-family:'Caveat',cursive;font-size:22px;color:var(--bk-ink);width:16px;line-height:1;">=</span><span style="font-family:'Shantell Sans',cursive;font-size:16px;font-weight:700;color:var(--bk-ink);line-height:1.15;">A longitudinal learning trajectory</span></div>
+              </div>
+              <div style="font-family:'Shantell Sans',cursive;font-size:14.5px;line-height:1.4;color:var(--bk-text-2);margin-top:10px;">Why can't they just do it? A balanced motion corpus can't be scraped, it must be <b style="color:var(--bk-ink);">physically collected</b>: pens, field teams, per-pen calibration, signed consent, school partnerships and longitudinal tracking over years. That is the moat.</div>
+            </div>
+            <div style="flex:1;height:100%;padding:48px 46px 34px;border-radius:0 8px 8px 0;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;display:flex;flex-direction:column;">
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">WHAT THE FOUNDATION MODEL POWERS</div>
+              <div style="font-family:'Caveat',cursive;font-size:40px;color:var(--bk-ink);line-height:1;margin:1px 0 14px;">Many markets, one model</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px;">
+                <div style="background:#fff;border:1.5px solid var(--bk-paper-line);border-radius:11px;padding:12px 13px;box-shadow:2px 3px 0 rgba(0,0,0,.05);">
+                  <div style="display:flex;align-items:center;gap:9px;margin-bottom:5px;"><svg width="26" height="26" viewBox="0 0 28 28" style="filter:url(#rough);flex:none;"><path d="M4 11 L14 4 L24 11 Z" fill="none" stroke="#27408f" stroke-width="2" stroke-linejoin="round"/><line x1="6" y1="11" x2="6" y2="21" stroke="#27408f" stroke-width="2"/><line x1="11" y1="11" x2="11" y2="21" stroke="#27408f" stroke-width="2"/><line x1="17" y1="11" x2="17" y2="21" stroke="#27408f" stroke-width="2"/><line x1="22" y1="11" x2="22" y2="21" stroke="#27408f" stroke-width="2"/><line x1="3" y1="23" x2="25" y2="23" stroke="#27408f" stroke-width="2" stroke-linecap="round"/></svg><div style="font-family:'Caveat',cursive;font-size:23px;color:var(--bk-ink);line-height:1;">Banking & fraud</div></div>
+                  <div style="font-family:'Shantell Sans',cursive;font-size:13px;line-height:1.35;color:var(--bk-text-3);">Signature & behavioural biometrics. Motion can't be forged like a shape can.</div>
+                </div>
+                <div style="background:#fff;border:1.5px solid var(--bk-paper-line);border-radius:11px;padding:12px 13px;box-shadow:2px 3px 0 rgba(0,0,0,.05);">
+                  <div style="display:flex;align-items:center;gap:9px;margin-bottom:5px;"><svg width="26" height="26" viewBox="0 0 28 28" style="filter:url(#rough);flex:none;"><path d="M3 14 h5 l2 -6 l3 12 l2 -6 h7" fill="none" stroke="#c0392b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div style="font-family:'Caveat',cursive;font-size:23px;color:var(--bk-red);line-height:1;">Health screening</div></div>
+                  <div style="font-family:'Shantell Sans',cursive;font-size:13px;line-height:1.35;color:var(--bk-text-3);">Fine-motor biomarkers studied for Parkinson's, dysgraphia & stroke recovery.</div>
+                </div>
+                <div style="background:#fff;border:1.5px solid var(--bk-paper-line);border-radius:11px;padding:12px 13px;box-shadow:2px 3px 0 rgba(0,0,0,.05);">
+                  <div style="display:flex;align-items:center;gap:9px;margin-bottom:5px;"><svg width="26" height="26" viewBox="0 0 28 28" style="filter:url(#rough);flex:none;"><path d="M14 5 a4.5 4.5 0 0 1 0 9 M14 14 c-5 0 -8 3 -8 8 h16 c0 -5 -3 -8 -8 -8 z M14 9 m-1 0 a1 1 0 1 0 2 0 a1 1 0 1 0 -2 0" fill="none" stroke="#7a4bd0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div style="font-family:'Caveat',cursive;font-size:23px;color:#7a4bd0;line-height:1;">Identity & auth</div></div>
+                  <div style="font-family:'Shantell Sans',cursive;font-size:13px;line-height:1.35;color:var(--bk-text-3);">Behavioural biometrics, plus bot & liveness detection. Human motion is hard to fake.</div>
+                </div>
+                <div style="background:#fff;border:1.5px solid var(--bk-paper-line);border-radius:11px;padding:12px 13px;box-shadow:2px 3px 0 rgba(0,0,0,.05);">
+                  <div style="display:flex;align-items:center;gap:9px;margin-bottom:5px;"><svg width="26" height="26" viewBox="0 0 28 28" style="filter:url(#rough);flex:none;"><path d="M3 9 L14 4 L25 9 L14 14 Z" fill="none" stroke="#2a8c82" stroke-width="2" stroke-linejoin="round"/><path d="M8 11.5 V18 c0 2 12 2 12 0 V11.5" fill="none" stroke="#2a8c82" stroke-width="2" stroke-linecap="round"/><line x1="25" y1="9" x2="25" y2="15" stroke="#2a8c82" stroke-width="2" stroke-linecap="round"/></svg><div style="font-family:'Caveat',cursive;font-size:23px;color:var(--bk-teal);line-height:1;">EdTech at scale</div></div>
+                  <div style="font-family:'Shantell Sans',cursive;font-size:13px;line-height:1.35;color:var(--bk-text-3);">Literacy & handwriting assessment for millions of learners, in their own script.</div>
+                </div>
+                <div style="background:#fff;border:1.5px solid var(--bk-paper-line);border-radius:11px;padding:12px 13px;box-shadow:2px 3px 0 rgba(0,0,0,.05);">
+                  <div style="display:flex;align-items:center;gap:9px;margin-bottom:5px;"><svg width="26" height="26" viewBox="0 0 28 28" style="filter:url(#rough);flex:none;"><rect x="8" y="10" width="12" height="10" rx="2" fill="none" stroke="#b07d12" stroke-width="2"/><path d="M11 10 V7 a3 3 0 0 1 6 0 v3" fill="none" stroke="#b07d12" stroke-width="2"/><line x1="14" y1="4" x2="14" y2="2" stroke="#b07d12" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="15" r="1" fill="#b07d12"/><circle cx="16" cy="15" r="1" fill="#b07d12"/></svg><div style="font-family:'Caveat',cursive;font-size:23px;color:var(--dev);line-height:1;">Generative & robotics</div></div>
+                  <div style="font-family:'Shantell Sans',cursive;font-size:13px;line-height:1.35;color:var(--bk-text-3);">Teach machines to write like a human hand, the ground-truth no scrape can give.</div>
+                </div>
+                <div style="background:var(--bk-ink);border:1.5px solid var(--bk-ink);border-radius:11px;padding:12px 13px;box-shadow:2px 3px 0 rgba(0,0,0,.1);">
+                  <div style="display:flex;align-items:center;gap:9px;margin-bottom:5px;"><svg width="26" height="26" viewBox="0 0 28 28" style="filter:url(#rough);flex:none;"><path d="M11 6 C6 6 8 14 4 14 C8 14 6 22 11 22 M17 6 C22 6 20 14 24 14 C20 14 22 22 17 22" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div style="font-family:'Caveat',cursive;font-size:23px;color:#fff;line-height:1;">Motion SDK</div></div>
+                  <div style="font-family:'Shantell Sans',cursive;font-size:13px;line-height:1.35;color:#dbe4f7;">License the engine. Partners build on our motion API, no hardware required.</div>
+                </div>
+              </div>
+              <div style="margin-top:auto;font-family:'Shantell Sans',cursive;font-size:14.5px;color:var(--bk-text-2);text-align:center;line-height:1.5;padding-top:10px;">One dataset, many markets, entered <b>in sequence</b> (see Go-to-Market). <b style="color:var(--bk-ink);">The pen seeds the data; the data is the company.</b></div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- COMPETITION -->
+        <sc-if value="{{ isCompetition }}" hint-placeholder-val="{{ false }}">
+          <div class="spd" style="display:flex;width:100%;height:100%;">
+            <div style="flex:1;height:100%;padding:54px 40px 36px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
+              <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 04 · COMPETITION</div>
+              <div style="font-family:'Caveat',cursive;font-size:50px;color:var(--bk-ink);line-height:1;margin:2px 0 4px;">Everyone reads. No one records.</div>
+              <svg viewBox="0 0 250 14" style="display:block;width:250px;height:13px;margin:0 0 14px;filter:url(#rough);"><path d="M4 8 C60 2 120 12 165 6 C200 2 228 9 246 5" fill="none" stroke="#e2a32b" stroke-width="3" stroke-linecap="round"/></svg>
+              <div style="font-family:'Shantell Sans',cursive;font-size:15px;line-height:1.4;color:var(--bk-text-2);margin-bottom:12px;">Strong players recognise finished handwriting. None capture the <b style="color:var(--bk-ink);">motion</b> on ordinary paper, over time, in Indian scripts.</div>
+              <div style="border:1.5px solid #e0d8c2;border-radius:11px;overflow:hidden;background:#fff;box-shadow:2px 3px 0 rgba(0,0,0,.06);">
+                <div style="display:grid;grid-template-columns:1.6fr repeat(4,1fr);background:#f3eedf;font-family:'Patrick Hand',cursive;font-size:10.5px;color:#7a6a3f;text-align:center;">
+                  <div style="padding:7px 11px;text-align:left;">player</div>
+                  <div style="padding:7px 3px;border-left:1px solid var(--bk-paper-line);line-height:1.1;">reads<br>writing</div>
+                  <div style="padding:7px 3px;border-left:1px solid var(--bk-paper-line);line-height:1.1;">captures<br>motion</div>
+                  <div style="padding:7px 3px;border-left:1px solid var(--bk-paper-line);line-height:1.1;">longi-<br>tudinal</div>
+                  <div style="padding:7px 3px;border-left:1px solid var(--bk-paper-line);line-height:1.1;">on<br>paper</div>
+                </div>
+                <sc-for list="{{ compRows }}" as="r" hint-placeholder-count="6">
+                  <div style="{{ r.rowStyle }}">
+                    <div style="{{ r.nameStyle }}">{{ r.name }}<div style="font-family:'Patrick Hand',cursive;font-weight:400;font-size:10.5px;color:{{ r.noteColor }};margin-top:1px;">{{ r.note }}</div></div>
+                    <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="4">
+                      <div style="text-align:center;border-left:1px solid var(--bk-paper-line);font-family:'Caveat',cursive;font-size:23px;font-weight:700;color:{{ c.c }};">{{ c.g }}</div>
+                    </sc-for>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:flex;gap:14px;margin-top:9px;font-family:'Patrick Hand',cursive;font-size:11px;color:var(--bk-hint);"><span style="color:var(--bk-teal);">✓ yes</span><span style="color:var(--dev);">~ partial</span><span style="color:#cf6b5e;">✗ no</span></div>
+            </div>
+            <div style="flex:1;height:100%;padding:54px 48px 36px;border-radius:0 8px 8px 0;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;display:flex;flex-direction:column;">
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">WHY THE GAP STAYS OPEN</div>
+              <div style="font-family:'Caveat',cursive;font-size:38px;color:var(--bk-ink);line-height:1.02;margin:1px 0 14px;">Their incentives point the other way</div>
+              <div style="display:flex;flex-direction:column;gap:11px;">
+                <div style="background:#fff;border:1.5px solid var(--bk-paper-line);border-radius:11px;padding:12px 14px;box-shadow:2px 3px 0 rgba(0,0,0,.05);"><div style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:15px;color:var(--bk-text);">Big Tech sells screens</div><div style="font-family:'Shantell Sans',cursive;font-size:13.5px;color:var(--bk-text-3);line-height:1.35;margin-top:2px;">Their handwriting lives on glass. Ordinary-paper motion has no place in an iPad or Pixel roadmap.</div></div>
+                <div style="background:#fff;border:1.5px solid var(--bk-paper-line);border-radius:11px;padding:12px 14px;box-shadow:2px 3px 0 rgba(0,0,0,.05);"><div style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:15px;color:var(--bk-text);">Researchers stop at the paper</div><div style="font-family:'Shantell Sans',cursive;font-size:13.5px;color:var(--bk-text-3);line-height:1.35;margin-top:2px;">STABILO's OnHW proved the method, then published and moved on. No balanced corpus, no Indian scripts, no product.</div></div>
+                <div style="background:#fff;border:1.5px solid var(--bk-paper-line);border-radius:11px;padding:12px 14px;box-shadow:2px 3px 0 rgba(0,0,0,.05);"><div style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:15px;color:var(--bk-text);">AI labs only have images</div><div style="font-family:'Shantell Sans',cursive;font-size:13.5px;color:var(--bk-text-3);line-height:1.35;margin-top:2px;">OCR and vision models read pixels. They have no way to synthesise the motion they never recorded.</div></div>
+              </div>
+              <div style="margin-top:auto;background:var(--accent-soft);border:2px solid var(--bk-ink);border-radius:11px;padding:13px 15px;text-align:center;box-shadow:3px 4px 0 rgba(39,64,143,.12);"><div style="font-family:'Shantell Sans',cursive;font-size:15px;color:var(--bk-ink);line-height:1.5;">We compete on the one column no one else fills: <b>balanced motion on paper, over years, in India's scripts.</b></div></div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- DATASET METHODS -->
+        <sc-if value="{{ isMethods }}" hint-placeholder-val="{{ false }}">
+          <div class="spd" style="display:flex;width:100%;height:100%;">
+            <div style="flex:1;height:100%;padding:50px 40px 34px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
+              <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 05 · DATASET METHODS</div>
+              <div style="font-family:'Caveat',cursive;font-size:48px;color:var(--bk-ink);line-height:1;margin:2px 0 4px;">How we build the dataset</div>
+              <svg viewBox="0 0 260 14" style="display:block;width:265px;height:13px;margin:0 0 16px;filter:url(#rough);"><path d="M4 8 C70 2 130 12 175 6 C210 2 238 9 256 5" fill="none" stroke="#e2a32b" stroke-width="3" stroke-linecap="round"/></svg>
+              <div style="display:flex;flex-direction:column;gap:15px;">
+                <div style="display:flex;gap:13px;align-items:flex-start;">
+                  <div style="flex:none;width:42px;height:42px;border-radius:12px;background:var(--accent-soft);border:1.5px solid color-mix(in srgb, var(--bk-ink) 26%, var(--surface));display:flex;align-items:center;justify-content:center;font-family:'Caveat',cursive;font-size:26px;font-weight:700;color:var(--bk-ink);">1</div>
+                  <div style="flex:1;padding-top:1px;"><div style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:16px;color:var(--bk-ink);">Prompt a character</div><div style="font-family:'Shantell Sans',cursive;font-size:14px;line-height:1.38;color:var(--bk-text-2);margin-top:1px;">The companion app shows one character at a time. The contributor writes it once on plain A4 paper, at a natural speed.</div></div>
+                </div>
+                <div style="display:flex;gap:13px;align-items:flex-start;">
+                  <div style="flex:none;width:42px;height:42px;border-radius:12px;background:var(--accent-soft);border:1.5px solid color-mix(in srgb, var(--bk-teal) 30%, var(--surface));display:flex;align-items:center;justify-content:center;font-family:'Caveat',cursive;font-size:26px;font-weight:700;color:var(--bk-teal);">2</div>
+                  <div style="flex:1;padding-top:1px;"><div style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:16px;color:var(--bk-teal);">Capture &amp; segment</div><div style="font-family:'Shantell Sans',cursive;font-size:14px;line-height:1.38;color:var(--bk-text-2);margin-top:1px;">Sixteen motion axes stream live over Bluetooth. Pen-down force marks where each sample begins; lifting the pen ends it.</div></div>
+                </div>
+                <div style="display:flex;gap:13px;align-items:flex-start;">
+                  <div style="flex:none;width:42px;height:42px;border-radius:12px;background:#f3eefb;border:1.5px solid #d9c9f2;display:flex;align-items:center;justify-content:center;font-family:'Caveat',cursive;font-size:26px;font-weight:700;color:#7a4bd0;">3</div>
+                  <div style="flex:1;padding-top:1px;"><div style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:16px;color:#7a4bd0;">Auto-label</div><div style="font-family:'Shantell Sans',cursive;font-size:14px;line-height:1.38;color:var(--bk-text-2);margin-top:1px;">The prompted character becomes the ground-truth label, saved with writer ID, language and start-and-end timestamps.</div></div>
+                </div>
+                <div style="display:flex;gap:13px;align-items:flex-start;">
+                  <div style="flex:none;width:42px;height:42px;border-radius:12px;background:var(--hot-soft);border:1.5px solid color-mix(in srgb, var(--bk-red) 28%, var(--surface));display:flex;align-items:center;justify-content:center;font-family:'Caveat',cursive;font-size:26px;font-weight:700;color:var(--bk-red);">4</div>
+                  <div style="flex:1;padding-top:1px;"><div style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:16px;color:var(--bk-red);">Calibrate &amp; protect</div><div style="font-family:'Shantell Sans',cursive;font-size:14px;line-height:1.38;color:var(--bk-text-2);margin-top:1px;">Each pen is calibrated for offset and drift; motion plots catch noise and mislabels. Stored under the DPDP Act, deletable on request.</div></div>
+                </div>
+              </div>
+              <div style="position:absolute;left:74px;bottom:26px;font-family:'Caveat',cursive;font-size:23px;color:var(--bk-teal);transform:rotate(-2deg);">A field operation, not a web scrape. ✎</div>
+            </div>
+            <div style="flex:1;height:100%;padding:48px 46px 34px;border-radius:0 8px 8px 0;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;display:flex;flex-direction:column;">
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">WHY IT'S RIGOROUS</div>
+              <div style="font-family:'Caveat',cursive;font-size:40px;color:var(--bk-ink);line-height:1;margin:1px 0 14px;">Balanced by design</div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:13px;color:var(--bk-text-3);margin-bottom:8px;">every script × every age × both hands</div>
+              <div style="border:1.5px solid #e0d8c2;border-radius:10px;overflow:hidden;background:#fff;box-shadow:2px 3px 0 rgba(0,0,0,.05);">
+                <div style="display:grid;grid-template-columns:88px repeat(4,1fr);background:#f3eedf;font-family:'Patrick Hand',cursive;font-size:11px;color:#7a6a3f;">
+                  <div style="padding:6px 8px;">script ↓</div>
+                  <div style="padding:6px 4px;text-align:center;border-left:1px solid var(--bk-paper-line);">kids</div>
+                  <div style="padding:6px 4px;text-align:center;border-left:1px solid var(--bk-paper-line);">teens</div>
+                  <div style="padding:6px 4px;text-align:center;border-left:1px solid var(--bk-paper-line);">adults</div>
+                  <div style="padding:6px 4px;text-align:center;border-left:1px solid var(--bk-paper-line);">seniors</div>
+                </div>
+                <sc-for list="{{ stratRows }}" as="r" hint-placeholder-count="6">
+                  <div style="display:grid;grid-template-columns:88px repeat(4,1fr);border-top:1px solid var(--bk-paper-line);font-size:12px;">
+                    <div style="padding:5px 8px;font-family:'Shantell Sans',cursive;color:var(--bk-text);">{{ r.name }}</div>
+                    <div style="padding:5px 4px;text-align:center;border-left:1px solid var(--bk-paper-line);color:var(--bk-teal);">✓</div>
+                    <div style="padding:5px 4px;text-align:center;border-left:1px solid var(--bk-paper-line);color:var(--bk-teal);">✓</div>
+                    <div style="padding:5px 4px;text-align:center;border-left:1px solid var(--bk-paper-line);color:var(--bk-teal);">✓</div>
+                    <div style="padding:5px 4px;text-align:center;border-left:1px solid var(--bk-paper-line);color:var(--bk-teal);">✓</div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:flex;gap:9px;margin-top:14px;">
+                <div style="flex:1;background:#fff;border:1.5px solid var(--bk-paper-line);border-radius:10px;padding:10px 11px;box-shadow:1px 2px 0 rgba(0,0,0,.04);"><div style="font-family:'Caveat',cursive;font-size:20px;color:var(--bk-ink);line-height:1;">Balanced</div><div style="font-family:'Shantell Sans',cursive;font-size:12px;color:var(--bk-text-3);line-height:1.3;margin-top:3px;">No demographic overfit.</div></div>
+                <div style="flex:1;background:#fff;border:1.5px solid var(--bk-paper-line);border-radius:10px;padding:10px 11px;box-shadow:1px 2px 0 rgba(0,0,0,.04);"><div style="font-family:'Caveat',cursive;font-size:20px;color:var(--bk-teal);line-height:1;">Ground-truth</div><div style="font-family:'Shantell Sans',cursive;font-size:12px;color:var(--bk-text-3);line-height:1.3;margin-top:3px;">Motion ↔ letter, time-synced.</div></div>
+                <div style="flex:1;background:#fff;border:1.5px solid var(--bk-paper-line);border-radius:10px;padding:10px 11px;box-shadow:1px 2px 0 rgba(0,0,0,.04);"><div style="font-family:'Caveat',cursive;font-size:20px;color:var(--bk-red);line-height:1;">Consent-first</div><div style="font-family:'Shantell Sans',cursive;font-size:12px;color:var(--bk-text-3);line-height:1.3;margin-top:3px;">DPDP, revocable.</div></div>
+              </div>
+              <div style="margin-top:14px;background:#0f203f;border-radius:11px;padding:12px 15px;color:#dfe7fb;">
+                <div style="display:flex;align-items:baseline;justify-content:space-between;"><div style="font-family:'Patrick Hand',cursive;font-size:12px;letter-spacing:1.5px;color:var(--accent-lite);">HOW IT SCALES</div><div style="font-family:'Shantell Sans',cursive;font-size:11px;color:color-mix(in srgb, var(--bk-ink) 42%, var(--surface));">&gt;98% labelled-quality after QC</div></div>
+                <div style="display:flex;align-items:center;gap:7px;margin-top:7px;font-family:'Patrick Hand',cursive;font-size:12.5px;flex-wrap:wrap;"><span>1 collector</span><span style="color:var(--accent-lite);">→</span><span>~500 pages/day</span><span style="color:var(--accent-lite);">→</span><span>~20k chars/day</span><span style="color:var(--accent-lite);">→</span><span style="color:#e3c66b;">~₹15/sample</span></div>
+              </div>
+              <div style="display:flex;gap:9px;margin-top:11px;">
+                <div style="flex:1;background:var(--accent-soft);border:1.5px solid color-mix(in srgb, var(--bk-ink) 26%, var(--surface));border-radius:10px;padding:9px;text-align:center;"><div style="font-family:'Caveat',cursive;font-size:26px;color:var(--bk-ink);line-height:.9;">50k</div><div style="font-family:'Shantell Sans',cursive;font-size:11px;color:var(--bk-ink);">Phase 1 · English</div></div>
+                <div style="flex:1;background:var(--accent-soft);border:1.5px solid color-mix(in srgb, var(--bk-teal) 30%, var(--surface));border-radius:10px;padding:9px;text-align:center;"><div style="font-family:'Caveat',cursive;font-size:26px;color:var(--bk-teal);line-height:.9;">500k</div><div style="font-family:'Shantell Sans',cursive;font-size:11px;color:var(--accent-ink);">Phase 2 · + Hindi</div></div>
+                <div style="flex:1;background:#f3eefb;border:1.5px solid #d9c9f2;border-radius:10px;padding:9px;text-align:center;"><div style="font-family:'Caveat',cursive;font-size:26px;color:#7a4bd0;line-height:.9;">5M</div><div style="font-family:'Shantell Sans',cursive;font-size:11px;color:#7a4bd0;">Phase 3 · 6 scripts</div></div>
+              </div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:10.5px;color:var(--bk-hint);text-align:center;margin-top:9px;line-height:1.3;">protocol follows the proven IMU-pen standard (STABILO OnHW · Punjabi IMU studies), adapted for Indian scripts</div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- PEN / HOW IT WORKS -->
+        <sc-if value="{{ isPen }}" hint-placeholder-val="{{ false }}">
+          <div class="spd" style="display:flex;width:100%;height:100%;">
+            <div style="flex:1;height:100%;padding:56px 44px 40px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
+              <div style="position:absolute;top:0;bottom:0;left:56px;width:0;background:transparent;"></div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 06</div>
+              <div style="font-family:'Caveat',cursive;font-size:54px;color:var(--bk-ink);line-height:1;margin:2px 0 4px;">How Vahini Works</div>
+              <svg viewBox="0 0 260 14" style="display:block;width:270px;height:14px;margin:0 0 12px;filter:url(#rough);"><path d="M4 8 C70 2 130 12 180 6 C215 2 240 8 256 5" fill="none" stroke="#e2a32b" stroke-width="3" stroke-linecap="round"/></svg>
+              <p style="font-family:'Shantell Sans',cursive;font-size:18px;line-height:30px;color:var(--bk-text);margin:0 0 18px;">Vahini is a normal-looking pen that understands <i>how</i> you write. It turns the motion of your hand into meaning, then coaches you, all on ordinary paper. <span style="color:var(--bk-hint);font-size:14px;">(The sensor engineering lives in Patents &amp; Specs.)</span></p>
+              <sc-for list="{{ penSteps }}" as="s" hint-placeholder-count="4">
+                <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:14px;">
+                  <div style="flex:none;width:32px;height:32px;border-radius:50%;background:var(--bk-ink);color:#fff;font-family:'Patrick Hand',cursive;font-size:18px;display:flex;align-items:center;justify-content:center;">{{ s.n }}</div>
+                  <div><div style="font-family:'Caveat',cursive;font-size:26px;color:var(--bk-ink);line-height:1;">{{ s.t }}</div>
+                  <div style="font-family:'Shantell Sans',cursive;font-size:16px;color:var(--bk-text-2);line-height:1.45;">{{ s.d }}</div></div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="flex:1;height:100%;padding:40px;border-radius:0 8px 8px 0;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+              <div style="font-family:'Patrick Hand',cursive;font-size:16px;color:var(--bk-hint);align-self:flex-start;">fig. 2 · dual-IMU pen</div>
+              <!-- pen body (doodle) -->
+              <svg viewBox="0 0 300 360" style="width:300px;height:330px;overflow:visible;">
+                <g fill="none" stroke-linecap="round">
+                  <path d="M120 300 C95 285 92 255 110 238" stroke="#c0392b" stroke-width="2.2" stroke-dasharray="3 7" style="animation:march 1.4s linear infinite;"/>
+                  <path d="M110 238 l-9 4 m9 -4 l-2 -10" stroke="#c0392b" stroke-width="2.2"/>
+                  <path d="M186 300 C212 286 214 256 196 240" stroke="#7a4bd0" stroke-width="2.2" stroke-dasharray="3 7" style="animation:march 1.4s linear .5s infinite;"/>
+                  <path d="M196 240 l9 4 m-9 -4 l2 -10" stroke="#7a4bd0" stroke-width="2.2"/>
+                </g>
+                <text x="78" y="232" font-family="'Caveat',cursive" font-size="25" fill="#c0392b">accel</text>
+                <text x="200" y="232" font-family="'Caveat',cursive" font-size="25" fill="#7a4bd0">↻ gyro</text>
+                <g transform="rotate(13 150 180)" style="filter:url(#rough);">
+                  <rect x="128" y="46" width="44" height="208" rx="20" fill="#ffffff" stroke="#1f1f1f" stroke-width="2.6"/>
+                  <rect x="140" y="28" width="20" height="20" rx="5" fill="#ffffff" stroke="#1f1f1f" stroke-width="2.2"/>
+                  <path d="M128 74 L172 74 M128 84 L172 84" stroke="#1f1f1f" stroke-width="1.6"/>
+                  <path d="M128 254 L172 254 L150 306 Z" fill="#ffffff" stroke="#1f1f1f" stroke-width="2.6" stroke-linejoin="round"/>
+                  <circle cx="150" cy="306" r="4" fill="#1f1f1f"/>
+                  <path d="M135 244 l8 6 M150 244 l0 8 M165 244 l-8 6" stroke="#1f1f1f" stroke-width="1.6" stroke-linecap="round"/>
+                  <rect x="133" y="96" width="34" height="30" rx="4" fill="#f6d79a" stroke="#1f1f1f" stroke-width="2.2"/>
+                  <path d="M133 104 l-6 0 M133 116 l-6 0 M167 104 l6 0 M167 116 l6 0" stroke="#1f1f1f" stroke-width="1.6" stroke-linecap="round"/>
+                  <rect x="133" y="156" width="34" height="30" rx="4" fill="#a9ddd4" stroke="#1f1f1f" stroke-width="2.2"/>
+                  <path d="M133 164 l-6 0 M133 176 l-6 0 M167 164 l6 0 M167 176 l6 0" stroke="#1f1f1f" stroke-width="1.6" stroke-linecap="round"/>
+                </g>
+                <g stroke="#1f1f1f" stroke-width="1.4" fill="none" stroke-dasharray="2 4" stroke-linecap="round"><path d="M188 100 L244 72"/><path d="M198 160 L250 158"/></g>
+                <text x="246" y="68" font-family="'Patrick Hand',cursive" font-size="16" fill="#b07d12">IMU-A · tip</text>
+                <text x="252" y="162" font-family="'Patrick Hand',cursive" font-size="16" fill="#1d635c">IMU-B · barrel</text>
+                <g stroke="#e2a32b" stroke-width="2" stroke-linecap="round"><path d="M252 250 l0 12 M246 256 l12 0"/><path d="M66 118 l0 10 M61 123 l10 0"/></g>
+              </svg>
+              <div style="display:flex;gap:22px;margin-top:6px;font-family:'Patrick Hand',cursive;font-size:15px;">
+                <span style="color:var(--dev);">● IMU-A (tip)</span>
+                <span style="color:var(--accent-ink);">● IMU-B (barrel)</span>
+              </div>
+              <div style="font-family:'Shantell Sans',cursive;font-size:15px;color:var(--bk-text-2);text-align:center;max-width:300px;margin-top:10px;line-height:1.5;">Two sensors work together so the pen reads true motion on <b>any</b> surface, the hard engineering that makes the simple promise above possible.</div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- SPECS -->
+        <sc-if value="{{ isSpecs }}" hint-placeholder-val="{{ false }}">
+          <div class="spd" style="display:flex;width:100%;height:100%;">
+            <div style="flex:1;height:100%;padding:56px 40px 40px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
+              <div style="position:absolute;top:0;bottom:0;left:56px;width:0;background:transparent;"></div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 07 · WRITING DNA</div>
+              <div style="font-family:'Caveat',cursive;font-size:54px;color:var(--bk-ink);line-height:1;margin:2px 0 6px;">Writing DNA</div>
+              <div style="font-family:'Shantell Sans',cursive;font-size:16px;line-height:1.4;color:var(--bk-text);max-width:430px;margin-bottom:14px;">Every page produces a <b style="color:var(--bk-ink);">20-factor signature</b>, as distinct as a fingerprint. Today it is scored by computer vision from a simple scan; the pen's motion research makes it deeper still.</div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;max-width:440px;">
+                <sc-for list="{{ factors }}" as="f" hint-placeholder-count="20">
+                  <span style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:13.5px;color:var(--bk-ink);background:#fff;border:1.5px solid color-mix(in srgb, var(--bk-ink) 26%, var(--surface));border-radius:18px;padding:5px 12px;box-shadow:1px 2px 0 rgba(39,64,143,.06);">{{ f }}</span>
+                </sc-for>
+              </div>
+              <div style="position:absolute;left:64px;bottom:52px;pointer-events:none;">
+                <svg width="270" height="118" viewBox="0 0 270 118" style="filter:url(#rough);overflow:visible;display:block;">
+                  <path d="M14 94 C40 58 64 58 84 86 C100 108 122 104 130 76 C138 50 162 48 184 80" fill="none" stroke="#2a8c82" stroke-width="2.6" stroke-linecap="round"/>
+                  <g transform="translate(176 4) rotate(33)">
+                    <rect x="0" y="0" width="19" height="74" rx="9" fill="#eef3f6" stroke="#27408f" stroke-width="2"/>
+                    <path d="M5 74 L9.5 94 L14 74 Z" fill="#2a3a4a" stroke="#27408f" stroke-width="1.5" stroke-linejoin="round"/>
+                    <circle cx="9.5" cy="20" r="3.6" fill="none" stroke="#27408f" stroke-width="1.6"/>
+                  </g>
+                  <g stroke="#c0392b" stroke-width="1.8" fill="none" stroke-linecap="round" transform="translate(230 12)">
+                    <path d="M0 34 L0 4 M-5 10 L0 3 L5 10"/>
+                    <path d="M0 34 L30 34 M24 29 L31 34 L24 39"/>
+                    <path d="M0 34 L-18 50 M-16 43 L-19 51 L-11 51"/>
+                  </g>
+                </svg>
+                <div style="font-family:'Caveat',cursive;font-size:24px;color:var(--bk-ink);transform:rotate(-2deg);margin-top:-2px;">one signature, twenty factors</div>
+              </div>
+            </div>
+            <div style="flex:1;height:100%;padding:56px 54px;border-radius:0 8px 8px 0;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">WHY THE NUMBERS MATTER</div>
+              <div style="font-family:'Caveat',cursive;font-size:38px;color:var(--bk-ink);line-height:1;margin:1px 0 14px;">Specs that earn their keep</div>
+              <div style="display:flex;flex-direction:column;gap:9px;">
+                <div style="display:flex;gap:13px;align-items:baseline;background:#fff;border:1.5px solid var(--bk-paper-line);border-radius:10px;padding:10px 13px;box-shadow:1px 2px 0 rgba(0,0,0,.04);"><div style="flex:none;width:78px;font-family:'Caveat',cursive;font-size:26px;color:var(--bk-ink);line-height:1;">208 Hz</div><div style="font-family:'Shantell Sans',cursive;font-size:13.5px;color:var(--bk-text-2);line-height:1.35;">Handwriting changes within milliseconds; this catches a tremor or hesitation a camera never sees.</div></div>
+                <div style="display:flex;gap:13px;align-items:baseline;background:#fff;border:1.5px solid var(--bk-paper-line);border-radius:10px;padding:10px 13px;box-shadow:1px 2px 0 rgba(0,0,0,.04);"><div style="flex:none;width:78px;font-family:'Caveat',cursive;font-size:26px;color:var(--bk-teal);line-height:1;">16 axes</div><div style="font-family:'Shantell Sans',cursive;font-size:13.5px;color:var(--bk-text-2);line-height:1.35;">Pressure, tilt, speed and rhythm, all from a single natural stroke, not a flat 2-D image.</div></div>
+                <div style="display:flex;gap:13px;align-items:baseline;background:#fff;border:1.5px solid var(--bk-paper-line);border-radius:10px;padding:10px 13px;box-shadow:1px 2px 0 rgba(0,0,0,.04);"><div style="flex:none;width:78px;font-family:'Caveat',cursive;font-size:22px;color:var(--dev);line-height:1.05;">any paper</div><div style="font-family:'Shantell Sans',cursive;font-size:13.5px;color:var(--bk-text-2);line-height:1.35;">No tablet, no dot-pattern, no app to learn, the page you already use is the only requirement.</div></div>
+              </div>
+              <div style="font-family:'Caveat',cursive;font-size:28px;color:var(--bk-ink);margin:16px 0 8px;">Six scripts</div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                <sc-for list="{{ scripts }}" as="x" hint-placeholder-count="6">
+                  <span style="font-family:'Patrick Hand',cursive;font-size:16px;background:#fff;border:1.5px solid #e2a32b;color:#7a5a14;padding:5px 13px;border-radius:20px;transform:rotate(-1deg);box-shadow:1px 2px 0 rgba(0,0,0,.06);">{{ x }}</span>
+                </sc-for>
+              </div>
+              <div style="margin-top:14px;text-align:center;">
+                <img src="assets/ev/pen-cut.png" alt="The Vahini pen: internal sensor board and barrel" style="width:100%;max-width:320px;height:auto;">
+                <div style="font-family:'Patrick Hand',cursive;font-size:13px;color:var(--bk-hint);margin-top:2px;">the real Vahini pen · sensor board, USB &amp; barrel</div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- PATENTS -->
+        <sc-if value="{{ isPatents }}" hint-placeholder-val="{{ false }}">
+          <div class="spd" style="display:flex;width:100%;height:100%;">
+            <div style="flex:1;height:100%;padding:56px 40px 40px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
+              <div style="position:absolute;top:0;bottom:0;left:56px;width:0;background:transparent;"></div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 08</div>
+              <div style="font-family:'Caveat',cursive;font-size:54px;color:var(--bk-ink);line-height:1;margin:2px 0 18px;">Patents &amp; IP</div>
+              <div style="position:relative;background:#fff;border:2px solid var(--bk-ink);border-radius:8px;padding:18px 20px;box-shadow:4px 5px 0 rgba(39,64,143,.15);">
+                <div style="position:absolute;top:-14px;right:-14px;width:64px;height:64px;border-radius:50%;border:2.5px solid var(--bk-red);color:var(--bk-red);font-family:'Patrick Hand',cursive;font-size:13px;display:flex;align-items:center;justify-content:center;text-align:center;transform:rotate(-12deg);background:#fff;">GRANTED</div>
+                <div style="font-family:'Patrick Hand',cursive;font-size:13px;color:var(--bk-hint);letter-spacing:1px;">INDIAN PATENT</div>
+                <div style="font-family:'Caveat',cursive;font-size:46px;color:var(--bk-ink);line-height:1;">No. 584433</div>
+                <div style="font-family:'Shantell Sans',cursive;font-size:16px;color:var(--bk-text);line-height:1.45;margin-top:6px;">“Handwriting Recognition with an Intelligent Ballpoint Pen using IMU Sensors.” 20-year protection.</div>
+              </div>
+              <div style="position:absolute;left:74px;bottom:38px;width:432px;pointer-events:none;">
+                <div style="font-family:'Patrick Hand',cursive;font-size:13px;letter-spacing:1px;color:var(--bk-hint);margin-bottom:1px;">FIG. 1 · SENSING ASSEMBLY · PATENT 584433</div>
+                <svg width="430" height="176" viewBox="0 0 440 176" style="filter:url(#rough);overflow:visible;display:block;">
+                  <g stroke="#5a616f" stroke-width="1.3" fill="none">
+                    <path d="M80 48 L80 78"/><path d="M140 48 L140 78"/><path d="M196 48 L196 78"/><path d="M256 48 L256 78"/><path d="M340 138 L340 112"/>
+                  </g>
+                  <g fill="#fdfdfb" stroke="#27408f" stroke-width="1.6"><circle cx="80" cy="36" r="12"/><circle cx="140" cy="36" r="12"/><circle cx="196" cy="36" r="12"/><circle cx="256" cy="36" r="12"/><circle cx="340" cy="150" r="12"/></g>
+                  <g font-family="'Patrick Hand',cursive" font-size="15" fill="#27408f" text-anchor="middle">
+                    <text x="80" y="41">1</text><text x="140" y="41">2</text><text x="196" y="41">3</text><text x="256" y="41">4</text><text x="340" y="155">5</text>
+                  </g>
+                  <rect x="40" y="78" width="322" height="34" rx="17" fill="#fff" stroke="#27408f" stroke-width="2"/>
+                  <path d="M362 78 L362 112 L404 95 Z" fill="#eef3f6" stroke="#27408f" stroke-width="2" stroke-linejoin="round"/>
+                  <path d="M404 95 L416 95" stroke="#27408f" stroke-width="2"/>
+                  <rect x="63" y="86" width="16" height="18" rx="3" fill="#e8f5f2" stroke="#2a8c82" stroke-width="1.8"/>
+                  <rect x="82" y="86" width="16" height="18" rx="3" fill="#e8f5f2" stroke="#2a8c82" stroke-width="1.8"/>
+                  <circle cx="140" cy="95" r="11" fill="#fff7d6" stroke="#e2a32b" stroke-width="1.8"/>
+                  <rect x="181" y="86" width="30" height="18" rx="3" fill="#fff" stroke="#c0392b" stroke-width="1.8"/>
+                  <rect x="238" y="85" width="36" height="20" rx="3" fill="#16243f" stroke="#27408f" stroke-width="1.8"/>
+                  <path d="M244 92 h24 M244 98 h16" stroke="#7fd4c8" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+                  <path d="M322 88 L340 95 L322 102 Z" fill="#f6e3ee" stroke="#b0306b" stroke-width="1.6" stroke-linejoin="round"/>
+                </svg>
+                <div style="display:flex;flex-wrap:wrap;gap:1px 18px;margin-top:5px;font-family:'Shantell Sans',cursive;font-size:12.5px;color:var(--bk-text-3);">
+                  <span><b style="color:var(--bk-ink);">&#9312;</b> Dual IMU &middot; gyro + accel</span>
+                  <span><b style="color:var(--bk-ink);">&#9313;</b> Magnetometer</span>
+                  <span><b style="color:var(--bk-ink);">&#9314;</b> MCU &middot; on-pen recognition</span>
+                  <span><b style="color:var(--bk-ink);">&#9315;</b> OLED display &middot; live readout</span>
+                  <span><b style="color:var(--bk-ink);">&#9316;</b> Tip-force sensor</span>
+                </div>
+              </div>
+            </div>
+            <div style="flex:1;height:100%;padding:56px 54px;border-radius:0 8px 8px 0;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
+              <div style="font-family:'Caveat',cursive;font-size:34px;color:var(--bk-ink);margin-bottom:10px;">Pending applications</div>
+              <sc-for list="{{ pending }}" as="p" hint-placeholder-count="2">
+                <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:12px;">
+                  <span style="font-family:'Patrick Hand',cursive;font-size:13px;color:#fff;background:#e2a32b;padding:3px 9px;border-radius:20px;white-space:nowrap;">PENDING</span>
+                  <div><div style="font-family:'Caveat',cursive;font-size:22px;color:var(--bk-ink);line-height:1;">#{{ p.no }}</div>
+                  <div style="font-family:'Shantell Sans',cursive;font-size:15px;color:var(--bk-text-2);">{{ p.t }}</div></div>
+                </div>
+              </sc-for>
+              <div style="font-family:'Caveat',cursive;font-size:30px;color:var(--bk-ink);margin:22px 0 8px;">Credentials</div>
+              <sc-for list="{{ creds }}" as="c" hint-placeholder-count="3">
+                <div style="font-family:'Shantell Sans',cursive;font-size:16px;color:var(--bk-text);line-height:30px;border-bottom:1px dotted #c3b89a;display:flex;justify-content:space-between;">
+                  <span>{{ c.k }}</span><span style="font-family:'Patrick Hand',cursive;color:var(--bk-teal);">{{ c.v }}</span>
+                </div>
+              </sc-for>
+              <div style="margin-top:18px;background:#fff7ec;border:1.5px dashed #e2a32b;border-radius:10px;padding:11px 13px;max-width:300px;">
+                <div style="font-family:'Patrick Hand',cursive;font-size:12px;letter-spacing:1px;color:var(--dev);margin-bottom:4px;">HONEST SCOPE</div>
+                <div style="font-family:'Shantell Sans',cursive;font-size:13px;line-height:1.4;color:var(--bk-text-3);">The patent protects the <b style="color:var(--bk-ink);">hardware sensing method</b>. It does <b>not</b> cover the dataset, the AI models or the learning loop, those are defended by execution and data, not paper.</div>
+              </div>
+              <div style="position:absolute;right:50px;bottom:46px;pointer-events:none;display:flex;align-items:center;gap:12px;">
+                <div style="font-family:'Caveat',cursive;font-size:24px;color:var(--bk-red);transform:rotate(-3deg);max-width:118px;line-height:1.05;text-align:right;">protected through 2045</div>
+                <svg width="96" height="116" viewBox="0 0 96 116" style="filter:url(#rough);overflow:visible;display:block;">
+                  <path d="M34 64 L26 108 L40 98 L48 108 L42 64 Z" fill="#c0392b" stroke="#9b2c20" stroke-width="1.4" stroke-linejoin="round"/>
+                  <path d="M54 64 L48 108 L56 98 L70 108 L62 64 Z" fill="#e2a32b" stroke="#b07d12" stroke-width="1.4" stroke-linejoin="round"/>
+                  <circle cx="48" cy="40" r="34" fill="#fff7d6" stroke="#e2a32b" stroke-width="2.6"/>
+                  <circle cx="48" cy="40" r="26" fill="none" stroke="#e2a32b" stroke-width="1.4" stroke-dasharray="2 5"/>
+                  <path d="M48 22 l6 12 13 1 -10 9 3 13 -12 -7 -12 7 3 -13 -10 -9 13 -1 Z" fill="#e2a32b" stroke="#b07d12" stroke-width="1" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- UNIT ECONOMICS -->
+        <sc-if value="{{ isEconomics }}" hint-placeholder-val="{{ false }}">
+          <div class="spd" style="display:flex;width:100%;height:100%;">
+            <div style="flex:1;height:100%;padding:48px 40px 32px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 09 · UNIT ECONOMICS</div>
+                <div style="font-family:'Patrick Hand',cursive;font-size:10px;letter-spacing:.5px;color:var(--dev);background:var(--dev-bg);border:1px solid color-mix(in srgb, var(--dev) 35%, var(--surface));border-radius:5px;padding:2px 7px;transform:rotate(2deg);">ILLUSTRATIVE · REPLACE</div>
+              </div>
+              <div style="font-family:'Caveat',cursive;font-size:48px;color:var(--bk-ink);line-height:1;margin:2px 0 4px;">Where the money comes from</div>
+              <svg viewBox="0 0 250 14" style="display:block;width:255px;height:13px;margin:0 0 14px;filter:url(#rough);"><path d="M4 8 C60 2 120 12 165 6 C200 2 228 9 246 5" fill="none" stroke="#e2a32b" stroke-width="3" stroke-linecap="round"/></svg>
+              <div style="font-family:'Patrick Hand',cursive;font-size:13px;color:var(--bk-text-3);margin-bottom:10px;">revenue arrives in sequence, not all at once</div>
+              <div style="display:flex;flex-direction:column;gap:9px;">
+                <sc-for list="{{ revPhases }}" as="p" hint-placeholder-count="3">
+                  <div style="background:#fff;border:1.5px solid var(--bk-paper-line);border-left:5px solid {{ p.c }};border-radius:10px;padding:10px 14px;box-shadow:1px 2px 0 rgba(0,0,0,.04);">
+                    <div style="display:flex;justify-content:space-between;align-items:baseline;"><span style="font-family:'Patrick Hand',cursive;font-size:12px;letter-spacing:1.5px;color:{{ p.c }};">{{ p.ph }}</span><span style="font-family:'Patrick Hand',cursive;font-size:12px;color:var(--bk-hint);">{{ p.who }}</span></div>
+                    <div style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:16px;color:var(--bk-text);margin-top:2px;">{{ p.name }}</div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="margin-top:13px;background:var(--accent-soft);border:2px solid var(--bk-ink);border-radius:10px;padding:11px 14px;box-shadow:3px 4px 0 rgba(39,64,143,.1);"><div style="font-family:'Patrick Hand',cursive;font-size:12px;letter-spacing:1px;color:var(--bk-ink);">WHO PAYS FIRST</div><div style="font-family:'Shantell Sans',cursive;font-size:14.5px;color:var(--bk-ink);line-height:1.4;margin-top:2px;"><b>Schools and parents</b>, today, for handwriting coaching. That pilot revenue funds the dataset that later licenses to enterprises.</div></div>
+            </div>
+            <div style="flex:1;height:100%;padding:48px 46px 34px;border-radius:0 8px 8px 0;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;display:flex;flex-direction:column;">
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">COST PER DATASET SAMPLE</div>
+              <div style="font-family:'Caveat',cursive;font-size:40px;color:var(--bk-ink);line-height:1;margin:1px 0 14px;">What one labelled sample costs</div>
+              <div style="display:flex;flex-direction:column;gap:0;background:#fff;border:1.5px solid var(--bk-paper-line);border-radius:11px;overflow:hidden;box-shadow:2px 3px 0 rgba(0,0,0,.05);">
+                <sc-for list="{{ econRows }}" as="r" hint-placeholder-count="5">
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 15px;border-top:1px solid {{ r.bd }};background:{{ r.bg }};">
+                    <span style="font-family:'Shantell Sans',cursive;font-size:15px;color:{{ r.tc }};font-weight:{{ r.fw }};">{{ r.k }}</span>
+                    <span style="font-family:'Caveat',cursive;font-size:24px;color:{{ r.vc }};font-weight:600;">{{ r.v }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="margin-top:14px;">
+                <div style="font-family:'Patrick Hand',cursive;font-size:12px;letter-spacing:1px;color:var(--bk-hint);margin-bottom:7px;">AND IT FALLS WITH VOLUME</div>
+                <div style="display:flex;align-items:flex-end;gap:4px;background:#fff;border:1.5px solid var(--bk-paper-line);border-radius:11px;padding:11px 8px;box-shadow:2px 3px 0 rgba(0,0,0,.05);">
+                  <sc-for list="{{ costCurve }}" as="c" hint-placeholder-count="4">
+                    <div style="flex:1;text-align:center;"><div style="font-family:'Caveat',cursive;font-size:30px;color:var(--bk-ink);line-height:.85;">{{ c.v }}</div><div style="font-family:'Shantell Sans',cursive;font-size:10.5px;color:#6a7180;line-height:1.15;margin-top:2px;">{{ c.n }}</div></div>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="margin-top:auto;font-family:'Shantell Sans',cursive;font-size:13.5px;color:var(--bk-text-2);text-align:center;line-height:1.5;padding-top:12px;">Benchmark: STABILO's OnHW reached ~31k samples from 119 writers; we target <b style="color:var(--bk-ink);">balanced ages &amp; both hands</b>. <span style="color:var(--dev);">Figures illustrative.</span></div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- GO-TO-MARKET -->
+        <sc-if value="{{ isGtm }}" hint-placeholder-val="{{ false }}">
+          <div class="spd" style="display:flex;width:100%;height:100%;">
+            <div style="flex:1;height:100%;padding:54px 40px 36px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
+              <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 10 · GO-TO-MARKET</div>
+              <div style="font-family:'Caveat',cursive;font-size:50px;color:var(--bk-ink);line-height:1;margin:2px 0 4px;">Land soft, expand hard</div>
+              <svg viewBox="0 0 250 14" style="display:block;width:250px;height:13px;margin:0 0 14px;filter:url(#rough);"><path d="M4 8 C60 2 120 12 165 6 C200 2 228 9 246 5" fill="none" stroke="#e2a32b" stroke-width="3" stroke-linecap="round"/></svg>
+              <div style="font-family:'Shantell Sans',cursive;font-size:15px;line-height:1.4;color:var(--bk-text-2);margin-bottom:13px;">A free analyser earns trust with parents, then we climb: classrooms, districts, states, and finally enterprise licensing.</div>
+              <div style="display:flex;flex-direction:column;gap:6px;">
+                <sc-for list="{{ gtmStages }}" as="g" hint-placeholder-count="5">
+                  <div style="display:flex;gap:12px;align-items:flex-start;">
+                    <div style="flex:none;display:flex;flex-direction:column;align-items:center;"><div style="width:34px;height:34px;border-radius:50%;background:{{ g.c }};color:#fff;font-family:'Caveat',cursive;font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center;">{{ g.n }}</div><div style="width:2px;flex:1;min-height:14px;background:#dcd3bd;"></div></div>
+                    <div style="flex:1;padding-bottom:8px;"><div style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:16px;color:{{ g.c }};line-height:1.1;">{{ g.t }}</div><div style="font-family:'Shantell Sans',cursive;font-size:13.5px;color:var(--bk-text-3);line-height:1.35;margin-top:1px;">{{ g.d }}</div></div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="flex:1;height:100%;padding:54px 48px 36px;border-radius:0 8px 8px 0;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;display:flex;flex-direction:column;">
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">fig. · every stage feeds the dataset</div>
+              <div style="font-family:'Caveat',cursive;font-size:36px;color:var(--bk-ink);line-height:1.02;margin:1px 0 16px;">The flywheel</div>
+              <div style="display:flex;flex-direction:column;gap:8px;align-items:center;">
+                <div style="width:100%;background:var(--accent-soft);border:1.5px solid var(--bk-teal);border-radius:9px;padding:9px 12px;text-align:center;"><span style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:14px;color:var(--accent-ink);">More writers use the free analyser</span></div>
+                <div style="font-family:'Patrick Hand',cursive;font-size:18px;color:var(--bk-hint);line-height:1;">↓</div>
+                <div style="width:88%;background:var(--accent-soft);border:1.5px solid var(--bk-ink);border-radius:9px;padding:9px 12px;text-align:center;"><span style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:14px;color:var(--bk-ink);">Each page adds balanced motion data</span></div>
+                <div style="font-family:'Patrick Hand',cursive;font-size:18px;color:var(--bk-hint);line-height:1;">↓</div>
+                <div style="width:76%;background:var(--dev-bg);border:1.5px solid #e2a32b;border-radius:9px;padding:9px 12px;text-align:center;"><span style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:14px;color:var(--dev);">A better model = better coaching</span></div>
+                <div style="font-family:'Patrick Hand',cursive;font-size:18px;color:var(--bk-hint);line-height:1;">↓</div>
+                <div style="width:64%;background:#f3eefb;border:1.5px solid #7a4bd0;border-radius:9px;padding:9px 12px;text-align:center;"><span style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:14px;color:#7a4bd0;">Schools pay → funds more collection</span></div>
+              </div>
+              <div style="margin-top:auto;font-family:'Shantell Sans',cursive;font-size:14.5px;color:var(--bk-text-2);text-align:center;line-height:1.5;padding-top:14px;">The coaching product and the dataset grow each other. <b style="color:var(--bk-ink);">Distribution and the moat are the same motion.</b></div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- AWARDS / RECOGNITIONS -->
+        <sc-if value="{{ isAwards }}" hint-placeholder-val="{{ false }}">
+          <div class="spd" style="display:flex;width:100%;height:100%;">
+            <div style="flex:1;height:100%;padding:56px 40px 40px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
+              <div style="position:absolute;top:0;bottom:0;left:56px;width:0;background:transparent;"></div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 11 · TRACTION</div>
+              <div style="font-family:'Caveat',cursive;font-size:52px;color:var(--bk-ink);line-height:1;margin:2px 0 6px;">Traction so far</div>
+              <div style="font-family:'Shantell Sans',cursive;font-size:15px;color:var(--bk-text-3);margin-bottom:14px;">Small but real: a granted patent, recognition, a live product in the field, and open pre-orders.</div>
+              <sc-for list="{{ recognitions }}" as="r" hint-placeholder-count="3">
+                <div style="display:flex;gap:14px;align-items:center;margin-bottom:16px;">
+                  <div style="flex:none;width:46px;height:46px;border-radius:50%;background:{{ r.c }};color:#fff;font-family:'Caveat',cursive;font-size:30px;display:flex;align-items:center;justify-content:center;">★</div>
+                  <div><div style="font-family:'Caveat',cursive;font-size:26px;color:var(--bk-ink);line-height:1;">{{ r.t }}</div>
+                  <div style="font-family:'Shantell Sans',cursive;font-size:15px;color:var(--bk-text-2);">{{ r.d }}</div></div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="flex:1;height:100%;padding:56px 54px;border-radius:0 8px 8px 0;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
+              <div style="font-family:'Caveat',cursive;font-size:34px;color:var(--bk-ink);margin-bottom:14px;">Milestones</div>
+              <sc-for list="{{ milestones }}" as="m" hint-placeholder-count="4">
+                <div style="display:flex;gap:14px;align-items:baseline;line-height:1.4;margin-bottom:14px;">
+                  <span style="font-family:'Patrick Hand',cursive;font-size:20px;color:var(--bk-red);white-space:nowrap;">{{ m.y }}</span>
+                  <span style="font-family:'Shantell Sans',cursive;font-size:17px;color:var(--bk-text);">{{ m.t }}</span>
+                </div>
+              </sc-for>
+              
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- TEAM -->
+        <sc-if value="{{ isTeam }}" hint-placeholder-val="{{ false }}">
+          <div class="spd" style="display:flex;width:100%;height:100%;">
+            <div style="flex:1;height:100%;padding:56px 40px 40px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
+              <div style="position:absolute;top:0;bottom:0;left:56px;width:0;background:transparent;"></div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 12</div>
+              <div style="font-family:'Caveat',cursive;font-size:54px;color:var(--bk-ink);line-height:1;margin:2px 0 6px;">The Team</div>
+              <div style="font-family:'Shantell Sans',cursive;font-size:15px;color:var(--bk-text-3);margin-bottom:8px;">17 years in embedded systems, a granted patent, and three years living this problem, why this team can collect what others won't.</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+                <sc-for list="{{ team }}" as="t" hint-placeholder-count="4">
+                  <div style="background:#fff;border:1px solid #e3dcc7;border-radius:8px;padding:14px;box-shadow:2px 3px 0 rgba(0,0,0,.05);transform:rotate({{ t.rot }});">
+                    <div style="width:44px;height:44px;border-radius:50%;background:{{ t.c }};color:#fff;font-family:'Caveat',cursive;font-size:26px;display:flex;align-items:center;justify-content:center;">{{ t.i }}</div>
+                    <div style="font-family:'Caveat',cursive;font-size:24px;color:var(--bk-ink);line-height:1;margin-top:8px;">{{ t.name }}</div>
+                    <div style="font-family:'Patrick Hand',cursive;font-size:14px;color:var(--bk-red);">{{ t.role }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="flex:1;height:100%;padding:56px 54px;border-radius:0 8px 8px 0;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;">
+              <div style="font-family:'Caveat',cursive;font-size:44px;color:var(--bk-teal);line-height:1.1;">“It began in May 2023 with one question. Could technology preserve the natural act of writing while making it more accessible?”</div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:18px;color:var(--bk-text-2);margin-top:18px;">Malli Kosuri, Co-Founder &amp; MD</div>
+              <div style="position:absolute;left:54px;bottom:50px;pointer-events:none;display:flex;align-items:flex-end;gap:14px;">
+                <svg width="116" height="126" viewBox="0 0 116 126" style="filter:url(#rough);overflow:visible;display:block;">
+                  <g stroke="#e2a32b" stroke-width="2" stroke-linecap="round" fill="none">
+                    <path d="M58 8 V0"/><path d="M18 26 L11 20"/><path d="M98 26 L105 20"/><path d="M10 62 H2"/><path d="M106 62 H114"/>
+                  </g>
+                  <path d="M58 16 a30 30 0 0 1 20 52 c-4 4 -5 8 -5 13 h-30 c0 -5 -1 -9 -5 -13 a30 30 0 0 1 20 -52 z" fill="#fff7d6" stroke="#e2a32b" stroke-width="2.4" stroke-linejoin="round"/>
+                  <path d="M48 62 C53 51 63 51 68 62" fill="none" stroke="#e2a32b" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M44 86 h28 M47 94 h22 M51 101 h14" fill="none" stroke="#7a5a14" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <div style="font-family:'Caveat',cursive;font-size:23px;color:var(--bk-teal);transform:rotate(-2deg);max-width:150px;line-height:1.05;margin-bottom:20px;">it started with one question.</div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- HARD QUESTIONS -->
+        <sc-if value="{{ isQuestions }}" hint-placeholder-val="{{ false }}">
+          <div class="spd" style="display:flex;width:100%;height:100%;">
+            <div style="flex:1;height:100%;padding:46px 38px 34px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
+              <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 13 · HARD QUESTIONS</div>
+              <div style="font-family:'Caveat',cursive;font-size:46px;color:var(--bk-ink);line-height:1;margin:2px 0 3px;">The questions you'll ask</div>
+              <div style="font-family:'Shantell Sans',cursive;font-size:13.5px;color:var(--bk-text-3);margin-bottom:13px;">Answered before you have to ask them.</div>
+              <div style="display:flex;flex-direction:column;gap:12px;">
+                <sc-for list="{{ hardQL }}" as="q" hint-placeholder-count="5">
+                  <div style="display:flex;gap:11px;align-items:flex-start;">
+                    <div style="flex:none;width:29px;height:29px;border-radius:50%;background:var(--bk-ink);color:#fff;font-family:'Caveat',cursive;font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;">{{ q.n }}</div>
+                    <div style="flex:1;"><div style="font-family:'Patrick Hand',cursive;font-size:15px;color:var(--bk-red);line-height:1.12;">{{ q.q }}</div><div style="font-family:'Shantell Sans',cursive;font-size:12.5px;color:var(--bk-text-2);line-height:1.35;margin-top:2px;">{{ q.a }}</div></div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="flex:1;height:100%;padding:46px 48px 34px 40px;border-radius:0 8px 8px 0;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
+              <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);text-align:right;margin-bottom:13px;">…continued</div>
+              <div style="display:flex;flex-direction:column;gap:12px;margin-top:34px;">
+                <sc-for list="{{ hardQR }}" as="q" hint-placeholder-count="5">
+                  <div style="display:flex;gap:11px;align-items:flex-start;">
+                    <div style="flex:none;width:29px;height:29px;border-radius:50%;background:var(--bk-teal);color:#fff;font-family:'Caveat',cursive;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;">{{ q.n }}</div>
+                    <div style="flex:1;"><div style="font-family:'Patrick Hand',cursive;font-size:15px;color:var(--bk-red);line-height:1.12;">{{ q.q }}</div><div style="font-family:'Shantell Sans',cursive;font-size:12.5px;color:var(--bk-text-2);line-height:1.35;margin-top:2px;">{{ q.a }}</div></div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- VISION -->
+        <sc-if value="{{ isVision }}" hint-placeholder-val="{{ false }}">
+          <div class="spd" style="display:flex;width:100%;height:100%;">
+            <div style="flex:1;height:100%;padding:54px 40px 36px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
+              <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 14 · THE VISION</div>
+              <div style="font-family:'Caveat',cursive;font-size:50px;color:var(--bk-ink);line-height:1;margin:2px 0 4px;">Where this goes</div>
+              <svg viewBox="0 0 250 14" style="display:block;width:250px;height:13px;margin:0 0 18px;filter:url(#rough);"><path d="M4 8 C60 2 120 12 165 6 C200 2 228 9 246 5" fill="none" stroke="#e2a32b" stroke-width="3" stroke-linecap="round"/></svg>
+              <div style="display:flex;flex-direction:column;gap:14px;">
+                <sc-for list="{{ visionH }}" as="v" hint-placeholder-count="3">
+                  <div style="background:#fff;border:1.5px solid var(--bk-paper-line);border-left:6px solid {{ v.c }};border-radius:11px;padding:13px 16px;box-shadow:2px 3px 0 rgba(0,0,0,.05);">
+                    <div style="font-family:'Patrick Hand',cursive;font-size:12px;letter-spacing:2px;color:{{ v.c }};">{{ v.tag }}</div>
+                    <div style="font-family:'Caveat',cursive;font-size:30px;color:var(--bk-ink);line-height:1;margin:1px 0 3px;">{{ v.t }}</div>
+                    <div style="font-family:'Shantell Sans',cursive;font-size:14px;color:var(--bk-text-3);line-height:1.4;">{{ v.d }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="flex:1;height:100%;padding:0;border-radius:0 8px 8px 0;background:radial-gradient(120% 120% at 70% 28%,#2f4a9e 0%,var(--bk-ink) 52%,#1c2f6b 100%);position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;color:#fff;padding:54px 50px;">
+              <div style="position:absolute;inset:0;background-image:radial-gradient(circle at center, rgba(255,255,255,.07) 1.3px, transparent 1.6px);background-size:26px 26px;"></div>
+              <div style="position:relative;">
+                <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:color-mix(in srgb, var(--bk-ink) 20%, var(--surface));">ONE SENTENCE TO REMEMBER</div>
+                <div style="font-family:'Caveat',cursive;font-size:50px;line-height:1.02;color:#fff;margin:10px 0 0;">The pen is the instrument.<br>The dataset is the company.<br>The model is the future.</div>
+                <div style="width:130px;height:3px;background:#e3c66b;border-radius:3px;margin:22px 0;"></div>
+                <div style="font-family:'Shantell Sans',cursive;font-size:17px;line-height:1.6;color:var(--accent-soft);max-width:380px;">One motion signal, collected from real hands on ordinary paper, becomes the layer every machine uses to <b style="color:#e3c66b;">read, verify and generate</b> human handwriting.</div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- NEWS / BLOG -->
+        <sc-if value="{{ isNews }}" hint-placeholder-val="{{ false }}">
+          <div class="spd" style="display:flex;width:100%;height:100%;">
+            <div style="flex:1;height:100%;padding:56px 40px 40px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
+              <div style="position:absolute;top:0;bottom:0;left:56px;width:0;background:transparent;"></div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 15</div>
+              <div style="font-family:'Caveat',cursive;font-size:54px;color:var(--bk-ink);line-height:1;margin:2px 0 18px;">Events &amp; News</div>
+              <sc-for list="{{ news }}" as="n" hint-placeholder-count="3">
+                <div style="margin-bottom:18px;">
+                  <div style="font-family:'Patrick Hand',cursive;font-size:14px;color:var(--bk-red);">{{ n.date }}</div>
+                  <div style="font-family:'Caveat',cursive;font-size:26px;color:var(--bk-ink);line-height:1.05;">{{ n.t }}</div>
+                  <div style="font-family:'Shantell Sans',cursive;font-size:15px;color:var(--bk-text-2);line-height:1.45;">{{ n.d }}</div>
+                </div>
+              </sc-for>
+              <div style="position:absolute;left:64px;bottom:80px;pointer-events:none;">
+                <svg width="260" height="62" viewBox="0 0 260 62" style="filter:url(#rough);overflow:visible;display:block;">
+                  <path d="M6 14 C84 34 176 34 254 10" fill="none" stroke="#9aa" stroke-width="2"/>
+                  <path d="M28 20 L48 20 L38 40 Z" fill="#c0392b"/>
+                  <path d="M70 26 L90 26 L80 46 Z" fill="#e2a32b"/>
+                  <path d="M114 28 L134 28 L124 48 Z" fill="#2a8c82"/>
+                  <path d="M158 26 L178 26 L168 46 Z" fill="#27408f"/>
+                  <path d="M200 21 L220 21 L210 41 Z" fill="#7a4bd0"/>
+                </svg>
+                <div style="font-family:'Caveat',cursive;font-size:25px;color:var(--bk-red);transform:rotate(-2deg);margin-top:2px;">catch us at the next demo!</div>
+              </div>
+            </div>
+            <div style="flex:1;height:100%;padding:56px 54px;border-radius:0 8px 8px 0;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
+              <div style="font-family:'Patrick Hand',cursive;font-size:16px;color:var(--bk-hint);">out in the field</div>
+              <div style="font-family:'Caveat',cursive;font-size:36px;color:var(--bk-ink);margin:0 0 16px;">Vahini in action</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 14px;justify-items:center;">
+                <div style="background:#fff;padding:7px 7px 2px;border:1px solid var(--bk-paper-line);box-shadow:2px 4px 11px rgba(0,0,0,.15);width:188px;">
+                  <img src="assets/ev/ev-vizag.jpg" alt="The DeepTech Innovation Award trophy at APDTS 2026, Visakhapatnam" style="display:block;width:100%;height:118px;object-fit:cover;object-position:center 32%;">
+                  <div style="font-family:'Patrick Hand',cursive;font-size:13px;color:var(--bk-text-2);text-align:center;padding:6px 2px 5px;line-height:1.2;">DeepTech Award · Vizag</div>
+                </div>
+                <div style="background:#fff;padding:7px 7px 2px;border:1px solid var(--bk-paper-line);box-shadow:2px 4px 11px rgba(0,0,0,.15);width:188px;">
+                  <img src="assets/ev/ev-thub.jpg" alt="The Vahini stall at the T-Hub expo, Hyderabad" style="display:block;width:100%;height:118px;object-fit:cover;object-position:center;">
+                  <div style="font-family:'Patrick Hand',cursive;font-size:13px;color:var(--bk-text-2);text-align:center;padding:6px 2px 5px;line-height:1.2;">T-Hub, Hyderabad</div>
+                </div>
+                <div style="background:#fff;padding:7px 7px 2px;border:1px solid var(--bk-paper-line);box-shadow:2px 4px 11px rgba(0,0,0,.15);width:188px;">
+                  <img src="assets/ev/ev-msme.jpg" alt="At the ni-msme campus, Hyderabad" style="display:block;width:100%;height:118px;object-fit:cover;object-position:center 38%;">
+                  <div style="font-family:'Patrick Hand',cursive;font-size:13px;color:var(--bk-text-2);text-align:center;padding:6px 2px 5px;line-height:1.2;">ni-msme, Hyderabad</div>
+                </div>
+                <div style="background:#fff;padding:7px 7px 2px;border:1px solid var(--bk-paper-line);box-shadow:2px 4px 11px rgba(0,0,0,.15);width:188px;">
+                  <img src="assets/ev/ev-iit.jpg" alt="The Vahini booth at the IIT expo" style="display:block;width:100%;height:118px;object-fit:cover;object-position:center;">
+                  <div style="font-family:'Patrick Hand',cursive;font-size:13px;color:var(--bk-text-2);text-align:center;padding:6px 2px 5px;line-height:1.2;">IIT expo · booth #72</div>
+                </div>
+                <div style="grid-column:1 / span 2;background:#fff;padding:7px 7px 2px;border:1px solid var(--bk-paper-line);box-shadow:2px 4px 11px rgba(0,0,0,.15);width:188px;">
+                  <img src="assets/ev/ev-mrhub.jpg" alt="At the MR Hub with the Vahini handwriting-science banner" style="display:block;width:100%;height:118px;object-fit:cover;object-position:center 26%;">
+                  <div style="font-family:'Patrick Hand',cursive;font-size:13px;color:var(--bk-text-2);text-align:center;padding:6px 2px 5px;line-height:1.2;">MR Hub</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- CONTACT -->
+        <sc-if value="{{ isContact }}" hint-placeholder-val="{{ false }}">
+          <div class="spd" style="display:flex;width:100%;height:100%;">
+            <div style="flex:1;height:100%;padding:56px 40px 40px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
+              <div style="position:absolute;top:0;bottom:0;left:56px;width:0;background:transparent;"></div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 16</div>
+              <div style="font-family:'Caveat',cursive;font-size:54px;color:var(--bk-ink);line-height:1;margin:2px 0 18px;">Get in touch</div>
+              <sc-for list="{{ contacts }}" as="c" hint-placeholder-count="6">
+                <div style="display:flex;gap:12px;align-items:baseline;line-height:36px;">
+                  <span style="font-family:'Patrick Hand',cursive;font-size:15px;color:var(--bk-red);width:96px;">{{ c.k }}</span>
+                  <span style="font-family:'Shantell Sans',cursive;font-size:18px;color:var(--bk-ink);">{{ c.v }}</span>
+                </div>
+              </sc-for>
+              <div style="position:absolute;left:70px;bottom:66px;pointer-events:none;">
+                <svg width="240" height="118" viewBox="0 0 240 118" style="filter:url(#rough);overflow:visible;display:block;">
+                  <path d="M10 104 C36 112 52 96 38 88 C28 83 24 96 40 98 C74 104 120 86 196 30" fill="none" stroke="#b9c2cc" stroke-width="2" stroke-dasharray="2 7" stroke-linecap="round"/>
+                  <path d="M210 18 L150 50 L178 58 Z" fill="#e8eef3" stroke="#27408f" stroke-width="2" stroke-linejoin="round"/>
+                  <path d="M210 18 L178 58 L184 42 Z" fill="#cdd9e3" stroke="#27408f" stroke-width="2" stroke-linejoin="round"/>
+                </svg>
+                <div style="font-family:'Caveat',cursive;font-size:25px;color:var(--bk-red);transform:rotate(-3deg);margin-top:-6px;">drop us a line, we reply fast!</div>
+              </div>
+            </div>
+            <div style="flex:1;height:100%;padding:50px;border-radius:0 8px 8px 0;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+              <div style="width:300px;background:var(--dev-bg);border:1px solid color-mix(in srgb, var(--dev) 35%, var(--surface));border-radius:4px;padding:24px;box-shadow:4px 6px 14px rgba(0,0,0,.12);transform:rotate(-3deg);">
+                <div style="font-family:'Caveat',cursive;font-size:34px;color:#7a5a14;line-height:1;">Let's talk.</div>
+                <div style="font-family:'Shantell Sans',cursive;font-size:16px;color:#6a5a30;line-height:1.5;margin-top:10px;">Investors and partners, we'd love to show you the pen writing live. Drop a line and we'll set up a demo.</div>
+                <div style="font-family:'Caveat',cursive;font-size:23px;color:var(--bk-ink);margin-top:18px;border-top:1px dashed #d7c179;padding-top:10px;line-height:1.3;">info@vahinitech.com<br>vahinitechfirm@gmail.com</div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- BACK COVER -->
+        <sc-if value="{{ isBack }}" hint-placeholder-val="{{ false }}">
+          <div class="spd" style="display:flex;width:100%;height:100%;">
+            <div style="flex:1;height:100%;background:radial-gradient(120% 120% at 30% 22%,var(--bk-cover-hi) 0%,var(--bk-cover) 55%,var(--bk-cover-lo) 100%);border-radius:8px 0 0 8px;border-right:2px solid color-mix(in srgb, var(--bk-cover-lo) 70%, #000);display:flex;flex-direction:column;justify-content:center;padding:0 60px;color:#f3e3b4;">
+              <div style="font-family:'Caveat',cursive;font-size:58px;line-height:1;color:#f4e2a4;text-shadow:0 2px 0 color-mix(in srgb, var(--dark-2) 70%, #000),0 4px 12px rgba(0,0,0,.4);">The end of<br>the notebook.</div>
+              <div style="font-family:'Shantell Sans',cursive;font-size:18px;line-height:1.6;color:#f1e6c4;opacity:.95;margin-top:18px;max-width:330px;">But the start of the platform. One motion signal powers handwriting, digital paper, learning, healthcare and research.</div>
+              <div onClick="{{ goCover }}" class="lnk" style="margin-top:30px;font-family:'Patrick Hand',cursive;font-size:20px;color:#f4d97a;">↺ Back to the cover</div>
+            </div>
+            <div style="flex:1;height:100%;background:radial-gradient(120% 120% at 70% 30%,var(--bk-cover-hi) 0%,var(--bk-cover) 55%,var(--bk-cover-lo) 100%);border-radius:0 8px 8px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#ecd49a;position:relative;">
+              <div style="position:absolute;inset:14px;border:1.5px dashed rgba(236,212,154,.42);border-radius:6px;"></div>
+              <div style="position:relative;width:150px;height:150px;display:flex;align-items:center;justify-content:center;">
+                <div style="position:absolute;left:50%;bottom:-20px;width:26px;height:56px;background:linear-gradient(180deg,#d8b85a,#8a1f2d);transform:translateX(-132%) rotate(10deg);clip-path:polygon(0 0,100% 0,100% 100%,50% 74%,0 100%);box-shadow:0 4px 9px rgba(0,0,0,.4);"></div>
+                <div style="position:absolute;left:50%;bottom:-20px;width:26px;height:56px;background:linear-gradient(180deg,#d8b85a,#8a1f2d);transform:translateX(32%) rotate(-10deg);clip-path:polygon(0 0,100% 0,100% 100%,50% 74%,0 100%);box-shadow:0 4px 9px rgba(0,0,0,.4);"></div>
+                <div style="position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(#d8b85a 0deg 6deg,#9b7a2c 6deg 12deg);box-shadow:0 7px 18px rgba(0,0,0,.5);"></div>
+                <div style="position:absolute;inset:11px;border-radius:50%;background:radial-gradient(circle at 38% 30%,#f8ecbd,#d4af37 52%,#a07a2b);box-shadow:inset 0 3px 7px rgba(255,255,255,.55),inset 0 -5px 12px rgba(80,52,8,.55);display:flex;align-items:center;justify-content:center;">
+                  <div style="position:absolute;inset:9px;border-radius:50%;border:1.5px dashed rgba(80,52,8,.4);"></div>
+                  <img src="assets/ev/logo.png" alt="Vahini logo" style="width:80px;height:80px;object-fit:contain;filter:drop-shadow(0 1px 1px rgba(80,52,8,.45));">
+                </div>
+              </div>
+              <div style="font-family:'Caveat',cursive;font-size:32px;margin-top:16px;color:#f1d894;">Vahini Technologies</div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:14px;color:#e3c66b;opacity:.85;margin-top:4px;">Hyderabad · vahinitech.com</div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:13px;color:#e3c66b;opacity:.8;margin-top:3px;">RTIH, Tirupati · AP Incubated 2026</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:16px;">
+                <div style="width:31px;height:21px;border-radius:2px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 2px 6px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.25);">
+                  <div style="flex:1;background:#ff9933;"></div>
+                  <div style="flex:1;background:#fff;display:flex;align-items:center;justify-content:center;"><div style="width:8px;height:8px;border-radius:50%;border:1.5px solid #0a3d91;"></div></div>
+                  <div style="flex:1;background:#138808;"></div>
+                </div>
+                <div style="font-family:'Caveat',cursive;font-size:24px;color:#f4e2a4;">Made in India</div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- center stitched binding -->
+        <div style="position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);width:30px;pointer-events:none;z-index:20;background:linear-gradient(90deg,rgba(0,0,0,.18),rgba(0,0,0,0) 25%,rgba(0,0,0,0) 75%,rgba(0,0,0,.18));"></div>
+        <sc-if value="{{ showStitch }}" hint-placeholder-val="{{ true }}">
+          <div style="position:absolute;top:40px;bottom:40px;left:50%;transform:translateX(-50%);width:2px;z-index:21;pointer-events:none;background:repeating-linear-gradient(var(--bk-red),var(--bk-red) 14px,transparent 14px,transparent 26px);"></div>
+        </sc-if>
+
+        <!-- flip leaf overlay -->
+        <sc-if value="{{ flipping }}" hint-placeholder-val="{{ false }}">
+          <sc-if value="{{ flipNext }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;top:0;right:0;width:50%;height:100%;z-index:30;transform-origin:left center;animation:flipNext .52s ease-in forwards;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;border-radius:0 8px 8px 0;box-shadow:-12px 0 24px rgba(0,0,0,.2);backface-visibility:hidden;">
+              <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.16),transparent 40%);animation:leafShade .52s ease-in forwards;"></div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ flipPrev }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;top:0;left:0;width:50%;height:100%;z-index:30;transform-origin:right center;animation:flipPrev .52s ease-in forwards;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;border-radius:8px 0 0 8px;box-shadow:12px 0 24px rgba(0,0,0,.2);backface-visibility:hidden;">
+              <div style="position:absolute;inset:0;background:linear-gradient(270deg,rgba(0,0,0,.16),transparent 40%);animation:leafShade .52s ease-in forwards;"></div>
+            </div>
+          </sc-if>
+        </sc-if>
+
+        <!-- page corners -->
+        <sc-if value="{{ canNext }}" hint-placeholder-val="{{ true }}">
+          <div onClick="{{ next }}" class="corner lnk" title="next page" style="position:absolute;bottom:0;right:0;width:64px;height:64px;z-index:25;background:linear-gradient(135deg,transparent 50%,#e9e0c6 50%);border-radius:0 0 8px 0;box-shadow:-3px -3px 8px rgba(0,0,0,.08) inset;"></div>
+        </sc-if>
+        <sc-if value="{{ canPrev }}" hint-placeholder-val="{{ false }}">
+          <div onClick="{{ prev }}" class="corner lnk" title="previous page" style="position:absolute;bottom:0;left:0;width:64px;height:64px;z-index:25;background:linear-gradient(225deg,transparent 50%,#e9e0c6 50%);border-radius:0 0 0 8px;box-shadow:3px -3px 8px rgba(0,0,0,.08) inset;"></div>
+        </sc-if>
+      </div>
+
+      <!-- page number -->
+      <sc-if value="{{ showFooter }}" hint-placeholder-val="{{ true }}">
+        <div style="position:absolute;bottom:18px;right:80px;font-family:'Patrick Hand',cursive;font-size:15px;color:var(--bk-hint);z-index:26;">{{ pageLabel }}</div>
+        <div style="position:absolute;bottom:18px;left:80px;font-family:'Patrick Hand',cursive;font-size:15px;color:var(--bk-hint);z-index:26;">Vahini · field notes</div>
+      </sc-if>
+    </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- flipbook controls -->
+  <div class="ibk-bar">
+    <button onClick="{{ prev }}" title="previous page" aria-label="Previous page">&#10094;</button>
+    <div class="ibk-pg">{{ pageCounter }}</div>
+    <button onClick="{{ next }}" title="next page" aria-label="Next page">&#10095;</button>
+    <span class="ibk-sep"></span>
+    <button onClick="{{ goIndex }}" title="table of contents">&#9776; Contents</button>
+    <button onClick="{{ toggleFS }}" title="fullscreen" aria-label="Toggle fullscreen">&#9974;</button>
+  </div>
+</div>
+</x-dc>
+</main>
+<div id="site-footer"></div>
+<script src="js/site.js"></script>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { cur: 'cover', flipping: false, dir: 'next', scale: 1, selApp: 0, halfMode: false, half: 0 };
+
+  order = ['cover','index','problem','whynow','beyond','competition','methods','pen','specs','patents','economics','gtm','awards','team','questions','vision','news','contact','back'];
+
+  labels = {
+    problem:'The Problem', whynow:'Why Now', beyond:'The Moat', competition:'Competition', methods:'Dataset Methods', pen:'How Vahini Works',
+    specs:'Writing DNA & Specs', patents:'Patents & IP', economics:'Unit Economics', gtm:'Go-to-Market',
+    awards:'Traction', team:'The Team', questions:'Hard Questions', vision:'The Vision', news:'Events & News', contact:'Get in Touch'
+  };
+
+  hardQ = [
+    { n:'1', q:'Why can’t Apple build this in two years?', a:'Motion on paper can’t be scraped. It needs pens, field teams, calibration, consent and years of longitudinal tracking, a physical operation Big Tech doesn’t run.' },
+    { n:'2', q:'How large can this become?', a:'Coaching SaaS is the wedge; the licensable motion foundation dataset is the prize, a horizontal layer under edtech, health, identity & robotics.' },
+    { n:'3', q:'Who pays first?', a:'Schools and parents, today, for handwriting coaching. Pilot revenue funds the dataset that later sells to enterprises.' },
+    { n:'4', q:'What is the dataset worth?', a:'It is the only balanced, labelled motion-on-paper corpus across Indian scripts, the ground truth every downstream model needs.' },
+    { n:'5', q:'Why will AI companies buy it?', a:'You cannot generate or verify human handwriting motion without real motion data. We own the source they can’t synthesise.' },
+    { n:'6', q:'How much data creates defensibility?', a:'Balance, not just volume: every script × age × hand, linked to outcomes over time. The longitudinal link is the moat, not raw count.' },
+    { n:'7', q:'Why now?', a:'LLMs proved data wins. Every vertical is racing for proprietary corpora, and handwriting motion is still unclaimed.' },
+    { n:'8', q:'What traction proves demand?', a:'Granted patent, DPIIT recognition, a live analyser in the field, an award win and open pre-orders.' },
+    { n:'9', q:'How fast can collection scale?', a:'One trained collector captures ~500 pages/day → ~20k auto-labelled characters/day at ~₹15/sample, falling with volume.' },
+    { n:'10', q:'What happens after English?', a:'Hindi by population, then Telugu, Kannada, Tamil & Malayalam, the same protocol multiplied across India’s scripts.' }
+  ];
+
+  componentDidMount() {
+    this.fit();
+    this._onResize = () => this.fit();
+    window.addEventListener('resize', this._onResize);
+    this._onKey = (e) => {
+      if (/input|textarea|select/i.test((e.target && e.target.tagName) || '')) return;
+      if (e.key === 'ArrowRight') { e.preventDefault(); this.next(); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); this.prev(); }
+    };
+    window.addEventListener('keydown', this._onKey);
+    this._onFs = () => { this.setState({ fs: !!document.fullscreenElement }); this.fit(); };
+    document.addEventListener('fullscreenchange', this._onFs);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._onResize);
+    window.removeEventListener('keydown', this._onKey);
+    document.removeEventListener('fullscreenchange', this._onFs);
+    if (this._t) clearTimeout(this._t);
+  }
+  stageRef = (el) => {
+    if (!el || el === this._stageEl) return;
+    this._stageEl = el;
+    // swipe between pages; leave the demo canvas, buttons and links alone
+    el.addEventListener('touchstart', (e) => {
+      const t = e.touches[0];
+      this._sw = t && { x: t.clientX, y: t.clientY, skip: !!(e.target.closest && e.target.closest('canvas,button,a,.lnk,.corner')) };
+    }, { passive: true });
+    el.addEventListener('touchend', (e) => {
+      const sw = this._sw; this._sw = null;
+      if (!sw || sw.skip) return;
+      const t = e.changedTouches[0]; if (!t) return;
+      const dx = t.clientX - sw.x, dy = t.clientY - sw.y;
+      if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.5) (dx < 0 ? this.next() : this.prev());
+    }, { passive: true });
+    this.fit();
+  };
+  fit = () => {
+    const w = (this._stageEl && this._stageEl.clientWidth) || window.innerWidth;
+    const halfMode = w < 720;
+    const bookW = halfMode ? 560 : 1120;
+    const availW = Math.max(260, w - 18);
+    const chrome = document.fullscreenElement ? 110 : 220; /* toolbar + nav + breathing room */
+    const availH = Math.max(400, window.innerHeight - chrome);
+    /* 730 book + 38 reserved above it -- just short of the tallest resting
+       ribbon (46px), so ribbons tuck into the page edge instead of hovering
+       above it with a gap */
+    const s = Math.min(availW / bookW, availH / 768, 1.06);
+    this.setState({ scale: Math.max(0.28, s), halfMode, half: halfMode ? this.state.half : 0 });
+  };
+  toggleFS = () => {
+    const el = this._stageEl; if (!el) return;
+    if (document.fullscreenElement) { if (document.exitFullscreen) document.exitFullscreen(); }
+    else if (el.requestFullscreen) el.requestFullscreen();
+  };
+
+  go = (key, landHalf) => {
+    if (key === this.state.cur || this.state.flipping) return;
+    const dir = this.order.indexOf(key) > this.order.indexOf(this.state.cur) ? 'next' : 'prev';
+    this.setState({ flipping: true, dir });
+    if (this._t) clearTimeout(this._t);
+    this._t = setTimeout(() => this.setState({ cur: key, flipping: false, half: landHalf || 0 }), 510);
+  };
+  /* single-page (mobile) mode walks half-spreads: right half first, then the
+     next spread's left half; prev mirrors that so the page order is stable */
+  next = () => {
+    if (this.state.halfMode && this.state.half === 0) { this.setState({ half: 1 }); return; }
+    const i = this.order.indexOf(this.state.cur);
+    if (i < this.order.length - 1) this.go(this.order[i + 1], 0);
+  };
+  prev = () => {
+    if (this.state.halfMode && this.state.half === 1) { this.setState({ half: 0 }); return; }
+    const i = this.order.indexOf(this.state.cur);
+    if (i > 0) this.go(this.order[i - 1], this.state.halfMode ? 1 : 0);
+  };
+
+  renderVals() {
+    const cur = this.state.cur;
+    const idx = this.order.indexOf(cur);
+    const is = (k) => cur === k;
+
+    const appData = [
+      { name:'Handwriting AI', glyph:'✎', status:'LIVE', badge:'var(--bk-teal)', color:'var(--bk-teal)', tag:'20-factor CV analysis from a simple scan, for every child.', doodle:'live & free today ✦', long:'Scan or photograph one handwritten page and computer vision scores all 20 factors (pressure, slant, spacing, formation) with personalised coaching exercises, not the same worksheet for everyone. No pen, no per-child device: it works with the printers and scanners schools already have. English and Telugu today. Live and free to try.' },
+      { name:'Digital Notes', glyph:'⇩', status:'IN DEV', badge:'#e2a32b', color:'var(--dev)', tag:'Paper notes reconstructed to digital, screen-free.', doodle:'paper → searchable text', long:'Your ordinary paper notes, rebuilt as searchable digital text straight from the pen’s motion, no tablet, no dot-pattern paper and no camera. Write on the page you already use; keep the digital copy.' },
+      { name:'Autism Support · The Pen', glyph:'✚', status:'RESEARCH', badge:'var(--bk-red)', color:'var(--bk-red)', tag:'The dual-IMU pen, dedicated to autism-support research.', doodle:'built with clinicians', long:'The pen’s dedicated role: autism and CwSN support, built with special educators, OTs and clinicians. It senses grip pressure, steadiness, writing flow and pen lifts directly, and measures each child against their own baseline, not a norm. No dataset required, and no diagnostic claims.' },
+      { name:'Signature Intelligence', glyph:'✓', status:'IN DEV', badge:'#e2a32b', color:'#7a4bd0', tag:'Verify how a signature was written, not just its shape.', doodle:'motion, not just shape', long:'A forgery can copy the shape of a signature; it cannot copy the motion behind it. Vahini verifies the pressure, speed and rhythm of how a signature is written, a motion layer no image-based check can see.' },
+      { name:'Developer SDK', glyph:'{ }', status:'PLANNED', badge:'var(--bk-ink)', color:'var(--bk-ink)', tag:'Motion intelligence as an API for partners.', doodle:'build on our motion API', long:'Everything above, exposed as an API. Partners build their own products on Vahini’s motion-intelligence engine, banks, edtech, healthtech, without touching the hardware or the data pipeline.' }
+    ];
+    const apps = appData.map((a, i) => {
+      const on = i === this.state.selApp;
+      return {
+        ...a, onSelect: () => this.setState({ selApp: i }),
+        glyphStyle: `flex:none;width:38px;height:38px;border-radius:50%;background:${a.color};color:#fff;font-family:'Caveat',cursive;font-size:21px;display:flex;align-items:center;justify-content:center;box-shadow:1px 2px 0 rgba(0,0,0,.12);`,
+        arrowStyle: `flex:none;font-family:'Patrick Hand',cursive;font-size:23px;line-height:1;color:${on?a.color:'#d4c9b3'};transform:${on?'translateX(2px)':'none'};transition:all .18s;`,
+        cardStyle: `display:flex;align-items:center;gap:11px;padding:8px 11px;margin-bottom:8px;border-radius:10px;background:#fff;border:1.5px solid ${on?a.color:'var(--bk-paper-line)'};box-shadow:${on?'0 0 0 2px color-mix(in srgb, '+a.color+' 19%, transparent), 2px 4px 0 rgba(0,0,0,.07)':'1px 2px 0 rgba(0,0,0,.04)'};transform:${on?'translateX(5px)':'none'};transition:all .18s;`
+      };
+    });
+    const sel = appData[this.state.selApp];
+
+    const navAll = Object.keys(this.labels).map((k, i) => ({
+      key:k, label:this.labels[k], num:String(i+1).padStart(2,'0'),
+      onGo: () => this.go(k)
+    }));
+
+    const cmpGlyph = (v) => v==='✓' ? {g:'✓',c:'var(--bk-teal)'} : v==='✗' ? {g:'✗',c:'#cf6b5e'} : {g:'~',c:'var(--dev)'};
+    const compDefs = [
+      { name:'Apple · Google · Samsung', note:'recognise writing on glass', img:'✓', motion:'~', longi:'✗', paper:'✗', us:false },
+      { name:'STABILO OnHW', note:'research IMU pen, lab-scale', img:'✓', motion:'✓', longi:'✗', paper:'✓', us:false },
+      { name:'NeoLAB · Livescribe', note:'dot-pattern smart pens', img:'✓', motion:'✗', longi:'✗', paper:'~', us:false },
+      { name:'reMarkable', note:'digital-paper tablet', img:'✓', motion:'✗', longi:'✗', paper:'✗', us:false },
+      { name:'OpenAI · Microsoft', note:'OCR & vision models', img:'✓', motion:'✗', longi:'✗', paper:'✗', us:false },
+      { name:'Vahini', note:'motion on ordinary paper', img:'✓', motion:'✓', longi:'✓', paper:'✓', us:true }
+    ];
+    const compRows = compDefs.map((d) => ({
+      name:d.name, note:d.note,
+      cells:[cmpGlyph(d.img),cmpGlyph(d.motion),cmpGlyph(d.longi),cmpGlyph(d.paper)],
+      rowStyle:`display:grid;grid-template-columns:1.6fr repeat(4,1fr);align-items:center;border-top:1px solid ${d.us?'var(--bk-ink)':'var(--bk-paper-line)'};background:${d.us?'var(--accent-soft)':'#fff'};`,
+      nameStyle:`padding:8px 11px;font-family:'Shantell Sans',cursive;font-weight:${d.us?'700':'600'};font-size:13.5px;color:${d.us?'var(--bk-ink)':'var(--bk-text)'};line-height:1.05;`,
+      noteColor:d.us?'var(--bk-ink)':'var(--bk-hint)'
+    }));
+
+    const half = this.state.half || 0;
+    const halfMode = this.state.halfMode;
+    const pageCounter = halfMode
+      ? (idx * 2 + half + 1) + ' / ' + (this.order.length * 2)
+      : (idx + 1) + ' / ' + this.order.length;
+
+    return {
+      compRows,
+      scale: this.state.scale,
+      stageRef: this.stageRef,
+      frameH: Math.round(768 * this.state.scale) + 8,
+      viewW: halfMode ? 560 : 1120,
+      innerShift: halfMode && half === 1 ? -560 : 0,
+      pageCounter,
+      toggleFS: this.toggleFS,
+      isCover:is('cover'), isIndex:is('index'), isProblem:is('problem'), isPen:is('pen'),
+      isSpecs:is('specs'), isPatents:is('patents'), isBeyond:is('beyond'), isMethods:is('methods'), isEconomics:is('economics'),
+      isAwards:is('awards'), isTeam:is('team'), isNews:is('news'), isContact:is('contact'), isBack:is('back'),
+      isWhynow:is('whynow'), isCompetition:is('competition'), isGtm:is('gtm'), isQuestions:is('questions'), isVision:is('vision'),
+      showStitch: !is('cover') && !is('back'),
+      showFooter: true,
+      flipping: this.state.flipping, flipNext: this.state.dir==='next', flipPrev: this.state.dir==='prev',
+      canNext: idx < this.order.length - 1, canPrev: idx > 0,
+      next: this.next, prev: this.prev,
+      goCover: () => this.go('cover'), goIndex: () => this.go('index'),
+      goMoat: () => this.go('problem'),
+      pageLabel: is('cover') ? '' : is('index') ? 'i' : is('back') ? '' : String(idx - 1),
+
+      navLeft: navAll.slice(0, 9), navRight: navAll.slice(9),
+
+      penSteps: [
+        { n:'1', t:'Write naturally', d:'Anyone writes on ordinary paper. No tablet, no special notebook, nothing new to learn.' },
+        { n:'2', t:'The pen captures motion', d:'Invisible sensors record exactly how the hand moves, every stroke, in real time.' },
+        { n:'3', t:'AI builds your Writing DNA', d:'That motion becomes a personal signature of 20 handwriting factors, as distinct as a fingerprint.' },
+        { n:'4', t:'Personalised coaching', d:'Each writer gets the specific exercises they need, not the same worksheet for everyone.' }
+      ],
+
+      apps, selApp: sel, selColor: sel.color, selKey: sel.name,
+      specs: [
+        { k:'Dataset', v:'India’s first motion corpus' },
+        { k:'Sample rate', v:'208 Hz' },
+        { k:'Axes captured', v:'16' },
+        { k:'Sensors', v:'2× IMU + magnetometer + force' },
+        { k:'Tip force', v:'Pressure dynamics' },
+        { k:'Fusion', v:'On-pen Kalman filter' },
+        { k:'Surface', v:'Any ordinary paper' }
+      ],
+      scripts: ['English','Hindi','Telugu','Kannada','Tamil','Malayalam'],
+      stratRows: [
+        { name:'English' }, { name:'Hindi' }, { name:'Telugu' },
+        { name:'Kannada' }, { name:'Tamil' }, { name:'Malayalam' }
+      ],
+      revStreams: [
+        { name:'Hardware, the pen', note:'one-time device sale', price:'₹2,499', unit:'/ pen', c:'var(--dev)' },
+        { name:'Coaching subscription', note:'SaaS, schools & families', price:'₹999', unit:'/ seat / yr', c:'var(--bk-teal)' },
+        { name:'API / SDK licensing', note:'partners build on motion engine', price:'₹0.50', unit:'/ call', c:'var(--bk-ink)' },
+        { name:'Dataset licensing', note:'banks, health, AI labs', price:'₹ deal', unit:'/ annual', c:'#7a4bd0' },
+        { name:'Enterprise pilots', note:'B2B: fraud, edtech, screening', price:'₹5–25L', unit:'/ pilot', c:'var(--bk-red)' }
+      ],
+      econRows: [
+        { k:'Contributor incentive', v:'₹4.0', bg:'#fff', bd:'transparent', tc:'var(--bk-text)', vc:'var(--bk-text)', fw:'400' },
+        { k:'Field collection & ops', v:'₹3.0', bg:'#fff', bd:'var(--bk-paper-line)', tc:'var(--bk-text)', vc:'var(--bk-text)', fw:'400' },
+        { k:'Annotation & QC', v:'₹2.5', bg:'#fff', bd:'var(--bk-paper-line)', tc:'var(--bk-text)', vc:'var(--bk-text)', fw:'400' },
+        { k:'Pen hardware (amortised)', v:'₹2.0', bg:'#fff', bd:'var(--bk-paper-line)', tc:'var(--bk-text)', vc:'var(--bk-text)', fw:'400' },
+        { k:'Storage, compute & overhead', v:'₹3.5', bg:'#fff', bd:'var(--bk-paper-line)', tc:'var(--bk-text)', vc:'var(--bk-text)', fw:'400' },
+        { k:'Cost / labelled sample', v:'₹15', bg:'var(--accent-soft)', bd:'color-mix(in srgb, var(--bk-ink) 26%, var(--surface))', tc:'var(--bk-ink)', vc:'var(--bk-ink)', fw:'600' }
+      ],
+      pending: [
+        { no:'202541020023', t:'Second patent, in examination (signal & applications)' },
+        { no:'VAHINI™', t:'Trademark filed in classes 9 · 16 · 38 · 42' }
+      ],
+      creds: [
+        { k:'DPIIT recognition', v:'DIPP201621' },
+        { k:'Trademark', v:'VAHINI™ · 4 classes' },
+        { k:'Granted patent', v:'No. 584433' }
+      ],
+
+      recognitions: [
+        { t:'DeepTech Innovation Award', d:'Winner · AP Digital Technology Summit 2026, Visakhapatnam', c:'#e2a32b' },
+        { t:'DPIIT-recognised Startup', d:'Recognised under Startup India · DIPP201621', c:'var(--bk-teal)' },
+        { t:'Granted Indian Patent', d:'No. 584433 · dual-IMU sensing, 20-yr protection', c:'var(--bk-red)' }
+      ],
+      milestones: [
+        { y:'May 2023', t:'The idea: preserve natural handwriting, make it accessible & independent.' },
+        { y:'Dec 2024', t:'Vahini Technologies registered as a partnership firm.' },
+        { y:'2025', t:'First Vahini prototypes. Patent 584433 granted; DPIIT recognition.' },
+        { y:'2025–26', t:'Live 20-factor analyser, demo circuit & open pre-orders.' }
+      ],
+
+      team: [
+        { name:'Malli Kosuri', role:'Co-Founder & MD · 17 yrs embedded systems; product vision & architecture', i:'MK', c:'var(--bk-ink)', rot:'-1.5deg' },
+        { name:'Govardhani Kosuri', role:'Co-Founder · sales, school outreach & pilot operations', i:'GK', c:'var(--bk-teal)', rot:'1.5deg' },
+        { name:'Vishnu Kosuri', role:'Engineering Head · AI models, Vertex AI, QA & cloud', i:'VK', c:'#e2a32b', rot:'1deg' },
+        { name:'Specialists · NDA', role:'Hardware, PCB & firmware freelancers', i:'★', c:'#7a4bd0', rot:'-1deg' }
+      ],
+
+      news: [
+        { date:'Jan 2026', t:'DeepTech Innovation Award', d:'Won at the AP Digital Technology Summit 2026 in Visakhapatnam.' },
+        { date:'2025', t:'Core patent granted', d:'Indian Patent 584433 secures the dual-IMU method; DPIIT-recognised.' },
+        { date:'2025–26', t:'On the demo circuit', d:'Showing Vahini & the live analyser at T-Hub, IIT and MSME expos across Telangana.' }
+      ],
+      posts: [
+        { t:'Reconstructing handwriting from motion alone', meta:'Research · Jun 2026' },
+        { t:'Handwriting as a health signal', meta:'Research' },
+        { t:'One IMU, or two?', meta:'Engineering' },
+        { t:'Writing without a screen', meta:'Product' }
+      ],
+
+      contacts: [
+        { k:'Email', v:'info@vahinitech.com' },
+        { k:'Email', v:'vahinitechfirm@gmail.com' },
+        { k:'WhatsApp', v:'+91 98857 61007' },
+        { k:'Website', v:'vahinitech.com' },
+        { k:'LinkedIn', v:'/company/vahini-technologies' },
+        { k:'Location', v:'Hyderabad, Telangana, India' }
+      ],
+
+      whyNow: [
+        { y:'2022', t:'LLMs arrive', d:'Generative AI proves one thing for good: whoever owns the dataset owns the model.', c:'var(--bk-ink)' },
+        { y:'2023–24', t:'Every vertical races for data', d:'Voice, vision, code, medicine, each foundation model is only as good as the proprietary data beneath it.', c:'var(--bk-teal)' },
+        { y:'Today', t:'Handwriting is still image-based', d:'The world has billions of scanned pages, but no one has captured the motion, how the hand actually moves.', c:'var(--dev)' },
+        { y:'The window', t:'Nobody owns motion yet', d:'It can still be built from scratch. In five years the handwriting-motion corpus will already belong to someone.', c:'var(--bk-red)' }
+      ],
+      gtmStages: [
+        { n:'1', t:'Parents & learners', d:'Free 20-factor analyser builds demand and a contributor base, one page at a time.', c:'var(--bk-teal)' },
+        { n:'2', t:'Schools', d:'Per-seat coaching SaaS; teachers get objective handwriting reports.', c:'var(--bk-ink)' },
+        { n:'3', t:'Districts & boards', d:'State-language packs and bulk literacy assessment.', c:'var(--dev)' },
+        { n:'4', t:'States & national', d:'Government literacy & NEP-aligned programmes at population scale.', c:'var(--bk-red)' },
+        { n:'5', t:'Dataset & SDK licensing', d:'Banks, health and AI labs license the motion corpus and engine.', c:'#7a4bd0' }
+      ],
+      hardQL: this.hardQ.slice(0,5), hardQR: this.hardQ.slice(5),
+      visionH: [
+        { tag:'TODAY', t:'Two solutions, live', d:'20-factor CV analysis from a simple scan for every child; the pen dedicated to autism-support research.', c:'var(--bk-teal)' },
+        { tag:'TOMORROW', t:'Handwriting foundation model', d:'One model trained on the motion corpus, powering edtech, health, identity & robotics.', c:'var(--bk-ink)' },
+        { tag:'EVENTUALLY', t:'The writing operating system', d:'The motion layer every machine uses to read, verify and generate human handwriting.', c:'var(--bk-red)' }
+      ],
+      factors: ['Pressure','Slant','Spacing','Rhythm','Formation','Speed','Consistency','Grip force','Baseline','Alignment','Size control','Stroke order','Pen lifts','Loop control','Tremor','Fluency','Letter joins','Margins','Cadence','Steadiness'],
+      revPhases: [
+        { ph:'TODAY', name:'Pilot & coaching revenue', who:'schools & parents', c:'var(--bk-teal)' },
+        { ph:'TOMORROW', name:'School coaching SaaS', who:'districts & boards', c:'var(--bk-ink)' },
+        { ph:'LATER', name:'Dataset & SDK licensing', who:'banks · health · AI labs', c:'#7a4bd0' }
+      ],
+      costCurve: [ { v:'₹15', n:'phase 1' }, { v:'₹12', n:'10× volume' }, { v:'₹9', n:'50× volume' }, { v:'₹5', n:'at scale' } ],
+    };
+  }
+}
+</script>
+</body>
+</html>

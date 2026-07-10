@@ -6,7 +6,6 @@ samples/
 
 # Dead / superseded duplicates kept only for local reference, not for release.
 archive/
-analyser/archive/
 screenshots/
 
 # Scratch / working files (not part of the deployable product)
@@ -15,6 +14,9 @@ shots/
 scraps/
 .thumbnail
 .image-slots.state.json
+
+# Never commit a real filled-in Cloudflare API token (see the .example template).
+deploy/certbot/cloudflare-credentials.ini
 
 # Local Claude Code / editor config (machine-specific, not for release)
 .claude/
@@ -40,3 +42,6 @@ venv/
 # Build artifacts / local exports
 export/
 *.log
+
+# External security scan reports (tools/security-scan.sh output)
+scan-reports/

@@ -9,8 +9,13 @@ distribution.
 > The 20-factor analyser engine is **open source** under the GNU AGPL-3.0 and
 > lives in its own public repository:
 > **https://github.com/vahinitech/20factor-analyser**
-> The `analyser/` folder here is a copy used to serve the live app; it is
-> licensed under AGPL-3.0 (see [analyser/LICENSE](analyser/LICENSE)).
+> The `analyser/` folder here is a **git submodule** pinned to that repository's
+> latest release tag; it is licensed under AGPL-3.0 (see
+> [analyser/LICENSE](analyser/LICENSE)). The submodule's own `backend/` and
+> `frontend/` serve themselves — this repo never copies or vendors its files.
+> Its architecture, CV/OCR algorithm and roadmap docs live in
+> [`analyser/docs/`](analyser/docs/), not in this repo's `docs/` — don't
+> duplicate them here, they'll just go stale (this repo doesn't own that code).
 
 ---
 
@@ -18,9 +23,10 @@ distribution.
 
 ```
 site/         marketing website + blog (static; deploy this folder)
-analyser/     copy of the open-source 20-factor app (AGPL-3.0), served at /analyser
+analyser/     git submodule -> vahinitech/20factor-analyser (AGPL-3.0), served at /analyser
 deploy/       nginx vhosts + release scripts
-docs/         architecture, build, CV/OCR notes, blog guide
+docs/         this site's own deploy/persistence/blog/stall-demo docs
+services/     the persist API (uploads/reports/feedback)
 docker-compose.yml   local full stack (web + analyser OCR + persist)
 ```
 
@@ -29,16 +35,44 @@ Scratch/PII folders (`uploads/`, `samples/`, `archive/`, `screenshots/`) and
 
 ---
 
-## Run it
+## Clone
+
+This repo has a submodule, so clone with:
 
 ```bash
-# Whole site + analyser + OCR, locally:
-docker compose up -d --wait
-# http://localhost:8080                                   -> marketing site
-# http://localhost:8080/analyser/Vahini%20Analyser.html   -> the analyser
+git clone --recurse-submodules <this-repo-url>
+# or, if already cloned:
+git submodule update --init
+```
 
-# Or just open the static site without a build:
-#   site/index.html
+## Run it
+
+One command runs everything (website + 20-factor analyser + persist),
+waits for health, and prints the URLs:
+
+```bash
+make up          # build + start all containers, wait until healthy
+make smoke       # prove every service answers through nginx
+make e2e         # both of the above in one shot
+make logs        # follow logs (one service: make logs S=analyser)
+make down        # stop everything
+make help        # every target, including release + certbot wrappers
+```
+
+- http://localhost:8080 -> marketing site
+- http://localhost:8080/analyser/analyser.html -> the analyser
+
+Without make, the equivalent is `docker compose up --build -d --wait`.
+For front-end-only work with no Docker: `make site` (static server on :4173).
+
+Every target (docker cleanup, `deploy-check` preflight, releases,
+certificate status/renewal) is documented in [docs/MAKE.md](docs/MAKE.md).
+
+To pull in a newer analyser release later:
+
+```bash
+cd analyser && git fetch --tags && git checkout <new-tag> && cd ..
+git add analyser && git commit -m "chore: bump analyser submodule to <new-tag>"
 ```
 
 ### Staging / production
@@ -49,12 +83,12 @@ See `docs/DEPLOY-STAG-PROD.md`. Host nginx vhost templates live in `deploy/`.
 
 ## Change the website colour theme
 
-1. Open `site/theme.config.js`.
+1. Open `site/js/theme.config.js`.
 2. Set `ACTIVE_THEME` to one of: `"space-teal"` (default), `"midnight-indigo"`,
    `"forest-emerald"`, `"ember-charcoal"`.
 3. Reload.
 
-Colours live only in `site/theme.css`.
+Colours live only in `site/css/theme.css`.
 
 ---
 

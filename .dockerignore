@@ -10,19 +10,48 @@ venv/
 *.pyc
 README.md
 docs/
-analyser/src/
-analyser/server/
+# The analyser submodule now serves itself entirely (frontend + API) from the
+# analyser container (see deploy/docker-compose*.yml) -- the web/nginx image
+# never needs its files, it only reverse-proxies to it.
+analyser/
 tests/
-!tests/
-tests/*
-!tests/smoke-http.mjs
 samples/
 archive/
-analyser/archive/
 screenshots/
+# Remotion video source (not served, no runtime dependency on the site).
+site/video-src/
+# `COPY . .` puts the build context into the public web root, so anything not
+# excluded here becomes downloadable at https://vahinitech.com/<path>. Ship
+# only /site plus the nginx configs the Dockerfile installs into /etc/nginx
+# (those never land in the web root -- and nginx blocks /deploy/* regardless).
+deploy/*
+!deploy/nginx.conf
+!deploy/nginx-security.conf
+!deploy/nginx-headers.inc
+# Defense in depth: even if deploy/ exclusions above are ever loosened, never
+# let a real, locally-created Cloudflare API token leak into the image.
+deploy/certbot/cloudflare-credentials.ini
+# The persist-api Dockerfile's build context is also the repo root (see
+# deploy/docker-compose.prod.yml / root docker-compose.yml), so this file
+# must NOT exclude services/ -- that would also strip persist-api's own
+# source from its own build. services/persist-api/Dockerfile.dockerignore
+# (BuildKit's per-Dockerfile override, which fully replaces this file for
+# that build) is where persist-api's context is scoped down instead. nginx
+# also blocks public /services/ regardless (deploy/nginx.conf), so the web
+# image not shipping it is belt-and-suspenders, not the only protection.
+services/
+tools/
+node_modules/
+package.json
+package-lock.json
+sbom.spdx.json
+Makefile
+Dockerfile.npm-test
+THIRD-PARTY-NOTICES.md
 uploads/
 shots/
 scraps/
 .thumbnail
 .image-slots.state.json
 *.md
+scan-reports/

@@ -1,0 +1,154 @@
+/* SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+   © 2026 Vahini Technologies. All rights reserved. */
+/* ============================================================
+   PRODUCT · Vahini — hardware story page
+   Hero → Why it exists → How it works → Inside → Specs →
+   What it understands → Why paper → Engineering → v1/v2 →
+   Timeline → CTA.  Crimson = Vahini product accent. After site.css.
+   ============================================================ */
+.pp{ --paper:#FBFAF7; }
+
+/* ---------- HERO ---------- */
+.pp-hero{padding:70px 0 56px; overflow:hidden;}
+.pp-hero__grid{display:grid; grid-template-columns:1fr 1.04fr; gap:50px; align-items:center;}
+.pp-hero__eye{font-family:var(--sans); font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:var(--crimson-deep); margin:0 0 18px;}
+.pp-hero h1{font-family:var(--serif); font-weight:700; font-size:clamp(40px,5.2vw,68px); line-height:1.0; letter-spacing:-.025em; color:var(--ink); margin:0;}
+.pp-hero h1 em{font-style:normal; color:var(--crimson-deep);}
+.pp-hero__sub{font-size:18.5px; line-height:1.6; color:var(--muted); margin:24px 0 0; max-width:500px;}
+.pp-hero__sub strong{color:var(--ink); font-weight:700;}
+.pp-hero__cta{display:flex; gap:13px; flex-wrap:wrap; margin-top:32px;}
+.pp-hero__trust{display:flex; flex-wrap:wrap; gap:9px 20px; margin-top:30px; font-size:13.5px; color:var(--muted);}
+.pp-hero__trust span{display:inline-flex; align-items:center; gap:8px;}
+.pp-hero__trust span::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--crimson); flex:0 0 auto;}
+
+/* hero pen stage — full-bleed product photo, scan sweep, caption overlay */
+.pp-stage{position:relative; margin:0; border:1px solid var(--rule); border-radius:var(--radius-xl);
+  box-shadow:var(--shadow-2); overflow:hidden; aspect-ratio:1/1; max-width:520px; margin-left:auto;}
+.pp-photo{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;}
+.pp-scan{position:absolute; top:0; bottom:0; width:150px; pointer-events:none; mix-blend-mode:screen; z-index:3;
+  background:linear-gradient(90deg, transparent, color-mix(in srgb, var(--crimson) 55%, transparent), transparent);}
+.pp-stage__cap{position:absolute; bottom:0; left:0; right:0; z-index:4; display:flex; justify-content:center; gap:10px 18px; flex-wrap:wrap;
+  padding:30px 18px 16px; font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:rgba(255,255,255,.92);
+  background:linear-gradient(transparent, rgba(8,11,18,.82));}
+.pp-stage__cap span{display:inline-flex; align-items:center; gap:6px;}
+.pp-stage__cap i{width:7px; height:7px; border-radius:50%; background:var(--crimson-lite); display:inline-block; box-shadow:0 0 8px var(--crimson);}
+@media (prefers-reduced-motion:no-preference){
+  .pp-scan{animation:ppScan 4s var(--ease) infinite;}
+}
+@keyframes ppScan{0%{left:-160px;opacity:0}14%{opacity:1}86%{opacity:1}100%{left:100%;opacity:0}}
+@media (max-width:920px){ .pp-hero__grid{grid-template-columns:1fr; gap:34px;} .pp-hero .pp-stage{order:-1; margin:0 auto;} }
+
+/* ---------- WHY IT EXISTS ---------- */
+.pp-why{display:grid; grid-template-columns:0.9fr 1.1fr; gap:48px; align-items:center;}
+.pp-why h2{font-family:var(--serif); font-size:clamp(30px,3.8vw,46px); line-height:1.08; letter-spacing:-.02em; color:var(--ink);}
+.pp-why p.lead{font-size:17px; color:var(--muted); line-height:1.65; margin-top:18px;}
+.pp-nos{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+.pp-no{display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--rule); border-radius:14px; padding:15px 18px; box-shadow:var(--shadow-1);}
+.pp-no__x{flex:0 0 auto; width:26px; height:26px; border-radius:50%; background:var(--crimson-soft); color:var(--crimson-deep); display:grid; place-items:center;}
+.pp-no__x svg{width:15px; height:15px;}
+.pp-no b{font-size:15px; color:var(--ink); font-family:var(--serif); font-weight:600;}
+.pp-just{grid-column:1 / -1; display:flex; align-items:center; gap:13px; background:var(--ink); color:#fff; border-radius:14px; padding:18px 22px; margin-top:4px;}
+.pp-just svg{width:24px; height:24px; color:var(--crimson-lite); flex:0 0 auto;}
+.pp-just b{font-family:var(--serif); font-weight:600; font-size:20px; color:#fff;}
+@media (max-width:880px){ .pp-why{grid-template-columns:1fr; gap:28px;} }
+@media (max-width:480px){ .pp-nos{grid-template-columns:1fr;} }
+
+/* ---------- HOW IT WORKS (pipeline) ---------- */
+.pp-flow{display:grid; grid-template-columns:repeat(4,1fr) ; gap:0; margin-top:44px;}
+.pp-fstep{position:relative; padding:0 24px; text-align:center;}
+.pp-fstep__ic{width:64px; height:64px; border-radius:18px; margin:0 auto 18px; display:grid; place-items:center;
+  background:var(--crimson-soft); color:var(--crimson-deep);}
+.pp-fstep__ic svg{width:30px; height:30px;}
+.pp-fstep h3{font-size:19px; margin-bottom:8px;}
+.pp-fstep p{font-size:14px; color:var(--muted); line-height:1.55;}
+.pp-fstep::after{content:""; position:absolute; top:32px; right:-10px; width:20px; height:20px;
+  background:no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C0080B' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E");}
+.pp-fstep:last-child::after{display:none;}
+@media (max-width:880px){ .pp-flow{grid-template-columns:1fr 1fr; gap:34px 0;} .pp-fstep:nth-child(2)::after{display:none;} }
+@media (max-width:480px){ .pp-flow{grid-template-columns:1fr; gap:26px;} .pp-fstep::after{display:none;} }
+
+/* ---------- INSIDE VAHINI (engineering) ---------- */
+.pp-inside{display:grid; grid-template-columns:1.05fr 0.95fr; gap:48px; align-items:center; margin-top:8px;}
+.pp-inside__img{position:relative; background:radial-gradient(120% 100% at 50% 50%, #fff, var(--paper)); border:1px solid var(--rule); border-radius:var(--radius-xl); padding:30px; box-shadow:var(--shadow-2);}
+.pp-inside__img img{width:100%; height:auto; display:block; filter:drop-shadow(0 16px 24px rgba(34,40,49,.14));}
+.pp-eng{display:flex; flex-direction:column; gap:14px;}
+.pp-engc{display:flex; gap:15px; align-items:flex-start; background:var(--surface); border:1px solid var(--rule); border-left:3px solid var(--crimson); border-radius:14px; padding:18px 20px; box-shadow:var(--shadow-1);}
+.pp-engc__ic{flex:0 0 auto; width:40px; height:40px; border-radius:11px; background:var(--crimson-soft); color:var(--crimson-deep); display:grid; place-items:center;}
+.pp-engc__ic svg{width:21px; height:21px;}
+.pp-engc b{font-family:var(--serif); font-weight:600; font-size:17px; color:var(--ink); display:block; margin-bottom:3px;}
+.pp-engc span{font-size:13.5px; color:var(--muted); line-height:1.5;}
+@media (max-width:880px){ .pp-inside{grid-template-columns:1fr; gap:30px;} }
+
+/* ---------- SPECS (3 grouped columns) ---------- */
+.pp-specs{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:42px;}
+.pp-speccol{background:rgba(255,255,255,.05); border:1px solid var(--rule-on); border-radius:var(--radius-lg); padding:26px;}
+.pp-speccol h3{font-family:var(--sans); font-weight:800; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--crimson-lite); margin-bottom:16px;}
+.pp-speccol ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:13px;}
+.pp-speccol li{display:flex; flex-direction:column; gap:2px; padding-bottom:13px; border-bottom:1px solid var(--rule-on);}
+.pp-speccol li:last-child{border-bottom:0; padding-bottom:0;}
+.pp-speccol li b{font-family:var(--serif); font-weight:600; font-size:18px; color:#fff; line-height:1.1;}
+.pp-speccol li span{font-size:12.5px; color:rgba(238,238,238,.6);}
+@media (max-width:880px){ .pp-specs{grid-template-columns:1fr;} }
+
+/* ---------- WHAT VAHINI UNDERSTANDS (6 signal cards) ---------- */
+.pp-sig{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:42px;}
+.pp-sigc{background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg); padding:24px 22px; box-shadow:var(--shadow-1); transition:transform .22s var(--ease), box-shadow .22s var(--ease);}
+.pp-sigc:hover{transform:translateY(-4px); box-shadow:var(--shadow-2);}
+.pp-sigc__ic{width:46px; height:46px; border-radius:12px; background:var(--crimson-soft); color:var(--crimson-deep); display:grid; place-items:center; margin-bottom:15px;}
+.pp-sigc__ic svg{width:23px; height:23px;}
+.pp-sigc h3{font-size:18px; margin-bottom:7px;}
+.pp-sigc p{font-size:13.5px; color:var(--muted); line-height:1.55;}
+@media (max-width:880px){ .pp-sig{grid-template-columns:1fr 1fr;} }
+@media (max-width:480px){ .pp-sig{grid-template-columns:1fr;} }
+
+/* ---------- WHY ORDINARY PAPER (table) ---------- */
+.pp-papertable{margin-top:34px; max-width:620px; border:1px solid var(--rule); border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-1);}
+.pp-ptable{width:100%; border-collapse:collapse; background:var(--surface);}
+.pp-ptable th, .pp-ptable td{padding:15px 18px; border-bottom:1px solid var(--rule); text-align:left;}
+.pp-ptable thead th{background:var(--ivory-2); font-family:var(--sans); font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--elephant);}
+.pp-ptable thead th.us{background:var(--ink); color:#fff; text-align:center;}
+.pp-ptable td.c{text-align:center; width:120px;}
+.pp-ptable td.us{text-align:center; width:120px; background:color-mix(in srgb,var(--crimson) 7%, var(--surface));}
+.pp-ptable tbody tr:last-child td{border-bottom:0;}
+.pp-ptable td:first-child{font-weight:600; color:var(--ink); font-size:14.5px;}
+.pp-ptable svg{width:19px; height:19px; vertical-align:middle;}
+.pp-y{color:var(--live);} .pp-n{color:var(--hint); opacity:.55;} .pp-mid{color:var(--dev); font-weight:700; font-size:13px;}
+
+/* ---------- ENGINEERING CHALLENGES ---------- */
+.pp-chal{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:36px;}
+.pp-chalc{display:flex; gap:14px; align-items:flex-start; background:rgba(255,255,255,.05); border:1px solid var(--rule-on); border-radius:14px; padding:18px 20px;}
+.pp-chalc__n{flex:0 0 auto; font-family:var(--serif); font-weight:700; font-size:22px; color:var(--crimson-lite); line-height:1;}
+.pp-chalc b{display:block; font-size:15px; color:#fff; font-family:var(--serif); font-weight:600; margin-bottom:3px;}
+.pp-chalc span{font-size:12.5px; color:rgba(238,238,238,.6); line-height:1.5;}
+.pp-chal-solve{margin-top:24px; display:flex; align-items:center; justify-content:center; gap:12px; text-align:center;
+  font-family:var(--serif); font-size:clamp(20px,2.6vw,28px); font-weight:700; color:#fff;}
+.pp-chal-solve em{font-style:normal; color:var(--crimson-lite);}
+@media (max-width:880px){ .pp-chal{grid-template-columns:1fr;} }
+
+/* ---------- TIMELINE ---------- */
+.pp-tl{display:flex; flex-wrap:wrap; gap:12px; margin-top:36px;}
+.pp-tlc{flex:1; min-width:140px; background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg); padding:20px; box-shadow:var(--shadow-1); border-top:3px solid var(--crimson); position:relative;}
+.pp-tlc .yr{font-family:var(--sans); font-weight:800; font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--crimson-deep);}
+.pp-tlc b{display:block; font-family:var(--serif); font-weight:600; font-size:17px; color:var(--ink); margin-top:7px;}
+
+/* ---------- v1 / v2 (reuse .gens pattern, scoped tweaks) ---------- */
+.pp-gens{display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:38px;}
+.pp-gen{display:flex; flex-direction:column; background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg); padding:30px; box-shadow:var(--shadow-1);}
+.pp-gen--v2{background:linear-gradient(160deg,var(--surface),var(--accent-soft)); border-color:rgba(0,173,181,.35); box-shadow:0 0 30px rgba(0,173,181,.10), var(--shadow-1);}
+.pp-gen__top{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px;}
+.pp-gen__name{font-family:var(--serif); font-size:26px; font-weight:600; color:var(--ink);}
+.pp-gen__name b{color:var(--crimson-deep); font-weight:700;}
+.pp-gen--v2 .pp-gen__name b{color:var(--accent-deep);}
+.pp-gen__lede{font-size:15.5px; color:var(--elephant); line-height:1.55; margin-bottom:16px;}
+.pp-gen__list{list-style:none; padding:0; margin:0 0 24px; display:flex; flex-direction:column; gap:10px;}
+.pp-gen__list li{font-size:14.5px; color:var(--muted); line-height:1.5; padding-left:26px; position:relative;}
+.pp-gen__list li svg{position:absolute; left:0; top:3px; width:17px; height:17px; color:var(--crimson-deep);}
+.pp-gen--v2 .pp-gen__list li svg{color:var(--accent-deep);}
+.pp-gen__list li b{color:var(--ink);}
+@media (max-width:880px){ .pp-gens{grid-template-columns:1fr;} }
+
+/* ---------- CTA ---------- */
+.pp-cta{text-align:center;}
+.pp-cta h2{font-family:var(--serif); font-weight:700; font-size:clamp(30px,4vw,48px); color:#fff; letter-spacing:-.02em;}
+.pp-cta p{color:rgba(238,238,238,.72); font-size:18px; margin:18px auto 30px; max-width:520px;}
+.pp-cta__row{display:flex; gap:13px; justify-content:center; flex-wrap:wrap;}

@@ -1,0 +1,28 @@
+# SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+# © 2026 Vahini Technologies. All rights reserved.
+#
+# Per-Dockerfile ignore file for services/persist-api/Dockerfile (BuildKit
+# convention: <dockerfile-name>.dockerignore next to the Dockerfile FULLY
+# REPLACES the root .dockerignore for this build -- it is not merged with
+# it). Needed because persist-api's build context is also the repo root
+# (see docker-compose.yml), and the root .dockerignore excludes services/
+# to keep it out of the *web* image's public root -- which would otherwise
+# also strip persist-api's own source (services/persist-api/lib) from its
+# own build.
+#
+# The Dockerfile only COPYs two explicit paths (server.js, lib/), so nothing
+# listed here can leak into the image regardless -- this file only trims
+# what gets sent to the build daemon as context, for faster builds.
+.git
+node_modules/
+analyser/
+samples/
+archive/
+screenshots/
+uploads/
+shots/
+scraps/
+site/video-src/
+docs/
+deploy/certbot/cloudflare-credentials.ini
+*.md

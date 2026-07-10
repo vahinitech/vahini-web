@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+# © 2026 Vahini Technologies. All rights reserved.
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -24,6 +26,18 @@ esac
 
 echo "[release] environment=${ENV_NAME}"
 echo "[release] compose=${COMPOSE_FILE}"
+
+echo "[release] syncing analyser submodule (vahinitech/20factor-analyser)"
+git -C "${ROOT_DIR}" submodule sync --recursive -- analyser
+git -C "${ROOT_DIR}" submodule update --init --recursive -- analyser
+
+if [[ ! -f "${ROOT_DIR}/analyser/deployment/Dockerfile" ]]; then
+  echo "[release] ERROR: analyser/deployment/Dockerfile missing after submodule update." >&2
+  echo "[release] The analyser/ submodule looks empty or out of date -- check network/auth" >&2
+  echo "[release] to github.com and 'git -C ${ROOT_DIR} submodule status'." >&2
+  exit 1
+fi
+echo "[release] analyser submodule pinned at $(git -C "${ROOT_DIR}/analyser" rev-parse --short HEAD)"
 
 docker compose -f "${COMPOSE_FILE}" build --pull analyser web
 docker compose -f "${COMPOSE_FILE}" up -d --remove-orphans analyser web

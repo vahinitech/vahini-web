@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" data-site-base="../">
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. All rights reserved. -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>The magnetometer: direction, zeroing and a cleaner signal | Vahini Blog</title>
+<meta name="description" content="An accelerometer and gyroscope drift in heading. A magnetometer supplies an absolute compass reference that zeroes the system and steadies orientation, vital for script direction.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="../js/theme.config.js"></script>
+<link rel="stylesheet" href="../css/theme.css">
+<link rel="stylesheet" href="../css/site.css">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
+
+  <article>
+  <section class="post-hero" data-screen-label="Post hero">
+    <div class="wrap">
+      <a class="post-back" href="index.html" data-nav><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All posts</a>
+      <span class="btag btag--technology">Technology</span>
+      <h1>The magnetometer: direction, zeroing and a cleaner signal</h1>
+      <div class="post-meta"><span class="post-author"><span class="pa-av">VK</span>Vishnu Kosuri</span><span class="dot"></span><span>Jun 2026</span><span class="dot"></span><span>6 min read</span></div>
+    </div>
+  </section>
+
+  <section class="post-ai" data-screen-label="AI summary">
+    <div class="wrap">
+      <div class="post-ai__card">
+        <span class="post-ai__tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9z"/><path d="M19 14l.7 1.8L21 16.5l-1.3.6L19 19l-.7-1.8L17 16.5z"/></svg>AI summary</span>
+        <p>An accelerometer anchors tilt and a gyroscope tracks rotation, but together they slowly <strong>drift in heading</strong>, the compass direction the pen points. A magnetometer reads Earth's magnetic field to supply an absolute heading, which the system uses to zero out that drift and lock orientation.</p>
+        <p>It needs careful calibration to remove interference, but once clean it gives a stable, drift-free sense of direction, important for tracking the consistent left-to-right flow and stroke directions of the five Indic scripts.</p>
+        <p class="post-ai__note">A quick machine-generated overview. The full post has the detail and the why.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="post-body">
+    <div class="wrap">
+      <div class="post-toc">
+        <h4>In this post</h4>
+        <ol>
+          <li><a href="#s1">Why accelerometer + gyroscope isn't enough</a></li>
+          <li><a href="#s2">The compass that fixes heading</a></li>
+          <li><a href="#s3">Zeroing and calibration</a></li>
+          <li><a href="#s4">Direction for five scripts</a></li>
+        </ol>
+      </div>
+
+      <p class="lede-para">Two of the pen's three orientation senses have a shared blind spot. The third, the magnetometer, exists to cover it, and to give the whole system a stable sense of which way is which.</p>
+
+      <h2 id="s1">Why accelerometer + gyroscope isn't enough</h2>
+      <p>An accelerometer uses gravity to pin down two of the three orientation angles, pitch and roll, the pen's lean. But gravity says nothing about <strong>heading</strong>: rotate the pen flat on the desk like a clock hand and gravity doesn't change at all. The gyroscope can track that rotation, but only by integrating its rate over time, which slowly accumulates error. So heading <em>drifts</em>: after a while the system's idea of "forward" quietly rotates away from reality. Pitch and roll stay anchored by gravity; heading has nothing to anchor it.</p>
+
+      <h2 id="s2">The compass that fixes heading</h2>
+      <p>The magnetometer is that missing anchor. It measures the direction of <strong>Earth's magnetic field</strong>, the same field a compass needle follows, which provides an absolute reference for heading. Fused with the accelerometer and gyroscope, it lets the system continually correct heading drift: the gyroscope supplies smooth short-term motion, the magnetometer supplies the steady long-term direction. Together the three give a full, stable orientation, often called a nine-axis or AHRS (attitude and heading reference) solution.</p>
+
+      <figure class="post-fig">
+        <svg viewBox="0 0 720 200" role="img" aria-label="Heading drifting away over time, then snapped back to true north by the magnetometer reference">
+          <rect width="720" height="200" fill="#FFFFFF"/>
+          <g transform="translate(150,100)">
+            <circle r="64" fill="none" stroke="#E3E5E7" stroke-width="2"/>
+            <line x1="0" y1="0" x2="0" y2="-64" stroke="#00ADB5" stroke-width="3"/>
+            <polygon points="-5,-58 5,-58 0,-70" fill="#00ADB5"/>
+            <line x1="0" y1="0" x2="36" y2="-52" stroke="#C0080B" stroke-width="3" stroke-dasharray="4 4"/>
+            <text x="-12" y="-78" font-family="Hanken Grotesk,sans-serif" font-size="12" font-weight="700" fill="#048A91">true N</text>
+            <text x="40" y="-58" font-family="Hanken Grotesk,sans-serif" font-size="11" font-weight="700" fill="#C0080B">drifted</text>
+          </g>
+          <g stroke="#222831" stroke-width="2" fill="none"><path d="M260 100h60M312 92l12 8-12 8"/></g>
+          <text x="360" y="86" font-family="Hanken Grotesk,sans-serif" font-size="13" font-weight="700" fill="#565D66">magnetometer</text>
+          <text x="360" y="106" font-family="Hanken Grotesk,sans-serif" font-size="12" fill="#565D66">supplies absolute heading</text>
+          <g transform="translate(610,100)">
+            <circle r="64" fill="none" stroke="#E3E5E7" stroke-width="2"/>
+            <line x1="0" y1="0" x2="0" y2="-64" stroke="#00ADB5" stroke-width="3"/>
+            <polygon points="-5,-58 5,-58 0,-70" fill="#00ADB5"/>
+            <text x="-12" y="-78" font-family="Hanken Grotesk,sans-serif" font-size="12" font-weight="700" fill="#048A91">re-zeroed</text>
+          </g>
+        </svg>
+        <figcaption>Without a reference, heading slowly rotates away from true. The magnetometer's absolute compass reading snaps it back, keeping the pen's sense of direction honest.</figcaption>
+      </figure>
+
+      <h2 id="s3">Zeroing and calibration</h2>
+      <p>A magnetometer is only as good as its calibration, because it's sensitive to more than Earth's field. Nearby metal and the pen's own electronics distort the reading in two classic ways:</p>
+      <ul>
+        <li><strong>Hard-iron</strong> effects, a fixed offset from magnetised materials near the sensor, which shift the whole field.</li>
+        <li><strong>Soft-iron</strong> effects, which stretch and skew the field depending on orientation.</li>
+      </ul>
+      <p>Calibration models and removes both, typically by observing the sensor through many orientations and fitting the data back to a sphere. On top of that, the system performs <strong>zeroing</strong>: establishing a known reference heading at a quiet moment so the rest of the session is measured against a clean baseline. Filtering then suppresses the remaining electromagnetic noise. Only after all of this does the magnetometer earn its place in the fusion, otherwise it would inject more error than it removes.</p>
+
+      <h2 id="s4">Direction for five scripts</h2>
+      <p>Why does heading matter for handwriting? Because direction is meaning. Strokes have a correct orientation and order, and a page is written along a consistent line of progression. If the pen's sense of "forward" drifts, reconstructed strokes can rotate subtly relative to the page, blurring the geometry the analysis depends on.</p>
+      <p>For the <strong>five Indic scripts</strong>, Telugu, Kannada, Malayalam, Tamil and Devanagari (Hindi), this is especially delicate. They're written left to right, but each akshara is a tight construction of curves and strokes with their own directions, and Devanagari hangs from a continuous horizontal head-line whose straightness is part of correct form. A stable, well-zeroed heading keeps that baseline and those stroke directions consistent across a whole page, so the analyser measures real letterform quality rather than accumulated drift.</p>
+
+      <div class="post-key">
+        <h4>Key takeaways</h4>
+        <ul>
+          <li>Gravity anchors tilt, but heading has no anchor, so accelerometer + gyroscope drift in direction.</li>
+          <li>The magnetometer reads Earth's field to supply an absolute heading reference.</li>
+          <li>It must be calibrated (hard-iron, soft-iron) and zeroed before it can be trusted.</li>
+          <li>Stable heading keeps stroke directions and the Devanagari head-line consistent across a page of Indic script.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  </article>
+
+  <section class="block block--alt" data-screen-label="Read next">
+    <div class="wrap">
+      <div class="block__head reveal" style="margin-bottom:6px;"><p class="eyebrow">Read next</p></div>
+      <div class="post-next" id="readNext"></div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+<script src="blog-data.js"></script>
+<script src="../js/site.js"></script>
+<script>
+(function(){
+  var SLUG="the-magnetometer";
+  if(!window.VahiniPosts) return;
+  var CAT={research:"Research",technology:"Technology",health:"Health",signals:"Signals",explainer:"Guide"};
+  var arrow='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+  var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+  var next=window.VahiniPosts.filter(function(p){return p.slug!==SLUG;}).slice(0,3);
+  document.getElementById('readNext').innerHTML=next.map(function(p){
+    return '<a class="bpost reveal" href="'+p.url+'">'+
+      '<div class="bpost__art">'+window.VahiniPostArt(p,0)+'</div>'+
+      '<div class="bpost__body"><div class="bpost__meta"><span class="btag btag--'+p.cat+'">'+CAT[p.cat]+'</span><span class="bpost__date">'+esc(p.date)+'</span></div>'+
+      '<h3>'+esc(p.title)+'</h3><p>'+esc(p.excerpt)+'</p><span class="bpost__more">Read '+arrow+'</span></div></a>';
+  }).join('');
+  if(window.VahiniRevealScan) window.VahiniRevealScan();
+})();
+</script>
+</body>
+</html>

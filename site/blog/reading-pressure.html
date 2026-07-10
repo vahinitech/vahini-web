@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" data-site-base="../">
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. All rights reserved. -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>Reading pressure from an analog force sensor | Vahini Blog</title>
+<meta name="description" content="A force sensor gives a single wavering voltage. Turning it into a clean, calibrated pressure signal, and learning what heavy and light pressure say about control.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="../js/theme.config.js"></script>
+<link rel="stylesheet" href="../css/theme.css">
+<link rel="stylesheet" href="../css/site.css">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
+
+  <article>
+  <section class="post-hero" data-screen-label="Post hero">
+    <div class="wrap">
+      <a class="post-back" href="index.html" data-nav><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All posts</a>
+      <span class="btag btag--signals">Signals</span>
+      <h1>Reading pressure from an analog force sensor</h1>
+      <div class="post-meta"><span class="post-author"><span class="pa-av">VK</span>Vishnu Kosuri</span><span class="dot"></span><span>Jun 2026</span><span class="dot"></span><span>6 min read</span></div>
+    </div>
+  </section>
+
+  <section class="post-ai" data-screen-label="AI summary">
+    <div class="wrap">
+      <div class="post-ai__card">
+        <span class="post-ai__tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9z"/><path d="M19 14l.7 1.8L21 16.5l-1.3.6L19 19l-.7-1.8L17 16.5z"/></svg>AI summary</span>
+        <p>The pen's tip rests on a force sensor whose electrical resistance changes as you press, which a circuit turns into a wavering <strong>analog voltage</strong>. To make that usable we filter the noise, subtract each writer's resting baseline, and calibrate it toward real force, then a model reads the pattern over time.</p>
+        <p>Steady, moderate pressure is the mark of a relaxed, controlled hand; heavy or wildly varying pressure signals tension and fatigue. For Indic scripts, whose aksharas pack many strokes into one character, even pressure is what keeps a long writing session legible.</p>
+        <p class="post-ai__note">A quick machine-generated overview. The full post has the detail and the why.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="post-body">
+    <div class="wrap">
+      <div class="post-toc">
+        <h4>In this post</h4>
+        <ol>
+          <li><a href="#s1">An analog voltage, not a number</a></li>
+          <li><a href="#s2">Cleaning and calibrating the signal</a></li>
+          <li><a href="#s3">What heavy and light pressure mean</a></li>
+          <li><a href="#s4">Pressure and the Indic scripts</a></li>
+        </ol>
+      </div>
+
+      <p class="lede-para">Of all the things a pen can feel, pressure is the most intimate. It's the part of handwriting you don't see on the page, and the first to betray when a hand is tense, tired or unsure.</p>
+
+      <h2 id="s1">An analog voltage, not a number</h2>
+      <p>At the tip sits a force-sensitive element, often a force-sensitive resistor (FSR) or a small load cell. Its electrical resistance falls as you press harder. Wired into a simple voltage divider, that changing resistance becomes a <strong>continuously varying voltage</strong>, and an analog-to-digital converter (ADC) samples it hundreds of times a second.</p>
+      <p>But that raw voltage is not "pressure" yet. It's noisy, it's non-linear (doubling the force doesn't double the voltage), it drifts with temperature, and every writer, and every pen grip, has a different resting level. The signal is real, but it needs work before it means anything.</p>
+
+      <h2 id="s2">Cleaning and calibrating the signal</h2>
+      <p>Several steps turn the wavering voltage into a trustworthy pressure trace:</p>
+      <ul>
+        <li><strong>Filtering.</strong> A low-pass filter (a moving average or an exponential filter) removes high-frequency electrical jitter while keeping the real pressure changes that happen as you write.</li>
+        <li><strong>Baseline removal.</strong> The pen learns each session's resting and light-touch level and subtracts it, so "no pressure" reliably reads as zero.</li>
+        <li><strong>Linearisation &amp; calibration.</strong> A calibration curve maps the sensor's non-linear response toward a consistent scale, so the same press always reports the same value.</li>
+        <li><strong>Normalisation.</strong> Because grip strength varies between people, the signal is normalised per writer, so the analysis compares <em>your</em> pressure to <em>your</em> own range, not to a stranger's.</li>
+      </ul>
+      <p>Only then does a model look at the <em>shape</em> of the pressure over time, how it rises into a downstroke, eases on a curve, spikes at a stop.</p>
+
+      <figure class="post-fig">
+        <svg viewBox="0 0 720 200" role="img" aria-label="A noisy raw voltage on the left being smoothed into a clean pressure curve on the right">
+          <rect width="720" height="200" fill="#FFFFFF"/>
+          <text x="40" y="34" font-family="Hanken Grotesk,sans-serif" font-size="12" font-weight="700" fill="#9A7B25">RAW SENSOR VOLTAGE</text>
+          <path d="M40 120 l10 -18 8 26 9 -30 10 22 8 -16 10 30 9 -26 10 18 8 -22 9 24 10 -14 8 20 9 -24 10 16 8 -10 10 22 9 -28 8 18" fill="none" stroke="#D9912E" stroke-width="1.8" opacity="0.8"/>
+          <g stroke="#222831" stroke-width="2" fill="none"><path d="M300 110h60M352 102l12 8-12 8"/></g>
+          <rect x="392" y="92" width="92" height="34" rx="9" fill="#222831"/><text x="438" y="114" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="12" font-weight="700" fill="#fff">filter + cal</text>
+          <text x="520" y="34" font-family="Hanken Grotesk,sans-serif" font-size="12" font-weight="700" fill="#048A91">CLEAN PRESSURE</text>
+          <path d="M510 130 q24 -54 48 -8 q20 38 44 -16 q22 -44 46 6 q18 40 42 -10" fill="none" stroke="#00ADB5" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <figcaption>The journey from a jittery, drifting analog voltage to a calibrated pressure curve the analysis can actually read.</figcaption>
+      </figure>
+
+      <h2 id="s3">What heavy and light pressure mean</h2>
+      <p>Pressure is a window onto control. A <strong>steady, moderate</strong> pressure that eases gently through curves is the signature of a relaxed, practised hand. <strong>Consistently heavy</strong> pressure, the kind that almost embosses the page, usually means a tight grip: it tires the hand quickly and is common in early or anxious writers. <strong>Erratic</strong> pressure, lurching between hard and faint, points to uncertainty in forming the letters.</p>
+      <p>None of these is "bad" in isolation, but the <em>pattern</em> is diagnostic. The analyser uses it to score control and to suggest gentler, more even pressure where it will reduce fatigue and improve consistency, which in turn lifts legibility.</p>
+
+      <h2 id="s4">Pressure and the Indic scripts</h2>
+      <p>Pressure is especially revealing in <strong>Indic scripts</strong>. A single akshara in Telugu, Kannada, Malayalam, Tamil or Devanagari (Hindi) often combines a base consonant with stacked vowel signs and conjunct strokes, far more pen-work per character than a Latin letter. Holding even pressure across all those strokes, character after character, is what keeps a page of Telugu or Malayalam from degrading into heavy, cramped marks by the end of a paragraph.</p>
+      <p>Because the curved, looping forms of these scripts demand frequent changes of direction, a writer who presses too hard fatigues fast and loses the fine control those curves need. Reading pressure well lets Vahini give script-aware feedback, not "press less" in the abstract, but "ease your pressure through these curves so your aksharas stay clean to the end of the line."</p>
+
+      <div class="post-key">
+        <h4>Key takeaways</h4>
+        <ul>
+          <li>A force sensor outputs a noisy, non-linear analog voltage, not a ready-made pressure number.</li>
+          <li>Filtering, baseline removal, calibration and per-writer normalisation make it trustworthy.</li>
+          <li>The pattern over time, steady, heavy or erratic, reflects control, tension and fatigue.</li>
+          <li>Even pressure is critical for the stroke-dense aksharas of Indic scripts.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  </article>
+
+  <section class="block block--alt" data-screen-label="Read next">
+    <div class="wrap">
+      <div class="block__head reveal" style="margin-bottom:6px;"><p class="eyebrow">Read next</p></div>
+      <div class="post-next" id="readNext"></div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+<script src="blog-data.js"></script>
+<script src="../js/site.js"></script>
+<script>
+(function(){
+  var SLUG="reading-pressure";
+  if(!window.VahiniPosts) return;
+  var CAT={research:"Research",technology:"Technology",health:"Health",signals:"Signals",explainer:"Guide"};
+  var arrow='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+  var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+  var next=window.VahiniPosts.filter(function(p){return p.slug!==SLUG;}).slice(0,3);
+  document.getElementById('readNext').innerHTML=next.map(function(p){
+    return '<a class="bpost reveal" href="'+p.url+'">'+
+      '<div class="bpost__art">'+window.VahiniPostArt(p,0)+'</div>'+
+      '<div class="bpost__body"><div class="bpost__meta"><span class="btag btag--'+p.cat+'">'+CAT[p.cat]+'</span><span class="bpost__date">'+esc(p.date)+'</span></div>'+
+      '<h3>'+esc(p.title)+'</h3><p>'+esc(p.excerpt)+'</p><span class="bpost__more">Read '+arrow+'</span></div></a>';
+  }).join('');
+  if(window.VahiniRevealScan) window.VahiniRevealScan();
+})();
+</script>
+</body>
+</html>
