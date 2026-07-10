@@ -192,8 +192,8 @@
 .tabfly__tab:hover{color:var(--ink);}
 .tabfly__tab.is-active{color:var(--ink);}
 .tabfly__tab.is-active::after{transform:scaleX(1);}
-.tabfly__stage{position:relative; width:min(620px,100%); height:384px; margin:0 auto;}
-.tf-card{position:absolute; left:0; top:0; width:min(560px, calc(100% - 45px)); height:312px; overflow:hidden;
+.tabfly__stage{position:relative; width:min(710px,100%); height:376px; margin:0 auto;}
+.tf-card{position:absolute; left:0; top:0; width:min(548px, calc(100% - 152px)); height:312px; overflow:hidden;
   display:flex; flex-direction:column; align-items:flex-start;
   background:var(--surface); border:1px solid var(--rule); border-radius:16px;
   padding:24px 26px 20px; box-shadow:var(--shadow-2);
@@ -204,13 +204,25 @@
 .tf-card .pf-acard__who{width:100%;}
 .tf-card__go{margin-top:14px; font-size:13.5px; font-weight:700; color:var(--accent-deep); text-decoration:none;}
 .tf-card__go:hover{text-decoration:underline;}
-/* the stack: each page sits a step down-right of the one above it */
+/* the stack fans right, so every page's corner symbol stays visible
+   like binder dividers -- a reason to peek behind the top page */
 .tf-card:nth-of-type(1){z-index:6; transform:translate(0,0);}
-.tf-card:nth-of-type(2){z-index:5; transform:translate(9px,9px);}
-.tf-card:nth-of-type(3){z-index:4; transform:translate(18px,18px);}
-.tf-card:nth-of-type(4){z-index:3; transform:translate(27px,27px);}
-.tf-card:nth-of-type(5){z-index:2; transform:translate(36px,36px);}
-.tf-card:nth-of-type(6){z-index:1; transform:translate(45px,45px);}
+.tf-card:nth-of-type(2){z-index:5; transform:translate(30px,8px);}
+.tf-card:nth-of-type(3){z-index:4; transform:translate(60px,16px);}
+.tf-card:nth-of-type(4){z-index:3; transform:translate(90px,24px);}
+.tf-card:nth-of-type(5){z-index:2; transform:translate(120px,32px);}
+.tf-card:nth-of-type(6){z-index:1; transform:translate(150px,40px);}
+/* the corner symbol chip */
+.tf-card__mini{position:absolute; top:9px; right:7px; width:22px; height:22px; border-radius:7px;
+  display:grid; place-items:center; color:var(--mcc,var(--accent-deep)); background:var(--mcbg,var(--accent-soft));}
+.tf-card__mini svg{width:13px; height:13px;}
+/* stacked (non-top) pages invite a click: lift a little on hover */
+.tf-card:not(.is-top):not(.fly){cursor:pointer;}
+.tf-card:not(.is-top):not(.fly):nth-of-type(2):hover{transform:translate(30px,1px);}
+.tf-card:not(.is-top):not(.fly):nth-of-type(3):hover{transform:translate(60px,9px);}
+.tf-card:not(.is-top):not(.fly):nth-of-type(4):hover{transform:translate(90px,17px);}
+.tf-card:not(.is-top):not(.fly):nth-of-type(5):hover{transform:translate(120px,25px);}
+.tf-card:not(.is-top):not(.fly):nth-of-type(6):hover{transform:translate(150px,33px);}
 /* flying away: each page gets its own trajectory, like leafed paper */
 .tf-card.fly{opacity:0; pointer-events:none; z-index:20;
   transition:transform .85s cubic-bezier(.45,-.15,.7,.35), opacity .3s .4s;}
@@ -224,12 +236,13 @@
   .tabfly__tab{font-size:12px; padding:8px 10px 12px;}
   .tabfly__stage{height:452px;}
   .tf-card{height:392px; width:calc(100% - 32px);}
-  .tf-card:nth-of-type(n){transform:translate(0,0);}
-  .tf-card:nth-of-type(2){transform:translate(6px,6px);}
-  .tf-card:nth-of-type(3){transform:translate(12px,12px);}
-  .tf-card:nth-of-type(4){transform:translate(18px,18px);}
-  .tf-card:nth-of-type(5){transform:translate(24px,24px);}
-  .tf-card:nth-of-type(6){transform:translate(30px,30px);}
+  .tf-card__mini{display:none;}
+  .tf-card:nth-of-type(n):not(.fly){transform:translate(0,0);}
+  .tf-card:nth-of-type(2):not(.fly){transform:translate(6px,6px);}
+  .tf-card:nth-of-type(3):not(.fly){transform:translate(12px,12px);}
+  .tf-card:nth-of-type(4):not(.fly){transform:translate(18px,18px);}
+  .tf-card:nth-of-type(5):not(.fly){transform:translate(24px,24px);}
+  .tf-card:nth-of-type(6):not(.fly){transform:translate(30px,30px);}
 }
 @media (prefers-reduced-motion: reduce){
   .tf-card{transition:opacity .2s;}
