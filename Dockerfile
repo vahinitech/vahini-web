@@ -18,7 +18,15 @@ FROM nginx:1.27-alpine
 # first (conf.d is included alphabetically) so its rate-limit zones and maps
 # exist before vahini.conf references them; the headers include lives outside
 # conf.d because it is a server/location-level fragment, not an http-context file.
-RUN rm /etc/nginx/conf.d/default.conf
+#
+# The base image's own /etc/nginx/nginx.conf sets `keepalive_timeout 65;` in
+# the http block; nginx-security.conf intentionally hardens that to 25s for
+# slowloris protection (deploy/nginx-security.conf), but nginx treats a
+# repeated scalar directive in the same context as a hard config error, not
+# a "last one wins" override -- so the base image's line must go, or ours
+# never loads at all.
+RUN rm /etc/nginx/conf.d/default.conf \
+ && sed -i '/^\s*keepalive_timeout\s/d' /etc/nginx/nginx.conf
 COPY deploy/nginx-security.conf /etc/nginx/conf.d/00-security.conf
 COPY deploy/nginx-headers.inc /etc/nginx/vahini-headers.inc
 COPY deploy/nginx.conf /etc/nginx/conf.d/vahini.conf
