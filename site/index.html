@@ -1064,7 +1064,9 @@
   var cards = [].slice.call(document.querySelectorAll('.tf-card'));
   if (!tabs.length || cards.length !== tabs.length) return;
   var timers = [];
+  var current = 1;
   function setActive(id){ /* 1-based */
+    current = id;
     tabs.forEach(function(t, i){
       var on = i === id - 1;
       t.classList.toggle('is-active', on);
@@ -1096,6 +1098,43 @@
     });
   });
   cards[0].classList.add('is-top');
+
+  /* ---- auto-advance: gently loop the stack 1..N, deal-back at the end ----
+     Matches the hero flywheel's conventions: disabled under
+     prefers-reduced-motion, paused while off-screen or the tab is hidden,
+     and re-armed cleanly on bfcache restore. Also pauses whenever the user
+     hovers or keyboard-focuses the component, so it never fights someone
+     reading or clicking; an explicit tab/card pick just re-seats the loop at
+     that product (current is updated in setActive). This hover/focus pause +
+     reduced-motion opt-out is the WCAG 2.2.2 "pause moving content" hook. */
+  var root = document.querySelector('.tabfly');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var auto = null, hovered = false, visible = true;
+  function stopAuto(){ if (auto){ clearInterval(auto); auto = null; } }
+  function startAuto(){
+    if (reduce || hovered || !visible || auto) return;
+    auto = setInterval(function(){ setActive(current % tabs.length + 1); }, 3600);
+  }
+  if (root && !reduce){
+    root.addEventListener('pointerenter', function(){ hovered = true; stopAuto(); });
+    root.addEventListener('pointerleave', function(){ hovered = false; startAuto(); });
+    root.addEventListener('focusin',  function(){ hovered = true; stopAuto(); });
+    root.addEventListener('focusout', function(){
+      if (!root.contains(document.activeElement)){ hovered = false; startAuto(); }
+    });
+    document.addEventListener('visibilitychange', function(){
+      if (document.hidden) stopAuto(); else startAuto();
+    });
+    window.addEventListener('pageshow', function(e){ if (e.persisted) startAuto(); });
+    if ('IntersectionObserver' in window){
+      new IntersectionObserver(function(es){
+        visible = es[0].isIntersecting;
+        if (visible) startAuto(); else stopAuto();
+      }, { threshold: 0.25 }).observe(root);
+    } else {
+      startAuto();
+    }
+  }
 })();
 </script>
 <script>
