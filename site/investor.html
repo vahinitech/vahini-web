@@ -7,12 +7,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="only light">
 <title>Investor Book · Vahini Technologies</title>
-<meta name="description" content="The Vahini investor field notebook: the handwriting-motion dataset thesis, live demo, patents, economics and the ask, as a page-turning book.">
+<meta name="description" content="The Vahini investor field notebook: the handwriting-motion dataset thesis, live demo, patents and the ask, as a page-turning book.">
 <link rel="canonical" href="https://vahinitech.com/investor.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Vahini Technologies">
 <meta property="og:title" content="Investor Book · Vahini Technologies">
-<meta property="og:description" content="The Vahini investor field notebook: the handwriting-motion dataset thesis, live demo, patents, economics and the ask, as a page-turning book.">
+<meta property="og:description" content="The Vahini investor field notebook: the handwriting-motion dataset thesis, live demo, patents and the ask, as a page-turning book.">
 <meta property="og:url" content="https://vahinitech.com/investor.html">
 <meta property="og:image" content="https://vahinitech.com/assets/vahini-pen-og.jpg">
 <meta property="og:image:width" content="1200">
@@ -22,7 +22,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@vahinitech">
 <meta name="twitter:title" content="Investor Book · Vahini Technologies">
-<meta name="twitter:description" content="The Vahini investor field notebook: the handwriting-motion dataset thesis, live demo, patents, economics and the ask, as a page-turning book.">
+<meta name="twitter:description" content="The Vahini investor field notebook: the handwriting-motion dataset thesis, live demo, patents and the ask, as a page-turning book.">
 <meta name="twitter:image" content="https://vahinitech.com/assets/vahini-pen-og.jpg">
 <meta name="twitter:image:alt" content="Vahini Sensor Pen">
 
@@ -37,31 +37,6 @@
      fallback when window.Babel already exists -->
 <script src="js/vendor/babel.min.js"></script>
 <script src="js/support.js"></script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "BreadcrumbList",
-      "@id": "https://vahinitech.com/investor.html#breadcrumb",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://vahinitech.com/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Investors",
-          "item": "https://vahinitech.com/investor.html"
-        }
-      ]
-    }
-  ]
-}
-</script>
 </head>
 <body class="booting">
 <div id="site-nav"></div>
@@ -75,6 +50,14 @@
 <link rel="icon" type="image/png" sizes="16x16" href="assets/ev/favicon-16x16.png">
 <link rel="apple-touch-icon" href="assets/ev/apple-touch-icon.png">
 <style>
+/* Ch03 'Many applications' auto-shuffle: one card gently rises at a time,
+   looping through all six; pauses on hover; off under reduced-motion. */
+@keyframes moatRaise{0%{transform:none;filter:none}6%{transform:translateY(-5px) scale(1.02);filter:drop-shadow(0 7px 12px rgba(39,64,143,.22))}16%{transform:translateY(-5px) scale(1.02);filter:drop-shadow(0 7px 12px rgba(39,64,143,.22))}23%,100%{transform:none;filter:none}}
+.moat-apps>div{animation:moatRaise 6s infinite;will-change:transform}
+.moat-apps>div:nth-child(2){animation-delay:1s}.moat-apps>div:nth-child(3){animation-delay:2s}.moat-apps>div:nth-child(4){animation-delay:3s}.moat-apps>div:nth-child(5){animation-delay:4s}.moat-apps>div:nth-child(6){animation-delay:5s}
+.moat-apps:hover>div{animation-play-state:paused}
+@media (prefers-reduced-motion:reduce){.moat-apps>div{animation:none}}
+
   /* the book lives inside a normal, scrollable subpage; support.js appends
      "#dc-root{height:100%}" at boot, so the auto override needs !important */
   #dc-root, #dc-root > .sc-host{height:auto !important;}
@@ -480,8 +463,8 @@
             </div>
             <div style="flex:1;height:100%;padding:48px 46px 34px;border-radius:0 8px 8px 0;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;display:flex;flex-direction:column;">
               <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">WHAT THE FOUNDATION MODEL POWERS</div>
-              <div style="font-family:'Caveat',cursive;font-size:40px;color:var(--bk-ink);line-height:1;margin:1px 0 14px;">Many markets, one model</div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px;">
+              <div style="font-family:'Caveat',cursive;font-size:40px;color:var(--bk-ink);line-height:1;margin:1px 0 14px;">Many applications, one model</div>
+              <div class="moat-apps" style="display:grid;grid-template-columns:1fr 1fr;gap:11px;">
                 <div style="background:#fff;border:1.5px solid var(--bk-paper-line);border-radius:11px;padding:12px 13px;box-shadow:2px 3px 0 rgba(0,0,0,.05);">
                   <div style="display:flex;align-items:center;gap:9px;margin-bottom:5px;"><svg width="26" height="26" viewBox="0 0 28 28" style="filter:url(#rough);flex:none;"><path d="M4 11 L14 4 L24 11 Z" fill="none" stroke="#27408f" stroke-width="2" stroke-linejoin="round"/><line x1="6" y1="11" x2="6" y2="21" stroke="#27408f" stroke-width="2"/><line x1="11" y1="11" x2="11" y2="21" stroke="#27408f" stroke-width="2"/><line x1="17" y1="11" x2="17" y2="21" stroke="#27408f" stroke-width="2"/><line x1="22" y1="11" x2="22" y2="21" stroke="#27408f" stroke-width="2"/><line x1="3" y1="23" x2="25" y2="23" stroke="#27408f" stroke-width="2" stroke-linecap="round"/></svg><div style="font-family:'Caveat',cursive;font-size:23px;color:var(--bk-ink);line-height:1;">Banking & fraud</div></div>
                   <div style="font-family:'Shantell Sans',cursive;font-size:13px;line-height:1.35;color:var(--bk-text-3);">Signature & behavioural biometrics. Motion can't be forged like a shape can.</div>
@@ -507,7 +490,7 @@
                   <div style="font-family:'Shantell Sans',cursive;font-size:13px;line-height:1.35;color:#dbe4f7;">License the engine. Partners build on our motion API, no hardware required.</div>
                 </div>
               </div>
-              <div style="margin-top:auto;font-family:'Shantell Sans',cursive;font-size:14.5px;color:var(--bk-text-2);text-align:center;line-height:1.5;padding-top:10px;">One dataset, many markets, entered <b>in sequence</b> (see Go-to-Market). <b style="color:var(--bk-ink);">The pen seeds the data; the data is the company.</b></div>
+              <div style="margin-top:auto;font-family:'Shantell Sans',cursive;font-size:14.5px;color:var(--bk-text-2);text-align:center;line-height:1.5;padding-top:10px;">One dataset, many applications, entered <b>in sequence</b> (see Go-to-Market). <b style="color:var(--bk-ink);">The pen seeds the data; the data is the company.</b></div>
             </div>
           </div>
         </sc-if>
@@ -552,80 +535,13 @@
           </div>
         </sc-if>
 
-        <!-- DATASET METHODS -->
-        <sc-if value="{{ isMethods }}" hint-placeholder-val="{{ false }}">
-          <div class="spd" style="display:flex;width:100%;height:100%;">
-            <div style="flex:1;height:100%;padding:50px 40px 34px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
-              <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 05 · DATASET METHODS</div>
-              <div style="font-family:'Caveat',cursive;font-size:48px;color:var(--bk-ink);line-height:1;margin:2px 0 4px;">How we build the dataset</div>
-              <svg viewBox="0 0 260 14" style="display:block;width:265px;height:13px;margin:0 0 16px;filter:url(#rough);"><path d="M4 8 C70 2 130 12 175 6 C210 2 238 9 256 5" fill="none" stroke="#e2a32b" stroke-width="3" stroke-linecap="round"/></svg>
-              <div style="display:flex;flex-direction:column;gap:15px;">
-                <div style="display:flex;gap:13px;align-items:flex-start;">
-                  <div style="flex:none;width:42px;height:42px;border-radius:12px;background:var(--accent-soft);border:1.5px solid color-mix(in srgb, var(--bk-ink) 26%, var(--surface));display:flex;align-items:center;justify-content:center;font-family:'Caveat',cursive;font-size:26px;font-weight:700;color:var(--bk-ink);">1</div>
-                  <div style="flex:1;padding-top:1px;"><div style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:16px;color:var(--bk-ink);">Prompt a character</div><div style="font-family:'Shantell Sans',cursive;font-size:14px;line-height:1.38;color:var(--bk-text-2);margin-top:1px;">The companion app shows one character at a time. The contributor writes it once on plain A4 paper, at a natural speed.</div></div>
-                </div>
-                <div style="display:flex;gap:13px;align-items:flex-start;">
-                  <div style="flex:none;width:42px;height:42px;border-radius:12px;background:var(--accent-soft);border:1.5px solid color-mix(in srgb, var(--bk-teal) 30%, var(--surface));display:flex;align-items:center;justify-content:center;font-family:'Caveat',cursive;font-size:26px;font-weight:700;color:var(--bk-teal);">2</div>
-                  <div style="flex:1;padding-top:1px;"><div style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:16px;color:var(--bk-teal);">Capture &amp; segment</div><div style="font-family:'Shantell Sans',cursive;font-size:14px;line-height:1.38;color:var(--bk-text-2);margin-top:1px;">Sixteen motion axes stream live over Bluetooth. Pen-down force marks where each sample begins; lifting the pen ends it.</div></div>
-                </div>
-                <div style="display:flex;gap:13px;align-items:flex-start;">
-                  <div style="flex:none;width:42px;height:42px;border-radius:12px;background:#f3eefb;border:1.5px solid #d9c9f2;display:flex;align-items:center;justify-content:center;font-family:'Caveat',cursive;font-size:26px;font-weight:700;color:#7a4bd0;">3</div>
-                  <div style="flex:1;padding-top:1px;"><div style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:16px;color:#7a4bd0;">Auto-label</div><div style="font-family:'Shantell Sans',cursive;font-size:14px;line-height:1.38;color:var(--bk-text-2);margin-top:1px;">The prompted character becomes the ground-truth label, saved with writer ID, language and start-and-end timestamps.</div></div>
-                </div>
-                <div style="display:flex;gap:13px;align-items:flex-start;">
-                  <div style="flex:none;width:42px;height:42px;border-radius:12px;background:var(--hot-soft);border:1.5px solid color-mix(in srgb, var(--bk-red) 28%, var(--surface));display:flex;align-items:center;justify-content:center;font-family:'Caveat',cursive;font-size:26px;font-weight:700;color:var(--bk-red);">4</div>
-                  <div style="flex:1;padding-top:1px;"><div style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:16px;color:var(--bk-red);">Calibrate &amp; protect</div><div style="font-family:'Shantell Sans',cursive;font-size:14px;line-height:1.38;color:var(--bk-text-2);margin-top:1px;">Each pen is calibrated for offset and drift; motion plots catch noise and mislabels. Stored under the DPDP Act, deletable on request.</div></div>
-                </div>
-              </div>
-              <div style="position:absolute;left:74px;bottom:26px;font-family:'Caveat',cursive;font-size:23px;color:var(--bk-teal);transform:rotate(-2deg);">A field operation, not a web scrape. ✎</div>
-            </div>
-            <div style="flex:1;height:100%;padding:48px 46px 34px;border-radius:0 8px 8px 0;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;display:flex;flex-direction:column;">
-              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">WHY IT'S RIGOROUS</div>
-              <div style="font-family:'Caveat',cursive;font-size:40px;color:var(--bk-ink);line-height:1;margin:1px 0 14px;">Balanced by design</div>
-              <div style="font-family:'Patrick Hand',cursive;font-size:13px;color:var(--bk-text-3);margin-bottom:8px;">every script × every age × both hands</div>
-              <div style="border:1.5px solid #e0d8c2;border-radius:10px;overflow:hidden;background:#fff;box-shadow:2px 3px 0 rgba(0,0,0,.05);">
-                <div style="display:grid;grid-template-columns:88px repeat(4,1fr);background:#f3eedf;font-family:'Patrick Hand',cursive;font-size:11px;color:#7a6a3f;">
-                  <div style="padding:6px 8px;">script ↓</div>
-                  <div style="padding:6px 4px;text-align:center;border-left:1px solid var(--bk-paper-line);">kids</div>
-                  <div style="padding:6px 4px;text-align:center;border-left:1px solid var(--bk-paper-line);">teens</div>
-                  <div style="padding:6px 4px;text-align:center;border-left:1px solid var(--bk-paper-line);">adults</div>
-                  <div style="padding:6px 4px;text-align:center;border-left:1px solid var(--bk-paper-line);">seniors</div>
-                </div>
-                <sc-for list="{{ stratRows }}" as="r" hint-placeholder-count="6">
-                  <div style="display:grid;grid-template-columns:88px repeat(4,1fr);border-top:1px solid var(--bk-paper-line);font-size:12px;">
-                    <div style="padding:5px 8px;font-family:'Shantell Sans',cursive;color:var(--bk-text);">{{ r.name }}</div>
-                    <div style="padding:5px 4px;text-align:center;border-left:1px solid var(--bk-paper-line);color:var(--bk-teal);">✓</div>
-                    <div style="padding:5px 4px;text-align:center;border-left:1px solid var(--bk-paper-line);color:var(--bk-teal);">✓</div>
-                    <div style="padding:5px 4px;text-align:center;border-left:1px solid var(--bk-paper-line);color:var(--bk-teal);">✓</div>
-                    <div style="padding:5px 4px;text-align:center;border-left:1px solid var(--bk-paper-line);color:var(--bk-teal);">✓</div>
-                  </div>
-                </sc-for>
-              </div>
-              <div style="display:flex;gap:9px;margin-top:14px;">
-                <div style="flex:1;background:#fff;border:1.5px solid var(--bk-paper-line);border-radius:10px;padding:10px 11px;box-shadow:1px 2px 0 rgba(0,0,0,.04);"><div style="font-family:'Caveat',cursive;font-size:20px;color:var(--bk-ink);line-height:1;">Balanced</div><div style="font-family:'Shantell Sans',cursive;font-size:12px;color:var(--bk-text-3);line-height:1.3;margin-top:3px;">No demographic overfit.</div></div>
-                <div style="flex:1;background:#fff;border:1.5px solid var(--bk-paper-line);border-radius:10px;padding:10px 11px;box-shadow:1px 2px 0 rgba(0,0,0,.04);"><div style="font-family:'Caveat',cursive;font-size:20px;color:var(--bk-teal);line-height:1;">Ground-truth</div><div style="font-family:'Shantell Sans',cursive;font-size:12px;color:var(--bk-text-3);line-height:1.3;margin-top:3px;">Motion ↔ letter, time-synced.</div></div>
-                <div style="flex:1;background:#fff;border:1.5px solid var(--bk-paper-line);border-radius:10px;padding:10px 11px;box-shadow:1px 2px 0 rgba(0,0,0,.04);"><div style="font-family:'Caveat',cursive;font-size:20px;color:var(--bk-red);line-height:1;">Consent-first</div><div style="font-family:'Shantell Sans',cursive;font-size:12px;color:var(--bk-text-3);line-height:1.3;margin-top:3px;">DPDP, revocable.</div></div>
-              </div>
-              <div style="margin-top:14px;background:#0f203f;border-radius:11px;padding:12px 15px;color:#dfe7fb;">
-                <div style="display:flex;align-items:baseline;justify-content:space-between;"><div style="font-family:'Patrick Hand',cursive;font-size:12px;letter-spacing:1.5px;color:var(--accent-lite);">HOW IT SCALES</div><div style="font-family:'Shantell Sans',cursive;font-size:11px;color:color-mix(in srgb, var(--bk-ink) 42%, var(--surface));">&gt;98% labelled-quality after QC</div></div>
-                <div style="display:flex;align-items:center;gap:7px;margin-top:7px;font-family:'Patrick Hand',cursive;font-size:12.5px;flex-wrap:wrap;"><span>1 collector</span><span style="color:var(--accent-lite);">→</span><span>~500 pages/day</span><span style="color:var(--accent-lite);">→</span><span>~20k chars/day</span><span style="color:var(--accent-lite);">→</span><span style="color:#e3c66b;">~₹15/sample</span></div>
-              </div>
-              <div style="display:flex;gap:9px;margin-top:11px;">
-                <div style="flex:1;background:var(--accent-soft);border:1.5px solid color-mix(in srgb, var(--bk-ink) 26%, var(--surface));border-radius:10px;padding:9px;text-align:center;"><div style="font-family:'Caveat',cursive;font-size:26px;color:var(--bk-ink);line-height:.9;">50k</div><div style="font-family:'Shantell Sans',cursive;font-size:11px;color:var(--bk-ink);">Phase 1 · English</div></div>
-                <div style="flex:1;background:var(--accent-soft);border:1.5px solid color-mix(in srgb, var(--bk-teal) 30%, var(--surface));border-radius:10px;padding:9px;text-align:center;"><div style="font-family:'Caveat',cursive;font-size:26px;color:var(--bk-teal);line-height:.9;">500k</div><div style="font-family:'Shantell Sans',cursive;font-size:11px;color:var(--accent-ink);">Phase 2 · + Hindi</div></div>
-                <div style="flex:1;background:#f3eefb;border:1.5px solid #d9c9f2;border-radius:10px;padding:9px;text-align:center;"><div style="font-family:'Caveat',cursive;font-size:26px;color:#7a4bd0;line-height:.9;">5M</div><div style="font-family:'Shantell Sans',cursive;font-size:11px;color:#7a4bd0;">Phase 3 · 6 scripts</div></div>
-              </div>
-              <div style="font-family:'Patrick Hand',cursive;font-size:10.5px;color:var(--bk-hint);text-align:center;margin-top:9px;line-height:1.3;">protocol follows the proven IMU-pen standard (STABILO OnHW · Punjabi IMU studies), adapted for Indian scripts</div>
-            </div>
-          </div>
-        </sc-if>
 
         <!-- PEN / HOW IT WORKS -->
         <sc-if value="{{ isPen }}" hint-placeholder-val="{{ false }}">
           <div class="spd" style="display:flex;width:100%;height:100%;">
             <div style="flex:1;height:100%;padding:56px 44px 40px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
               <div style="position:absolute;top:0;bottom:0;left:56px;width:0;background:transparent;"></div>
-              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 06</div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 05</div>
               <div style="font-family:'Caveat',cursive;font-size:54px;color:var(--bk-ink);line-height:1;margin:2px 0 4px;">How Vahini Works</div>
               <svg viewBox="0 0 260 14" style="display:block;width:270px;height:14px;margin:0 0 12px;filter:url(#rough);"><path d="M4 8 C70 2 130 12 180 6 C215 2 240 8 256 5" fill="none" stroke="#e2a32b" stroke-width="3" stroke-linecap="round"/></svg>
               <p style="font-family:'Shantell Sans',cursive;font-size:18px;line-height:30px;color:var(--bk-text);margin:0 0 18px;">Vahini is a normal-looking pen that understands <i>how</i> you write. It turns the motion of your hand into meaning, then coaches you, all on ordinary paper. <span style="color:var(--bk-hint);font-size:14px;">(The sensor engineering lives in Patents &amp; Specs.)</span></p>
@@ -680,7 +596,7 @@
           <div class="spd" style="display:flex;width:100%;height:100%;">
             <div style="flex:1;height:100%;padding:56px 40px 40px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
               <div style="position:absolute;top:0;bottom:0;left:56px;width:0;background:transparent;"></div>
-              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 07 · WRITING DNA</div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 06 · WRITING DNA</div>
               <div style="font-family:'Caveat',cursive;font-size:54px;color:var(--bk-ink);line-height:1;margin:2px 0 6px;">Writing DNA</div>
               <div style="font-family:'Shantell Sans',cursive;font-size:16px;line-height:1.4;color:var(--bk-text);max-width:430px;margin-bottom:14px;">Every page produces a <b style="color:var(--bk-ink);">20-factor signature</b>, as distinct as a fingerprint. Today it is scored by computer vision from a simple scan; the pen's motion research makes it deeper still.</div>
               <div style="display:flex;flex-wrap:wrap;gap:8px;max-width:440px;">
@@ -732,7 +648,7 @@
           <div class="spd" style="display:flex;width:100%;height:100%;">
             <div style="flex:1;height:100%;padding:56px 40px 40px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
               <div style="position:absolute;top:0;bottom:0;left:56px;width:0;background:transparent;"></div>
-              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 08</div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 07</div>
               <div style="font-family:'Caveat',cursive;font-size:54px;color:var(--bk-ink);line-height:1;margin:2px 0 18px;">Patents &amp; IP</div>
               <div style="position:relative;background:#fff;border:2px solid var(--bk-ink);border-radius:8px;padding:18px 20px;box-shadow:4px 5px 0 rgba(39,64,143,.15);">
                 <div style="position:absolute;top:-14px;right:-14px;width:64px;height:64px;border-radius:50%;border:2.5px solid var(--bk-red);color:var(--bk-red);font-family:'Patrick Hand',cursive;font-size:13px;display:flex;align-items:center;justify-content:center;text-align:center;transform:rotate(-12deg);background:#fff;">GRANTED</div>
@@ -803,56 +719,12 @@
           </div>
         </sc-if>
 
-        <!-- UNIT ECONOMICS -->
-        <sc-if value="{{ isEconomics }}" hint-placeholder-val="{{ false }}">
-          <div class="spd" style="display:flex;width:100%;height:100%;">
-            <div style="flex:1;height:100%;padding:48px 40px 32px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
-              <div style="display:flex;align-items:center;justify-content:space-between;">
-                <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 09 · UNIT ECONOMICS</div>
-                <div style="font-family:'Patrick Hand',cursive;font-size:10px;letter-spacing:.5px;color:var(--dev);background:var(--dev-bg);border:1px solid color-mix(in srgb, var(--dev) 35%, var(--surface));border-radius:5px;padding:2px 7px;transform:rotate(2deg);">ILLUSTRATIVE · REPLACE</div>
-              </div>
-              <div style="font-family:'Caveat',cursive;font-size:48px;color:var(--bk-ink);line-height:1;margin:2px 0 4px;">Where the money comes from</div>
-              <svg viewBox="0 0 250 14" style="display:block;width:255px;height:13px;margin:0 0 14px;filter:url(#rough);"><path d="M4 8 C60 2 120 12 165 6 C200 2 228 9 246 5" fill="none" stroke="#e2a32b" stroke-width="3" stroke-linecap="round"/></svg>
-              <div style="font-family:'Patrick Hand',cursive;font-size:13px;color:var(--bk-text-3);margin-bottom:10px;">revenue arrives in sequence, not all at once</div>
-              <div style="display:flex;flex-direction:column;gap:9px;">
-                <sc-for list="{{ revPhases }}" as="p" hint-placeholder-count="3">
-                  <div style="background:#fff;border:1.5px solid var(--bk-paper-line);border-left:5px solid {{ p.c }};border-radius:10px;padding:10px 14px;box-shadow:1px 2px 0 rgba(0,0,0,.04);">
-                    <div style="display:flex;justify-content:space-between;align-items:baseline;"><span style="font-family:'Patrick Hand',cursive;font-size:12px;letter-spacing:1.5px;color:{{ p.c }};">{{ p.ph }}</span><span style="font-family:'Patrick Hand',cursive;font-size:12px;color:var(--bk-hint);">{{ p.who }}</span></div>
-                    <div style="font-family:'Shantell Sans',cursive;font-weight:600;font-size:16px;color:var(--bk-text);margin-top:2px;">{{ p.name }}</div>
-                  </div>
-                </sc-for>
-              </div>
-              <div style="margin-top:13px;background:var(--accent-soft);border:2px solid var(--bk-ink);border-radius:10px;padding:11px 14px;box-shadow:3px 4px 0 rgba(39,64,143,.1);"><div style="font-family:'Patrick Hand',cursive;font-size:12px;letter-spacing:1px;color:var(--bk-ink);">WHO PAYS FIRST</div><div style="font-family:'Shantell Sans',cursive;font-size:14.5px;color:var(--bk-ink);line-height:1.4;margin-top:2px;"><b>Schools and parents</b>, today, for handwriting coaching. That pilot revenue funds the dataset that later licenses to enterprises.</div></div>
-            </div>
-            <div style="flex:1;height:100%;padding:48px 46px 34px;border-radius:0 8px 8px 0;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;display:flex;flex-direction:column;">
-              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">COST PER DATASET SAMPLE</div>
-              <div style="font-family:'Caveat',cursive;font-size:40px;color:var(--bk-ink);line-height:1;margin:1px 0 14px;">What one labelled sample costs</div>
-              <div style="display:flex;flex-direction:column;gap:0;background:#fff;border:1.5px solid var(--bk-paper-line);border-radius:11px;overflow:hidden;box-shadow:2px 3px 0 rgba(0,0,0,.05);">
-                <sc-for list="{{ econRows }}" as="r" hint-placeholder-count="5">
-                  <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 15px;border-top:1px solid {{ r.bd }};background:{{ r.bg }};">
-                    <span style="font-family:'Shantell Sans',cursive;font-size:15px;color:{{ r.tc }};font-weight:{{ r.fw }};">{{ r.k }}</span>
-                    <span style="font-family:'Caveat',cursive;font-size:24px;color:{{ r.vc }};font-weight:600;">{{ r.v }}</span>
-                  </div>
-                </sc-for>
-              </div>
-              <div style="margin-top:14px;">
-                <div style="font-family:'Patrick Hand',cursive;font-size:12px;letter-spacing:1px;color:var(--bk-hint);margin-bottom:7px;">AND IT FALLS WITH VOLUME</div>
-                <div style="display:flex;align-items:flex-end;gap:4px;background:#fff;border:1.5px solid var(--bk-paper-line);border-radius:11px;padding:11px 8px;box-shadow:2px 3px 0 rgba(0,0,0,.05);">
-                  <sc-for list="{{ costCurve }}" as="c" hint-placeholder-count="4">
-                    <div style="flex:1;text-align:center;"><div style="font-family:'Caveat',cursive;font-size:30px;color:var(--bk-ink);line-height:.85;">{{ c.v }}</div><div style="font-family:'Shantell Sans',cursive;font-size:10.5px;color:#6a7180;line-height:1.15;margin-top:2px;">{{ c.n }}</div></div>
-                  </sc-for>
-                </div>
-              </div>
-              <div style="margin-top:auto;font-family:'Shantell Sans',cursive;font-size:13.5px;color:var(--bk-text-2);text-align:center;line-height:1.5;padding-top:12px;">Benchmark: STABILO's OnHW reached ~31k samples from 119 writers; we target <b style="color:var(--bk-ink);">balanced ages &amp; both hands</b>. <span style="color:var(--dev);">Figures illustrative.</span></div>
-            </div>
-          </div>
-        </sc-if>
 
         <!-- GO-TO-MARKET -->
         <sc-if value="{{ isGtm }}" hint-placeholder-val="{{ false }}">
           <div class="spd" style="display:flex;width:100%;height:100%;">
             <div style="flex:1;height:100%;padding:54px 40px 36px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
-              <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 10 · GO-TO-MARKET</div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 08 · GO-TO-MARKET</div>
               <div style="font-family:'Caveat',cursive;font-size:50px;color:var(--bk-ink);line-height:1;margin:2px 0 4px;">Land soft, expand hard</div>
               <svg viewBox="0 0 250 14" style="display:block;width:250px;height:13px;margin:0 0 14px;filter:url(#rough);"><path d="M4 8 C60 2 120 12 165 6 C200 2 228 9 246 5" fill="none" stroke="#e2a32b" stroke-width="3" stroke-linecap="round"/></svg>
               <div style="font-family:'Shantell Sans',cursive;font-size:15px;line-height:1.4;color:var(--bk-text-2);margin-bottom:13px;">A free analyser earns trust with parents, then we climb: classrooms, districts, states, and finally enterprise licensing.</div>
@@ -887,7 +759,7 @@
           <div class="spd" style="display:flex;width:100%;height:100%;">
             <div style="flex:1;height:100%;padding:56px 40px 40px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
               <div style="position:absolute;top:0;bottom:0;left:56px;width:0;background:transparent;"></div>
-              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 11 · TRACTION</div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 09 · TRACTION</div>
               <div style="font-family:'Caveat',cursive;font-size:52px;color:var(--bk-ink);line-height:1;margin:2px 0 6px;">Traction so far</div>
               <div style="font-family:'Shantell Sans',cursive;font-size:15px;color:var(--bk-text-3);margin-bottom:14px;">Small but real: a granted patent, recognition, a live product in the field, and open pre-orders.</div>
               <sc-for list="{{ recognitions }}" as="r" hint-placeholder-count="3">
@@ -916,7 +788,7 @@
           <div class="spd" style="display:flex;width:100%;height:100%;">
             <div style="flex:1;height:100%;padding:56px 40px 40px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
               <div style="position:absolute;top:0;bottom:0;left:56px;width:0;background:transparent;"></div>
-              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 12</div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 10</div>
               <div style="font-family:'Caveat',cursive;font-size:54px;color:var(--bk-ink);line-height:1;margin:2px 0 6px;">The Team</div>
               <div style="font-family:'Shantell Sans',cursive;font-size:15px;color:var(--bk-text-3);margin-bottom:8px;">17 years in embedded systems, a granted patent, and three years living this problem, why this team can collect what others won't.</div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
@@ -951,7 +823,7 @@
         <sc-if value="{{ isQuestions }}" hint-placeholder-val="{{ false }}">
           <div class="spd" style="display:flex;width:100%;height:100%;">
             <div style="flex:1;height:100%;padding:46px 38px 34px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
-              <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 13 · HARD QUESTIONS</div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 11 · HARD QUESTIONS</div>
               <div style="font-family:'Caveat',cursive;font-size:46px;color:var(--bk-ink);line-height:1;margin:2px 0 3px;">The questions you'll ask</div>
               <div style="font-family:'Shantell Sans',cursive;font-size:13.5px;color:var(--bk-text-3);margin-bottom:13px;">Answered before you have to ask them.</div>
               <div style="display:flex;flex-direction:column;gap:12px;">
@@ -981,7 +853,7 @@
         <sc-if value="{{ isVision }}" hint-placeholder-val="{{ false }}">
           <div class="spd" style="display:flex;width:100%;height:100%;">
             <div style="flex:1;height:100%;padding:54px 40px 36px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
-              <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 14 · THE VISION</div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:14px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 12 · THE VISION</div>
               <div style="font-family:'Caveat',cursive;font-size:50px;color:var(--bk-ink);line-height:1;margin:2px 0 4px;">Where this goes</div>
               <svg viewBox="0 0 250 14" style="display:block;width:250px;height:13px;margin:0 0 18px;filter:url(#rough);"><path d="M4 8 C60 2 120 12 165 6 C200 2 228 9 246 5" fill="none" stroke="#e2a32b" stroke-width="3" stroke-linecap="round"/></svg>
               <div style="display:flex;flex-direction:column;gap:14px;">
@@ -1011,7 +883,7 @@
           <div class="spd" style="display:flex;width:100%;height:100%;">
             <div style="flex:1;height:100%;padding:56px 40px 40px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
               <div style="position:absolute;top:0;bottom:0;left:56px;width:0;background:transparent;"></div>
-              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 15</div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 13</div>
               <div style="font-family:'Caveat',cursive;font-size:54px;color:var(--bk-ink);line-height:1;margin:2px 0 18px;">Events &amp; News</div>
               <sc-for list="{{ news }}" as="n" hint-placeholder-count="3">
                 <div style="margin-bottom:18px;">
@@ -1066,7 +938,7 @@
           <div class="spd" style="display:flex;width:100%;height:100%;">
             <div style="flex:1;height:100%;padding:56px 40px 40px 74px;border-radius:8px 0 0 8px;background:var(--bk-paper);background-image:radial-gradient(circle at center, var(--bk-paper-dot) 1.3px, transparent 1.6px);background-size:26px 26px;position:relative;overflow:hidden;">
               <div style="position:absolute;top:0;bottom:0;left:56px;width:0;background:transparent;"></div>
-              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 16</div>
+              <div style="font-family:'Patrick Hand',cursive;font-size:15px;letter-spacing:2px;color:var(--bk-hint);">CHAPTER 14</div>
               <div style="font-family:'Caveat',cursive;font-size:54px;color:var(--bk-ink);line-height:1;margin:2px 0 18px;">Get in touch</div>
               <sc-for list="{{ contacts }}" as="c" hint-placeholder-count="6">
                 <div style="display:flex;gap:12px;align-items:baseline;line-height:36px;">
@@ -1097,8 +969,8 @@
         <sc-if value="{{ isBack }}" hint-placeholder-val="{{ false }}">
           <div class="spd" style="display:flex;width:100%;height:100%;">
             <div style="flex:1;height:100%;background:radial-gradient(120% 120% at 30% 22%,var(--bk-cover-hi) 0%,var(--bk-cover) 55%,var(--bk-cover-lo) 100%);border-radius:8px 0 0 8px;border-right:2px solid color-mix(in srgb, var(--bk-cover-lo) 70%, #000);display:flex;flex-direction:column;justify-content:center;padding:0 60px;color:#f3e3b4;">
-              <div style="font-family:'Caveat',cursive;font-size:58px;line-height:1;color:#f4e2a4;text-shadow:0 2px 0 color-mix(in srgb, var(--dark-2) 70%, #000),0 4px 12px rgba(0,0,0,.4);">The end of<br>the notebook.</div>
-              <div style="font-family:'Shantell Sans',cursive;font-size:18px;line-height:1.6;color:#f1e6c4;opacity:.95;margin-top:18px;max-width:330px;">But the start of the platform. One motion signal powers handwriting, digital paper, learning, healthcare and research.</div>
+              <div style="font-family:'Caveat',cursive;font-size:58px;line-height:1;color:#f4e2a4;text-shadow:0 2px 0 color-mix(in srgb, var(--dark-2) 70%, #000),0 4px 12px rgba(0,0,0,.4);">Not the end.<br>A beginning.</div>
+              <div style="font-family:'Shantell Sans',cursive;font-size:18px;line-height:1.6;color:#f1e6c4;opacity:.95;margin-top:18px;max-width:330px;">This notebook closes; the company opens. One motion signal — the foundation for handwriting, digital paper, learning, healthcare and research — begins here. Come build it with us.</div>
               <div onClick="{{ goCover }}" class="lnk" style="margin-top:30px;font-family:'Patrick Hand',cursive;font-size:20px;color:#f4d97a;">↺ Back to the cover</div>
             </div>
             <div style="flex:1;height:100%;background:radial-gradient(120% 120% at 70% 30%,var(--bk-cover-hi) 0%,var(--bk-cover) 55%,var(--bk-cover-lo) 100%);border-radius:0 8px 8px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#ecd49a;position:relative;">
@@ -1184,11 +1056,11 @@
 class Component extends DCLogic {
   state = { cur: 'cover', flipping: false, dir: 'next', scale: 1, selApp: 0, halfMode: false, half: 0 };
 
-  order = ['cover','index','problem','whynow','beyond','competition','methods','pen','specs','patents','economics','gtm','awards','team','questions','vision','news','contact','back'];
+  order = ['cover','index','problem','whynow','beyond','competition','pen','specs','patents','gtm','awards','team','questions','vision','news','contact','back'];
 
   labels = {
-    problem:'The Problem', whynow:'Why Now', beyond:'The Moat', competition:'Competition', methods:'Dataset Methods', pen:'How Vahini Works',
-    specs:'Writing DNA & Specs', patents:'Patents & IP', economics:'Unit Economics', gtm:'Go-to-Market',
+    problem:'The Problem', whynow:'Why Now', beyond:'The Moat', competition:'Competition', pen:'How Vahini Works',
+    specs:'Writing DNA & Specs', patents:'Patents & IP', gtm:'Go-to-Market',
     awards:'Traction', team:'The Team', questions:'Hard Questions', vision:'The Vision', news:'Events & News', contact:'Get in Touch'
   };
 
@@ -1341,7 +1213,7 @@ class Component extends DCLogic {
       pageCounter,
       toggleFS: this.toggleFS,
       isCover:is('cover'), isIndex:is('index'), isProblem:is('problem'), isPen:is('pen'),
-      isSpecs:is('specs'), isPatents:is('patents'), isBeyond:is('beyond'), isMethods:is('methods'), isEconomics:is('economics'),
+      isSpecs:is('specs'), isPatents:is('patents'), isBeyond:is('beyond'),
       isAwards:is('awards'), isTeam:is('team'), isNews:is('news'), isContact:is('contact'), isBack:is('back'),
       isWhynow:is('whynow'), isCompetition:is('competition'), isGtm:is('gtm'), isQuestions:is('questions'), isVision:is('vision'),
       showStitch: !is('cover') && !is('back'),
