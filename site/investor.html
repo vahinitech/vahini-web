@@ -37,6 +37,31 @@
      fallback when window.Babel already exists -->
 <script src="js/vendor/babel.min.js"></script>
 <script src="js/support.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://vahinitech.com/investor.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://vahinitech.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Investors",
+          "item": "https://vahinitech.com/investor.html"
+        }
+      ]
+    }
+  ]
+}
+</script>
 </head>
 <body class="booting">
 <div id="site-nav"></div>
