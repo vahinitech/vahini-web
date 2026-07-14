@@ -48,7 +48,7 @@ reloading vhosts), `deploy/snippets/tls-vahinitech.conf`, `deploy/*.nginx.conf`.
 
 | Concern | Mitigation |
 |---|---|
-| Per-IP request floods | `edge_perip` 30 r/s, burst 120 (marketing/stag vhosts, port-80 redirects) |
+| Per-IP request floods | `edge_perip` 30 r/s, burst 120 (marketing/stage vhosts, port-80 redirects) |
 | API hammering | `edge_api` 30 r/min, burst 15 on api.vahinitech.com |
 | Connection exhaustion | `edge_conn`: 60 parallel connections/IP (20 on the API vhost) |
 | TLS downgrade / weak suites | TLS 1.2+13 only, forward-secret AEAD ciphers only |
@@ -135,7 +135,7 @@ network hits it directly:
 | Information disclosure | responses return ids only — server filesystem paths removed from the API; 5xx details logged server-side, never echoed |
 | Slow clients | `headersTimeout` 15 s, `requestTimeout` 120 s |
 
-All limits are env-tunable in `deploy/docker-compose.{stag,prod}.yml`.
+All limits are env-tunable in `deploy/docker-compose.{stage,prod}.yml`.
 Throttled clients get `429` + `Retry-After`.
 
 ## SSRF posture

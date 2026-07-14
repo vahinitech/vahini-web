@@ -12,7 +12,7 @@
 #
 # The certbot targets wrap the host-level scripts in deploy/certbot/ —
 # certificates are deliberately NOT a container: the renewal timer and
-# nginx-reload hook live on the host (see docs/DEPLOY-STAG-PROD.md).
+# nginx-reload hook live on the host (see docs/DEPLOY-STAGE-PROD.md).
 # ============================================================
 
 COMPOSE      ?= docker compose
@@ -112,7 +112,7 @@ docker-clean: ## stop the stack and remove its local images (volumes kept)
 	@echo "local stack images removed; model-cache/upload volumes kept"
 
 .PHONY: docker-prune
-docker-prune: ## remove EVERY vahini/* image (local+stag+prod) + dangling layers + build cache
+docker-prune: ## remove EVERY vahini/* image (local+stage+prod) + dangling layers + build cache
 	@imgs=$$(docker image ls --format '{{.Repository}}:{{.Tag}}' | grep '^vahini/' || true); \
 	if [ -n "$$imgs" ]; then \
 		echo "removing vahini images:"; echo "$$imgs" | sed 's/^/  /'; \
@@ -149,9 +149,9 @@ DEPLOY_FILES := \
 	services/persist-api/Dockerfile services/persist-api/Dockerfile.dockerignore \
 	services/persist-api/server.js services/persist-api/lib/textguard.js \
 	deploy/nginx.conf deploy/nginx-security.conf deploy/nginx-headers.inc \
-	deploy/docker-compose.stag.yml deploy/docker-compose.prod.yml \
+	deploy/docker-compose.stage.yml deploy/docker-compose.prod.yml \
 	deploy/release.sh deploy/prewarm-models.sh \
-	deploy/vahinitech.com.nginx.conf deploy/stag.vahinitech.com.nginx.conf \
+	deploy/vahinitech.com.nginx.conf deploy/stage.vahinitech.com.nginx.conf \
 	deploy/api.vahinitech.com.nginx.conf deploy/analyser.vhost.nginx.conf \
 	deploy/http-redirect.vahinitech.com.nginx.conf \
 	deploy/snippets/tls-vahinitech.conf deploy/snippets/http-context-vahinitech.conf \
@@ -172,7 +172,7 @@ deploy-check: ## preflight: every deployment file present, scripts executable, c
 		[ -x "$$s" ] || { echo "  NOT EXECUTABLE  $$s (fix: chmod +x $$s)"; missing=$$((missing+1)); }; \
 	done; \
 	if command -v docker >/dev/null 2>&1 && docker info >/dev/null 2>&1; then \
-		for c in $(COMPOSE_FILE) deploy/docker-compose.stag.yml deploy/docker-compose.prod.yml; do \
+		for c in $(COMPOSE_FILE) deploy/docker-compose.stage.yml deploy/docker-compose.prod.yml; do \
 			$(COMPOSE) -f $$c config -q && echo "  ok       $$c (compose config valid)" \
 				|| { echo "  INVALID  $$c"; missing=$$((missing+1)); }; \
 		done; \
@@ -180,13 +180,13 @@ deploy-check: ## preflight: every deployment file present, scripts executable, c
 	if [ "$$missing" -gt 0 ]; then echo "deploy-check FAILED: $$missing problem(s)"; exit 1; fi; \
 	echo "deploy-check OK: all deployment files present"
 
-.PHONY: release-stag release-prod prewarm-stag prewarm-prod
-release-stag: deploy-check ## build + roll out the staging stack (deploy/release.sh stag)
-	./deploy/release.sh stag
+.PHONY: release-stage release-prod prewarm-stage prewarm-prod
+release-stage: deploy-check ## build + roll out the staging stack (deploy/release.sh stage)
+	./deploy/release.sh stage
 release-prod: deploy-check ## build + roll out the production stack (deploy/release.sh prod)
 	./deploy/release.sh prod
-prewarm-stag: ## pre-download OCR models into the staging volume
-	./deploy/prewarm-models.sh stag
+prewarm-stage: ## pre-download OCR models into the staging volume
+	./deploy/prewarm-models.sh stage
 prewarm-prod: ## pre-download OCR models into the production volume
 	./deploy/prewarm-models.sh prod
 

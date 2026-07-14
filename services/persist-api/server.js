@@ -37,7 +37,7 @@ const QUOTA_BYTES_PER_DAY = Number(process.env.QUOTA_BYTES_PER_DAY || 200 * 1024
 // Origin header on every POST. Non-browser clients (no Origin) pass through.
 const ALLOWED_ORIGINS = String(
   process.env.PERSIST_ALLOWED_ORIGINS ||
-    "https://vahinitech.com,https://www.vahinitech.com,https://stag.vahinitech.com"
+    "https://vahinitech.com,https://www.vahinitech.com,https://stage.vahinitech.com"
 )
   .split(",")
   .map((s) => s.trim())

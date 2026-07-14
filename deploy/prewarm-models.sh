@@ -5,19 +5,19 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DEPLOY_DIR="${ROOT_DIR}/deploy"
-ENV_NAME="${1:-stag}"
+ENV_NAME="${1:-stage}"
 LANGS_RAW="${2:-}"
 
 case "${ENV_NAME}" in
-  stag)
-    COMPOSE_FILE="${DEPLOY_DIR}/docker-compose.stag.yml"
+  stage)
+    COMPOSE_FILE="${DEPLOY_DIR}/docker-compose.stage.yml"
     ;;
   prod)
     COMPOSE_FILE="${DEPLOY_DIR}/docker-compose.prod.yml"
     ;;
   *)
-    echo "Usage: $0 [stag|prod] [langs_csv]"
-    echo "Example: $0 stag en,te,hi,ta,kn,ml"
+    echo "Usage: $0 [stage|prod] [langs_csv]"
+    echo "Example: $0 stage en,te,hi,ta,kn,ml"
     exit 1
     ;;
 esac

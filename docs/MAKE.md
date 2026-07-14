@@ -62,7 +62,7 @@ make up COMPOSE=docker-compose      # legacy compose v1 binary
 | Target | What it does | Destroys |
 |---|---|---|
 | `make docker-clean` | Stop the stack, remove its **local** images. | images only |
-| `make docker-prune` | Remove **every** `vahini/*` image (local, stag, prod tags), dangling layers, and the Docker build cache. | images + build cache |
+| `make docker-prune` | Remove **every** `vahini/*` image (local, stage, prod tags), dangling layers, and the Docker build cache. | images + build cache |
 | `make clean` | `down` + delete **volumes** + local images. | images + **model cache + persisted uploads/reports/feedback** |
 
 Rule of thumb: reclaiming disk after builds → `docker-prune`;
@@ -73,9 +73,9 @@ Rule of thumb: reclaiming disk after builds → `docker-prune`;
 | Target | What it does |
 |---|---|
 | `make deploy-check` | **Preflight.** Asserts every file a deployment needs is present (Dockerfiles, both compose files, container + host nginx configs, TLS snippet, release/prewarm scripts, certbot scripts, core site assets), that all shell scripts are executable, and — when Docker is available — that each compose file parses (`compose config -q`). Exits non-zero listing every problem. |
-| `make release-stag` | `deploy-check`, then `deploy/release.sh stag`: sync submodule, build, roll out, health-check the staging stack. |
+| `make release-stage` | `deploy-check`, then `deploy/release.sh stage`: sync submodule, build, roll out, health-check the staging stack. |
 | `make release-prod` | Same for production. |
-| `make prewarm-stag` / `make prewarm-prod` | Pre-download OCR models into that environment's model volume, so the first real request isn't slow. |
+| `make prewarm-stage` / `make prewarm-prod` | Pre-download OCR models into that environment's model volume, so the first real request isn't slow. |
 
 `release-*` refuses to run if `deploy-check` fails, so a missing config
 file is caught before anything is rebuilt or restarted.
@@ -84,7 +84,7 @@ file is caught before anything is rebuilt or restarted.
 
 Certificates are deliberately **not** containers: the certbot renewal
 timer and the nginx-reload hook run on the host (full design in
-[DEPLOY-STAG-PROD.md](DEPLOY-STAG-PROD.md)). One wildcard cert
+[DEPLOY-STAGE-PROD.md](DEPLOY-STAGE-PROD.md)). One wildcard cert
 (`vahinitech.com` + `*.vahinitech.com`, DNS-01 via Cloudflare) covers
 every subdomain.
 
@@ -117,7 +117,7 @@ make docker-prune   # drop all vahini images + build cache, keep data
 
 ```bash
 make deploy-check   # preflight — free to run, catches missing files
-make release-stag   # stage first
+make release-stage   # stage first
 make release-prod   # then production
 ```
 

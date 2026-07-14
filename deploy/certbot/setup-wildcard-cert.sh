@@ -15,7 +15,7 @@
 # fully automatic -- no manual DNS step every 90 days.
 #
 # Note: *.vahinitech.com covers exactly one label of subdomain
-# (api.vahinitech.com, stag.vahinitech.com, ...) but NOT the bare apex
+# (api.vahinitech.com, stage.vahinitech.com, ...) but NOT the bare apex
 # (vahinitech.com) and NOT two-level subdomains (foo.bar.vahinitech.com) --
 # that's why both -d flags below are needed.
 #
@@ -80,7 +80,7 @@ echo "[setup] Going forward, 'certbot renew' (already scheduled by certbot's"
 echo "[setup] own timer/cron) renews this via the same Cloudflare API -- no"
 echo "[setup] further action needed, including for new subdomains added later."
 echo "[setup]"
-echo "[setup] The old per-domain certs (vahinitech.com, stag.vahinitech.com,"
+echo "[setup] The old per-domain certs (vahinitech.com, stage.vahinitech.com,"
 echo "[setup] api.vahinitech.com if issued) are now superseded. They'll keep"
 echo "[setup] trying to renew until removed; once you've confirmed the"
 echo "[setup] wildcard cert is serving correctly, retire them with:"
