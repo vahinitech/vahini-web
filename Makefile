@@ -10,9 +10,20 @@
 #   make e2e       up + smoke in one shot
 #   make down      stop everything
 #
+# `make up` is for LOCAL dev only. On the server, use the one-shot targets
+# below instead — each chains build+start+health-check for that environment
+# with a certificate check/renew, so one command does the whole deploy:
+#
+#   make deploy-stage   staging: release-stage, then cert-monitor
+#   make deploy-prod    production: release-prod, then cert-monitor
+#
 # The certbot targets wrap the host-level scripts in deploy/certbot/ —
 # certificates are deliberately NOT a container: the renewal timer and
 # nginx-reload hook live on the host (see docs/DEPLOY-STAGE-PROD.md).
+# `make cert-monitor` reports expiry + renew-timer health and renews
+# anything within 30 days; the OS-level timer (`make certbot-setup` +
+# `make certbot-hook`, one-time) is what actually renews unattended forever
+# — cert-monitor is a manual/CI-triggered check, not a replacement for it.
 # ============================================================
 
 COMPOSE      ?= docker compose
@@ -207,3 +218,24 @@ cert-renew-dry: ## rehearse renewal end-to-end (DNS-01 + hook), changes nothing
 cert-renew: ## renew the site certificates now (only certs within 30 days of expiry)
 	sudo certbot renew
 	@echo "renewed where due; nginx reloaded by the deploy hook. 'make cert-status' to confirm."
+
+.PHONY: cert-monitor
+cert-monitor: cert-status cert-renew ## one-shot: report expiry + renew-timer health, then renew anything within 30 days
+	@echo "cert-monitor OK: expiry checked, renew-timer verified, renewed anything due."
+
+# ------------------------------------- one-shot deploy (server, per env)
+# The OS-level auto-renew already runs unattended forever once
+# `make certbot-setup` + `make certbot-hook` have been done once (systemd
+# timer / cron calls `certbot renew` twice daily, itself a no-op outside the
+# last 30 days of a cert's validity -- see deploy/certbot/check-renew-timer.sh
+# and deploy/certbot/install-renew-hook.sh). These two targets don't
+# reimplement that; they just chain the three things you'd otherwise run by
+# hand for a full deploy: build+start+health-check the environment, then
+# verify/renew its certificate.
+.PHONY: deploy-stage deploy-prod
+deploy-stage: release-stage cert-monitor ## up + deploy + cert, one shot: build/start/health-check staging, then verify/renew certs
+	@echo ""
+	@echo "deploy-stage complete: staging stack is up and healthy; certificates verified/renewed."
+deploy-prod: release-prod cert-monitor ## up + deploy + cert, one shot: build/start/health-check production, then verify/renew certs
+	@echo ""
+	@echo "deploy-prod complete: production stack is up and healthy; certificates verified/renewed."
