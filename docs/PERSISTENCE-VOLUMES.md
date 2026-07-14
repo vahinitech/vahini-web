@@ -41,7 +41,7 @@ Nginx routes:
 ```bash
 cd /home/vishnu/web-live
 mkdir -p /home/vishnu/uploads /home/vishnu/reports /home/vishnu/feedback
-./deploy/release.sh stag
+./deploy/release.sh stage
 ```
 
 ## Verify

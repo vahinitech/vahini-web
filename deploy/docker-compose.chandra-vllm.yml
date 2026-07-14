@@ -3,7 +3,7 @@
 services:
   chandra-vllm:
     image: vllm/vllm-openai:latest
-    container_name: vahini-chandra-vllm-stag
+    container_name: vahini-chandra-vllm-stage
     restart: unless-stopped
     profiles: ["chandra"]
     command:

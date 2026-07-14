@@ -4,9 +4,9 @@
 #
 # One-time setup on the vahinitech.com host: wires up automatic HTTPS
 # certificate renewal for every certbot-managed cert on this host --
-# vahinitech.com / www.vahinitech.com / stag.vahinitech.com /
+# vahinitech.com / www.vahinitech.com / stage.vahinitech.com /
 # api.vahinitech.com today, and any subdomain added later (see the "Adding a
-# new subdomain" section in docs/DEPLOY-STAG-PROD.md) -- with no per-domain
+# new subdomain" section in docs/DEPLOY-STAGE-PROD.md) -- with no per-domain
 # changes needed here.
 #
 # This does NOT set up a new cron job or systemd timer -- if certbot was

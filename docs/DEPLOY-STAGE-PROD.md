@@ -5,7 +5,7 @@
 
 This project now supports a clean two-step rollout:
 
-- Stage first on `stag.vahinitech.com` via local port `127.0.0.1:3016`
+- Stage first on `stage.vahinitech.com` via local port `127.0.0.1:3016`
 - Cut over later to `vahinitech.com` via local port `127.0.0.1:3015`
 - Bundle PP-OCRv5 into Docker and expose OCR at `/ocr` through the web container
 
@@ -21,7 +21,7 @@ still missing afterwards (network/auth issue reaching GitHub).
 
 ## Files
 
-- `deploy/docker-compose.stag.yml`
+- `deploy/docker-compose.stage.yml`
 - `deploy/docker-compose.prod.yml`
 - `deploy/release.sh`
 - `deploy/http-redirect.vahinitech.com.nginx.conf` -- the one shared port-80
@@ -29,7 +29,7 @@ still missing afterwards (network/auth issue reaching GitHub).
   subdomain. Apply once; new subdomains don't need their own copy.
 - `deploy/snippets/tls-vahinitech.conf` -- shared TLS config (cert paths,
   protocols, ciphers, security headers), `include`d by every HTTPS vhost below.
-- `deploy/stag.vahinitech.com.nginx.conf`
+- `deploy/stage.vahinitech.com.nginx.conf`
 - `deploy/vahinitech.com.nginx.conf`
 - `deploy/api.vahinitech.com.nginx.conf` -- friendlier host name for the same
   recognition API (`/ocr`, `/report-python`, `/analyze-vl`) that already runs
@@ -41,7 +41,7 @@ still missing afterwards (network/auth issue reaching GitHub).
 From repo root:
 
 ```bash
-./deploy/release.sh stag
+./deploy/release.sh stage
 ```
 
 Verify on server:
@@ -52,7 +52,7 @@ curl -I http://127.0.0.1:3016/analyser/analyser.html
 curl http://127.0.0.1:3016/ocr/health
 ```
 
-Apply host nginx vhost using `deploy/stag.vahinitech.com.nginx.conf` (plus
+Apply host nginx vhost using `deploy/stage.vahinitech.com.nginx.conf` (plus
 `deploy/http-redirect.vahinitech.com.nginx.conf` and
 `deploy/snippets/tls-vahinitech.conf` if not already in place -- see
 "HTTPS certificate renewal" below) and reload nginx.
@@ -105,7 +105,7 @@ vahinitech.com's DNS is on **Cloudflare**, so instead of a separate
 Let's-Encrypt certificate per subdomain (the old approach, HTTP-01/webroot,
 one cert per domain), this uses a **single wildcard certificate**
 (`vahinitech.com` + `*.vahinitech.com`) via DNS-01 through Cloudflare's API.
-One cert, one renewal, covers `vahinitech.com`, `www.`, `stag.`, `api.`, and
+One cert, one renewal, covers `vahinitech.com`, `www.`, `stage.`, `api.`, and
 any subdomain added in the future with zero further cert work.
 
 ### One-time setup
@@ -150,14 +150,14 @@ as unattended as the old per-domain ones were.
 
 ### Retiring the old per-domain certs
 
-Before the wildcard cert, `vahinitech.com`, `stag.vahinitech.com` and
+Before the wildcard cert, `vahinitech.com`, `stage.vahinitech.com` and
 `api.vahinitech.com` (if issued) each had their own HTTP-01 certificate.
 Once the wildcard cert is confirmed serving correctly on all of them:
 
 ```bash
 certbot certificates                    # list what's tracked
 certbot delete --cert-name vahinitech.com
-certbot delete --cert-name stag.vahinitech.com
+certbot delete --cert-name stage.vahinitech.com
 certbot delete --cert-name api.vahinitech.com   # only if it was ever issued
 ```
 

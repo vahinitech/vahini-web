@@ -2,11 +2,11 @@
 # © 2026 Vahini Technologies. All rights reserved.
 services:
   analyser:
-    container_name: vahini-analyser-stag
+    container_name: vahini-analyser-stage
     build:
       context: ../analyser
       dockerfile: deployment/Dockerfile
-    image: vahini/analyser:stag
+    image: vahini/analyser:stage
     restart: unless-stopped
     environment:
       - PORT=8868
@@ -30,11 +30,11 @@ services:
       retries: 3
 
   persist:
-    container_name: vahini-persist-stag
+    container_name: vahini-persist-stage
     build:
       context: ..
       dockerfile: services/persist-api/Dockerfile
-    image: vahini/persist:stag
+    image: vahini/persist:stage
     restart: unless-stopped
     environment:
       - PORT=8090
@@ -53,11 +53,11 @@ services:
       retries: 3
 
   web:
-    container_name: vahini-site-stag
+    container_name: vahini-site-stage
     build:
       context: ..
       dockerfile: Dockerfile
-    image: vahini/site:stag
+    image: vahini/site:stage
     restart: unless-stopped
     networks:
       - default

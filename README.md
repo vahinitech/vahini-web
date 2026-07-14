@@ -77,7 +77,7 @@ git add analyser && git commit -m "chore: bump analyser submodule to <new-tag>"
 
 ### Staging / production
 
-See `docs/DEPLOY-STAG-PROD.md`. Host nginx vhost templates live in `deploy/`.
+See `docs/DEPLOY-STAGE-PROD.md`. Host nginx vhost templates live in `deploy/`.
 
 ---
 

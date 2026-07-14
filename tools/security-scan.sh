@@ -9,7 +9,7 @@
 # ports answer and the TLS grade holds.
 #
 #   tools/security-scan.sh vahinitech.com
-#   tools/security-scan.sh stag.vahinitech.com --quick
+#   tools/security-scan.sh stage.vahinitech.com --quick
 #   make security-scan HOST=vahinitech.com
 #
 # AUTHORIZED TARGETS ONLY. Port-scanning or TLS-probing infrastructure you

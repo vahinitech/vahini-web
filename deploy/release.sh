@@ -5,11 +5,11 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DEPLOY_DIR="${ROOT_DIR}/deploy"
-ENV_NAME="${1:-stag}"
+ENV_NAME="${1:-stage}"
 
 case "${ENV_NAME}" in
-  stag)
-    COMPOSE_FILE="${DEPLOY_DIR}/docker-compose.stag.yml"
+  stage)
+    COMPOSE_FILE="${DEPLOY_DIR}/docker-compose.stage.yml"
     WEB_HEALTH_URL="http://127.0.0.1:3016/site/index.html"
     OCR_HEALTH_URL="http://127.0.0.1:3016/ocr/health"
     ;;
@@ -19,7 +19,7 @@ case "${ENV_NAME}" in
     OCR_HEALTH_URL="http://127.0.0.1:3015/ocr/health"
     ;;
   *)
-    echo "Usage: $0 [stag|prod]"
+    echo "Usage: $0 [stage|prod]"
     exit 1
     ;;
 esac
