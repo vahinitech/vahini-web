@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. All rights reserved. -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>Project Akshara, the world's first handwriting-motion dataset</title>
+<meta name="description" content="Project Akshara is Vahini's marathon: building the world's first handwriting-motion dataset with schools across India, consent-first, one page at a time.">
+<link rel="canonical" href="https://vahinitech.com/project-akshara.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Vahini Technologies">
+<meta property="og:title" content="Project Akshara, the world's first handwriting-motion dataset">
+<meta property="og:description" content="A marathon, not a sprint: building the handwriting-motion dataset with schools, consent-first, one page at a time.">
+<meta property="og:url" content="https://vahinitech.com/project-akshara.html">
+<meta property="og:image" content="https://vahinitech.com/assets/vahini-pen-og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Vahini sensor pen on ordinary paper">
+<meta property="og:locale" content="en_IN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@vahinitech">
+<meta name="twitter:title" content="Project Akshara">
+<meta name="twitter:description" content="The world's first handwriting-motion dataset, built with schools, consent-first, one page at a time.">
+<meta name="twitter:image" content="https://vahinitech.com/assets/vahini-pen-og.jpg">
+<meta name="twitter:image:alt" content="Vahini Sensor Pen">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="js/theme.config.js"></script>
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/site.css">
+<style>
+  .ak-num{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:14px; margin-top:22px;}
+  .ak-num .n{background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-1); padding:20px 22px;}
+  .ak-num .n b{display:block; font-family:var(--serif); font-size:clamp(22px,2.8vw,30px); color:var(--ink); line-height:1.15;}
+  .ak-num .n span{display:block; margin-top:6px; font-size:13.5px; color:var(--muted); line-height:1.45;}
+  .ak-cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:14px; margin-top:18px;}
+  .ak-cards .c{background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-1); padding:22px 24px;}
+  .ak-cards .c h3{font-size:17.5px; margin-bottom:8px;}
+  .ak-cards .c p{font-size:14.5px; color:var(--muted); line-height:1.6;}
+  .ak-steps{counter-reset:step; display:flex; flex-direction:column; gap:14px; margin-top:18px; max-width:760px;}
+  .ak-steps .s{position:relative; background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-1); padding:20px 24px 20px 72px;}
+  .ak-steps .s::before{counter-increment:step; content:counter(step); position:absolute; left:22px; top:20px;
+    width:34px; height:34px; border-radius:50%; background:var(--ink); color:#fff; display:flex; align-items:center;
+    justify-content:center; font-family:var(--serif); font-weight:700; font-size:17px;}
+  .ak-steps .s h3{font-size:16.5px; margin-bottom:5px;}
+  .ak-steps .s p{font-size:14.5px; color:var(--muted); line-height:1.6;}
+  .ak-quote{font-family:var(--serif); font-size:clamp(20px,2.6vw,27px); font-weight:600; color:var(--ink);
+    line-height:1.45; max-width:820px; margin-top:8px;}
+</style>
+</head>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
+
+  <section class="phero" data-screen-label="Hero">
+    <div class="wrap">
+      <div class="phero__tags reveal"><p class="eyebrow">Project Akshara</p></div>
+      <h1 class="reveal" data-d="1">The dataset nobody else has the patience to build.</h1>
+      <p class="lede reveal" data-d="2">An <em>akshara</em> is the smallest unit of Indic writing, the syllable a child learns first. Project Akshara is Vahini's marathon: building the world's first handwriting-motion dataset, with schools, one honest page at a time.</p>
+      <div class="ak-num reveal" data-d="3">
+        <div class="n"><b>World first</b><span>nobody has ever recorded how hands actually move while writing Indic scripts, at scale</span></div>
+        <div class="n"><b>Six scripts</b><span>the languages hundreds of millions write in every day, and software still can't read from motion</span></div>
+        <div class="n"><b>With schools</b><span>collected where handwriting lives: classrooms, with consent, on ordinary paper</span></div>
+        <div class="n"><b>Years, by design</b><span>a corpus built by real hands cannot be rushed, scraped or bought. That is exactly why it is worth building</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" data-screen-label="The gap">
+    <div class="wrap" style="max-width:860px;">
+      <p class="eyebrow reveal">Why it doesn't exist yet</p>
+      <h2 class="reveal" data-d="1">Everyone photographed the page. Nobody recorded the hand.</h2>
+      <p class="body reveal" data-d="2">Decades of handwriting research produced mountains of scanned images and tablet scribbles. Both miss the thing that matters: the living motion of a hand shaping a letter on real paper, the pressure, the pace, the hesitations, the flow. That motion is where learning shows, where health shows, where identity shows. It has never been captured at scale in any language, and for Indic scripts it has barely been captured at all.</p>
+      <p class="body reveal" data-d="3">Generative AI settled the argument about what such gaps are worth: whoever owns the dataset owns the model. The handwriting-motion corpus is one of the last great datasets still unclaimed. Someone will build it. We decided it should be us, and it should start in India.</p>
+    </div>
+  </section>
+
+  <section class="block" data-screen-label="The stand">
+    <div class="wrap" style="max-width:860px;">
+      <p class="eyebrow reveal">A marathon, not a sprint</p>
+      <h2 class="reveal" data-d="1">The brave part is the patience.</h2>
+      <p class="ak-quote reveal" data-d="1">There is no shortcut. Every sample in this dataset is written by a real human hand, page after page, school after school, year after year.</p>
+      <p class="body reveal" data-d="2">Most companies will not commit to something that takes years before it pays. Vahini took a firm stand: the dataset is the company. We build the pen, we run the analyser, we ship products along the way, and all of it feeds one long project that compounds every single day. By the time anyone else starts, this corpus will be years ahead, and years are the one thing money cannot compress.</p>
+    </div>
+  </section>
+
+  <section class="block" data-screen-label="How it works">
+    <div class="wrap" style="max-width:860px;">
+      <p class="eyebrow reveal">How collection works</p>
+      <h2 class="reveal" data-d="1">Simple on the surface. Careful underneath.</h2>
+      <div class="ak-steps">
+        <div class="s reveal"><h3>Schools partner with us</h3><p>Teachers know handwriting better than anyone, and classrooms are where it happens every day. Partner schools run normal writing practice; students write what they would write anyway, on ordinary paper.</p></div>
+        <div class="s reveal" data-d="1"><h3>Consent comes first, always</h3><p>Participation is opt-in, explained in plain language, with guardian consent for every child. A school, a family or a writer can step out at any time, and their data goes with them.</p></div>
+        <div class="s reveal" data-d="2"><h3>Motion is recorded, not identities</h3><p>The pen records how writing moves: pressure, pace, flow. Sessions are separated from names before they ever join the dataset. We collect the movement of writing, and we protect the writer.</p></div>
+        <div class="s reveal"><h3>Every page is quality-checked</h3><p>A dataset is only as good as its worst sample. Every session passes quality review before it counts, and the corpus stays balanced across scripts, ages and regions by design.</p></div>
+        <div class="s reveal" data-d="1"><h3>Contributors benefit immediately</h3><p>Participating students and schools get handwriting coaching reports from day one. The dataset gives back before it asks for anything more.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" data-screen-label="What it unlocks">
+    <div class="wrap">
+      <p class="eyebrow reveal">What the corpus unlocks</p>
+      <h2 class="reveal" data-d="1">One dataset. Four industries.</h2>
+      <div class="ak-cards">
+        <div class="c reveal"><h3>Handwriting that types itself</h3><p>Write on paper in your own language and script; the words arrive as digital text. For Indic scripts this simply does not exist today. Akshara is how it gets built.</p></div>
+        <div class="c reveal" data-d="1"><h3>Learning, seen early</h3><p>Struggles with writing show up in motion long before they show up in grades. Objective, affordable screening for every classroom, not just the ones with specialists.</p></div>
+        <div class="c reveal" data-d="2"><h3>Assistive writing</h3><p>For hands that shake or tire, motion understanding means real help: writing that stays legible, progress that can be measured, therapy that can be guided.</p></div>
+        <div class="c reveal" data-d="3"><h3>A research foundation</h3><p>Curated releases for universities and labs, so an entire field can finally study writing the way it actually happens: in motion, on paper, across languages.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" data-screen-label="Why defensible">
+    <div class="wrap" style="max-width:860px;">
+      <p class="eyebrow reveal">For investors</p>
+      <h2 class="reveal" data-d="1">Why this compounds, and why it can't be copied</h2>
+      <p class="body reveal" data-d="1"><strong>It cannot be scraped.</strong> This data does not exist on the internet. It is created, physically, by hands writing on paper with our instrument. There is no shortcut for a competitor to take, and no archive for them to buy.</p>
+      <p class="body reveal" data-d="2"><strong>It compounds daily.</strong> Every consented page makes the models better; better models make the products better; better products bring more writers. The flywheel is already turning: the analyser is live, the pen is patented and in development, and collection is underway.</p>
+      <p class="body reveal" data-d="3"><strong>The moat is triple-layered.</strong> Granted hardware IP (Indian Patent No. 584433), a head start measured in years, and relationships with schools that trust us because we earned it consent-first. Each layer protects the others.</p>
+      <p class="body reveal" data-d="4"><strong>And the timing is now.</strong> Every vertical is racing to own its proprietary data. Handwriting motion, in the world's most linguistically rich market, is still unclaimed. In five years it will belong to someone.</p>
+    </div>
+  </section>
+
+  <section class="block" data-screen-label="Responsibility">
+    <div class="wrap" style="max-width:860px;">
+      <p class="eyebrow reveal">Responsible by design</p>
+      <h2 class="reveal" data-d="1">Built the slow way, because it's the right way</h2>
+      <p class="body reveal" data-d="2">Children are involved, so the bar is high and we set it ourselves before anyone asked: explicit consent in plain language, guardian sign-off for minors, motion signals separated from identities, the right to withdraw at any time, and community benefit flowing back from day one. A dataset built with schools only works if schools can trust it for years. That trust is part of the asset.</p>
+    </div>
+  </section>
+
+  <section class="block" data-screen-label="Join">
+    <div class="wrap" style="max-width:860px;">
+      <h2 class="reveal">Be part of the marathon</h2>
+      <p class="body reveal" data-d="1">If you run a school and want your students to write better while contributing to something historic; if you research handwriting, learning or motor skills; or if you invest in companies that build patient, compounding assets, we should talk.</p>
+      <div class="phero__cta reveal" data-d="2" style="margin-top:24px; display:flex; gap:12px; flex-wrap:wrap;">
+        <a class="btn btn--crimson btn--lg" href="reach.html" data-nav>Reach out</a>
+        <a class="btn btn--ghost btn--lg" href="investors.html" data-nav>Investor overview</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+<script src="js/site.js"></script>
+</body>
+</html>

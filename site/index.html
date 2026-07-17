@@ -519,7 +519,7 @@
           <h1 class="pf__h1">One pen writes. One dataset grows. <em>Every page makes the platform smarter.</em></h1>
           <div class="pf__rule"></div>
           <p class="pf__ticker" aria-hidden="true">The pen is reading your&nbsp;<span id="imuWord" class="pf__ticker-word">MOTION</span></p>
-          <p class="pf__sub">Two priorities, one loop. The patented <strong>Vahini dual-IMU sensor pen</strong> writes on plain paper and feels what no camera can see: pressure, tilt, speed and pen-lifts. Every consented page grows the <strong>world's first Indic handwriting-motion dataset</strong>. This is not a lab project. The analyser is live today, and every new writer makes the platform smarter.</p>
+          <p class="pf__sub">Two priorities, one loop. The patented <strong>Vahini dual-IMU sensor pen</strong> writes on plain paper and feels what no camera can see: pressure, pen angle, writing speed and pen-lifts. Every consented page grows the <strong>world's first Indic handwriting-motion dataset</strong>. This is not a lab project. The analyser is live today, and every new writer makes the platform smarter.</p>
           <div class="pf-duo" role="list" aria-label="Our two highest priorities">
             <a class="pf-duo__card" role="listitem" href="product.html" data-nav>
               <span class="pf-duo__tag">Highest priority · Hardware</span>
@@ -587,10 +587,10 @@
                 <path d="M0,28 Q12,16 24,28 T48,28 T72,28 T96,28 T120,28 T144,28 T168,28 T192,28 T216,28 T240,28 T264,28 T288,28" stroke="#E0922E" opacity=".7"/>
               </svg>
               <div class="pf-metrows">
-                <div class="pf-metrow"><span class="pf-metrow__k">Pressure</span><i class="pf-metrow__t"><b style="--w:74%"></b></i></div>
-                <div class="pf-metrow"><span class="pf-metrow__k">Tilt</span><i class="pf-metrow__t"><b style="--w:52%"></b></i></div>
-                <div class="pf-metrow"><span class="pf-metrow__k">Acceleration</span><i class="pf-metrow__t"><b style="--w:88%"></b></i></div>
-                <div class="pf-metrow"><span class="pf-metrow__k">Speed</span><i class="pf-metrow__t"><b style="--w:63%"></b></i></div>
+                <div class="pf-metrow"><span class="pf-metrow__k">Pressure Control</span><i class="pf-metrow__t"><b style="--w:74%"></b></i></div>
+                <div class="pf-metrow"><span class="pf-metrow__k">Pen Control</span><i class="pf-metrow__t"><b style="--w:52%"></b></i></div>
+                <div class="pf-metrow"><span class="pf-metrow__k">Smoothness</span><i class="pf-metrow__t"><b style="--w:88%"></b></i></div>
+                <div class="pf-metrow"><span class="pf-metrow__k">Writing Speed</span><i class="pf-metrow__t"><b style="--w:63%"></b></i></div>
                 <div class="pf-metrow"><span class="pf-metrow__k">Orientation</span><i class="pf-metrow__t"><b style="--w:80%"></b></i></div>
               </div>
               <span class="pf-phase__lab"><b>02 · Capture</b> A camera sees ink. The pen senses motion: 16 axes, 208 times a second.</span>
@@ -610,7 +610,7 @@
               <span class="pf-phase__lab"><b>03 · Learn</b> Every page makes the models sharper.</span>
             </div>
 
-            <!-- 3 · GROW (the dataset — pages stack in, corpus fills) -->
+            <!-- 3 · GROW (the dataset: pages stack in, corpus fills) -->
             <div class="pf-phase pf-phase--grow">
               <div class="pf-pagecards">
                 <span class="pf-pagecard"><b>वाहिनी</b><em>हिन्दी</em></span>
@@ -891,7 +891,7 @@
         <p>Every analysed page and every pen-stroke, captured with explicit consent, builds a corpus that doesn’t exist anywhere else: real handwriting motion across five Indic scripts and many ages. A camera company can scrape finished pages; only Vahini owns the <strong>motion</strong> behind them.</p>
         <div class="dset__points">
           <div class="dpt"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><div><b>Consent-first</b><span>Collected only with explicit consent, never quietly scraped.</span></div></div>
-          <div class="dpt"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-5 4 4 8-8M3 21h18"/></svg></span><div><b>Motion, not content</b><span>We store the signal, pressure, tilt, rhythm, not the words written.</span></div></div>
+          <div class="dpt"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-5 4 4 8-8M3 21h18"/></svg></span><div><b>Motion, not content</b><span>We store the signal, pressure control, pen control, writing flow, never the words written.</span></div></div>
           <div class="dpt"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg></span><div><b>DPDP-aligned, India-processed</b><span>Privacy by design under the DPDP Act 2023, a sales advantage, not just compliance.</span></div></div>
         </div>
       </div>
@@ -1192,7 +1192,7 @@
   var stage=document.getElementById('pfStage'); if(!stage) return;
   var PHASES=5, DUR=[3200,3000,3400,2900,3200], i=0, t=null, visible=true;
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  /* static fallback shows the dataset (Grow) phase — the pen already leads the left column */
+  /* static fallback shows the dataset (Grow) phase; the pen already leads the left column */
   if(reduce){ stage.setAttribute('data-phase','3'); return; }
   function stop(){ if(t){ clearTimeout(t); t=null; } }
   function tick(){
