@@ -37,6 +37,8 @@
   ];
   var PLATFORM = [
     { href: "product.html", t: "The pen, Vahini", d: "Dual-IMU sensing on any paper", pill: "dev", pl: "Pre-order" },
+    { href: "benchmarks.html", t: "Specifications & benchmarks", d: "Writing time, charging, memory, measured honestly" },
+    { href: "project-akshara.html", t: "Project Akshara", d: "The world's first handwriting-motion dataset" },
     { href: "patents.html", t: "Patents & IP", d: "Granted Patent No. 584433" }
   ];
   var COMPANY = [
@@ -73,6 +75,8 @@
     { t:"Handwriting analysis", u:P("solution-handwriting.html"), d:"The market, live today", k:"handwriting analysis solution scorecard exercises market" },
     { t:"OCR & Vision", u:P("solution-ocr-vision.html"), d:"Indic handwriting engine, quality not just text", k:"ocr vision indic handwriting recognition engine quality legibility telugu hindi tamil kannada api dataset licensing" },
     { t:"The Pen (Vahini)", u:P("product.html"), d:"Dual-IMU sensing on any paper", k:"pen vahini hardware imu sensor pre-order" },
+    { t:"Specifications & benchmarks", u:P("benchmarks.html"), d:"Writing time, charging, memory, measured honestly", k:"specs specifications benchmarks battery charging writing time memory performance quality speed pressure" },
+    { t:"Project Akshara", u:P("project-akshara.html"), d:"The world's first handwriting-motion dataset", k:"akshara dataset schools collection motion corpus indic scripts marathon investors" },
     { t:"Patents & IP", u:P("patents.html"), d:"Granted Patent No. 584433", k:"patents ip granted intellectual property privacy consent dpdp how it works" },
     { t:"About Vahini", u:P("about.html"), d:"How it started, where we are", k:"about story founder origin team" },
     { t:"Investor Book", u:P("investor.html"), d:"The motion-data field notebook", k:"investors funding round roadmap motion data moat deep tech notebook" },
@@ -189,6 +193,8 @@
         '<div class="foot__col"><h5>Applications</h5>'+sol+'</div>'+
         '<div class="foot__col"><h5>Company</h5>'+
           '<a href="'+P("product.html")+'" data-nav>The Pen</a>'+
+          '<a href="'+P("benchmarks.html")+'" data-nav>Specs & benchmarks</a>'+
+          '<a href="'+P("project-akshara.html")+'" data-nav>Project Akshara</a>'+
           '<a href="'+P("about.html")+'" data-nav>About</a>'+
           '<a href="'+P("why-handwriting.html")+'" data-nav>Why handwriting matters</a>'+
           '<a href="'+P("awards.html")+'" data-nav>Awards</a>'+

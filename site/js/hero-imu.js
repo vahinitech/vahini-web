@@ -14,7 +14,7 @@
 (function () {
   "use strict";
 
-  var WORDS = ["MOTION", "RHYTHM", "PRESSURE", "TILT", "VELOCITY", "PEN-LIFTS"];
+  var WORDS = ["MOTION", "WRITING FLOW", "PRESSURE", "PEN CONTROL", "WRITING SPEED", "PEN-LIFTS"];
 
   function init() {
     var el = document.getElementById("imuWord");

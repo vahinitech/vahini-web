@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. All rights reserved. -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>Pen specifications &amp; benchmarks, the Vahini pen measured</title>
+<meta name="description" content="What the Vahini sensor pen captures, how long it writes, how fast it charges, and how we measure it. Plain answers to the questions buyers actually ask.">
+<link rel="canonical" href="https://vahinitech.com/benchmarks.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Vahini Technologies">
+<meta property="og:title" content="Pen specifications &amp; benchmarks">
+<meta property="og:description" content="Writing time, charging, memory, what the pen captures and how we measure it. Plain answers, honest numbers.">
+<meta property="og:url" content="https://vahinitech.com/benchmarks.html">
+<meta property="og:image" content="https://vahinitech.com/assets/vahini-pen-og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Vahini sensor pen on ordinary paper">
+<meta property="og:locale" content="en_IN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@vahinitech">
+<meta name="twitter:title" content="Pen specifications &amp; benchmarks">
+<meta name="twitter:description" content="Writing time, charging, memory, what the pen captures and how we measure it.">
+<meta name="twitter:image" content="https://vahinitech.com/assets/vahini-pen-og.jpg">
+<meta name="twitter:image:alt" content="Vahini Sensor Pen">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="js/theme.config.js"></script>
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/site.css">
+<style>
+  .bm-glance{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin-top:22px;}
+  .bm-glance .g{background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-1); padding:20px 22px;}
+  .bm-glance .g b{display:block; font-family:var(--serif); font-size:clamp(24px,3vw,32px); color:var(--ink); line-height:1.1;}
+  .bm-glance .g span{display:block; margin-top:6px; font-size:13.5px; color:var(--muted); line-height:1.4;}
+  .bm-table{width:100%; border-collapse:collapse; margin-top:14px; background:var(--surface);
+    border:1px solid var(--rule); border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-1);}
+  .bm-table th, .bm-table td{padding:14px 18px; text-align:left; font-size:15px; line-height:1.5; border-bottom:1px solid var(--rule);}
+  .bm-table th{width:38%; font-family:var(--serif); font-weight:600; color:var(--ink); vertical-align:top;}
+  .bm-table td{color:var(--elephant);}
+  .bm-table tr:last-child th, .bm-table tr:last-child td{border-bottom:none;}
+  .bm-cap{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin-top:18px;}
+  .bm-cap .c{background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-1); padding:20px 22px;}
+  .bm-cap .c h3{font-size:17px; margin-bottom:6px;}
+  .bm-cap .c p{font-size:14px; color:var(--muted); line-height:1.55;}
+  .bm-note{background:var(--surface-2, var(--surface)); border:1px dashed var(--rule-2); border-radius:var(--radius-lg);
+    padding:18px 22px; margin-top:22px; font-size:14.5px; color:var(--elephant); line-height:1.6;}
+</style>
+</head>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
+
+  <section class="phero" data-screen-label="Hero">
+    <div class="wrap">
+      <div class="phero__tags reveal"><p class="eyebrow">Specifications &amp; benchmarks</p></div>
+      <h1 class="reveal" data-d="1">The pen, measured.</h1>
+      <p class="lede reveal" data-d="2">Before you buy a pen that watches how you write, you deserve plain answers: what it captures, how long it writes, how fast it charges, and how honest the numbers are. Here they are.</p>
+      <div class="bm-glance reveal" data-d="3">
+        <div class="g"><b>208/s</b><span>motion snapshots every second, fast enough to catch what a camera misses</span></div>
+        <div class="g"><b>16 axes</b><span>of movement, pressure and direction from a single natural stroke</span></div>
+        <div class="g"><b>~15 h</b><span>of continuous writing on one charge</span></div>
+        <div class="g"><b>~2 h</b><span>from empty to a full battery</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" data-screen-label="What it captures">
+    <div class="wrap">
+      <p class="eyebrow reveal">Writing quality</p>
+      <h2 class="reveal" data-d="1">What the pen actually captures</h2>
+      <p class="lede reveal" data-d="2">Six things about your writing, in plain words. Together they are the raw material for every report the analyser gives you.</p>
+      <div class="bm-cap">
+        <div class="c reveal"><h3>Pressure Control</h3><p>How firmly the tip meets the paper, and how steadily you hold that pressure through a word.</p></div>
+        <div class="c reveal" data-d="1"><h3>Pen Control</h3><p>The angle you hold the pen at and how well you keep it, a quiet signature of grip and comfort.</p></div>
+        <div class="c reveal" data-d="2"><h3>Writing Speed</h3><p>How fast the tip travels, stroke by stroke, and where you slow down or rush.</p></div>
+        <div class="c reveal"><h3>Writing Flow</h3><p>The natural pace and continuity of your strokes: fluent and even, or hesitant and effortful.</p></div>
+        <div class="c reveal" data-d="1"><h3>Hand Stability</h3><p>Steadiness of the hand while writing, smooth control versus shake and wobble.</p></div>
+        <div class="c reveal" data-d="2"><h3>Smoothness</h3><p>How cleanly each stroke starts, turns and ends, without jerks or corrections.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" data-screen-label="Specifications">
+    <div class="wrap" style="max-width:860px;">
+      <p class="eyebrow reveal">Specifications</p>
+      <h2 class="reveal" data-d="1">What is inside, in one table</h2>
+      <table class="bm-table reveal" data-d="2">
+        <tr><th>Sensing</th><td>Two independent motion sensors (one near the tip, one near the top), a compass, and a pressure sensor in the tip. The two motion sensors see every stroke from two points, which is what makes faithful reconstruction possible.</td></tr>
+        <tr><th>Sampling</th><td>208 motion snapshots per second. Handwriting changes within milliseconds; this rate catches hesitations and shakes a photograph never can.</td></tr>
+        <tr><th>Paper</th><td>Any paper, any notebook, any form. No special dot-pattern, no tablet, no screen.</td></tr>
+        <tr><th>Connection</th><td>Bluetooth Low Energy to your phone or laptop, live while you write. USB-C for charging and wired transfer.</td></tr>
+        <tr><th>Offline memory</th><td>The pen keeps writing when nothing is connected: up to around 19 hours of pure writing time stored on the pen itself, which covers several weeks of normal daily notes. Sync whenever you like; nothing is lost in between.</td></tr>
+        <tr><th>Indicator</th><td>A single colour light tells you everything: recording, battery, charging, pairing, or a warning. One meaning per colour, documented in the manual.</td></tr>
+        <tr><th>Scripts</th><td>Motion capture is script-neutral by design. The analyser currently reads five Indic scripts, with more in training.</td></tr>
+        <tr><th>Size &amp; weight</th><td>A normal pen in the hand. Final production dimensions and weight will be published here at launch; shrinking both without giving up accuracy is an explicit design goal.</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section class="block" data-screen-label="Battery">
+    <div class="wrap" style="max-width:860px;">
+      <p class="eyebrow reveal">Battery &amp; charging</p>
+      <h2 class="reveal" data-d="1">Writes all day. Charges over lunch.</h2>
+      <table class="bm-table reveal" data-d="2">
+        <tr><th>Continuous writing</th><td>Around 15 hours of non-stop recording on one charge. Nobody writes 15 hours straight; that is the point.</td></tr>
+        <tr><th>A typical day</th><td>With a couple of hours of writing a day, expect roughly four days between charges.</td></tr>
+        <tr><th>On the shelf</th><td>A charged pen left in a drawer keeps its charge for weeks to months.</td></tr>
+        <tr><th>Full charge</th><td>About 2 hours over USB-C, from empty to full.</td></tr>
+        <tr><th>Forgot it on the charger?</th><td>Safe. Charging stops automatically when the battery is full; leaving the pen plugged in overnight, or for a weekend, does not harm it. Charging protection is built in twice: once in the charging hardware and once in the pen's own software, and each layer works even if the other fails.</td></tr>
+        <tr><th>Low battery</th><td>The pen warns you early, saves everything, and shuts down cleanly before the battery can be damaged. Your notes are never the price of an empty battery.</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section class="block" data-screen-label="Everyday life">
+    <div class="wrap" style="max-width:860px;">
+      <p class="eyebrow reveal">Everyday life</p>
+      <h2 class="reveal" data-d="1">Built for real hands, including small ones</h2>
+      <p class="body reveal" data-d="1">A pen lives a rough life. It gets dropped, shaken, chewed, forgotten in bags, and borrowed by children. We test for that life deliberately: drops from desk height are detected in flight, a pen rattling in a backpack does not wake up and drain itself, and banging or shaking the pen does not corrupt what you wrote. If something does go wrong, the pen recovers on its own at the next start and keeps your notes intact.</p>
+      <p class="body reveal" data-d="2">Heat is handled the same way. Writing while charging on a warm day stays well inside safe limits; if the pen ever gets genuinely hot, it warns you first and only stops if it must.</p>
+    </div>
+  </section>
+
+  <section class="block" data-screen-label="How we measure">
+    <div class="wrap" style="max-width:860px;">
+      <div class="bm-note reveal">
+        <strong>How we measure, honestly.</strong> The numbers on this page come from our engineering bench and from a full simulation of the pen's electronics that we run on every code change, using the same power figures our hardware is designed to. Pre-production hardware confirms them; final retail units will be re-measured and this page updated at launch. Where a number is a target rather than a measurement, we say so.
+      </div>
+      <div class="phero__cta reveal" data-d="1" style="margin-top:28px; display:flex; gap:12px; flex-wrap:wrap;">
+        <a class="btn btn--crimson btn--lg" href="product.html" data-nav>Meet the pen</a>
+        <a class="btn btn--ghost btn--lg" href="faq.html" data-nav>Questions &amp; answers</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+<script src="js/site.js"></script>
+</body>
+</html>
