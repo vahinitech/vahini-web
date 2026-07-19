@@ -139,6 +139,14 @@
       excerpt: "Classical sensor fusion drifts within seconds. How learned models reconstruct multi-stroke writing from an inertial pen on ordinary paper, no tablet, no special surface."
     },
     {
+      slug: "sampling-rate-104-208-416",
+      url: "sampling-rate-104-208-416.html",
+      cat: "technology",
+      title: "104, 208 or 416? Choosing how often a pen should look at your hand",
+      date: "May 2026", read: "8 min read", author: "Malli Kosuri",
+      excerpt: "Our sensors can sample at 104, 208 or 416 times a second. We ship 208. The physics of handwriting bandwidth, what doubling the rate really buys, and what it silently costs."
+    },
+    {
       slug: "two-views-of-a-letter",
       url: "two-views-of-a-letter.html",
       cat: "research",
@@ -155,13 +163,101 @@
       excerpt: "From childhood dysgraphia to the micrographia of Parkinson's, the way we form letters carries motor-health information, and machine learning is learning to read it."
     },
     {
+      slug: "less-hardware-same-accuracy",
+      url: "less-hardware-same-accuracy.html",
+      cat: "technology",
+      title: "The roadmap is less hardware, not more",
+      date: "Mar 2026", read: "6 min read", author: "Malli Kosuri",
+      excerpt: "Most gadgets add parts each generation. Our roadmap points the other way: fewer components, a simpler board, a cheaper pen, with accuracy as the one thing that is never traded. How software absorbs hardware."
+    },
+    {
       slug: "reading-a-hand-its-never-seen",
       url: "reading-a-hand-its-never-seen.html",
       cat: "research",
       title: "The hardest part: reading a hand it has never seen",
       date: "Feb 2026", read: "5 min read", author: "Vishnu Kosuri",
       excerpt: "A model trained on one set of writers and devices stumbles on the next. “Domain adaptation” is how researchers teach handwriting AI to generalise to a brand-new hand."
-    }
+    },
+    {
+      slug: "how-ai-accuracy-compounds",
+      url: "how-ai-accuracy-compounds.html",
+      cat: "research",
+      title: "Why the pen's AI gets better every month it exists",
+      date: "Dec 2025", read: "7 min read", author: "Malli Kosuri",
+      excerpt: "Handwriting models are not finished artifacts; they compound. More writers, more ages, more scripts, more edge cases, each loop through the data makes every user's pen sharper. On the flywheel and its honest limits."
+    },
+    {
+      slug: "pen-tip-reconstruction",
+      url: "pen-tip-reconstruction.html",
+      cat: "signals",
+      title: "Rebuilding the pen tip's path: the hardest easy-sounding problem we work on",
+      date: "Oct 2025", read: "8 min read", author: "Malli Kosuri",
+      excerpt: "Turn motion into the exact path the tip drew. Simple to say; the physics fights back with drift, gravity and geometry. The three enemies of reconstruction and the structural choices that beat them."
+    },
+    {
+      slug: "magnetometer-noise-cancellation",
+      url: "magnetometer-noise-cancellation.html",
+      cat: "signals",
+      title: "Taming the compass: magnetometer noise cancellation in practice",
+      date: "Jul 2025", read: "7 min read", author: "Malli Kosuri",
+      excerpt: "The pen's compass would be a superb orientation reference, if desks weren't made of steel and laptops weren't magnets. How calibration and cross-checking turn a jittery compass into a trustworthy one."
+    },
+    {
+      slug: "the-sensor-that-thinks",
+      url: "the-sensor-that-thinks.html",
+      cat: "technology",
+      title: "The sensor that thinks: event engines inside the IMU",
+      date: "May 2025", read: "6 min read", author: "Malli Kosuri",
+      excerpt: "Modern motion sensors carry tiny programmable state machines that detect taps, drops and pick-ups on their own, while the processor sleeps. How the pen delegates its reflexes to silicon."
+    },
+    {
+      slug: "why-a-force-sensor",
+      url: "why-a-force-sensor.html",
+      cat: "signals",
+      title: "The force sensor: why the pen needs to feel the paper",
+      date: "Feb 2025", read: "6 min read", author: "Malli Kosuri",
+      excerpt: "Pressure scoring is the obvious reason the tip has a force sensor. The deeper reason: it is the anchor that keeps motion-based reconstruction honest. On pen-down truth, drift resets, and pressure as a signal."
+    },
+    {
+      slug: "chasing-microamps",
+      url: "chasing-microamps.html",
+      cat: "technology",
+      title: "Chasing microamps: low-power engineering inside the pen",
+      date: "Nov 2024", read: "7 min read", author: "Malli Kosuri",
+      excerpt: "Milliamps decide whether the pen lasts a day. Microamps decide whether it lasts a month in a drawer. Inside the sleep-state ladder, wake-on-motion, and the discipline of accounting for every microamp."
+    },
+    {
+      slug: "ble-vs-bluetooth-classic",
+      url: "ble-vs-bluetooth-classic.html",
+      cat: "technology",
+      title: "Bluetooth and Bluetooth Low Energy are not the same thing",
+      date: "Sep 2024", read: "6 min read", author: "Malli Kosuri",
+      excerpt: "They share a name, a logo and a radio band, and almost nothing else. Why the pen speaks Bluetooth Low Energy, what actually differs under the hood, and what that buys you in battery life."
+    },
+    {
+      slug: "battery-that-writes-all-day",
+      url: "battery-that-writes-all-day.html",
+      cat: "technology",
+      title: "Engineering a battery that writes all day and survives its owner",
+      date: "Jun 2024", read: "7 min read", author: "Malli Kosuri",
+      excerpt: "A pen battery must last a school day, charge over lunch, shrug off being left on the charger all weekend, and protect itself from an owner who forgets it exists. How we engineer for all four."
+    },
+    {
+      slug: "the-humble-d3-refill",
+      url: "the-humble-d3-refill.html",
+      cat: "technology",
+      title: "The most important part we didn't design: the standard refill",
+      date: "Mar 2024", read: "5 min read", author: "Malli Kosuri",
+      excerpt: "Building around a standard ballpoint refill sounds unglamorous. It is one of the best product decisions we made. On ink, geometry, supply chains, and respecting a hundred years of pen ergonomics."
+    },
+    {
+      slug: "a-computer-in-a-pen",
+      url: "a-computer-in-a-pen.html",
+      cat: "technology",
+      title: "There is a whole computer inside this pen",
+      date: "Jan 2024", read: "6 min read", author: "Malli Kosuri",
+      excerpt: "Processor, memory, radio, sensors, power management and a filesystem's worth of storage, all inside a barrel you hold like any other pen. A tour of the Vahini pen as the small computer it really is."
+    },
   ];
 
   /* per-post SEO keywords, keyed by slug (injected by site.js on each post page) */
@@ -184,7 +280,19 @@
     "writing-without-a-screen": "surface free pen, IMU digital pen, writing on paper, no tablet pen, sensor fusion drift, CNN trajectory reconstruction, smart pen",
     "two-views-of-a-letter": "handwriting recognition, online handwriting, vision language model, OCR strokes, digital ink, multimodal handwriting, Indic scripts",
     "handwriting-as-a-health-signal": "handwriting health, dysgraphia detection, Parkinson micrographia, handwriting biomarker, motor skills writing, handwriting kinematics",
-    "reading-a-hand-its-never-seen": "domain adaptation handwriting, handwriting generalization, writer independent, domain adversarial training, handwriting AI, transfer learning"
+    "reading-a-hand-its-never-seen": "domain adaptation handwriting, handwriting generalization, writer independent, domain adversarial training, handwriting AI, transfer learning",
+    "sampling-rate-104-208-416": "IMU sampling rate, 104 208 416 Hz, Nyquist handwriting bandwidth, sensor ODR, aliasing motion capture, smart pen sampling frequency, battery vs sampling rate, BLE throughput sensors",
+    "less-hardware-same-accuracy": "hardware reduction roadmap, software absorbs hardware, sensor fusion fewer parts, cheaper smart pen, BOM cost reduction, minimal electronics design, deeptech product roadmap",
+    "how-ai-accuracy-compounds": "AI accuracy improvement, data flywheel, handwriting dataset growth, model retraining, machine learning compounding, writer diversity dataset, continuous learning pen",
+    "pen-tip-reconstruction": "pen tip trajectory reconstruction, IMU dead reckoning, drift correction, gravity compensation, zero velocity update, inertial navigation pen, stroke path estimation",
+    "magnetometer-noise-cancellation": "magnetometer noise cancellation, hard iron soft iron calibration, ellipsoid fitting compass, magnetic interference desk, heading reference pen, 9-axis sensor fusion",
+    "the-sensor-that-thinks": "IMU finite state machine, sensor event engine, tap detection FSM, wake on motion, embedded state machine, low power event detection, programmable IMU core",
+    "why-a-force-sensor": "pen force sensor, tip force sensing, pen down detection, pressure anchor drift reset, writing pressure signal, touch down lift off, handwriting force accuracy",
+    "chasing-microamps": "low power embedded design, microamp sleep current, sleep state ladder, wake on motion guard, battery life optimisation, power budget firmware, always on sensor power",
+    "ble-vs-bluetooth-classic": "BLE vs Bluetooth Classic, Bluetooth Low Energy difference, connection interval, BLE power consumption, GATT vs SPP, wireless pen protocol, 2.4 GHz radio duty cycle",
+    "battery-that-writes-all-day": "lithium ion pen battery, Li-ion discharge curve, battery protection circuit, charge over lunch, overcharge protection, small device battery engineering, all-day battery design",
+    "the-humble-d3-refill": "standard ballpoint refill, D3 refill electronics, pen refill supply chain, designing around refill, ballpoint ink geometry, pen ergonomics engineering",
+    "a-computer-in-a-pen": "embedded computer pen, smart pen electronics, microcontroller pen, pen system architecture, sensors radio storage pen, wearable embedded system tour"
   };
 
   /* abstract per-category cover art (no external images).

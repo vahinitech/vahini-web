@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" data-site-base="../">
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. All rights reserved. -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>Chasing microamps: low-power engineering inside the pen | Vahini Blog</title>
+<meta name="description" content="Milliamps decide whether the pen lasts a day. Microamps decide whether it lasts a month in a drawer. Inside the sleep-state ladder, wake-on-motion, and the discipline of accounting for every microamp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="../js/theme.config.js"></script>
+<link rel="stylesheet" href="../css/theme.css">
+<link rel="stylesheet" href="../css/site.css">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
+
+  <article>
+  <section class="post-hero" data-screen-label="Post hero">
+    <div class="wrap">
+      <a class="post-back" href="index.html" data-nav><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All posts</a>
+      <span class="btag btag--technology">Technology</span>
+      <h1>Chasing microamps: low-power engineering inside the pen</h1>
+      <div class="post-meta"><span class="post-author"><span class="pa-av malli">MK</span>Malli Kosuri</span><span class="dot"></span><span>Nov 2024</span><span class="dot"></span><span>7 min read</span></div>
+    </div>
+  </section>
+
+  <section class="post-ai" data-screen-label="AI summary">
+    <div class="wrap">
+      <div class="post-ai__card">
+        <span class="post-ai__tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9z"/><path d="M19 14l.7 1.8L21 16.5l-1.3.6L19 19l-.7-1.8L17 16.5z"/></svg>AI summary</span>
+        <p>Low-power design is a ladder of sleep states: fully awake while you write, progressively deeper sleep as the pen sits idle, with the motion sensor itself standing guard so the processor can power down and still wake the instant the pen is picked up.</p>
+        <p>This post explains the ladder, why 'off' is really a very deep sleep with one eye open, and the measurement culture that keeps idle current honest.</p>
+        <p class="post-ai__note">A quick machine-generated overview. The full post has the detail and the why.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="post-body">
+    <div class="wrap">
+      <div class="post-toc">
+        <h4>In this post</h4>
+        <ol>
+          <li><a href="#s1">The ladder of sleep</a></li>
+          <li><a href="#s2">The sensor that guards the sleeping processor</a></li>
+          <li><a href="#s3">Milliamps, microamps, and honesty</a></li>
+          <li><a href="#s4">Power bugs are real bugs</a></li>
+        </ol>
+      </div>
+
+      <h2 id="s1">The ladder of sleep</h2>
+<p>Power states in a well-behaved device form a ladder. Writing: everything on, sensors at full rate, radio streaming. Pen resting a few seconds: sensor rates drop, the stream pauses. Resting minutes: the processor itself sleeps between housekeeping ticks, radio advertising slows. Idle long enough: nearly everything powers down. Each rung costs less; the craft is moving down promptly without ever feeling asleep to the user.</p>
+      <h2 id="s2">The sensor that guards the sleeping processor</h2>
+<p>The trick that makes deep sleep usable is delegation. Our motion sensors contain tiny built-in engines that can watch for movement on their own, drawing almost nothing. So the processor hands them one instruction, wake me if anything moves, and switches off. Pick the pen up and the sensor taps the processor awake before your hand reaches the paper. The user experiences a pen that is simply always ready; the battery experiences a pen that was barely on.</p>
+      <figure class="post-fig">
+        <svg viewBox="0 0 640 230" role="img" aria-label="The sleep ladder: each idle rung costs orders of magnitude less, and the motion sensor&#x27;s built-in watchdog climbs the pen back to awake the moment it is picked up.">
+          <g font-family="Hanken Grotesk,sans-serif">
+          <rect x="60" y="40" width="150" height="34" rx="8" fill="#B4502E"/><text x="135" y="62" text-anchor="middle" font-size="12" fill="#fff">writing · mA</text>
+          <rect x="120" y="88" width="150" height="34" rx="8" fill="#C9822E"/><text x="195" y="110" text-anchor="middle" font-size="12" fill="#fff">resting · fractions of mA</text>
+          <rect x="180" y="136" width="170" height="34" rx="8" fill="#0E6B63"/><text x="265" y="158" text-anchor="middle" font-size="12" fill="#fff">idle · tens of &#181;A</text>
+          <rect x="240" y="184" width="190" height="34" rx="8" fill="#22467A"/><text x="335" y="206" text-anchor="middle" font-size="12" fill="#fff">deep sleep · single &#181;A</text>
+          <path d="M470 200 q40 -10 50 -40" fill="none" stroke="#8C2F39" stroke-width="2.4" marker-end="none"/>
+          <circle cx="524" cy="150" r="16" fill="#8C2F39"/><text x="524" y="155" text-anchor="middle" font-size="11" fill="#fff">wake</text>
+          <text x="524" y="120" text-anchor="middle" font-size="11.5" fill="#565D66">motion sensor</text>
+          <text x="524" y="105" text-anchor="middle" font-size="11.5" fill="#565D66">stands guard</text>
+          </g>
+        </svg>
+        <figcaption>The sleep ladder: each idle rung costs orders of magnitude less, and the motion sensor's built-in watchdog climbs the pen back to awake the moment it is picked up.</figcaption>
+      </figure>
+      <h2 id="s3">Milliamps, microamps, and honesty</h2>
+<p>Active power is measured in milliamps and decides your writing day. Idle power is measured in microamps, thousandths of a milliamp, and decides whether the pen survives a fortnight in a bag. The two regimes are engineered differently and measured differently, and the second is unforgiving: one forgotten pull-up resistor or one peripheral left clocked can triple the idle draw, invisibly. So idle current is a measured, tracked number on real hardware, not an assumption.</p>
+      <h2 id="s4">Power bugs are real bugs</h2>
+<p>We treat a power regression exactly like a crash: something measurable broke. Every firmware change that touches a peripheral answers the same review question, what does this cost when idle? It is slower than not asking. It is also why the product can promise that a pen left in a drawer greets you weeks later with charge to spare.</p>
+
+      <div class="post-key">
+        <h4>Key takeaways</h4>
+        <ul>
+          <li>Power states form a ladder; the craft is descending quickly without the user noticing.</li>
+          <li>The motion sensor itself watches for pick-up so the processor can truly sleep.</li>
+          <li>Active life is a milliamp problem; shelf life is a microamp problem, measured separately.</li>
+          <li>Idle current is tracked like a test suite: a regression is a bug, not a footnote.</li>
+        </ul>
+      </div>
+
+      <p>Nobody ever praised a pen for its idle current. They just trust it to be alive when they pick it up, and that trust is built a microamp at a time.</p>
+    </div>
+  </section>
+  </article>
+
+  <section class="block block--alt" data-screen-label="Read next">
+    <div class="wrap">
+      <div class="block__head reveal" style="margin-bottom:6px;"><p class="eyebrow">Read next</p></div>
+      <div class="post-next" id="readNext"></div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+<script src="blog-data.js"></script>
+<script src="../js/site.js"></script>
+<script>
+(function(){
+  var SLUG="chasing-microamps";
+  if(!window.VahiniPosts) return;
+  var CAT={research:"Research",technology:"Technology",health:"Health",signals:"Signals",explainer:"Guide"};
+  var arrow='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+  var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+  var next=window.VahiniPosts.filter(function(p){return p.slug!==SLUG;}).slice(0,3);
+  document.getElementById('readNext').innerHTML=next.map(function(p){
+    return '<a class="bpost reveal" href="'+p.url+'">'+
+      '<div class="bpost__art">'+window.VahiniPostArt(p,0)+'</div>'+
+      '<div class="bpost__body"><div class="bpost__meta"><span class="btag btag--'+p.cat+'">'+CAT[p.cat]+'</span><span class="bpost__date">'+esc(p.date)+'</span></div>'+
+      '<h3>'+esc(p.title)+'</h3><p>'+esc(p.excerpt)+'</p><span class="bpost__more">Read '+arrow+'</span></div></a>';
+  }).join('');
+  if(window.VahiniRevealScan) window.VahiniRevealScan();
+})();
+</script>
+</body>
+</html>

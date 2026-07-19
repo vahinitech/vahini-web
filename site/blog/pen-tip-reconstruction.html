@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" data-site-base="../">
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. All rights reserved. -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>Rebuilding the pen tip&#x27;s path: the hardest easy-sounding problem we work on | Vahini Blog</title>
+<meta name="description" content="Turn motion into the exact path the tip drew. Simple to say; the physics fights back with drift, gravity and geometry. The three enemies of reconstruction and the structural choices that beat them.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="../js/theme.config.js"></script>
+<link rel="stylesheet" href="../css/theme.css">
+<link rel="stylesheet" href="../css/site.css">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
+
+  <article>
+  <section class="post-hero" data-screen-label="Post hero">
+    <div class="wrap">
+      <a class="post-back" href="index.html" data-nav><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All posts</a>
+      <span class="btag btag--signals">Signals</span>
+      <h1>Rebuilding the pen tip&#x27;s path: the hardest easy-sounding problem we work on</h1>
+      <div class="post-meta"><span class="post-author"><span class="pa-av malli">MK</span>Malli Kosuri</span><span class="dot"></span><span>Oct 2025</span><span class="dot"></span><span>8 min read</span></div>
+    </div>
+  </section>
+
+  <section class="post-ai" data-screen-label="AI summary">
+    <div class="wrap">
+      <div class="post-ai__card">
+        <span class="post-ai__tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9z"/><path d="M19 14l.7 1.8L21 16.5l-1.3.6L19 19l-.7-1.8L17 16.5z"/></svg>AI summary</span>
+        <p>Reconstructing the written stroke from motion means fighting three enemies at once: double-integration drift that compounds errors, a gravity signal a thousand times larger than the writing signal, and the geometric fact that the sensors are not at the tip.</p>
+        <p>The pen's answer is structural: two IMUs whose separation reveals rotation, a force channel that resets drift at every touch, and integration windows kept as short as a stroke.</p>
+        <p class="post-ai__note">A quick machine-generated overview. The full post has the detail and the why.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="post-body">
+    <div class="wrap">
+      <div class="post-toc">
+        <h4>In this post</h4>
+        <ol>
+          <li><a href="#s1">Enemy one: drift compounds</a></li>
+          <li><a href="#s2">Enemy two: gravity dwarfs the signal</a></li>
+          <li><a href="#s3">Enemy three: the sensor is not the tip</a></li>
+          <li><a href="#s4">Structure beats cleverness</a></li>
+        </ol>
+      </div>
+
+      <h2 id="s1">Enemy one: drift compounds</h2>
+<p>Position from acceleration requires integrating twice, and integration is an error amplifier. A tiny constant bias in acceleration becomes a growing velocity error, then a position error growing with the square of time. Uncorrected, the reconstructed path curls away from truth within seconds. Drift cannot be eliminated, only contained, so the whole design is about giving it as little time as possible to grow.</p>
+      <h2 id="s2">Enemy two: gravity dwarfs the signal</h2>
+<p>The accelerations of handwriting are tiny, thousandths of the acceleration of gravity that the sensor also feels at every instant. To recover the writing signal you must subtract gravity, and to subtract it you must know the pen's orientation precisely. Tilt the estimate by a single degree and the leaked gravity is already bigger than the strokes you are trying to see. Reconstruction accuracy is orientation accuracy.</p>
+      <figure class="post-fig">
+        <svg viewBox="0 0 640 230" role="img" aria-label="The estimate (dashed) drifts from the true path (solid) inside each stroke, and every force-sensed touch-down (dots) snaps it back before the error can compound.">
+          <g font-family="Hanken Grotesk,sans-serif">
+          <path d="M70 170 q40 -90 90 -20 q30 45 70 5 q40 -40 80 -5 q35 30 75 -8 q40 -38 85 6 q22 20 60 12"
+            fill="none" stroke="#22467A" stroke-width="3"/>
+          <path d="M70 170 q42 -86 92 -14 q30 46 72 12 q42 -34 84 4 q37 33 79 -1 q42 -32 87 14 q22 19 56 14"
+            fill="none" stroke="#B4502E" stroke-width="2" stroke-dasharray="6 5" opacity=".85"/>
+          <circle cx="70" cy="170" r="6" fill="#0E6B63"/>
+          <circle cx="232" cy="152" r="6" fill="#0E6B63"/>
+          <circle cx="388" cy="150" r="6" fill="#0E6B63"/>
+          <circle cx="547" cy="158" r="6" fill="#0E6B63"/>
+          <text x="320" y="52" text-anchor="middle" font-size="12.5" fill="#565D66">solid: true path &#183; dashed: estimate &#183; dots: anchors that pull it back</text>
+          </g>
+        </svg>
+        <figcaption>The estimate (dashed) drifts from the true path (solid) inside each stroke, and every force-sensed touch-down (dots) snaps it back before the error can compound.</figcaption>
+      </figure>
+      <h2 id="s3">Enemy three: the sensor is not the tip</h2>
+<p>No sensor sits at the ballpoint. Sensors ride in the barrel, centimetres from the paper, and when the pen rotates, barrel and tip move differently, the lever-arm effect. This is where the dual-IMU design earns its keep: two sensors at known positions along a rigid body feel the same rotation with different accelerations, and that difference reveals the rotation cleanly enough to project motion down to the tip itself.</p>
+      <h2 id="s4">Structure beats cleverness</h2>
+<p>Each enemy meets a structural answer, not a heroic algorithm. Drift meets the force sensor: every touch-down is a fresh anchor, so integration windows last a stroke, not a page. Gravity meets disciplined orientation from fused gyro, gravity and compass. Geometry meets the second IMU. The result is a system where errors are repeatedly caught, reset and cancelled, which is the only way integration-based reconstruction stays honest.</p>
+
+      <div class="post-key">
+        <h4>Key takeaways</h4>
+        <ul>
+          <li>Double integration amplifies error; drift must be contained, not wished away.</li>
+          <li>Gravity is ~1000x the writing signal; reconstruction accuracy is orientation accuracy.</li>
+          <li>Two IMUs turn lever-arm geometry from a problem into the measurement itself.</li>
+          <li>Force-anchored, stroke-length integration windows keep errors from compounding.</li>
+        </ul>
+      </div>
+
+      <p>This problem is why the pen looks the way it does inside. The architecture is the algorithm.</p>
+    </div>
+  </section>
+  </article>
+
+  <section class="block block--alt" data-screen-label="Read next">
+    <div class="wrap">
+      <div class="block__head reveal" style="margin-bottom:6px;"><p class="eyebrow">Read next</p></div>
+      <div class="post-next" id="readNext"></div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+<script src="blog-data.js"></script>
+<script src="../js/site.js"></script>
+<script>
+(function(){
+  var SLUG="pen-tip-reconstruction";
+  if(!window.VahiniPosts) return;
+  var CAT={research:"Research",technology:"Technology",health:"Health",signals:"Signals",explainer:"Guide"};
+  var arrow='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+  var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+  var next=window.VahiniPosts.filter(function(p){return p.slug!==SLUG;}).slice(0,3);
+  document.getElementById('readNext').innerHTML=next.map(function(p){
+    return '<a class="bpost reveal" href="'+p.url+'">'+
+      '<div class="bpost__art">'+window.VahiniPostArt(p,0)+'</div>'+
+      '<div class="bpost__body"><div class="bpost__meta"><span class="btag btag--'+p.cat+'">'+CAT[p.cat]+'</span><span class="bpost__date">'+esc(p.date)+'</span></div>'+
+      '<h3>'+esc(p.title)+'</h3><p>'+esc(p.excerpt)+'</p><span class="bpost__more">Read '+arrow+'</span></div></a>';
+  }).join('');
+  if(window.VahiniRevealScan) window.VahiniRevealScan();
+})();
+</script>
+</body>
+</html>
