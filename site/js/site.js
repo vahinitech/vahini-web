@@ -38,7 +38,6 @@
   var PLATFORM = [
     { href: "product.html", t: "The pen, Vahini", d: "Dual-IMU sensing on any paper", pill: "dev", pl: "Pre-order" },
     { href: "benchmarks.html", t: "Specifications & benchmarks", d: "Writing time, charging, memory, measured honestly" },
-    { href: "project-akshara.html", t: "Project Akshara", d: "The world's first handwriting-motion dataset" },
     { href: "patents.html", t: "Patents & IP", d: "Granted Patent No. 584433" }
   ];
   var COMPANY = [
@@ -122,6 +121,7 @@
           '</div></div>'+
         '</li>'+
         navItem("product.html","The Pen",active)+
+        navItem("project-akshara.html","Project Akshara",active)+
         '<li class="has-mega has-drop" id="dropResources">'+
           '<button class="navtrig" aria-expanded="false">Resources '+caret+'</button>'+
           '<div class="drop" role="menu">'+RESOURCES.map(dropLink).join("")+'</div>'+
