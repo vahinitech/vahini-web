@@ -45,6 +45,31 @@
   .bm-cap .c p{font-size:14px; color:var(--muted); line-height:1.55;}
   .bm-note{background:var(--surface-2, var(--surface)); border:1px dashed var(--rule-2); border-radius:var(--radius-lg);
     padding:18px 22px; margin-top:22px; font-size:14.5px; color:var(--elephant); line-height:1.6;}
+
+  /* ---- the spec sheet: annotated pen left, specs right ---- */
+  .specsheet{display:grid; grid-template-columns:minmax(280px,4fr) 7fr; gap:20px 56px; align-items:start; margin-top:26px;}
+  .specsheet__pen{position:sticky; top:90px; display:flex; justify-content:center;}
+  .specsheet__pen svg{width:min(300px,100%); height:auto; filter:drop-shadow(0 24px 40px rgba(20,26,34,.18));}
+  .specsheet__list{display:flex; flex-direction:column; gap:12px;}
+  .spec-row{display:flex; gap:16px; align-items:flex-start; background:var(--surface); border:1px solid var(--rule);
+    border-radius:var(--radius-lg); box-shadow:var(--shadow-1); padding:18px 20px;
+    transition:transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s;}
+  .spec-row:hover{transform:translateX(6px); box-shadow:var(--shadow-2); border-color:var(--accent);}
+  .spec-row .n{flex:0 0 auto; width:30px; height:30px; border-radius:50%; display:grid; place-items:center;
+    font-weight:800; font-size:14px; color:#fff; background:var(--pc,#22467A); box-shadow:0 3px 8px rgba(20,26,34,.22);}
+  .spec-row h3{font-size:16.5px; margin:3px 0 5px;}
+  .spec-row p{font-size:14px; color:var(--muted); line-height:1.55; margin:0;}
+  /* pen part highlight pairing */
+  .pen-dot{transition:opacity .2s;}
+  .pen-dot circle.halo{opacity:0; transition:opacity .25s;}
+  .pen-dot.hot circle.halo{opacity:1;}
+  .pen-part{transition:opacity .25s, filter .25s;}
+  .pen-part.dim{opacity:.35;}
+  @media (max-width:900px){
+    .specsheet{grid-template-columns:1fr;}
+    .specsheet__pen{position:static; margin-bottom:6px;}
+    .specsheet__pen svg{width:min(220px,70%);}
+  }
 </style>
 </head>
 <body class="booting">
@@ -84,19 +109,81 @@
   <section class="block" data-screen-label="Specifications">
     <div class="wrap">
       <p class="eyebrow reveal">Specifications</p>
-      <h2 class="reveal" data-d="1">What is inside</h2>
-      <div class="bm-cap">
-        <div class="c reveal"><h3>Sensing</h3><p>Two independent motion sensors (one near the tip, one near the top), a compass, and a pressure sensor in the tip. Two viewpoints on every stroke make faithful reconstruction possible.</p></div>
-        <div class="c reveal" data-d="1"><h3>Sampling</h3><p>208 motion snapshots per second. Handwriting changes within milliseconds; this rate catches hesitations and shakes a photograph never can.</p></div>
-        <div class="c reveal" data-d="2"><h3>Paper</h3><p>Any paper, any notebook, any form. No special dot-pattern, no tablet, no screen.</p></div>
-        <div class="c reveal"><h3>Connection</h3><p>Bluetooth Low Energy to your phone or laptop, live while you write. USB-C for charging and wired transfer.</p></div>
-        <div class="c reveal" data-d="1"><h3>Offline memory</h3><p>The pen keeps writing when nothing is connected: around 19 hours of pure writing time stored on the pen, several weeks of normal daily notes. Sync whenever you like; nothing is lost in between.</p></div>
-        <div class="c reveal" data-d="2"><h3>Indicator</h3><p>A single colour light tells you everything: recording, battery, charging, pairing, or a warning. One meaning per colour, documented in the manual.</p></div>
-        <div class="c reveal"><h3>Scripts</h3><p>Motion capture is script-neutral by design. The analyser currently reads five Indic scripts, with more in training.</p></div>
-        <div class="c reveal" data-d="1"><h3>Size &amp; weight</h3><p>A normal pen in the hand. Final production dimensions will be published at launch; shrinking both without giving up accuracy is an explicit design goal.</p></div>
+      <h2 class="reveal" data-d="1">What is inside, on the pen itself</h2>
+      <p class="lede reveal" data-d="2">Hover a specification and see where it lives in the barrel. Every part earns its place.</p>
+      <div class="specsheet reveal" data-d="2">
+        <div class="specsheet__pen" aria-hidden="true">
+          <!-- annotated pen: proportions illustrative, not engineering drawing -->
+          <svg viewBox="0 0 300 760" fill="none" id="specPen">
+            <defs>
+              <linearGradient id="spBody" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#39424E"/><stop offset=".5" stop-color="#1E242C"/><stop offset="1" stop-color="#0F1318"/>
+              </linearGradient>
+              <linearGradient id="spGrip" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#2A313B"/><stop offset=".5" stop-color="#171C22"/><stop offset="1" stop-color="#0B0E12"/>
+              </linearGradient>
+            </defs>
+            <!-- barrel -->
+            <path d="M118 84 q32 -18 64 0 v468 l-32 118 -32 -118 z" fill="url(#spBody)"/>
+            <!-- top cap with USB-C slot -->
+            <rect x="118" y="60" width="64" height="34" rx="14" fill="#12161B"/>
+            <rect x="136" y="72" width="28" height="9" rx="4.5" fill="#02060a" stroke="#3d4650" stroke-width="1.4"/>
+            <!-- LED window -->
+            <circle cx="150" cy="118" r="7" fill="#00ADB5"><animate attributeName="opacity" values="1;.35;1" dur="2.6s" repeatCount="indefinite"/></circle>
+            <!-- grip -->
+            <path d="M126 470 h48 v82 l-24 88 -24 -88 z" fill="url(#spGrip)"/>
+            <!-- refill core (dashed, visible through cutaway) -->
+            <line x1="150" y1="150" x2="150" y2="640" stroke="#C9A227" stroke-width="5" stroke-dasharray="10 7" opacity=".8"/>
+            <!-- internal parts -->
+            <g class="pen-part" data-part="6"><rect x="128" y="168" width="44" height="30" rx="6" fill="#22467A"/><text x="150" y="188" text-anchor="middle" font-size="11" fill="#cfe0f5" font-family="sans-serif">IMU 2</text></g>
+            <g class="pen-part" data-part="5"><rect x="128" y="252" width="44" height="30" rx="6" fill="#4A3B78"/><text x="150" y="272" text-anchor="middle" font-size="11" fill="#ddd6f2" font-family="sans-serif">32 MB</text></g>
+            <g class="pen-part" data-part="4"><rect x="128" y="322" width="44" height="42" rx="6" fill="#0E6B63"/><text x="150" y="340" text-anchor="middle" font-size="10.5" fill="#d2efec" font-family="sans-serif">MCU +</text><text x="150" y="354" text-anchor="middle" font-size="10.5" fill="#d2efec" font-family="sans-serif">BLE</text></g>
+            <g class="pen-part" data-part="8"><rect x="128" y="404" width="44" height="34" rx="6" fill="#7A4B22"/><text x="150" y="425" text-anchor="middle" font-size="10.5" fill="#f2e3d2" font-family="sans-serif">battery</text></g>
+            <g class="pen-part" data-part="2"><rect x="128" y="500" width="44" height="30" rx="6" fill="#22467A"/><text x="150" y="520" text-anchor="middle" font-size="11" fill="#cfe0f5" font-family="sans-serif">IMU 1</text></g>
+            <g class="pen-part" data-part="1"><circle cx="150" cy="600" r="13" fill="#8C2F39"/><text x="150" y="604" text-anchor="middle" font-size="10" fill="#f6dee1" font-family="sans-serif">F</text></g>
+            <!-- tip ball -->
+            <circle cx="150" cy="672" r="5" fill="#C9A227"/>
+            <!-- callout dots, left/right alternating -->
+            <g class="pen-dot" data-dot="7"><line x1="162" y1="118" x2="232" y2="118" stroke="#9aa5b1" stroke-width="1.4"/><circle class="halo" cx="248" cy="118" r="15" fill="none" stroke="#D9A62E" stroke-width="2.5"/><circle cx="248" cy="118" r="11" fill="#D9A62E"/><text x="248" y="122" text-anchor="middle" font-size="11.5" font-weight="700" fill="#fff" font-family="sans-serif">7</text></g>
+            <g class="pen-dot" data-dot="8"><line x1="150" y1="60" x2="150" y2="34" stroke="#9aa5b1" stroke-width="1.4"/><circle class="halo" cx="150" cy="22" r="15" fill="none" stroke="#5B7DB1" stroke-width="2.5"/><circle cx="150" cy="22" r="11" fill="#5B7DB1"/><text x="150" y="26" text-anchor="middle" font-size="11.5" font-weight="700" fill="#fff" font-family="sans-serif">8</text></g>
+            <g class="pen-dot" data-dot="6"><line x1="128" y1="183" x2="66" y2="183" stroke="#9aa5b1" stroke-width="1.4"/><circle class="halo" cx="50" cy="183" r="15" fill="none" stroke="#22467A" stroke-width="2.5"/><circle cx="50" cy="183" r="11" fill="#22467A"/><text x="50" y="187" text-anchor="middle" font-size="11.5" font-weight="700" fill="#fff" font-family="sans-serif">6</text></g>
+            <g class="pen-dot" data-dot="5"><line x1="172" y1="267" x2="232" y2="267" stroke="#9aa5b1" stroke-width="1.4"/><circle class="halo" cx="248" cy="267" r="15" fill="none" stroke="#4A3B78" stroke-width="2.5"/><circle cx="248" cy="267" r="11" fill="#4A3B78"/><text x="248" y="271" text-anchor="middle" font-size="11.5" font-weight="700" fill="#fff" font-family="sans-serif">5</text></g>
+            <g class="pen-dot" data-dot="4"><line x1="128" y1="343" x2="66" y2="343" stroke="#9aa5b1" stroke-width="1.4"/><circle class="halo" cx="50" cy="343" r="15" fill="none" stroke="#0E6B63" stroke-width="2.5"/><circle cx="50" cy="343" r="11" fill="#0E6B63"/><text x="50" y="347" text-anchor="middle" font-size="11.5" font-weight="700" fill="#fff" font-family="sans-serif">4</text></g>
+            <g class="pen-dot" data-dot="3"><line x1="150" y1="455" x2="232" y2="455" stroke="#9aa5b1" stroke-width="1.4"/><circle class="halo" cx="248" cy="455" r="15" fill="none" stroke="#C9A227" stroke-width="2.5"/><circle cx="248" cy="455" r="11" fill="#C9A227"/><text x="248" y="459" text-anchor="middle" font-size="11.5" font-weight="700" fill="#fff" font-family="sans-serif">3</text></g>
+            <g class="pen-dot" data-dot="2"><line x1="128" y1="515" x2="66" y2="515" stroke="#9aa5b1" stroke-width="1.4"/><circle class="halo" cx="50" cy="515" r="15" fill="none" stroke="#22467A" stroke-width="2.5"/><circle cx="50" cy="515" r="11" fill="#22467A"/><text x="50" y="519" text-anchor="middle" font-size="11.5" font-weight="700" fill="#fff" font-family="sans-serif">2</text></g>
+            <g class="pen-dot" data-dot="1"><line x1="163" y1="600" x2="232" y2="600" stroke="#9aa5b1" stroke-width="1.4"/><circle class="halo" cx="248" cy="600" r="15" fill="none" stroke="#8C2F39" stroke-width="2.5"/><circle cx="248" cy="600" r="11" fill="#8C2F39"/><text x="248" y="604" text-anchor="middle" font-size="11.5" font-weight="700" fill="#fff" font-family="sans-serif">1</text></g>
+          </svg>
+        </div>
+        <div class="specsheet__list" id="specList">
+          <div class="spec-row" data-for="1" style="--pc:#8C2F39;"><span class="n">1</span><div><h3>Pressure sensor in the tip</h3><p>Feels how firmly the tip meets the paper, stroke by stroke. It also tells the pen exactly when writing starts and stops, the anchor for faithful reconstruction.</p></div></div>
+          <div class="spec-row" data-for="2" style="--pc:#22467A;"><span class="n">2</span><div><h3>Motion sensor near the tip</h3><p>The first of two independent motion sensors. Sitting close to the tip, it feels the fine finger movements that draw each letter.</p></div></div>
+          <div class="spec-row" data-for="3" style="--pc:#C9A227;"><span class="n">3</span><div><h3>A standard refill</h3><p>Real ink on any paper, any notebook, any form. No dot-pattern paper, no tablet, no screen, and the refill is a standard size you can buy anywhere.</p></div></div>
+          <div class="spec-row" data-for="4" style="--pc:#0E6B63;"><span class="n">4</span><div><h3>Brain: MCU + Bluetooth Low Energy</h3><p>A low-power ARM microcontroller with the radio on the same chip captures 208 motion snapshots per second and streams them live to your phone or laptop.</p></div></div>
+          <div class="spec-row" data-for="5" style="--pc:#4A3B78;"><span class="n">5</span><div><h3>Offline memory</h3><p>Around 19 hours of pure writing stored on the pen itself, several weeks of normal daily notes. No connection needed while you write; sync whenever you like.</p></div></div>
+          <div class="spec-row" data-for="6" style="--pc:#22467A;"><span class="n">6</span><div><h3>Motion sensor near the top</h3><p>The second viewpoint. Two sensors on one rigid barrel see every stroke from two points, which is what makes faithful reconstruction possible, plus a compass for orientation.</p></div></div>
+          <div class="spec-row" data-for="7" style="--pc:#D9A62E;"><span class="n">7</span><div><h3>One light, one meaning</h3><p>A single colour light tells you everything: recording, battery, charging, pairing, or a warning. One meaning per colour, documented in the manual.</p></div></div>
+          <div class="spec-row" data-for="8" style="--pc:#5B7DB1;"><span class="n">8</span><div><h3>USB-C &amp; battery</h3><p>Charges over USB-C in about 2 hours, writes for around 15 hours non-stop. Overcharge protection is built in twice, in hardware and in the pen's own software.</p></div></div>
+        </div>
       </div>
     </div>
   </section>
+
+  <script>
+  /* hover a spec row: light the matching callout, dim the other parts */
+  (function(){
+    var rows = document.querySelectorAll('#specList .spec-row');
+    var dots = document.querySelectorAll('#specPen .pen-dot');
+    var parts = document.querySelectorAll('#specPen .pen-part');
+    function focus(id){
+      dots.forEach(function(d){ d.classList.toggle('hot', d.getAttribute('data-dot') === id); });
+      parts.forEach(function(p){ p.classList.toggle('dim', id !== null && p.getAttribute('data-part') !== id); });
+    }
+    rows.forEach(function(r){
+      r.addEventListener('mouseenter', function(){ focus(r.getAttribute('data-for')); });
+      r.addEventListener('mouseleave', function(){ focus(null); });
+    });
+  })();
+  </script>
 
   <section class="block" data-screen-label="Battery">
     <div class="wrap">
@@ -109,6 +196,8 @@
         <div class="c reveal"><h3>Full charge</h3><p>About 2 hours over USB-C, from empty to full.</p></div>
         <div class="c reveal" data-d="1"><h3>Forgot it on the charger?</h3><p>Safe. Charging stops automatically when the battery is full. Protection is built in twice, once in the charging hardware and once in the pen's own software, and each layer works even if the other fails.</p></div>
         <div class="c reveal" data-d="2"><h3>Low battery</h3><p>The pen warns you early, saves everything, and shuts down cleanly before the battery can be damaged. Your notes are never the price of an empty battery.</p></div>
+        <div class="c reveal"><h3>Scripts</h3><p>Motion capture is script-neutral by design. The analyser currently reads five Indic scripts, with more in training.</p></div>
+        <div class="c reveal" data-d="1"><h3>Size &amp; weight</h3><p>A normal pen in the hand. Final production dimensions will be published at launch; shrinking both without giving up accuracy is an explicit design goal.</p></div>
       </div>
     </div>
   </section>
