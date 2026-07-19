@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. All rights reserved. -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>Bullet Journal Printer · Vahini</title>
+<meta name="description" content="Generate a print-ready, undated bullet journal PDF — cover, index, future log, milestones, year at a glance and twelve monthly sections — in A3 to A6.">
+<link rel="canonical" href="https://vahinitech.com/site/planner.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="js/theme.config.js"></script>
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/site.css">
+<style>
+  .bujo{min-height:100vh; display:grid; place-items:center; padding:48px 20px;}
+  .bujo__card{width:min(520px,100%); background:var(--surface,#fff); border:1px solid var(--rule,#d8dce3);
+    border-radius:var(--radius-lg,14px); box-shadow:var(--shadow-1,0 10px 30px rgb(35 43 54 / .08)); padding:40px;}
+  .bujo__kicker{font-size:12px; font-weight:700; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--crimson-deep,#39657f); margin:0 0 8px;}
+  .bujo__card h1{font-family:var(--serif,Spectral,serif); font-size:clamp(24px,3vw,32px); margin:0 0 10px;
+    color:var(--ink,#232b36);}
+  .bujo__lede{font-size:15px; line-height:1.6; color:var(--muted,#7c8794); margin:0 0 26px;}
+  .bujo form{display:grid; gap:16px;}
+  .bujo label{display:grid; gap:6px; font-size:13px; font-weight:600; color:var(--muted,#7c8794);}
+  .bujo input,.bujo select{font:inherit; color:var(--ink,#232b36); padding:10px 12px;
+    border:1px solid var(--rule,#d8dce3); border-radius:8px; background:#fff;}
+  .bujo__row{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .bujo button{font:inherit; font-weight:700; color:#fff; background:var(--crimson-deep,#39657f);
+    border:0; border-radius:8px; padding:12px 16px; cursor:pointer; margin-top:6px;}
+  .bujo button:hover{filter:brightness(1.08);}
+  .bujo__note{font-size:13px; color:var(--hint,#9aa3b2); margin:14px 0 0; line-height:1.5;}
+  .bujo__back{display:inline-block; margin-top:20px; font-size:13px; font-weight:600;
+    color:var(--crimson-deep,#39657f); text-decoration:none;}
+</style>
+</head>
+<body>
+<main class="bujo">
+  <div class="bujo__card">
+    <p class="bujo__kicker">Bullet Journal</p>
+    <h1>Print your own planner</h1>
+    <p class="bujo__lede">
+      A complete undated bullet journal, generated as a print-ready PDF —
+      cover, index, future log, milestones, year at a glance and twelve
+      monthly sections with dot grids, daily plans, weekly overviews and
+      habit trackers.
+    </p>
+    <form action="/bujo/generate" method="get">
+      <label>
+        Journal title
+        <input name="title" type="text" value="My Bullet Journal" maxlength="60" required>
+      </label>
+      <div class="bujo__row">
+        <label>
+          Paper size
+          <select name="paper">
+            <option value="A3">A3 · 297 × 420 mm</option>
+            <option value="A4" selected>A4 · 210 × 297 mm</option>
+            <option value="A5">A5 · 148 × 210 mm</option>
+            <option value="A6">A6 · 105 × 148 mm</option>
+          </select>
+        </label>
+        <label>
+          Color scheme
+          <select name="scheme">
+            <option value="color" selected>Color</option>
+            <option value="monochrome">Monochrome</option>
+          </select>
+        </label>
+      </div>
+      <button type="submit">Download PDF</button>
+    </form>
+    <p class="bujo__note">66 pages, vector-drawn — crisp at any print size. Powered by
+      <a href="https://github.com/vahinitech/bujo.js">bujo.js</a>.</p>
+    <a class="bujo__back" href="/site/index.html">← Back to vahinitech.com</a>
+  </div>
+</main>
+</body>
+</html>
