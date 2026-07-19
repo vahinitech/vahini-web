@@ -291,7 +291,7 @@
     "chasing-microamps": "low power embedded design, microamp sleep current, sleep state ladder, wake on motion guard, battery life optimisation, power budget firmware, always on sensor power",
     "ble-vs-bluetooth-classic": "BLE vs Bluetooth Classic, Bluetooth Low Energy difference, connection interval, BLE power consumption, GATT vs SPP, wireless pen protocol, 2.4 GHz radio duty cycle",
     "battery-that-writes-all-day": "lithium ion pen battery, Li-ion discharge curve, battery protection circuit, charge over lunch, overcharge protection, small device battery engineering, all-day battery design",
-    "the-humble-d3-refill": "standard ballpoint refill, D1 refill electronics, pen refill supply chain, designing around refill, ballpoint ink geometry, pen ergonomics engineering",
+    "the-humble-d3-refill": "standard ballpoint refill, D3 refill electronics, pen refill supply chain, designing around refill, ballpoint ink geometry, pen ergonomics engineering",
     "a-computer-in-a-pen": "embedded computer pen, smart pen electronics, microcontroller pen, pen system architecture, sensors radio storage pen, wearable embedded system tour"
   };
 
