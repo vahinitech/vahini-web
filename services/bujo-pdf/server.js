@@ -92,7 +92,12 @@ function sanitizeTitle(raw) {
 }
 
 function json(res, code, body, extra = {}) {
-  res.writeHead(code, { "Content-Type": "application/json", ...extra });
+  res.writeHead(code, {
+    "Content-Type": "application/json; charset=utf-8",
+    "Cache-Control": "no-store",
+    "X-Content-Type-Options": "nosniff",
+    ...extra,
+  });
   res.end(JSON.stringify(body));
 }
 
@@ -146,13 +151,17 @@ const server = http.createServer((req, res) => {
       const journal = new BulletJournal(title, scheme);
       const doc = journal.generate(paper);
       const pdf = Buffer.from(doc.output("arraybuffer"));
-      const filename = `${title.replace(/\s+/g, "_").toLowerCase()}_${paper.toLowerCase()}.pdf`;
+      // Conservative filename: filesystem-safe on every platform.
+      const stem =
+        title.toLowerCase().replace(/[^a-z0-9._-]+/g, "_").replace(/^_+|_+$/g, "") || "bullet_journal";
+      const filename = `${stem}_${paper.toLowerCase()}.pdf`;
       res.writeHead(200, {
         ...cors,
         "Content-Type": "application/pdf",
         "Content-Length": pdf.length,
         "Content-Disposition": `attachment; filename="${filename}"`,
         "Cache-Control": "no-store",
+        "X-Content-Type-Options": "nosniff",
       });
       return res.end(pdf);
     } catch (err) {
