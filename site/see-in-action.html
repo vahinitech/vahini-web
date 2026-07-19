@@ -60,7 +60,19 @@
 .pg-paper .eyebrow2{font-family:"Patrick Hand",cursive; letter-spacing:3px; font-size:14px; color:#9aa1ad; text-transform:uppercase;}
 .pg-paper h2{font-family:"Caveat",cursive; font-weight:700; font-size:clamp(34px,3.4vw,46px); color:#27408f; line-height:1; margin:2px 0 4px;}
 .pg-paper .plede{font-family:"Patrick Hand",cursive; font-size:16.5px; color:#5b6472; line-height:1.45; margin:0 0 12px; max-width:480px;}
-.pg-paper .demo-scope{font-family:"Patrick Hand",cursive; font-size:13px; color:#9aa1ad; line-height:1.4; margin:-6px 0 12px; max-width:480px;}
+.pg-paper .demo-scope{font-family:"Patrick Hand",cursive; font-size:14.5px; color:#8a6d1f; line-height:1.45;
+  margin:-2px 0 12px; max-width:480px; background:#fdf6e0; border:1.5px dashed #e2c96e; border-radius:9px; padding:8px 12px;}
+
+/* the simulation notice: impossible to miss, above the book */
+.sia-sim{display:flex; gap:12px; align-items:flex-start; max-width:720px; margin:18px auto 26px; text-align:left;
+  background:#FFF8E7; border:1px solid #EAD48F; border-left:4px solid #D9A62E; border-radius:12px; padding:14px 18px;}
+.sia-sim svg{flex:0 0 auto; width:22px; height:22px; color:#B07E14; margin-top:2px;}
+.sia-sim p{font-size:14.5px; color:#5C4A12; line-height:1.6; margin:0;}
+.sia-sim p b{color:#3F3208;}
+/* badge on the engine page, visible while people interact */
+.sim-badge{margin-left:auto; font-family:"Patrick Hand",cursive; font-size:13px; letter-spacing:1.5px;
+  text-transform:uppercase; color:#F3D889; background:rgba(217,166,46,.16); border:1px solid rgba(217,166,46,.55);
+  border-radius:999px; padding:3px 11px; white-space:nowrap;}
 
 .padbox{position:relative; border:2px dashed #d8c9a2; border-radius:10px; background:transparent;}
 .padbox canvas{display:block; width:100%; height:330px; touch-action:none;}
@@ -198,6 +210,11 @@
         <p class="lede">Your mouse is the pen. Write one letter or symbol on the paper page; the sensors fire, the packets stream over BLE, and the AI engine on the dark page rebuilds and recognises what you wrote.</p>
       </div>
 
+      <div class="sia-sim reveal" data-d="1" role="note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+        <p><b>This page is a simulation, built so you can see the idea.</b> The recognition here is a small demonstration matcher, not Vahini's real AI engine, so you may sometimes see a wrong or missed guess. The real engine works from 208 Hz dual-IMU motion captured by the pen itself, not from mouse position.</p>
+      </div>
+
       <div class="book reveal" data-d="1">
         <span class="fold fold--l"></span><span class="fold fold--r"></span>
 
@@ -238,6 +255,7 @@
         <div class="pg-dark">
           <div class="eng-head">
             <b>Vahini AI engine</b>
+            <span class="sim-badge" title="Demonstration only, not the production recogniser">Simulation</span>
             <span class="eng-status" id="siaStatus"><i></i><em id="siaStatusTx" style="font-style:normal;">Awaiting strokes…</em></span>
           </div>
 
@@ -261,12 +279,12 @@
             <div class="st4"><b><i>1</i>Capture motion</b><span>16 axes · 208 Hz</span></div>
             <div class="st4"><b><i>2</i>Remove noise</b><span>Kalman filter</span></div>
             <div class="st4"><b><i>3</i>Reconstruct</b><span>pen-tip path</span></div>
-            <div class="st4"><b><i>4</i>Recognise</b><span>letter / symbol</span></div>
+            <div class="st4"><b><i>4</i>Recognise</b><span>demo matcher · 7 shapes</span></div>
           </div>
         </div>
       </div>
 
-      <p class="sia-note reveal" data-d="2"><b>What you just did is what the pen does.</b> The real Vahini pen feels true pressure, tilt and pen-lifts through two IMU sensors, streams them at 208 Hz over BLE, and the AI rebuilds the writing from motion alone. Your mouse gives it only position, the pen gives it everything.</p>
+      <p class="sia-note reveal" data-d="2"><b>What you just did is what the pen does.</b> The real Vahini pen feels true pressure, tilt and pen-lifts through two IMU sensors, streams them at 208 Hz over BLE, and the AI rebuilds the writing from motion alone. Your mouse gives it only position, the pen gives it everything. Everything on this page runs as a simulation in your browser; the production engine, its accuracy and its scripts live in the analyser.</p>
 
       <div class="sia-ctas reveal" data-d="3">
         <a class="btn btn--crimson btn--lg" href="../analyser/analyser.html">Score a full page, 20 factors</a>

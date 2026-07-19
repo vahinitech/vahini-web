@@ -669,21 +669,22 @@
   <!-- ============ APPLICATIONS POWERED BY ONE SIGNAL ============ -->
   <section class="sec pf" id="applications" data-screen-label="Applications" style="padding:64px 0 78px;">
     <div class="wrap">
-      <div class="pf-band__head reveal">
-        <p class="eyebrow" style="display:inline-flex;">Many products, one motion model</p>
-        <h2 class="h-2" style="margin-top:14px;">One signal. Six products today. Hundreds tomorrow.</h2>
-        <p style="font-size:17px; color:var(--muted); margin:16px auto 0; max-width:640px;">Every product below runs on the <strong>same</strong> proprietary handwriting-motion dataset and one model. Handwriting analysis is the live proof; each new product both ships value and <strong>feeds more motion data back into the moat</strong>, so the platform compounds instead of being capped by any single product.</p>
-      </div>
-      <!-- tabfly: the six products as a stack of "pages"; picking a tab
-           makes the pages above it fly off the stack like leafed paper -->
-      <div class="tabfly reveal" data-d="1">
-        <div class="tabfly__tabs" role="tablist" aria-label="Vahini products">
-          <button class="tabfly__tab is-active" role="tab" aria-selected="true" data-id="1" style="--tc:var(--live);">Handwriting Intelligence</button>
-          <button class="tabfly__tab" role="tab" aria-selected="false" data-id="2" style="--tc:var(--dev);">Digital Notes</button>
-          <button class="tabfly__tab" role="tab" aria-selected="false" data-id="3" style="--tc:var(--pilot);">Learning Analytics</button>
-          <button class="tabfly__tab" role="tab" aria-selected="false" data-id="4" style="--tc:var(--assess);">Motor Assessment</button>
-          <button class="tabfly__tab" role="tab" aria-selected="false" data-id="5" style="--tc:#B4502E;">Signature Intelligence</button>
-          <button class="tabfly__tab" role="tab" aria-selected="false" data-id="6" style="--tc:var(--future);">Developer SDK</button>
+      <!-- tabfly, split layout: the heading + the six-product index sit in
+           the left column, the leafed card stack animates on the right,
+           saving a full screen of vertical space vs the stacked layout -->
+      <div class="tabfly tabfly--split reveal" data-d="1">
+        <div class="tabfly__left">
+          <p class="eyebrow" style="display:inline-flex;">Many products, one motion model</p>
+          <h2 class="h-2" style="margin-top:14px;">One signal. Six products today. Hundreds tomorrow.</h2>
+          <p class="tabfly__lede">Every product here runs on the <strong>same</strong> proprietary handwriting-motion dataset and one model. Handwriting analysis is the live proof; each new product both ships value and <strong>feeds more motion data back into the moat</strong>, so the platform compounds instead of being capped by any single product.</p>
+          <div class="tabfly__tabs" role="tablist" aria-label="Vahini products">
+            <button class="tabfly__tab is-active" role="tab" aria-selected="true" data-id="1" style="--tc:var(--live);">Handwriting Intelligence<small>20-factor analysis across five Indic scripts, live today</small></button>
+            <button class="tabfly__tab" role="tab" aria-selected="false" data-id="2" style="--tc:var(--dev);">Digital Notes<small>Write on any paper, digitised in real time</small></button>
+            <button class="tabfly__tab" role="tab" aria-selected="false" data-id="3" style="--tc:var(--pilot);">Learning Analytics<small>Classroom-level insight into how students write</small></button>
+            <button class="tabfly__tab" role="tab" aria-selected="false" data-id="4" style="--tc:var(--assess);">Motor Assessment<small>Early motor screening, studied with clinicians</small></button>
+            <button class="tabfly__tab" role="tab" aria-selected="false" data-id="5" style="--tc:#B4502E;">Signature Intelligence<small>Verify how a signature was written, from motion</small></button>
+            <button class="tabfly__tab" role="tab" aria-selected="false" data-id="6" style="--tc:var(--future);">Developer SDK<small>Motion intelligence as an API for partners</small></button>
+          </div>
         </div>
         <div class="tabfly__stage" id="tabflyStage">
           <article class="tf-card" role="tabpanel" aria-label="Handwriting Intelligence">
