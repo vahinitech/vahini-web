@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" data-site-base="../">
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. All rights reserved. -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>Taming the compass: magnetometer noise cancellation in practice | Vahini Blog</title>
+<meta name="description" content="The pen&#x27;s compass would be a superb orientation reference, if desks weren&#x27;t made of steel and laptops weren&#x27;t magnets. How calibration and cross-checking turn a jittery compass into a trustworthy one.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="../js/theme.config.js"></script>
+<link rel="stylesheet" href="../css/theme.css">
+<link rel="stylesheet" href="../css/site.css">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
+
+  <article>
+  <section class="post-hero" data-screen-label="Post hero">
+    <div class="wrap">
+      <a class="post-back" href="index.html" data-nav><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All posts</a>
+      <span class="btag btag--signals">Signals</span>
+      <h1>Taming the compass: magnetometer noise cancellation in practice</h1>
+      <div class="post-meta"><span class="post-author"><span class="pa-av malli">MK</span>Malli Kosuri</span><span class="dot"></span><span>Jul 2025</span><span class="dot"></span><span>7 min read</span></div>
+    </div>
+  </section>
+
+  <section class="post-ai" data-screen-label="AI summary">
+    <div class="wrap">
+      <div class="post-ai__card">
+        <span class="post-ai__tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9z"/><path d="M19 14l.7 1.8L21 16.5l-1.3.6L19 19l-.7-1.8L17 16.5z"/></svg>AI summary</span>
+        <p>A magnetometer anchors the one orientation angle gravity cannot provide, but Earth's field is weak and every desk is a minefield: steel frames, laptop magnets, phone speakers. The pen tames this with two classic calibrations, hard-iron and soft-iron, plus continuous plausibility checks against the other sensors.</p>
+        <p>The post explains each distortion, the calibration picture, and the rule that the compass corrects slowly or not at all.</p>
+        <p class="post-ai__note">A quick machine-generated overview. The full post has the detail and the why.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="post-body">
+    <div class="wrap">
+      <div class="post-toc">
+        <h4>In this post</h4>
+        <ol>
+          <li><a href="#s1">Why a pen carries a compass at all</a></li>
+          <li><a href="#s2">The two flavours of magnetic lying</a></li>
+          <li><a href="#s3">Calibration you can picture</a></li>
+          <li><a href="#s4">Trust, but verify continuously</a></li>
+        </ol>
+      </div>
+
+      <h2 id="s1">Why a pen carries a compass at all</h2>
+<p>Gravity, read through the accelerometers, reveals two of the three angles of the pen's orientation, how it tilts. The third angle, which way it points on the horizontal plane, is invisible to gravity. That is the magnetometer's one job: anchor the heading. Without it, the heading estimate can only come from integrating rotation, and anything integrated drifts.</p>
+      <h2 id="s2">The two flavours of magnetic lying</h2>
+<p>Magnetic interference comes in two flavours with useful names. Hard-iron distortion is a constant bias, something magnetised near the sensor adds a fixed push. Soft-iron distortion is direction-dependent, nearby ferrous material bends the field differently as the pen rotates. There is also the plain ambush: the writer sets the pen down next to a laptop whose speaker magnet swamps Earth's field entirely.</p>
+      <figure class="post-fig">
+        <svg viewBox="0 0 640 230" role="img" aria-label="Rotate the pen through all orientations: a clean magnetometer traces a centred sphere; interference shifts and squashes it. Calibration measures the distortion and undoes it.">
+          <g font-family="Hanken Grotesk,sans-serif">
+          <circle cx="160" cy="115" r="62" fill="none" stroke="#0E6B63" stroke-width="2.5"/>
+          <circle cx="160" cy="115" r="3.5" fill="#0E6B63"/>
+          <text x="160" y="35" text-anchor="middle" font-size="12.5" fill="#0E6B63">calibrated: a centred sphere</text>
+          <ellipse cx="450" cy="125" rx="80" ry="48" fill="none" stroke="#B4502E" stroke-width="2.5" transform="rotate(-18 450 125)"/>
+          <circle cx="472" cy="108" r="3.5" fill="#B4502E"/>
+          <text x="450" y="35" text-anchor="middle" font-size="12.5" fill="#B4502E">raw: shifted and squashed</text>
+          <text x="450" y="55" text-anchor="middle" font-size="10.5" fill="#565D66">hard iron shifts &#183; soft iron squashes</text>
+          <path d="M355 115 h-90" stroke="#565D66" stroke-width="2" fill="none"/>
+          <path d="M275 109 l-14 6 14 6" stroke="#565D66" stroke-width="2" fill="none"/>
+          <text x="310" y="100" text-anchor="middle" font-size="11" fill="#565D66">correct</text>
+          </g>
+        </svg>
+        <figcaption>Rotate the pen through all orientations: a clean magnetometer traces a centred sphere; interference shifts and squashes it. Calibration measures the distortion and undoes it.</figcaption>
+      </figure>
+      <h2 id="s3">Calibration you can picture</h2>
+<p>Rotate a perfect magnetometer through every orientation and its readings trace a sphere centred at zero. Hard-iron bias shifts that sphere off-centre; soft-iron distortion squashes it into an ellipsoid. Calibration is the act of measuring that shifted, squashed shape and computing the correction that restores the centred sphere. It is geometry, honest and checkable, and it is redone over time because the pen's own magnetic environment can change.</p>
+      <h2 id="s4">Trust, but verify continuously</h2>
+<p>Calibration cannot fix the laptop ambush, so the firmware never trusts the compass blindly. The magnetic reading is continuously checked for plausibility, is its strength near Earth's field, is it stable, does it agree with what the gyroscope says about rotation? When checks fail, the compass is quietly ignored and heading rides on the gyroscope until sanity returns. The rule of thumb: the magnetometer corrects slowly, or not at all.</p>
+
+      <div class="post-key">
+        <h4>Key takeaways</h4>
+        <ul>
+          <li>The compass anchors the one orientation angle gravity cannot see.</li>
+          <li>Hard-iron bias shifts readings; soft-iron distortion bends them by direction.</li>
+          <li>Calibration restores the centred sphere and is refreshed over the pen's life.</li>
+          <li>Plausibility checks demote the compass instantly when the desk lies.</li>
+        </ul>
+      </div>
+
+      <p>A sensor you sometimes ignore, on purpose, with criteria, is worth far more than a sensor you always believe.</p>
+    </div>
+  </section>
+  </article>
+
+  <section class="block block--alt" data-screen-label="Read next">
+    <div class="wrap">
+      <div class="block__head reveal" style="margin-bottom:6px;"><p class="eyebrow">Read next</p></div>
+      <div class="post-next" id="readNext"></div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+<script src="blog-data.js"></script>
+<script src="../js/site.js"></script>
+<script>
+(function(){
+  var SLUG="magnetometer-noise-cancellation";
+  if(!window.VahiniPosts) return;
+  var CAT={research:"Research",technology:"Technology",health:"Health",signals:"Signals",explainer:"Guide"};
+  var arrow='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+  var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+  var next=window.VahiniPosts.filter(function(p){return p.slug!==SLUG;}).slice(0,3);
+  document.getElementById('readNext').innerHTML=next.map(function(p){
+    return '<a class="bpost reveal" href="'+p.url+'">'+
+      '<div class="bpost__art">'+window.VahiniPostArt(p,0)+'</div>'+
+      '<div class="bpost__body"><div class="bpost__meta"><span class="btag btag--'+p.cat+'">'+CAT[p.cat]+'</span><span class="bpost__date">'+esc(p.date)+'</span></div>'+
+      '<h3>'+esc(p.title)+'</h3><p>'+esc(p.excerpt)+'</p><span class="bpost__more">Read '+arrow+'</span></div></a>';
+  }).join('');
+  if(window.VahiniRevealScan) window.VahiniRevealScan();
+})();
+</script>
+</body>
+</html>

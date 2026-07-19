@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" data-site-base="../">
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. All rights reserved. -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>The most important part we didn&#x27;t design: the standard refill | Vahini Blog</title>
+<meta name="description" content="Building around a standard ballpoint refill sounds unglamorous. It is one of the best product decisions we made. On ink, geometry, supply chains, and respecting a hundred years of pen ergonomics.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="../js/theme.config.js"></script>
+<link rel="stylesheet" href="../css/theme.css">
+<link rel="stylesheet" href="../css/site.css">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
+
+  <article>
+  <section class="post-hero" data-screen-label="Post hero">
+    <div class="wrap">
+      <a class="post-back" href="index.html" data-nav><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All posts</a>
+      <span class="btag btag--technology">Technology</span>
+      <h1>The most important part we didn&#x27;t design: the standard refill</h1>
+      <div class="post-meta"><span class="post-author"><span class="pa-av malli">MK</span>Malli Kosuri</span><span class="dot"></span><span>Mar 2024</span><span class="dot"></span><span>5 min read</span></div>
+    </div>
+  </section>
+
+  <section class="post-ai" data-screen-label="AI summary">
+    <div class="wrap">
+      <div class="post-ai__card">
+        <span class="post-ai__tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9z"/><path d="M19 14l.7 1.8L21 16.5l-1.3.6L19 19l-.7-1.8L17 16.5z"/></svg>AI summary</span>
+        <p>The Vahini pen writes with a standard ballpoint refill, the same slim format sold in stationery shops everywhere. That one decision anchors the pen's size, balance and running cost, and means running out of ink never takes the product down.</p>
+        <p>This post explains why we designed the electronics around the refill instead of designing a refill around the electronics.</p>
+        <p class="post-ai__note">A quick machine-generated overview. The full post has the detail and the why.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="post-body">
+    <div class="wrap">
+      <div class="post-toc">
+        <h4>In this post</h4>
+        <ol>
+          <li><a href="#s1">The refill is the product&#x27;s spine</a></li>
+          <li><a href="#s2">What a century of refills already solved</a></li>
+          <li><a href="#s3">Supply chains matter more than specs</a></li>
+          <li><a href="#s4">The constraint that disciplined the electronics</a></li>
+        </ol>
+      </div>
+
+      <h2 id="s1">The refill is the product&#x27;s spine</h2>
+<p>Every sensor pen faces one early fork: invent a proprietary ink cartridge shaped around your electronics, or accept a standard refill and shape your electronics around it. The proprietary route gives designers freedom and gives users a lifetime obligation to buy your ink. We took the other road. A standard slim refill runs straight through the pen's core, and every board and sensor is arranged around that reserved cylinder.</p>
+      <h2 id="s2">What a century of refills already solved</h2>
+<p>The standard refill formats are not arbitrary. They encode a hundred years of quiet optimisation: ink chemistry that flows at handwriting speeds without blobbing, tip geometry that works at the angles real hands hold pens, lengths and diameters that balance well. When you adopt the standard, you inherit all that solved engineering for free. When you invent your own, you have to re-solve it, and users can tell when you get it wrong.</p>
+      <figure class="post-fig">
+        <svg viewBox="0 0 640 230" role="img" aria-label="The design rule in one picture: a standard refill claims the centre line, and every board fits the space that remains.">
+          <rect x="90" y="70" width="380" height="90" rx="40" fill="none" stroke="#1E242C" stroke-width="3"/>
+          <rect x="120" y="103" width="380" height="24" rx="12" fill="#C9A227"/>
+          <path d="M500 103 l60 12 -60 12 z" fill="#A8861D"/>
+          <text x="300" y="50" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="14" font-weight="700" fill="#565D66">the refill runs through the core</text>
+          <rect x="120" y="78" width="60" height="18" rx="4" fill="#22467A" opacity=".85"/>
+          <rect x="200" y="78" width="80" height="18" rx="4" fill="#0E6B63" opacity=".85"/>
+          <rect x="300" y="78" width="60" height="18" rx="4" fill="#4A3B78" opacity=".85"/>
+          <rect x="120" y="134" width="70" height="18" rx="4" fill="#8C2F39" opacity=".85"/>
+          <rect x="210" y="134" width="60" height="18" rx="4" fill="#22467A" opacity=".85"/>
+          <text x="300" y="195" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="12.5" fill="#565D66">electronics wrap around the ink, never the other way</text>
+        </svg>
+        <figcaption>The design rule in one picture: a standard refill claims the centre line, and every board fits the space that remains.</figcaption>
+      </figure>
+      <h2 id="s3">Supply chains matter more than specs</h2>
+<p>A child in a small town who loses ink mid-homework should be able to walk to the nearest shop and fix that for a few rupees. No courier, no app, no waiting. That is only possible with a format the whole stationery industry already stocks. It also means our manufacturing never depends on a single ink supplier, which keeps the pen's price honest.</p>
+      <h2 id="s4">The constraint that disciplined the electronics</h2>
+<p>Reserving the core for ink forced every electronic component to fit the thin annular space around it, and the engineering got better for it. Boards became narrower, parts were chosen for size as well as ability, and the pen stayed a pen. Constraints you choose early shape everything downstream, and this is the one we would choose again first.</p>
+
+      <div class="post-key">
+        <h4>Key takeaways</h4>
+        <ul>
+          <li>The pen uses a standard slim ballpoint refill, available in any stationery shop.</li>
+          <li>Standard formats carry a century of solved ink and ergonomics engineering.</li>
+          <li>Local availability keeps the running cost near zero and removes supply-chain risk.</li>
+          <li>Designing around the refill disciplined the electronics and kept the pen pen-sized.</li>
+        </ul>
+      </div>
+
+      <p>The cleverest part of a smart pen can be the part with no electronics in it at all.</p>
+    </div>
+  </section>
+  </article>
+
+  <section class="block block--alt" data-screen-label="Read next">
+    <div class="wrap">
+      <div class="block__head reveal" style="margin-bottom:6px;"><p class="eyebrow">Read next</p></div>
+      <div class="post-next" id="readNext"></div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+<script src="blog-data.js"></script>
+<script src="../js/site.js"></script>
+<script>
+(function(){
+  var SLUG="the-humble-d3-refill";
+  if(!window.VahiniPosts) return;
+  var CAT={research:"Research",technology:"Technology",health:"Health",signals:"Signals",explainer:"Guide"};
+  var arrow='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+  var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+  var next=window.VahiniPosts.filter(function(p){return p.slug!==SLUG;}).slice(0,3);
+  document.getElementById('readNext').innerHTML=next.map(function(p){
+    return '<a class="bpost reveal" href="'+p.url+'">'+
+      '<div class="bpost__art">'+window.VahiniPostArt(p,0)+'</div>'+
+      '<div class="bpost__body"><div class="bpost__meta"><span class="btag btag--'+p.cat+'">'+CAT[p.cat]+'</span><span class="bpost__date">'+esc(p.date)+'</span></div>'+
+      '<h3>'+esc(p.title)+'</h3><p>'+esc(p.excerpt)+'</p><span class="bpost__more">Read '+arrow+'</span></div></a>';
+  }).join('');
+  if(window.VahiniRevealScan) window.VahiniRevealScan();
+})();
+</script>
+</body>
+</html>

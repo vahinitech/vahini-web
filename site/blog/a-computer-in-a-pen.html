@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" data-site-base="../">
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. All rights reserved. -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>There is a whole computer inside this pen | Vahini Blog</title>
+<meta name="description" content="Processor, memory, radio, sensors, power management and a filesystem&#x27;s worth of storage, all inside a barrel you hold like any other pen. A tour of the Vahini pen as the small computer it really is.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="../js/theme.config.js"></script>
+<link rel="stylesheet" href="../css/theme.css">
+<link rel="stylesheet" href="../css/site.css">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
+
+  <article>
+  <section class="post-hero" data-screen-label="Post hero">
+    <div class="wrap">
+      <a class="post-back" href="index.html" data-nav><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All posts</a>
+      <span class="btag btag--technology">Technology</span>
+      <h1>There is a whole computer inside this pen</h1>
+      <div class="post-meta"><span class="post-author"><span class="pa-av malli">MK</span>Malli Kosuri</span><span class="dot"></span><span>Jan 2024</span><span class="dot"></span><span>6 min read</span></div>
+    </div>
+  </section>
+
+  <section class="post-ai" data-screen-label="AI summary">
+    <div class="wrap">
+      <div class="post-ai__card">
+        <span class="post-ai__tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9z"/><path d="M19 14l.7 1.8L21 16.5l-1.3.6L19 19l-.7-1.8L17 16.5z"/></svg>AI summary</span>
+        <p>The Vahini pen is not a pen with a chip glued in. It is a complete computer: a 32-bit ARM processor, working memory, long-term storage, a Bluetooth radio, five sensors and its own power management, packaged into a barrel that still writes with ordinary ink.</p>
+        <p>This post walks the full stack from the tip upward and explains why 'mini computer' is a literal description, not a metaphor.</p>
+        <p class="post-ai__note">A quick machine-generated overview. The full post has the detail and the why.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="post-body">
+    <div class="wrap">
+      <div class="post-toc">
+        <h4>In this post</h4>
+        <ol>
+          <li><a href="#s1">Start at the tip and walk up</a></li>
+          <li><a href="#s2">The processor is small on purpose</a></li>
+          <li><a href="#s3">Memory is the scarcest resource</a></li>
+          <li><a href="#s4">Why build it this way</a></li>
+        </ol>
+      </div>
+
+      <h2 id="s1">Start at the tip and walk up</h2>
+<p>Hold the pen vertically and imagine slicing it open. At the very bottom sits an ink tip, a normal one. Just above it, a pressure sensor feels every gram the tip puts on paper. A little higher, the first motion sensor rides close to your fingers. Midway up the barrel live the processor, the radio and the storage. Near the top: a second motion sensor, a compass, a battery, one multi-colour light and a USB-C port. Every one of those parts talks to the processor dozens or hundreds of times each second while you write a single word.</p>
+      <h2 id="s2">The processor is small on purpose</h2>
+<p>The chip at the centre is a microcontroller, the same family of processor that runs inside fitness bands and hearing aids. It is thousands of times less powerful than a laptop and that is precisely the point: it sips power measured in thousandths of a watt, starts instantly, and does one job with complete focus. There is no operating system in the laptop sense, no apps competing for time. The firmware we write is the only program it will ever run, which means every millisecond is accounted for.</p>
+      <figure class="post-fig">
+        <svg viewBox="0 0 640 230" role="img" aria-label="The pen unrolled: battery, motion sensor, processor with radio, storage, second motion sensor and pressure sensor, all in a line that fits behind an ordinary ink refill.">
+          <rect x="40" y="95" width="430" height="40" rx="18" fill="#1E242C"/>
+          <path d="M470 95 l90 20 -90 20 z" fill="#12161B"/>
+          <circle cx="563" cy="115" r="4" fill="#C9A227"/>
+          <rect x="70" y="103" width="34" height="24" rx="5" fill="#8C2F39"/><text x="87" y="90" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="11" fill="#8C2F39">battery</text>
+          <rect x="118" y="103" width="34" height="24" rx="5" fill="#22467A"/><text x="135" y="150" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="11" fill="#22467A">IMU 2</text>
+          <rect x="166" y="103" width="52" height="24" rx="5" fill="#0E6B63"/><text x="192" y="90" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="11" fill="#0E6B63">MCU + radio</text>
+          <rect x="232" y="103" width="40" height="24" rx="5" fill="#4A3B78"/><text x="252" y="150" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="11" fill="#4A3B78">storage</text>
+          <rect x="286" y="103" width="34" height="24" rx="5" fill="#22467A"/><text x="303" y="90" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="11" fill="#22467A">IMU 1</text>
+          <rect x="334" y="103" width="40" height="24" rx="5" fill="#B4502E"/><text x="354" y="150" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="11" fill="#B4502E">pressure</text>
+          <text x="305" y="40" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="14" font-weight="700" fill="#565D66">a computer, laid flat</text>
+        </svg>
+        <figcaption>The pen unrolled: battery, motion sensor, processor with radio, storage, second motion sensor and pressure sensor, all in a line that fits behind an ordinary ink refill.</figcaption>
+      </figure>
+      <h2 id="s3">Memory is the scarcest resource</h2>
+<p>A laptop measures memory in gigabytes. This pen's working memory is measured in kilobytes, roughly a million times less. Designing for that budget changes how software is written: every buffer is planned, every feature pays rent, and nothing is wasted. The pay-off is a device that runs for days on a battery smaller than your thumbnail. Alongside the working memory sits a generous flash store, the pen's notebook, that quietly records your writing sessions when no phone is nearby and syncs them later.</p>
+      <h2 id="s4">Why build it this way</h2>
+<p>We could have made a fatter pen with a bigger battery and a stronger processor. Every gram and millimetre, though, moves it further from the thing people actually want to hold: a normal pen. The engineering discipline of small computers, doing more with deliberately less, is what lets the intelligence disappear into the object. The best compliment the hardware gets is that people forget it is there.</p>
+
+      <div class="post-key">
+        <h4>Key takeaways</h4>
+        <ul>
+          <li>The pen contains a full computer: processor, memory, storage, radio, sensors and power management.</li>
+          <li>A deliberately small processor means instant start and days of battery.</li>
+          <li>Kilobytes of memory force disciplined engineering, and that discipline is a feature.</li>
+          <li>The goal is invisibility: intelligence that hides inside a normal-feeling pen.</li>
+        </ul>
+      </div>
+
+      <p>Next time someone calls it a smart pen, correct them gently. It is a computer that happens to write.</p>
+    </div>
+  </section>
+  </article>
+
+  <section class="block block--alt" data-screen-label="Read next">
+    <div class="wrap">
+      <div class="block__head reveal" style="margin-bottom:6px;"><p class="eyebrow">Read next</p></div>
+      <div class="post-next" id="readNext"></div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+<script src="blog-data.js"></script>
+<script src="../js/site.js"></script>
+<script>
+(function(){
+  var SLUG="a-computer-in-a-pen";
+  if(!window.VahiniPosts) return;
+  var CAT={research:"Research",technology:"Technology",health:"Health",signals:"Signals",explainer:"Guide"};
+  var arrow='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+  var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+  var next=window.VahiniPosts.filter(function(p){return p.slug!==SLUG;}).slice(0,3);
+  document.getElementById('readNext').innerHTML=next.map(function(p){
+    return '<a class="bpost reveal" href="'+p.url+'">'+
+      '<div class="bpost__art">'+window.VahiniPostArt(p,0)+'</div>'+
+      '<div class="bpost__body"><div class="bpost__meta"><span class="btag btag--'+p.cat+'">'+CAT[p.cat]+'</span><span class="bpost__date">'+esc(p.date)+'</span></div>'+
+      '<h3>'+esc(p.title)+'</h3><p>'+esc(p.excerpt)+'</p><span class="bpost__more">Read '+arrow+'</span></div></a>';
+  }).join('');
+  if(window.VahiniRevealScan) window.VahiniRevealScan();
+})();
+</script>
+</body>
+</html>
