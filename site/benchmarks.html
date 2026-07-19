@@ -54,7 +54,8 @@
   .spec-row{display:flex; gap:16px; align-items:flex-start; background:var(--surface); border:1px solid var(--rule);
     border-radius:var(--radius-lg); box-shadow:var(--shadow-1); padding:18px 20px;
     transition:transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s;}
-  .spec-row:hover{transform:translateX(6px); box-shadow:var(--shadow-2); border-color:var(--accent);}
+  .spec-row:hover,.spec-row:focus-visible{transform:translateX(6px); box-shadow:var(--shadow-2); border-color:var(--accent);}
+  .spec-row:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
   .spec-row .n{flex:0 0 auto; width:30px; height:30px; border-radius:50%; display:grid; place-items:center;
     font-weight:800; font-size:14px; color:#fff; background:var(--pc,#22467A); box-shadow:0 3px 8px rgba(20,26,34,.22);}
   .spec-row h3{font-size:16.5px; margin:3px 0 5px;}
@@ -155,14 +156,14 @@
           </svg>
         </div>
         <div class="specsheet__list" id="specList">
-          <div class="spec-row" data-for="1" style="--pc:#8C2F39;"><span class="n">1</span><div><h3>Pressure sensor in the tip</h3><p>Feels how firmly the tip meets the paper, stroke by stroke. It also tells the pen exactly when writing starts and stops, the anchor for faithful reconstruction.</p></div></div>
-          <div class="spec-row" data-for="2" style="--pc:#22467A;"><span class="n">2</span><div><h3>Motion sensor near the tip</h3><p>The first of two independent motion sensors. Sitting close to the tip, it feels the fine finger movements that draw each letter.</p></div></div>
-          <div class="spec-row" data-for="3" style="--pc:#C9A227;"><span class="n">3</span><div><h3>A standard refill</h3><p>Real ink on any paper, any notebook, any form. No dot-pattern paper, no tablet, no screen, and the refill is a standard size you can buy anywhere.</p></div></div>
-          <div class="spec-row" data-for="4" style="--pc:#0E6B63;"><span class="n">4</span><div><h3>Brain: MCU + Bluetooth Low Energy</h3><p>A low-power ARM microcontroller with the radio on the same chip captures 208 motion snapshots per second and streams them live to your phone or laptop.</p></div></div>
-          <div class="spec-row" data-for="5" style="--pc:#4A3B78;"><span class="n">5</span><div><h3>Offline memory</h3><p>Around 19 hours of pure writing stored on the pen itself, several weeks of normal daily notes. No connection needed while you write; sync whenever you like.</p></div></div>
-          <div class="spec-row" data-for="6" style="--pc:#22467A;"><span class="n">6</span><div><h3>Motion sensor near the top</h3><p>The second viewpoint. Two sensors on one rigid barrel see every stroke from two points, which is what makes faithful reconstruction possible, plus a compass for orientation.</p></div></div>
-          <div class="spec-row" data-for="7" style="--pc:#D9A62E;"><span class="n">7</span><div><h3>One light, one meaning</h3><p>A single colour light tells you everything: recording, battery, charging, pairing, or a warning. One meaning per colour, documented in the manual.</p></div></div>
-          <div class="spec-row" data-for="8" style="--pc:#5B7DB1;"><span class="n">8</span><div><h3>USB-C &amp; battery</h3><p>Charges over USB-C in about 2 hours, writes for around 15 hours non-stop. Overcharge protection is built in twice, in hardware and in the pen's own software.</p></div></div>
+          <div class="spec-row" tabindex="0" data-for="1" style="--pc:#8C2F39;"><span class="n">1</span><div><h3>Pressure sensor in the tip</h3><p>Feels how firmly the tip meets the paper, stroke by stroke. It also tells the pen exactly when writing starts and stops, the anchor for faithful reconstruction.</p></div></div>
+          <div class="spec-row" tabindex="0" data-for="2" style="--pc:#22467A;"><span class="n">2</span><div><h3>Motion sensor near the tip</h3><p>The first of two independent motion sensors. Sitting close to the tip, it feels the fine finger movements that draw each letter.</p></div></div>
+          <div class="spec-row" tabindex="0" data-for="3" style="--pc:#C9A227;"><span class="n">3</span><div><h3>A standard refill</h3><p>Real ink on any paper, any notebook, any form. No dot-pattern paper, no tablet, no screen, and the refill is a standard size you can buy anywhere.</p></div></div>
+          <div class="spec-row" tabindex="0" data-for="4" style="--pc:#0E6B63;"><span class="n">4</span><div><h3>Brain: MCU + Bluetooth Low Energy</h3><p>A low-power ARM microcontroller with the radio on the same chip captures 208 motion snapshots per second and streams them live to your phone or laptop.</p></div></div>
+          <div class="spec-row" tabindex="0" data-for="5" style="--pc:#4A3B78;"><span class="n">5</span><div><h3>Offline memory</h3><p>Around 19 hours of pure writing stored on the pen itself, several weeks of normal daily notes. No connection needed while you write; sync whenever you like.</p></div></div>
+          <div class="spec-row" tabindex="0" data-for="6" style="--pc:#22467A;"><span class="n">6</span><div><h3>Motion sensor near the top</h3><p>The second viewpoint. Two sensors on one rigid barrel see every stroke from two points, which is what makes faithful reconstruction possible, plus a compass for orientation.</p></div></div>
+          <div class="spec-row" tabindex="0" data-for="7" style="--pc:#D9A62E;"><span class="n">7</span><div><h3>One light, one meaning</h3><p>A single colour light tells you everything: recording, battery, charging, pairing, or a warning. One meaning per colour, documented in the manual.</p></div></div>
+          <div class="spec-row" tabindex="0" data-for="8" style="--pc:#5B7DB1;"><span class="n">8</span><div><h3>USB-C &amp; battery</h3><p>Charges over USB-C in about 2 hours, writes for around 15 hours non-stop. Overcharge protection is built in twice, in hardware and in the pen's own software.</p></div></div>
         </div>
       </div>
     </div>
@@ -179,8 +180,14 @@
       parts.forEach(function(p){ p.classList.toggle('dim', id !== null && p.getAttribute('data-part') !== id); });
     }
     rows.forEach(function(r){
-      r.addEventListener('mouseenter', function(){ focus(r.getAttribute('data-for')); });
-      r.addEventListener('mouseleave', function(){ focus(null); });
+      function on(){ focus(r.getAttribute('data-for')); }
+      function off(){ focus(null); }
+      /* rows carry tabindex=0, so keyboard (and tap-to-focus) users get the
+         same pairing highlight as mouse hover */
+      r.addEventListener('mouseenter', on);
+      r.addEventListener('mouseleave', off);
+      r.addEventListener('focus', on);
+      r.addEventListener('blur', off);
     });
   })();
   </script>
@@ -196,6 +203,15 @@
         <div class="c reveal"><h3>Full charge</h3><p>About 2 hours over USB-C, from empty to full.</p></div>
         <div class="c reveal" data-d="1"><h3>Forgot it on the charger?</h3><p>Safe. Charging stops automatically when the battery is full. Protection is built in twice, once in the charging hardware and once in the pen's own software, and each layer works even if the other fails.</p></div>
         <div class="c reveal" data-d="2"><h3>Low battery</h3><p>The pen warns you early, saves everything, and shuts down cleanly before the battery can be damaged. Your notes are never the price of an empty battery.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" data-screen-label="Scripts &amp; size">
+    <div class="wrap">
+      <p class="eyebrow reveal">Scripts &amp; dimensions</p>
+      <h2 class="reveal" data-d="1">Any script. A normal pen.</h2>
+      <div class="bm-cap">
         <div class="c reveal"><h3>Scripts</h3><p>Motion capture is script-neutral by design. The analyser currently reads five Indic scripts, with more in training.</p></div>
         <div class="c reveal" data-d="1"><h3>Size &amp; weight</h3><p>A normal pen in the hand. Final production dimensions will be published at launch; shrinking both without giving up accuracy is an explicit design goal.</p></div>
       </div>
