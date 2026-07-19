@@ -4,6 +4,12 @@
 # Bullet-journal PDF print service. bujo.js is pulled from GitHub at build
 # time (see services/bujo-pdf/package.json for the pinned ref; override
 # with --build-arg BUJO_REF=<branch|tag|sha> to test another revision).
+#
+# KNOWN TEMPORARY STATE: package.json pins bujo.js to an immutable commit
+# SHA on vahinitech/bujo.js#1 (still open, unreleased) rather than a
+# released version, because no tag/main SHA exists yet for the modernized
+# engine this service depends on. TODO: once vahinitech/bujo.js#1 merges,
+# repin to a release tag (or `main`'s SHA at merge time).
 FROM node:20-alpine
 
 WORKDIR /app
