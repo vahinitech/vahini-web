@@ -139,6 +139,14 @@
       excerpt: "Classical sensor fusion drifts within seconds. How learned models reconstruct multi-stroke writing from an inertial pen on ordinary paper, no tablet, no special surface."
     },
     {
+      slug: "sampling-rate-104-208-416",
+      url: "sampling-rate-104-208-416.html",
+      cat: "technology",
+      title: "104, 208 or 416? Choosing how often a pen should look at your hand",
+      date: "May 2026", read: "8 min read", author: "Malli Kosuri",
+      excerpt: "Our sensors can sample at 104, 208 or 416 times a second. We ship 208. The physics of handwriting bandwidth, what doubling the rate really buys, and what it silently costs."
+    },
+    {
       slug: "two-views-of-a-letter",
       url: "two-views-of-a-letter.html",
       cat: "research",
@@ -155,28 +163,20 @@
       excerpt: "From childhood dysgraphia to the micrographia of Parkinson's, the way we form letters carries motor-health information, and machine learning is learning to read it."
     },
     {
-      slug: "reading-a-hand-its-never-seen",
-      url: "reading-a-hand-its-never-seen.html",
-      cat: "research",
-      title: "The hardest part: reading a hand it has never seen",
-      date: "Feb 2026", read: "5 min read", author: "Vishnu Kosuri",
-      excerpt: "A model trained on one set of writers and devices stumbles on the next. “Domain adaptation” is how researchers teach handwriting AI to generalise to a brand-new hand."
-    },
-    {
-      slug: "sampling-rate-104-208-416",
-      url: "sampling-rate-104-208-416.html",
-      cat: "technology",
-      title: "104, 208 or 416? Choosing how often a pen should look at your hand",
-      date: "May 2026", read: "8 min read", author: "Malli Kosuri",
-      excerpt: "Our sensors can sample at 104, 208 or 416 times a second. We ship 208. The physics of handwriting bandwidth, what doubling the rate really buys, and what it silently costs."
-    },
-    {
       slug: "less-hardware-same-accuracy",
       url: "less-hardware-same-accuracy.html",
       cat: "technology",
       title: "The roadmap is less hardware, not more",
       date: "Mar 2026", read: "6 min read", author: "Malli Kosuri",
       excerpt: "Most gadgets add parts each generation. Our roadmap points the other way: fewer components, a simpler board, a cheaper pen, with accuracy as the one thing that is never traded. How software absorbs hardware."
+    },
+    {
+      slug: "reading-a-hand-its-never-seen",
+      url: "reading-a-hand-its-never-seen.html",
+      cat: "research",
+      title: "The hardest part: reading a hand it has never seen",
+      date: "Feb 2026", read: "5 min read", author: "Vishnu Kosuri",
+      excerpt: "A model trained on one set of writers and devices stumbles on the next. “Domain adaptation” is how researchers teach handwriting AI to generalise to a brand-new hand."
     },
     {
       slug: "how-ai-accuracy-compounds",
@@ -280,7 +280,19 @@
     "writing-without-a-screen": "surface free pen, IMU digital pen, writing on paper, no tablet pen, sensor fusion drift, CNN trajectory reconstruction, smart pen",
     "two-views-of-a-letter": "handwriting recognition, online handwriting, vision language model, OCR strokes, digital ink, multimodal handwriting, Indic scripts",
     "handwriting-as-a-health-signal": "handwriting health, dysgraphia detection, Parkinson micrographia, handwriting biomarker, motor skills writing, handwriting kinematics",
-    "reading-a-hand-its-never-seen": "domain adaptation handwriting, handwriting generalization, writer independent, domain adversarial training, handwriting AI, transfer learning"
+    "reading-a-hand-its-never-seen": "domain adaptation handwriting, handwriting generalization, writer independent, domain adversarial training, handwriting AI, transfer learning",
+    "sampling-rate-104-208-416": "IMU sampling rate, 104 208 416 Hz, Nyquist handwriting bandwidth, sensor ODR, aliasing motion capture, smart pen sampling frequency, battery vs sampling rate, BLE throughput sensors",
+    "less-hardware-same-accuracy": "hardware reduction roadmap, software absorbs hardware, sensor fusion fewer parts, cheaper smart pen, BOM cost reduction, minimal electronics design, deeptech product roadmap",
+    "how-ai-accuracy-compounds": "AI accuracy improvement, data flywheel, handwriting dataset growth, model retraining, machine learning compounding, writer diversity dataset, continuous learning pen",
+    "pen-tip-reconstruction": "pen tip trajectory reconstruction, IMU dead reckoning, drift correction, gravity compensation, zero velocity update, inertial navigation pen, stroke path estimation",
+    "magnetometer-noise-cancellation": "magnetometer noise cancellation, hard iron soft iron calibration, ellipsoid fitting compass, magnetic interference desk, heading reference pen, 9-axis sensor fusion",
+    "the-sensor-that-thinks": "IMU finite state machine, sensor event engine, tap detection FSM, wake on motion, embedded state machine, low power event detection, programmable IMU core",
+    "why-a-force-sensor": "pen force sensor, tip force sensing, pen down detection, pressure anchor drift reset, writing pressure signal, touch down lift off, handwriting force accuracy",
+    "chasing-microamps": "low power embedded design, microamp sleep current, sleep state ladder, wake on motion guard, battery life optimisation, power budget firmware, always on sensor power",
+    "ble-vs-bluetooth-classic": "BLE vs Bluetooth Classic, Bluetooth Low Energy difference, connection interval, BLE power consumption, GATT vs SPP, wireless pen protocol, 2.4 GHz radio duty cycle",
+    "battery-that-writes-all-day": "lithium ion pen battery, Li-ion discharge curve, battery protection circuit, charge over lunch, overcharge protection, small device battery engineering, all-day battery design",
+    "the-humble-d3-refill": "standard ballpoint refill, D1 refill electronics, pen refill supply chain, designing around refill, ballpoint ink geometry, pen ergonomics engineering",
+    "a-computer-in-a-pen": "embedded computer pen, smart pen electronics, microcontroller pen, pen system architecture, sensors radio storage pen, wearable embedded system tour"
   };
 
   /* abstract per-category cover art (no external images).
