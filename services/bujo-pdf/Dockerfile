@@ -6,18 +6,20 @@
 # with --build-arg BUJO_REF=<branch|tag|sha> to test another revision).
 FROM node:20-alpine
 
-# npm needs git to install GitHub-hosted dependencies.
-RUN apk add --no-cache git
-
 WORKDIR /app
 COPY services/bujo-pdf/package.json /app/package.json
 
+# git is only needed while npm fetches the GitHub-hosted dependency, so it
+# is installed and removed inside the same layer to keep it (and its
+# apk metadata) out of the runtime image.
 ARG BUJO_REF=""
-RUN npm install --omit=dev --no-audit --no-fund \
+RUN apk add --no-cache git \
+ && npm install --omit=dev --no-audit --no-fund \
  && if [ -n "$BUJO_REF" ]; then \
         npm install --no-save --no-audit --no-fund "github:vahinitech/bujo.js#${BUJO_REF}"; \
     fi \
- && npm cache clean --force
+ && npm cache clean --force \
+ && apk del git
 
 COPY services/bujo-pdf/server.js /app/server.js
 

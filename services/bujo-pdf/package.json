@@ -10,6 +10,6 @@
     "node": ">=20"
   },
   "dependencies": {
-    "bujo.js": "github:vahinitech/bujo.js#claude/bujo-modernize-pdf-styling-1vxpeq"
+    "bujo.js": "github:vahinitech/bujo.js#aa7ecf08baf82524d960853cf01d254dfddf0b03"
   }
 }

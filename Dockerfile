@@ -44,6 +44,7 @@ RUN cp /etc/nginx/conf.d/vahini.conf /etc/nginx/conf.d/vahini.conf.orig \
  && sed -i \
       -e 's#proxy_pass http://analyser:8868#proxy_pass http://127.0.0.1:8868#g' \
       -e 's#proxy_pass http://persist:8090#proxy_pass http://127.0.0.1:8090#g' \
+      -e 's#proxy_pass http://bujo:8091#proxy_pass http://127.0.0.1:8091#g' \
       /etc/nginx/conf.d/vahini.conf \
  && nginx -t \
  && mv /etc/nginx/conf.d/vahini.conf.orig /etc/nginx/conf.d/vahini.conf

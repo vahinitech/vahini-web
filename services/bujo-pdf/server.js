@@ -41,9 +41,24 @@ function isAllowedOrigin(origin) {
   return /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
 }
 
+function isPrivateAddress(addr) {
+  const a = String(addr || "").replace(/^::ffff:/, "");
+  return (
+    a === "::1" ||
+    a.startsWith("127.") ||
+    a.startsWith("10.") ||
+    a.startsWith("192.168.") ||
+    /^172\.(1[6-9]|2\d|3[01])\./.test(a)
+  );
+}
+
 function clientIp(req) {
+  // Trust X-Real-IP only when the direct peer is nginx on the private
+  // docker network; otherwise a direct caller could spoof the header to
+  // dodge the per-IP budget and bloat the rate-bucket map.
+  const peer = req.socket.remoteAddress || "unknown";
   const fwd = String(req.headers["x-real-ip"] || "").trim();
-  return fwd || req.socket.remoteAddress || "unknown";
+  return fwd && isPrivateAddress(peer) ? fwd : peer;
 }
 
 function overRateLimit(ip) {
@@ -82,7 +97,14 @@ function json(res, code, body, extra = {}) {
 }
 
 const server = http.createServer((req, res) => {
-  const url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
+  // Fixed base: req.url is server-relative, and a hostile Host header must
+  // not be able to make URL parsing throw and take the process down.
+  let url;
+  try {
+    url = new URL(req.url, "http://localhost");
+  } catch {
+    return json(res, 400, { ok: false, error: "malformed request url" });
+  }
 
   // CORS. Same-origin browsers send an Origin on cross-site POSTs only,
   // but a strict check costs nothing.
