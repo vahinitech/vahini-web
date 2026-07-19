@@ -10,6 +10,6 @@
     "node": ">=20"
   },
   "dependencies": {
-    "bujo.js": "github:vahinitech/bujo.js#bb569bc36db2947e48020a0697a0fda94cc2db40"
+    "bujo.js": "github:vahinitech/bujo.js#2ba2c0af5545f9e6c1723c30a13e019ae1ac2edc"
   }
 }
