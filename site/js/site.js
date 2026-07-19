@@ -161,6 +161,7 @@
     return '<div class="drawer" id="vt-drawer">'+
       '<details open><summary>Applications</summary>'+solLinks+'</details>'+
       '<a class="d-link" href="'+P("product.html")+'" data-nav>The Pen</a>'+
+      '<a class="d-link" href="'+P("project-akshara.html")+'" data-nav>Project Akshara</a>'+
       '<details><summary>Resources</summary>'+resLinks+'</details>'+
       '<details><summary>Company</summary>'+compLinks+'</details>'+
       '<a class="d-link" href="'+P("investor.html")+'" data-nav>Investor Book</a>'+

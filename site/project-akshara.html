@@ -119,14 +119,16 @@
              the motion trace draws beneath - the dataset in one picture -->
         <div class="ak-stage reveal" data-d="2" id="akStage">
           <span class="ak-stage__label"><i></i>Recording the hand &middot; <span id="akScript">Telugu</span></span>
-          <svg viewBox="0 0 420 250" aria-label="The word Vahini being written in five scripts while its motion signal is recorded">
+          <svg viewBox="0 0 420 250" role="img" aria-label="The word Vahini being written in five scripts while its motion signal is recorded">
+            <defs>
+              <clipPath id="akClip"><rect x="20" y="30" width="386" height="110"/></clipPath>
+            </defs>
             <g class="ak-anim" id="akAnim">
               <!-- the word, revealed by the sliding curtain -->
               <text class="word" id="akWord" x="34" y="112">వాహిని</text>
               <g clip-path="url(#akClip)">
                 <rect class="curtain" x="20" y="30" width="386" height="110" fill="#fdfcf6"></rect>
               </g>
-              <clipPath id="akClip"><rect x="20" y="30" width="386" height="110"/></clipPath>
               <!-- the pen tip riding the reveal edge -->
               <g class="pentip"><circle cx="34" cy="100" r="5" fill="#C0392B"/><circle cx="34" cy="100" r="10" fill="none" stroke="#C0392B" stroke-width="1.4" opacity=".35"/></g>
               <!-- baseline rule -->
