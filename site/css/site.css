@@ -242,10 +242,15 @@ section{position:relative;}
 .foot__brand b{font-family:var(--serif); color:#fff; font-size:24px; display:flex; align-items:center; gap:10px;}
 .foot__brand img{width:30px; height:30px; border-radius:50%;}
 .foot__social{display:flex; gap:10px; margin-top:16px;}
-.foot__soc{display:grid; place-items:center; width:36px; height:36px; border-radius:9px; border:1px solid var(--rule-on);
-  background:rgba(255,255,255,.05); color:rgba(247,243,232,.82); transition:.16s;}
-.foot__soc:hover{background:var(--crimson); border-color:var(--crimson); color:#fff; transform:translateY(-2px);}
-.foot__soc svg{width:18px; height:18px;}
+/* .foot__social .foot__soc (not the bare .foot__soc class alone): .foot__soc
+   is nested inside .foot__col, so the plain ".foot__soc" selector's
+   specificity (0,1,0) loses to ".foot__col a"'s (0,1,1), which sets
+   display:flex with no justify-content -- silently breaking the intended
+   grid centering and leaving the icon glyph packed against one edge. */
+.foot__social .foot__soc{display:grid; place-items:center; width:36px; height:36px; border-radius:9px; border:1px solid var(--rule-on);
+  background:rgba(255,255,255,.05); color:rgba(247,243,232,.82); padding:0; transition:.16s;}
+.foot__social .foot__soc:hover{background:var(--crimson); border-color:var(--crimson); color:#fff; transform:translateY(-2px);}
+.foot__social .foot__soc svg{width:18px; height:18px;}
 
 /* ============================================================
    cookie consent (GDPR / CCPA)
