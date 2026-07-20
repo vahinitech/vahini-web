@@ -135,7 +135,7 @@
       '<div class="actions">'+
         '<button class="navsearch" id="navSearch" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>'+
         '<a class="btn btn--ghost btn--sm" href="'+P("see-in-action.html")+'">See it in Action</a>'+
-        '<a class="btn btn--crimson btn--sm" href="'+P("reach.html")+'" data-nav>Partner with us</a>'+
+        '<a class="btn btn--crimson btn--sm" href="'+ANALYSER+'">Try the live analyser</a>'+
       '</div>'+
       '<button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>'+
     '</div></header>'+
@@ -167,7 +167,7 @@
       '<a class="d-link" href="'+P("investor.html")+'" data-nav>Investor Book</a>'+
       '<div class="drawer__actions">'+
         '<a class="btn btn--ghost" href="'+P("see-in-action.html")+'">See it in Action</a>'+
-        '<a class="btn btn--crimson" href="'+P("reach.html")+'" data-nav>Partner with us</a>'+
+        '<a class="btn btn--crimson" href="'+ANALYSER+'">Try the live analyser</a>'+
       '</div></div>';
   }
 
