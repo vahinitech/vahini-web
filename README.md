@@ -77,7 +77,37 @@ git add analyser && git commit -m "chore: bump analyser submodule to <new-tag>"
 
 ### Staging / production
 
-See `docs/DEPLOY-STAGE-PROD.md`. Host nginx vhost templates live in `deploy/`.
+See `docs/DEPLOY-STAGE-PROD.md` for the full picture (host nginx vhosts,
+wildcard cert setup, this server's Hestia Control Panel layout, rollback).
+For a routine content/code update once that's already set up, on the
+server:
+
+```bash
+cd ~/web-live
+git checkout main
+git pull origin main
+
+./deploy/release.sh stage
+# verify stag.vahinitech.com looks right (curl + a real browser pass),
+# THEN:
+./deploy/release.sh prod
+```
+
+Static site changes (anything under `site/`) are baked into the Docker
+image at build time (`Dockerfile`'s `COPY . .`) — **`git pull` alone does
+not update the running site.** `release.sh` always rebuilds the image and
+redeploys the container, so it's the only step that actually ships a
+change; a bare `git pull` with no `release.sh` run after it leaves the live
+site exactly as it was.
+
+This sequence is normally exactly two commands (stage, verify, prod) — no
+extra steps. The one exception: after the Compose project-name fix
+([#26](https://github.com/vahinitech/web-live/pull/26)), the very next prod
+release needed a one-time manual `docker stop && docker rm` of the
+old-labeled prod containers first, documented in
+`docs/DEPLOY-STAGE-PROD.md`'s Notes section — that was a one-off migration
+step for containers created before the fix existed, not a permanent part of
+this routine.
 
 ---
 
