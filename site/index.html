@@ -1086,9 +1086,9 @@
       var shouldFly = index < id - 1;
       var isFlying = card.classList.contains('fly');
       if (shouldFly && !isFlying){
-        timers.push(setTimeout(function(){ card.classList.add('fly'); card.setAttribute('aria-hidden','true'); }, index * 110));
+        timers.push(setTimeout(function(){ card.classList.add('fly'); card.setAttribute('aria-hidden','true'); }, index * 70));
       } else if (!shouldFly && isFlying){
-        timers.push(setTimeout(function(){ card.classList.remove('fly'); card.removeAttribute('aria-hidden'); }, (flying - index) * 110));
+        timers.push(setTimeout(function(){ card.classList.remove('fly'); card.removeAttribute('aria-hidden'); }, (flying - index) * 70));
       }
     });
   }
@@ -1120,7 +1120,7 @@
   function stopAuto(){ if (auto){ clearInterval(auto); auto = null; } }
   function startAuto(){
     if (reduce || hovered || !visible || auto) return;
-    auto = setInterval(function(){ setActive(current % tabs.length + 1); }, 3600);
+    auto = setInterval(function(){ setActive(current % tabs.length + 1); }, 2200);
   }
   if (root && !reduce){
     root.addEventListener('pointerenter', function(){ hovered = true; stopAuto(); });
