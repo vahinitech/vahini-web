@@ -224,9 +224,9 @@
 .tf-card:not(.is-top):not(.fly):nth-of-type(5):hover{transform:translate(120px,25px);}
 .tf-card:not(.is-top):not(.fly):nth-of-type(6):hover{transform:translate(150px,33px);}
 /* flying away: each page gets its own trajectory, like leafed paper.
-   1.5 s flight so the leafing reads as a page turn, not a blink. */
+   1 s flight so the leafing reads as a quick page turn. */
 .tf-card.fly{opacity:0; pointer-events:none; z-index:20;
-  transition:transform 1.5s cubic-bezier(.45,-.15,.7,.35), opacity .5s .8s;}
+  transition:transform 1s cubic-bezier(.45,-.15,.7,.35), opacity .4s .5s;}
 .tf-card.fly:nth-of-type(1){transform:translate(-115%,-42%) rotate(-31deg) scale(.62) skew(6deg,3deg);}
 .tf-card.fly:nth-of-type(2){transform:translate(108%,-52%) rotate(26deg) scale(.7) skew(-8deg,2deg);}
 .tf-card.fly:nth-of-type(3){transform:translate(-88%,-64%) rotate(-15deg) scale(.56) skew(4deg,-6deg);}

@@ -59,7 +59,7 @@
   /* lightweight client-side search index (the site is growing) */
   var ROOT = (BASE ? "static/" : "../analyser/static/");
   var SEARCH = [
-    { t:"The analyser", u:(BASE?"analyser.html":"../analyser/analyser.html"), d:"Upload a page, get your 20-factor scorecard", k:"analyse upload scan score report tool" },
+    { t:"The analyser", u:ANALYSER, d:"Upload a page, get your 20-factor scorecard", k:"analyse upload scan score report tool" },
     { t:"The 20 factors, explained", u:P("factors.html"), d:"Every factor in plain English", k:"factors score letter formation spacing slant legibility" },
     { t:"Why handwriting matters", u:P("why-handwriting.html"), d:"The research, news & viral videos", k:"brain research cursive memory science feed" },
     { t:"Blog", u:P("blog/index.html"), d:"Research notes & write-ups", k:"blog research posts arxiv reconstruction" },
@@ -114,7 +114,7 @@
             '<div class="mega__feature"><p class="mega__head">Start here</p>'+
               '<h4>Score your handwriting</h4>'+
               '<p>Upload one handwritten page and get a 20-factor breakdown across five Indic scripts. Live today.</p>'+
-              '<a class="btn btn--crimson btn--sm" href="'+P("see-in-action.html")+'">See it in Action</a>'+
+              '<a class="btn btn--crimson btn--sm" href="'+ANALYSER+'">Try the live analyser</a>'+
               '<a class="mega__feature-link" href="'+P("factors.html")+'" data-nav style="display:inline-block;margin-top:12px;color:rgba(247,243,232,.82);font-size:13px;font-weight:600;text-decoration:underline;text-underline-offset:3px;">What are the 20 factors? &rarr;</a>'+
               '<p class="mega__note">Patent No. 584433 · DPIIT-recognised</p>'+
             '</div>'+
