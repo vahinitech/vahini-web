@@ -14,6 +14,11 @@
 # Switch OCR engine by setting VAHINI_OCR_BACKEND on the analyser service
 # (paddle|trocr|surya|chandra|auto). The default image ships PaddleOCR only;
 # trocr/surya/chandra need their tier deps added to the analyser image.
+#
+# Explicit project name so this never collides with deploy/docker-compose.stage.yml
+# or deploy/docker-compose.prod.yml if ever invoked from the same directory --
+# see the "name:" comment in those two files for the incident this prevents.
+name: vahini-local
 services:
   analyser:
     container_name: vahini-analyser-local

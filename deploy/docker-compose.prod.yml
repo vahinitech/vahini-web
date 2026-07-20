@@ -1,5 +1,13 @@
 # SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
 # © 2026 Vahini Technologies. All rights reserved.
+#
+# Explicit project name: without this, Compose derives the project name from
+# the invoking directory (both this file and docker-compose.stage.yml live in
+# the same repo checkout), so stage and prod would share one default project
+# name and fight over the same "web"/"persist"/"analyser" service labels --
+# `up --remove-orphans` on one recreates (destroys) the other's containers.
+# One already did, on 2026-07-20 -- this is that incident's fix.
+name: vahini-prod
 services:
   analyser:
     container_name: vahini-analyser-prod
