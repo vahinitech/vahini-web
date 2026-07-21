@@ -14,6 +14,11 @@
 - **Build and test before every commit.** CI (`.github/workflows/ci.yml`:
   security tests + Playwright e2e) must be green before merge. Never merge
   a PR with failing or unchecked CI.
+- **Docs-only changes skip CI** — `ci.yml` has `paths-ignore: ['**/*.md',
+  'docs/**']`, so a PR touching only markdown never triggers the Docker/
+  Playwright pipeline. This is automatic; don't hand-skip CI on a mixed
+  PR that also touches code — the filter only fires when *every* changed
+  file is docs.
 - **Semantic HTML**: headings in order, `<figure>/<figcaption>` for
   diagrams, `aria-label` on informational SVGs, alt text on images.
 - **Verify visually.** For any UI/CSS/SVG change, render it (local server +
