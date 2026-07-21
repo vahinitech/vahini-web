@@ -10,6 +10,20 @@ inside Docker, plus a small persist API and the `analyser/` submodule
 users, real deploy target (`vahinitech.com`), no build step catching
 mistakes before they ship — review accordingly.
 
+## Provenance: Never Copied Code
+
+- **Flag any newly added JS/CSS that looks lifted from another site,
+  template, or Stack Overflow/gist** — unusual style vs. the rest of the
+  file, naming that doesn't match this codebase, or a suspiciously
+  complete block appearing all at once. Ask directly: "is this cited/a
+  real dependency, or copied?"
+- External libraries belong in as real, license-intact dependencies (npm
+  package, or a vendored file that keeps its original license header) —
+  not pasted source with the license stripped.
+- If literal reuse of someone else's non-package code is genuinely
+  needed, get the original author's consent first and record it in the
+  PR. Applies with extra force to AI-assisted changes.
+
 ## Security Critical Issues
 
 - No hardcoded secrets, tokens, or internal hostnames in JS/HTML.

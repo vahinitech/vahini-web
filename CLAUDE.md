@@ -5,6 +5,16 @@
 - **Verify before claiming.** Read the actual file/config before stating what
   it does. Never invent paths, APIs, stats, or benchmark numbers. If a fact
   can't be verified in this repo, say so instead of guessing.
+- **Never copy another project's code into this repo — reference it,
+  don't paste it.** If an external library/snippet is genuinely needed,
+  use it as a real dependency (npm package, documented CDN/vendor with
+  its license kept intact) or reimplement independently, not by pasting
+  source. If literal reuse of someone else's non-package code is truly
+  unavoidable, get the original author's explicit consent first and
+  record it in the commit/PR. Vahini is a research-adjacent org —
+  unattributed code reuse is an IP risk, and it applies with extra force
+  to AI-assisted changes, since a model can reproduce code it saw during
+  training without anyone noticing the provenance.
 - **No AI-isms** in site copy, commit messages, or docs: no "delve",
   "seamless", "robust solution", "leverage", "It's important to note",
   "in today's fast-paced world", or filler superlatives. Write like the
