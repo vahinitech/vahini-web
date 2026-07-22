@@ -508,190 +508,122 @@
 
 <main class="page-fade">
 
-  <!-- ============ HERO · The Intelligence Layer for Paper ============ -->
-  <section class="pf" data-screen-label="Hero">
-    <div class="wrap">
-      <div class="pf__grid">
+  <!-- ============ HERO · Looks like a pen. Thinks like AI. ============ -->
+  <section class="vh" id="vhHero" data-frame="0" data-screen-label="Hero">
+    <div class="vh__bg" aria-hidden="true">
+      <i class="vh__glow"></i>
+      <i class="vh__grid"></i>
+      <span class="vh__p" style="--x:8%;--y:22%;--d:9s"></span><span class="vh__p" style="--x:16%;--y:74%;--d:12s"></span>
+      <span class="vh__p" style="--x:38%;--y:12%;--d:10s"></span><span class="vh__p" style="--x:56%;--y:82%;--d:14s"></span>
+      <span class="vh__p" style="--x:72%;--y:30%;--d:11s"></span><span class="vh__p" style="--x:88%;--y:64%;--d:13s"></span>
+      <span class="vh__p" style="--x:64%;--y:8%;--d:15s"></span><span class="vh__p" style="--x:92%;--y:18%;--d:9.5s"></span>
+    </div>
+    <div class="wrap vh__grid2">
 
-        <!-- LEFT: copy -->
-        <div class="reveal">
-          <p class="pf__eye">Deep-Tech · Granted Indian Patent No. 584433 · Made in India</p>
-          <h1 class="pf__h1">This ordinary ballpoint pen? <em>It&rsquo;s a smart device.</em></h1>
-          <div class="pf__rule"></div>
-          <p class="pf__ticker" aria-hidden="true">The pen is reading your&nbsp;<span id="imuWord" class="pf__ticker-word">MOTION</span></p>
-          <p class="pf__sub">Surprised? It&rsquo;s real: research-proven, with a granted Indian patent. One small <strong>sensor circuit slides inside a normal ballpoint</strong> and the pen you already write with turns digital. It still writes ink on plain paper — while it reads pressure, pen angle, speed and every stroke, and your <strong>notes arrive in the cloud, analysed</strong>.</p>
-          <div class="pf-duo" role="list" aria-label="An ordinary ballpoint becomes a smart device">
-            <a class="pf-duo__card" role="listitem" href="product.html" data-nav>
-              <span class="pf-duo__tag">Starts as</span>
-              <b>An ordinary ballpoint</b>
-              <span>The pen you already own. Real ink, plain paper, nothing new to learn.</span>
-            </a>
-            <span class="pf-duo__loop" aria-hidden="true" title="One sensor insert turns the pen digital"><i>+ sensor</i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M9 3v4M15 3v4M9 17v4M15 17v4M3 9h4M3 15h4M17 9h4M17 15h4"/></svg><i>insert</i></span>
-            <a class="pf-duo__card" role="listitem" href="product.html" data-nav>
-              <span class="pf-duo__tag">Becomes</span>
-              <b>A smart device</b>
-              <span>Feels every stroke — pressure, angle, speed — and sends your notes to the cloud.</span>
-            </a>
-          </div>
-          <div class="pf__cta">
-            <a class="pf-btn pf-btn--primary" href="../analyser/analyser.html">Try the Live Analyser
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
-            <a class="pf-btn pf-btn--ghost" href="see-in-action.html" data-nav>
-              <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
-              See it Live in Action
-            </a>
-          </div>
-          <p class="pf__why"><b>Vahini is a bridge:</b> the traditional habit a young brain needs, connected to the digital world it lives in. Handwriting trains hand&ndash;eye coordination, direction &mdash; left and right, push and pull &mdash; and memory; screens skip that training. The pen keeps the habit, and adds what paper never had: notes you can <b>search in seconds, revise faster, and never lose</b> &mdash; the page stays in your notebook, its copy lives in the cloud. <a href="why-handwriting.html" data-nav>Why handwriting matters &rarr;</a></p>
+      <!-- LEFT: the value proposition -->
+      <div class="vh__copy reveal">
+        <p class="vh__eye"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg>Patent No. 584433 &middot; Made in India &middot; AI Powered</p>
+        <h1 class="vh__h1">Looks like a pen.<br><em>Thinks like AI.</em></h1>
+        <p class="vh__sub">Write naturally on paper. Every stroke becomes a searchable digital note &mdash; analysed, synced, never lost.</p>
+        <ul class="vh__ticks" role="list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Real ink</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Any paper</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>AI powered</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>No camera</li>
+        </ul>
+        <div class="vh__cta">
+          <a class="vh-btn vh-btn--primary" href="see-in-action.html" data-nav>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Watch Demo
+          </a>
+          <a class="vh-btn vh-btn--ghost" href="../analyser/analyser.html">Try Live Analysis
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
         </div>
-
-        <!-- RIGHT: the assembly stage, ordinary pen → open → insert sensor → close → digital -->
-        <div class="pf-stage reveal" id="pfStage" data-phase="0" data-d="1" aria-label="How an ordinary ballpoint becomes the Vahini digital pen: open the barrel, slide the sensor board in beside the refill, close it, and write: your notes stream to the cloud">
-          <div class="pf-stage__head">
-            <div class="pf-steps" aria-hidden="true">
-              <span class="pf-step"><i class="pf-step__bar"></i><em class="pf-step__lab">Pen</em></span>
-              <span class="pf-step"><i class="pf-step__bar"></i><em class="pf-step__lab">Open</em></span>
-              <span class="pf-step"><i class="pf-step__bar"></i><em class="pf-step__lab">Insert</em></span>
-              <span class="pf-step"><i class="pf-step__bar"></i><em class="pf-step__lab">Close</em></span>
-              <span class="pf-step"><i class="pf-step__bar"></i><em class="pf-step__lab">Digital</em></span>
-            </div>
-            <span class="pf-steps__loop" aria-hidden="true" title="The sequence repeats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v4h-4"/></svg></span>
-            <span class="pf-stage__live"><i></i>Live</span>
-          </div>
-
-          <div class="pf-stage__screen">
-
-            <!-- 0 · THE PEN (an ordinary ballpoint, assembled) -->
-            <div class="pf-phase pf-phase--pen">
-              <svg class="asm" viewBox="0 0 460 190" role="img" aria-label="An ordinary ballpoint pen">
-                <g class="asm-all">
-                  <path d="M38 95 L86 80 L86 110 Z" fill="#2E353E"/>
-                  <rect x="84" y="78" width="12" height="34" rx="3" fill="#464F5A"/>
-                  <rect x="96" y="76" width="118" height="38" rx="11" fill="#2A3038"/>
-                  <rect x="218" y="76" width="112" height="38" rx="11" fill="#2A3038"/>
-                  <rect x="330" y="80" width="24" height="30" rx="8" fill="#464F5A"/>
-                  <rect x="300" y="64" width="44" height="9" rx="4.5" fill="#3A424C"/>
-                  <rect x="104" y="83" width="100" height="5" rx="2.5" fill="#525B66" opacity=".5"/>
-                </g>
-              </svg>
-              <span class="pf-phase__lab"><b>01 · The pen</b> An ordinary ballpoint. Real ink, plain paper, nothing to learn.</span>
-            </div>
-
-            <!-- 1 · OPEN (barrel unscrews, refill revealed) -->
-            <div class="pf-phase pf-phase--open">
-              <svg class="asm" viewBox="0 0 460 190" role="img" aria-label="The barrel opens, showing the refill and space beside it">
-                <g class="asm-front">
-                  <path d="M18 95 L66 80 L66 110 Z" fill="#2E353E"/>
-                  <rect x="64" y="78" width="12" height="34" rx="3" fill="#464F5A"/>
-                  <rect x="76" y="76" width="118" height="38" rx="11" fill="#2A3038"/>
-                </g>
-                <rect class="asm-refill" x="200" y="91" width="120" height="8" rx="4" fill="#C9CFD7"/>
-                <rect class="asm-refill" x="196" y="92.5" width="10" height="5" rx="2.5" fill="#4A88C7"/>
-                <g class="asm-rear">
-                  <rect x="336" y="76" width="86" height="38" rx="11" fill="#2A3038"/>
-                  <rect x="422" y="80" width="22" height="30" rx="8" fill="#464F5A"/>
-                </g>
-                <g class="asm-hint" stroke="var(--accent-deep)" stroke-width="2" stroke-linecap="round" fill="none" opacity=".8">
-                  <path d="M210 52 h100"/><path d="M218 46 l-8 6 8 6"/><path d="M302 46 l8 6 -8 6"/>
-                </g>
-                <text x="230" y="146" font-size="12" fill="var(--muted)" font-family="inherit">room beside the refill</text>
-              </svg>
-              <span class="pf-phase__lab"><b>02 · Open</b> Unscrew the barrel. Beside the refill, there&rsquo;s room.</span>
-            </div>
-
-            <!-- 2 · INSERT (the sensor board slides in beside the refill) -->
-            <div class="pf-phase pf-phase--insert">
-              <svg class="asm" viewBox="0 0 460 190" role="img" aria-label="A small sensor circuit board slides in beside the refill">
-                <g class="asm-front">
-                  <path d="M18 105 L66 90 L66 120 Z" fill="#2E353E"/>
-                  <rect x="64" y="88" width="12" height="34" rx="3" fill="#464F5A"/>
-                  <rect x="76" y="86" width="118" height="38" rx="11" fill="#2A3038"/>
-                </g>
-                <rect x="200" y="106" width="120" height="8" rx="4" fill="#C9CFD7"/>
-                <g class="asm-rear">
-                  <rect x="336" y="86" width="86" height="38" rx="11" fill="#2A3038"/>
-                  <rect x="422" y="90" width="22" height="30" rx="8" fill="#464F5A"/>
-                </g>
-                <g class="asm-pcb">
-                  <rect x="200" y="88" width="120" height="13" rx="3.5" fill="#1F7A4D"/>
-                  <rect x="212" y="90.5" width="16" height="8" rx="1.5" fill="#12271C"/>
-                  <rect x="240" y="90.5" width="16" height="8" rx="1.5" fill="#12271C"/>
-                  <rect x="270" y="90.5" width="22" height="8" rx="4" fill="#C8B36A"/>
-                  <circle cx="306" cy="94.5" r="4" fill="#4FD1DA"/>
-                </g>
-                <g class="asm-pcb-labels" font-size="10.5" fill="var(--muted)" font-family="inherit">
-                  <text x="176" y="44">2× motion sensors</text>
-                  <text x="284" y="44">battery · Bluetooth</text>
-                  <path d="M215 48 l5 26 M300 48 l4 30" stroke="var(--rule-2)" stroke-width="1" fill="none"/>
-                </g>
-              </svg>
-              <span class="pf-phase__lab"><b>03 · Insert</b> One sensor board slides in: two motion sensors, battery, Bluetooth.</span>
-            </div>
-
-            <!-- 3 · CLOSE (halves rejoin, the pen looks unchanged, LED breathes) -->
-            <div class="pf-phase pf-phase--close">
-              <svg class="asm" viewBox="0 0 460 190" role="img" aria-label="The pen closes again, looking unchanged, with a small light breathing">
-                <g class="asm-join-front">
-                  <path d="M38 95 L86 80 L86 110 Z" fill="#2E353E"/>
-                  <rect x="84" y="78" width="12" height="34" rx="3" fill="#464F5A"/>
-                  <rect x="96" y="76" width="118" height="38" rx="11" fill="#2A3038"/>
-                </g>
-                <g class="asm-join-rear">
-                  <rect x="218" y="76" width="112" height="38" rx="11" fill="#2A3038"/>
-                  <rect x="330" y="80" width="24" height="30" rx="8" fill="#464F5A"/>
-                  <rect x="300" y="64" width="44" height="9" rx="4.5" fill="#3A424C"/>
-                </g>
-                <circle class="asm-led" cx="120" cy="95" r="4.5" fill="#4FD1DA"/>
-              </svg>
-              <span class="pf-phase__lab"><b>04 · Close</b> Screw it back. Same pen, same grip, same ink &mdash; now digital.</span>
-            </div>
-
-            <!-- 4 · DIGITAL (it writes; notes stream to the cloud) -->
-            <div class="pf-phase pf-phase--digital">
-              <svg class="asm" viewBox="0 0 460 190" role="img" aria-label="The digital pen writes and the notes stream to the cloud">
-                <g transform="rotate(-24 150 120)">
-                  <path d="M58 120 L106 105 L106 135 Z" fill="#2E353E"/>
-                  <rect x="104" y="103" width="12" height="34" rx="3" fill="#464F5A"/>
-                  <rect x="116" y="101" width="200" height="38" rx="11" fill="#2A3038"/>
-                  <circle class="asm-led" cx="140" cy="120" r="4.5" fill="#4FD1DA"/>
-                </g>
-                <path class="asm-ink" d="M64 150 q22 -16 44 0 t44 0 t44 0 t44 0" stroke="var(--accent-deep)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                <g class="asm-cloud" fill="none" stroke="var(--accent-deep)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M376 66 a14 14 0 0 1 27 -5 a11 11 0 0 1 9 20 h-40 a10 10 0 0 1 4 -15z" fill="rgba(0,173,181,.08)"/>
-                </g>
-                <g class="asm-dots" fill="var(--accent)">
-                  <circle class="asm-dot asm-dot--1" cx="260" cy="112" r="3.4"/>
-                  <circle class="asm-dot asm-dot--2" cx="260" cy="112" r="3.4"/>
-                  <circle class="asm-dot asm-dot--3" cx="260" cy="112" r="3.4"/>
-                </g>
-                <text x="336" y="104" font-size="11" fill="var(--muted)" font-family="inherit">your notes, analysed</text>
-              </svg>
-              <span class="pf-phase__lab"><b>05 · Digital</b> It writes like always &mdash; and your notes stream to the cloud: searchable, analysed, never lost.</span>
-            </div>
-
-          </div>
-        </div>
-
+        <ul class="vh__badges" role="list">
+          <li>Made in India</li><li>Granted Patent</li><li>Consent-First</li><li>Works Offline</li><li>Cloud Sync</li>
+        </ul>
       </div>
-      <div class="pf__metrics reveal" data-d="2">
-        <div class="pf-metgroup">
-          <span class="pf-metgroup__k">Hardware</span>
-          <div class="pf-met"><span class="pf-met__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h3l3 8 4-16 3 8h5"/></svg></span><div><b>208 Hz</b><span>Motion Capture</span></div></div>
-          <div class="pf-met"><span class="pf-met__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7M21 4v4h-4"/></svg></span><div><b>16-Axis</b><span>Motion Sensing</span></div></div>
-          <div class="pf-met"><span class="pf-met__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg></span><div><b>Any Paper</b><span>Works anywhere</span></div></div>
+
+      <!-- RIGHT: the pen, the halo, the story -->
+      <div class="vh__stage reveal" data-d="1" aria-label="The Vahini smart pen writing on a notebook: strokes are sensed, captured, digitised, analysed and synced to the cloud">
+        <div class="vh__halo" aria-hidden="true"><i></i><i></i><i></i></div>
+        <svg class="vh__scene" viewBox="0 0 560 470" aria-hidden="true">
+          <!-- notebook -->
+          <g class="vh-book">
+            <rect x="120" y="300" width="360" height="150" rx="12" fill="#F4F1EA" transform="skewX(-8)"/>
+            <line x1="150" y1="330" x2="430" y2="330" stroke="#D9D4C9" stroke-width="1.4" transform="skewX(-8)"/>
+            <line x1="150" y1="358" x2="430" y2="358" stroke="#D9D4C9" stroke-width="1.4" transform="skewX(-8)"/>
+            <line x1="150" y1="386" x2="430" y2="386" stroke="#D9D4C9" stroke-width="1.4" transform="skewX(-8)"/>
+            <line x1="150" y1="414" x2="430" y2="414" stroke="#D9D4C9" stroke-width="1.4" transform="skewX(-8)"/>
+            <path class="vh-ink" d="M160 352 q14 -14 28 0 t28 0 q10 -18 22 -2 t26 2 q12 -12 24 0" transform="skewX(-8)"
+              fill="none" stroke="#2456A6" stroke-width="2.6" stroke-linecap="round"/>
+            <g class="vh-capdots" fill="#60A5FA">
+              <circle cx="172" cy="348" r="2.6" transform="skewX(-8)"/><circle cx="206" cy="350" r="2.6" transform="skewX(-8)"/>
+              <circle cx="238" cy="344" r="2.6" transform="skewX(-8)"/><circle cx="272" cy="350" r="2.6" transform="skewX(-8)"/>
+            </g>
+          </g>
+          <!-- pen, tilted ~25° -->
+          <g class="vh-pen" transform="rotate(-25 300 220)">
+            <rect x="196" y="196" width="236" height="46" rx="20" fill="url(#vhBody)"/>
+            <path d="M180 219 L198 204 L198 234 Z" fill="#12151A"/>
+            <rect x="188" y="209" width="12" height="20" rx="4" fill="#3A424C"/>
+            <rect x="404" y="188" width="52" height="11" rx="5.5" fill="#20262E"/>
+            <rect x="206" y="204" width="150" height="6" rx="3" fill="#525B66" opacity=".4"/>
+            <circle class="vh-led" cx="246" cy="219" r="5" fill="#60A5FA"/>
+            <circle class="vh-ledring" cx="246" cy="219" r="5" fill="none" stroke="#60A5FA" stroke-width="2"/>
+            <text x="330" y="224" font-size="13" font-weight="700" letter-spacing="2" fill="#7C8894" text-anchor="middle">VAHINI</text>
+          </g>
+          <!-- capture pulse traveling the pen -->
+          <circle class="vh-pulse" r="4" fill="#3B82F6"/>
+          <!-- cloud -->
+          <g class="vh-cloud" fill="none" stroke="#60A5FA" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M448 96 a17 17 0 0 1 33 -6 a13 13 0 0 1 11 24 h-49 a12 12 0 0 1 5 -18z" fill="rgba(59,130,246,.10)"/>
+          </g>
+          <g class="vh-updots" fill="#3B82F6">
+            <circle class="vh-updot vh-updot--1" cx="380" cy="220" r="3.6"/>
+            <circle class="vh-updot vh-updot--2" cx="380" cy="220" r="3.6"/>
+            <circle class="vh-updot vh-updot--3" cx="380" cy="220" r="3.6"/>
+          </g>
+          <defs>
+            <linearGradient id="vhBody" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#343C46"/><stop offset=".45" stop-color="#1B2027"/><stop offset="1" stop-color="#0F1319"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <!-- holographic UI: digital note -->
+        <div class="vh-holo vh-holo--note" aria-hidden="true">
+          <b>Digital note</b>
+          <span class="vh-holo__line" style="width:86%"></span>
+          <span class="vh-holo__line" style="width:64%"></span>
+          <span class="vh-holo__line" style="width:74%"></span>
+          <div class="vh-holo__tools">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.4-4.4"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 11l4 4 4-4"/><path d="M4 21h16"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 0 0 .4-9A6 6 0 0 0 6.2 8.6 4.2 4.2 0 0 0 7 17z"/></svg>
+          </div>
         </div>
-        <div class="pf-metgroup">
-          <span class="pf-metgroup__k">Platform</span>
-          <div class="pf-met"><span class="pf-met__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span><div><b>Live Analyser</b><span>Handwriting Intelligence</span></div></div>
-          <div class="pf-met"><span class="pf-met__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/></svg></span><div><b>Motion Dataset</b><span>Growing every day</span></div></div>
-          <div class="pf-met"><span class="pf-met__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18z"/></svg></span><div><b>5</b><span>Indic Scripts</span></div></div>
+        <!-- holographic UI: live analysis -->
+        <div class="vh-holo vh-holo--ai" aria-hidden="true">
+          <div class="vh-gauge"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="6"/><circle class="vh-gauge__arc" cx="32" cy="32" r="26" fill="none" stroke="#3B82F6" stroke-width="6" stroke-linecap="round" stroke-dasharray="163" stroke-dashoffset="42" transform="rotate(-90 32 32)"/></svg><b>87</b></div>
+          <div class="vh-bars">
+            <div class="vh-bar"><span>Pressure</span><i><b style="--w:74%"></b></i></div>
+            <div class="vh-bar"><span>Speed</span><i><b style="--w:82%"></b></i></div>
+            <div class="vh-bar"><span>Tilt</span><i><b style="--w:64%"></b></i></div>
+          </div>
         </div>
-        <div class="pf-metgroup">
-          <span class="pf-metgroup__k">Trust</span>
-          <div class="pf-met"><span class="pf-met__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg></span><div><b>Indian Patent</b><span>No. 584433</span></div></div>
-          <div class="pf-met"><span class="pf-met__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 15l2 2 4-4"/></svg></span><div><b>Consent-First</b><span>Every page opt-in</span></div></div>
-        </div>
+        <!-- the 6-beat story -->
+        <ol class="vh__frames" aria-hidden="true">
+          <li>Write</li><li>Sense</li><li>Capture</li><li>Digitise</li><li>Analyse</li><li>Sync</li>
+        </ol>
       </div>
+    </div>
+
+    <!-- REAL numbers only: measured hardware spec + granted IP -->
+    <div class="wrap vh__stats reveal" data-d="2" role="list">
+      <div role="listitem"><b>208 Hz</b><span>Motion capture</span></div>
+      <div role="listitem"><b>16-axis</b><span>Dual-IMU sensing</span></div>
+      <div role="listitem"><b>5 scripts</b><span>Indic + English analysis</span></div>
+      <div role="listitem"><b>No. 584433</b><span>Granted Indian patent</span></div>
     </div>
   </section>
 
@@ -1256,34 +1188,33 @@
 
 })();
 </script>
+
 <script>
-/* hero flywheel, cycle phases write→sense→grow→learn→apply→(repeat) */
+/* vh hero: 6-beat story loop, write → sense → capture → digitise → analyse → sync.
+   2s per beat (12s full loop), paused off-screen, static composite frame under
+   prefers-reduced-motion, restarted cleanly after bfcache restores. */
 (function(){
-  var stage=document.getElementById('pfStage'); if(!stage) return;
-  var PHASES=5, DUR=[3200,3000,3400,2900,3200], i=0, t=null, visible=true;
+  var hero=document.getElementById('vhHero'); if(!hero) return;
+  var FRAMES=6, BEAT=2000, i=0, t=null, visible=true;
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  /* static fallback shows the dataset (Grow) phase; the pen already leads the left column */
-  if(reduce){ stage.setAttribute('data-phase','3'); return; }
+  if(reduce){ hero.setAttribute('data-frame','4'); return; }
   function stop(){ if(t){ clearTimeout(t); t=null; } }
   function tick(){
     stop();
     t=setTimeout(function(){
-      i=(i+1)%PHASES;
-      stage.setAttribute('data-phase', i);
+      i=(i+1)%FRAMES;
+      hero.setAttribute('data-frame', i);
       tick();
-    }, DUR[i]);
+    }, BEAT);
   }
-  function restart(){ i=0; stage.setAttribute('data-phase','0'); stop(); if(visible) tick(); }
+  function restart(){ i=0; hero.setAttribute('data-frame','0'); stop(); if(visible) tick(); }
   restart();
   if('IntersectionObserver' in window){
     new IntersectionObserver(function(es){
       visible = es[0].isIntersecting;
       if(visible){ if(!t) tick(); } else { stop(); }
-    },{threshold:0.05}).observe(stage);
+    },{threshold:0.05}).observe(hero);
   }
-  /* bfcache restore (back-navigation) re-shows the page without re-running
-     scripts, restart the sequence cleanly from phase 0 so it never resumes
-     mid-cycle on a random phase. */
   window.addEventListener('pageshow', function(e){ if(e.persisted) restart(); });
   document.addEventListener('visibilitychange', function(){
     if(document.hidden){ stop(); } else if(visible && !t){ tick(); }
