@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
 # © 2026 Vahini Technologies. All rights reserved.
-# Vahini CI — runs on every commit (push + PR).
+# Vahini CI — runs on every commit (push + PR) that touches a non-docs file;
+# see the paths-ignore note below.
 #  - security       : pure-Node unit tests for the persist API's abuse limits
 #                     and the OCR-input guard (rate limits, quotas, CORS,
 #                     homoglyph/SSRF). No Docker/browser -- runs in seconds,
@@ -19,8 +20,20 @@
 name: CI
 
 on:
+  # Docs-only changes skip this whole pipeline -- paths-ignore matches any
+  # '**/*.md' file anywhere in the repo (README, CLAUDE.md, docs/**, and any
+  # other markdown, e.g. under .github/instructions/) plus docs/**; nothing
+  # here builds or tests markdown. A push/PR that touches even one non-doc
+  # file still runs everything; paths-ignore only fires when EVERY changed
+  # file matches.
   push:
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
   pull_request:
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
 
 concurrency:
   group: ci-${{ github.ref }}
