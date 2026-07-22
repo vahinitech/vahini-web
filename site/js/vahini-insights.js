@@ -163,6 +163,9 @@
       "box-shadow:0 10px 30px rgba(0,0,0,.28);cursor:pointer;transition:transform .15s,background .15s;color-scheme:light;}" +
       ".vfb-launch:hover{background:#048A91;transform:translateY(-2px);}" +
       ".vfb-launch svg{width:17px;height:17px;}" +
+      /* never print the floating launcher/overlay — it printed on top of the
+         analyser report (user-reported, 2026-07) */
+      "@media print{.vfb-launch,.vfb-ov{display:none !important;}}" +
       ".vfb-ov{position:fixed;inset:0;z-index:9001;background:rgba(20,23,28,.55);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:18px;color-scheme:light;}" +
       ".vfb-ov.on{display:flex;}" +
       ".vfb{width:min(460px,96vw);max-height:92vh;overflow:auto;background:#fff;border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.45);padding:26px 26px 22px;font-family:'Hanken Grotesk',system-ui,sans-serif;color:#222831;}" +

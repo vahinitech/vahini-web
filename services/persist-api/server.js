@@ -421,6 +421,38 @@ const server = http.createServer(async (req, res) => {
 server.headersTimeout = 15 * 1000;
 server.requestTimeout = 120 * 1000;
 
+/* ---- Disk sweeper (lib/sweeper.js) --------------------------------------
+   The persist volume only ever grows (uploads + reports + feedback, no
+   deletes). Nightly, files older than SWEEP_COMPRESS_DAYS are gzipped in
+   place (JSON/HTML shrink 80-90%; incompressible JPEGs are skipped and
+   remembered). Deletion is opt-in only: SWEEP_EVICT_DAYS drops files older
+   than the horizon, SWEEP_CAP_MB sweeps oldest-first back under the cap.
+   SWEEP_ENABLE=0 turns the whole thing off. */
+const SWEEP_ENABLE = process.env.SWEEP_ENABLE !== "0";
+const SWEEP_COMPRESS_DAYS = Number(process.env.SWEEP_COMPRESS_DAYS || 14);
+const SWEEP_EVICT_DAYS = Number(process.env.SWEEP_EVICT_DAYS || 0);
+const SWEEP_CAP_MB = Number(process.env.SWEEP_CAP_MB || 0);
+const SWEEP_INTERVAL_H = Number(process.env.SWEEP_INTERVAL_H || 24);
+const { sweep } = require("./lib/sweeper");
+
+async function runSweep() {
+  try {
+    const stats = await sweep({
+      dirs: [DIR_UPLOADS, DIR_REPORTS, DIR_FEEDBACK],
+      compressDays: SWEEP_COMPRESS_DAYS,
+      evictDays: SWEEP_EVICT_DAYS,
+      capMB: SWEEP_CAP_MB,
+    });
+    console.log(
+      `sweeper: compressed=${stats.compressed} evicted=${stats.evicted} ` +
+        `saved=${(stats.savedBytes / 1024 / 1024).toFixed(1)}MB errors=${stats.errors.length}`,
+    );
+    for (const e of stats.errors.slice(0, 5)) console.warn(`sweeper: ${e}`);
+  } catch (err) {
+    console.error("sweeper failed", err);
+  }
+}
+
 ensureDirs()
   .then(() => {
     server.listen(PORT, "0.0.0.0", () => {
@@ -428,6 +460,11 @@ ensureDirs()
       console.log(`uploads=${DIR_UPLOADS}`);
       console.log(`reports=${DIR_REPORTS}`);
       console.log(`feedback=${DIR_FEEDBACK}`);
+      if (SWEEP_ENABLE) {
+        runSweep(); // once at boot, then daily
+        const t = setInterval(runSweep, SWEEP_INTERVAL_H * 60 * 60 * 1000);
+        t.unref();
+      }
     });
   })
   .catch((err) => {
