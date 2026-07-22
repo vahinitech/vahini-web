@@ -408,3 +408,11 @@
   /* the loop closes: the repeat arrow spins while Apply plays, pointing back to Write */
   .pf-stage[data-phase="4"] .pf-steps__loop svg{animation:pfSpin 1.6s linear infinite;}
 }
+
+/* hero mission line: why handwriting, under the CTAs (smart-pen concept) */
+.pf__why{margin-top:20px; max-width:560px; font-size:13.5px; line-height:1.62; color:var(--muted);
+  border-left:3px solid var(--accent); padding:10px 2px 10px 15px; border-radius:0 10px 10px 0;
+  background:linear-gradient(90deg, rgba(0,173,181,.07), transparent 72%);}
+.pf__why b{color:var(--ink);}
+.pf__why a{color:var(--accent-deep); font-weight:700; text-decoration:none; white-space:nowrap;}
+.pf__why a:hover{text-decoration:underline;}
