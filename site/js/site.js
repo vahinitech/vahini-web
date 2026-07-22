@@ -258,20 +258,32 @@
       add('<meta name="twitter:description" content="'+exc+'">');
       add('<meta name="author" content="'+(post.author||"Vahini Technologies")+'">');
     }
-    /* Analytics is GATED behind consent (GDPR/CCPA). Google Consent Mode v2 is
-       set to denied by default; the real GTM/GA tags load only after the user
-       opts in via the cookie banner. See wireConsent(). */
+    /* Analytics uses Google Consent Mode v2, ADVANCED mode (GDPR/CCPA): the
+       GTM/GA4 libraries load on every visit, but consent defaults to denied,
+       so they run cookieless -- no identifiers, no ad signals -- until the
+       visitor opts in via the cookie banner. Loading them unconditionally
+       (vs. withholding the script entirely) lets Google send anonymous
+       consent-mode pings for visitors who never opt in, which GA4 uses to
+       model that traffic instead of reporting it as zero. See wireConsent()
+       and loadAnalytics(), which only flips analytics_storage to granted. */
     window.dataLayer = window.dataLayer || [];
     window.gtag = function(){ dataLayer.push(arguments); };
     gtag('consent', 'default', {
       ad_storage:'denied', analytics_storage:'denied',
       ad_user_data:'denied', ad_personalization:'denied'
     });
+    /* Google Tag Manager */
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-52M7T5DJ');
+    /* Google Analytics 4 */
+    var ga=document.createElement('script'); ga.async=true; ga.src='https://www.googletagmanager.com/gtag/js?id=G-8FV4KRMPX8'; document.head.appendChild(ga);
+    gtag('js', new Date()); gtag('config','G-8FV4KRMPX8', { anonymize_ip:true });
   }
 
   /* ---- cookie consent (GDPR / CCPA) ---------------------------------------
-     Non-essential scripts (GTM, GA4) stay blocked until explicit consent.
-     The choice is stored, and every decision is appended to an audit log. */
+     GTM/GA4 load on every page (see injectHead(), Advanced Consent Mode) but
+     stay cookieless/denied until explicit consent flips analytics_storage to
+     granted. The choice is stored, and every decision is appended to an
+     audit log. */
   var CONSENT_KEY = "vahini_consent";
   var CONSENT_LOG = "vahini_consent_log";
   var CONSENT_VERSION = 1;
@@ -293,13 +305,10 @@
     logConsent(decision, analytics);
   }
   function loadAnalytics(){
+    /* GTM/GA4 are already loaded (see injectHead()) -- opting in just flips
+       Consent Mode from denied to granted, unlocking cookies/identifiers. */
     if (analyticsLoaded) return; analyticsLoaded = true;
     if (window.gtag) gtag('consent','update',{ analytics_storage:'granted' });
-    /* Google Tag Manager */
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-52M7T5DJ');
-    /* Google Analytics 4 */
-    var ga=document.createElement('script'); ga.async=true; ga.src='https://www.googletagmanager.com/gtag/js?id=G-8FV4KRMPX8'; document.head.appendChild(ga);
-    gtag('js', new Date()); gtag('config','G-8FV4KRMPX8', { anonymize_ip:true });
   }
 
   function wireConsent(){
