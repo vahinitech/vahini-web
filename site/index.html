@@ -643,7 +643,10 @@
     </div>
   </section>
 
-  <!-- ============ THE BRIDGE · scrollytelling: one letter, the whole loop ============ -->
+  <!-- ============ THE BRIDGE · scrollytelling: one letter, the whole loop ============
+       Temporarily disabled (kept for later): wrapped in an inert <template>
+       so it does not render; remove the wrapper to bring it back. -->
+  <template hidden data-disabled="cognition">
   <section class="cal" id="cognition" data-screen-label="The bridge">
     <div class="cal__track">
       <div class="cal__sticky">
@@ -746,11 +749,9 @@
     </div>
     </div>
   </section>
+  </template>
 
-  <!-- ============ APPLICATIONS POWERED BY ONE SIGNAL ============
-       Temporarily disabled (kept for later): wrapped in an inert <template>
-       so it does not render; remove the wrapper to bring it back. -->
-  <template hidden data-disabled="applications">
+  <!-- ============ APPLICATIONS POWERED BY ONE SIGNAL ============ -->
   <section class="sec pf" id="applications" data-screen-label="Applications" style="padding:64px 0 78px;">
     <div class="wrap">
       <!-- tabfly, split layout: the heading + the six-product index sit in
@@ -830,7 +831,6 @@
       </div>
     </div>
   </section>
-  </template>
 
   <!-- ============ MARKET STACK (scalability) ============ -->
   <section class="sec" id="markets" data-screen-label="Markets" hidden>
@@ -1208,8 +1208,16 @@
     auto = setInterval(function(){ setActive(current % tabs.length + 1); }, 2200);
   }
   if (root && !reduce){
-    root.addEventListener('pointerenter', function(){ hovered = true; stopAuto(); });
-    root.addEventListener('pointerleave', function(){ hovered = false; startAuto(); });
+    /* pointerenter also fires when the section scrolls under a cursor that
+       never actually moved (desktop only -- touch has no passive hover), so
+       a scroll-by alone would pause the loop forever with no pointerleave
+       to undo it. Only pause once a real mousemove happens inside. */
+    function onRealHover(){ hovered = true; stopAuto(); }
+    root.addEventListener('pointerenter', function(e){
+      if (e.pointerType === 'mouse') root.addEventListener('mousemove', onRealHover, { once:true });
+      else onRealHover();
+    });
+    root.addEventListener('pointerleave', function(){ root.removeEventListener('mousemove', onRealHover); hovered = false; startAuto(); });
     root.addEventListener('focusin',  function(){ hovered = true; stopAuto(); });
     root.addEventListener('focusout', function(){
       if (!root.contains(document.activeElement)){ hovered = false; startAuto(); }
