@@ -52,7 +52,7 @@
 .pf-btn svg{width:18px; height:18px;}
 .pf-btn--primary{background:var(--accent-deep); color:#fff; box-shadow:0 8px 24px rgba(4,138,145,.28);}
 .pf-btn--primary:hover{background:var(--accent-ink); transform:translateY(-2px);}
-.pf-btn--ghost{background:var(--surface); color:var(--ink); border:1px solid var(--rule-2);}
+.pf-btn--ghost{background:var(--surface); color:var(--ink); border:1px solid var(--rule);}
 .pf-btn--ghost:hover{border-color:var(--accent); color:var(--accent-deep); transform:translateY(-2px);}
 .pf-btn--ghost .play{display:grid; place-items:center; width:26px; height:26px; border-radius:50%;
   background:var(--accent-soft); color:var(--accent-deep);}
@@ -121,7 +121,7 @@
 /* phase 0 — write */
 .pf-paper{position:relative; flex:1; margin-bottom:34px; border-radius:14px; background:var(--surface);
   border:1px solid var(--rule);
-  background-image:radial-gradient(var(--rule-2) 1.1px, transparent 1.1px); background-size:15px 15px;
+  background-image:radial-gradient(var(--rule) 1.1px, transparent 1.1px); background-size:15px 15px;
   background-position:8px 8px; overflow:hidden;}
 .pf-hello{position:absolute; left:30px; right:24px; top:50%; transform:translateY(-42%) rotate(-4deg);
   font-family:"Caveat",cursive; font-weight:700; font-size:58px; color:var(--ink); line-height:1; white-space:nowrap;}
@@ -286,7 +286,7 @@
 .pf-acard{display:flex; flex-direction:column; background:var(--surface); border:1px solid var(--rule);
   border-radius:16px; padding:22px 20px; text-decoration:none; box-shadow:var(--shadow-1);
   transition:transform .24s var(--ease), box-shadow .24s var(--ease), border-color .24s;}
-.pf-acard:hover{transform:translateY(-5px); box-shadow:var(--shadow-2); border-color:var(--rule-2);}
+.pf-acard:hover{transform:translateY(-5px); box-shadow:var(--shadow-2); border-color:var(--rule);}
 .pf-acard__ic{width:48px; height:48px; border-radius:13px; display:grid; place-items:center; margin-bottom:16px;}
 .pf-acard__ic svg{width:24px; height:24px;}
 .pf-acard h3{font-family:var(--serif); font-weight:600; font-size:19px; color:var(--ink); line-height:1.15;}
@@ -470,30 +470,6 @@
 .cog__bridge{margin-top:20px; font-family:var(--serif); font-size:17px; line-height:1.5; color:var(--ink);
   border-left:3px solid var(--crimson, var(--accent-deep)); padding-left:15px;}
 
-/* the chain diagram */
-.cogchain{background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg);
-  box-shadow:var(--shadow-1); padding:26px 22px 20px;}
-.cogchain__title{font-size:11px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-bottom:18px;}
-.cogchain__row{display:flex; align-items:center; gap:6px;}
-.cogchain__node{flex:1; text-align:center; background:var(--paper, var(--bg)); border:1.5px solid var(--rule-2);
-  border-radius:11px; padding:11px 4px 9px; min-width:0;}
-.cogchain__node b{display:block; font-size:11.5px; letter-spacing:.05em; color:var(--ink);}
-.cogchain__node span{display:block; font-size:9px; color:var(--muted); margin-top:3px; text-transform:uppercase; letter-spacing:.06em;}
-.cogchain__arrow{flex:0 0 auto; color:var(--rule-2); width:14px; height:14px;}
-.cogchain__pulse{position:relative; height:5px; margin:16px 4px 0; background:var(--rule); border-radius:99px; overflow:hidden;}
-.cogchain__pulse i{position:absolute; top:0; bottom:0; width:22%; border-radius:99px; background:var(--accent);
-  animation:cogPulse 3.6s var(--ease) infinite;}
-@keyframes cogPulse{0%{left:-22%} 55%{left:58%} 62%{left:56%} 68%{left:60%} 100%{left:100%}}
-.cogchain__jam{margin-top:auto; padding-top:14px; display:flex; align-items:center; gap:9px; font-size:12px; color:var(--muted);}
-.cogchain__jam i{flex:0 0 auto; width:9px; height:9px; border-radius:50%; background:var(--crimson, #C0392B);
-  animation:asmBreathe 1.4s ease-in-out infinite;}
-.cogchain__foot{margin-top:16px; padding-top:14px; border-top:1px dashed var(--rule); font-size:12.5px; line-height:1.55; color:var(--muted);}
-.cogchain__foot b{color:var(--ink);}
-
-@media (max-width:920px){
-  .cog__grid{grid-template-columns:1fr; gap:36px;}
-  .cogchain__node span{display:none;}
-}
 
 
 /* ============================================================
@@ -502,7 +478,7 @@
    composition: halo, LED pen, holographic cards, 6-beat story loop.
    Scoped to .vh.
    ============================================================ */
-.vh{position:relative; overflow:hidden; background:var(--bg); color:var(--muted); padding:84px 0 0;}
+.vh{position:relative; overflow:hidden; background:var(--ivory); color:var(--muted); padding:84px 0 0;}
 .vh .wrap{position:relative; z-index:2;}
 
 /* background: soft accent glow + blueprint grid + drifting particles */
@@ -540,7 +516,7 @@
 .vh-btn svg{width:17px; height:17px;}
 .vh-btn--primary{background:var(--accent-deep); color:#fff; box-shadow:0 10px 30px rgba(4,138,145,.28);}
 .vh-btn--primary:hover{transform:translateY(-2px); background:var(--accent);}
-.vh-btn--ghost{border:1px solid var(--rule-2); color:var(--ink); background:var(--surface);}
+.vh-btn--ghost{border:1px solid var(--rule); color:var(--ink); background:var(--surface);}
 .vh-btn--ghost:hover{border-color:var(--accent-deep); transform:translateY(-2px);}
 .vh__badges{display:flex; flex-wrap:wrap; gap:8px; margin:30px 0 0; padding:0; list-style:none;}
 .vh__badges li{font-size:12px; font-weight:600; color:var(--muted); border:1px solid var(--rule);
@@ -587,7 +563,7 @@
 @keyframes vhTraceDraw{to{stroke-dashoffset:0}}
 
 /* holo cards: note (frame 3) + analysis (frame 4) */
-.vh-holo{position:absolute; z-index:2; background:rgba(255,255,255,.92); border:1px solid var(--rule-2);
+.vh-holo{position:absolute; z-index:2; background:rgba(255,255,255,.92); border:1px solid var(--rule);
   border-radius:14px; padding:14px 16px; backdrop-filter:blur(6px); box-shadow:var(--shadow-2);
   opacity:0; transform:translateY(14px); transition:opacity .5s var(--ease), transform .5s var(--ease);}
 .vh-holo--recon{left:-2%; bottom:22%; width:206px;}
@@ -684,41 +660,62 @@
 @keyframes cogdShake{26%{transform:translateX(0)} 29%{transform:translateX(-3px)} 32%{transform:translateX(2px)} 35%,100%{transform:translateX(0)}}
 @keyframes cogdFlash{0%,27%{opacity:0} 31%,48%{opacity:1} 56%,100%{opacity:0}}
 
-/* the five steps: glowing cards, pulse cycles through them */
-.cogsteps{background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg); box-shadow:var(--shadow-1); padding:22px 20px 18px; display:flex; flex-direction:column;}
-.cogsteps__row{display:grid; grid-template-columns:repeat(5,1fr); gap:9px; margin:14px 0 0; padding:0; list-style:none; align-content:start;}
-.cogstep{position:relative; text-align:center; border:1.5px solid var(--rule-2); border-radius:13px; padding:14px 6px 11px; background:var(--bg);
+
+
+/* ---- bridge v3: mockup-style timeline + door/brain moment ---------------- */
+.cogv3__top{display:grid; grid-template-columns:1fr 1.08fr; gap:44px; align-items:start; margin-top:8px;}
+.cogv3__h2{font-family:var(--serif); font-size:clamp(28px,3.4vw,42px); line-height:1.14; margin:12px 0 0;}
+.cogv3__h2 em{font-style:normal; color:var(--accent-deep);}
+.cogv3__moment{margin:26px 0 0; background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg); box-shadow:var(--shadow-1); padding:10px;}
+.cogv3__moment svg{width:100%; height:auto; display:block;}
+.cogv3__region circle{fill:rgba(0,173,181,.18); stroke:var(--accent-deep); stroke-width:2;
+  animation:cogRegion 10s ease-in-out infinite; animation-delay:calc(var(--i) * 2s);}
+.cogv3__region text{font-size:11px; font-weight:700; fill:var(--muted); text-anchor:middle;}
+@keyframes cogRegion{0%,18%{fill:rgba(0,173,181,.55); stroke-width:3.5; r:11;} 22%,100%{fill:rgba(0,173,181,.18); stroke-width:2;}}
+
+.cogv3__label{font-size:11.5px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin:0 0 14px;}
+.cogv3__rail{display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin:0; padding:0; list-style:none;}
+.cogv3__step{position:relative; background:var(--surface); border:1.5px solid var(--rule); border-radius:14px;
+  padding:30px 10px 12px; text-align:center; box-shadow:var(--shadow-1);
   animation:cogGlow 10s ease-in-out infinite; animation-delay:calc(var(--i) * 2s);}
-.cogstep svg{width:24px; height:24px; color:var(--accent-deep); display:block; margin:0 auto 8px;}
-.cogstep b{display:block; font-size:13px; color:var(--ink); letter-spacing:.02em;}
-.cogstep span{display:block; font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-top:3px;}
-.cogstep::after{content:""; position:absolute; right:-8px; top:50%; width:7px; height:7px; border-top:2px solid var(--rule-2); border-right:2px solid var(--rule-2); transform:translateY(-50%) rotate(45deg);}
-.cogstep:last-child::after{display:none;}
-@keyframes cogGlow{0%,18%{border-color:var(--accent); box-shadow:0 0 0 4px rgba(0,173,181,.12); background:rgba(0,173,181,.05)}
-  22%,100%{border-color:var(--rule-2); box-shadow:none; background:var(--bg)}}
+.cogv3__num{position:absolute; top:-13px; left:50%; transform:translateX(-50%); width:26px; height:26px;
+  border-radius:50%; background:var(--accent-deep); color:#fff; font-size:13px; font-weight:800;
+  display:grid; place-items:center; box-shadow:0 4px 12px rgba(4,138,145,.35);}
+.cogv3__step svg{width:22px; height:22px; color:var(--accent-deep); display:block; margin:0 auto 8px;}
+.cogv3__step b{display:block; font-size:13.5px; color:var(--ink);}
+.cogv3__step > span:not(.cogv3__num){display:block; font-size:10px; color:var(--muted); line-height:1.45; margin-top:4px;}
+.cogv3__track{position:relative; height:5px; margin:16px 2px 0; background:var(--rule); border-radius:99px; overflow:hidden;}
+.cogv3__track i{position:absolute; top:0; bottom:0; width:20%; border-radius:99px; background:var(--accent);
+  animation:cogTrack 10s linear infinite;}
+@keyframes cogTrack{from{left:-20%} to{left:100%}}
+.cogv3__jam{display:flex; align-items:flex-start; gap:10px; margin:16px 0 0; padding:12px 15px; font-size:12.5px; line-height:1.5;
+  color:var(--ink-2, var(--muted)); background:rgba(0,173,181,.07); border:1px solid rgba(0,173,181,.25); border-radius:12px;}
+.cogv3__jam svg{width:17px; height:17px; flex:0 0 auto; color:var(--accent-deep); margin-top:1px;}
+.cogv3__jam b{color:var(--ink);}
 
-/* scan cards */
-.cog__cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
-.cogcard{background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg); box-shadow:var(--shadow-1); padding:18px;}
-.cogcard__chips{display:flex; flex-wrap:wrap; gap:7px; margin-bottom:12px;}
-.cogcard__chips span{font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--accent-deep);
-  background:rgba(0,173,181,.08); border:1px solid rgba(0,173,181,.3); border-radius:8px; padding:5px 10px;}
-.cogcard p{font-size:13px; line-height:1.55; color:var(--muted); margin:0;}
-.cogcard p b{color:var(--ink); display:block; margin-bottom:3px;}
+.cogv3__runs{margin-top:26px;}
+.cogv3__runs h3{font-family:var(--serif); font-size:clamp(19px,1.9vw,24px); margin:0;}
+.cogv3__runs h3 em{font-style:normal; color:var(--accent-deep);}
+.cogv3__runs p{font-size:13.5px; line-height:1.6; color:var(--muted); margin:8px 0 0; max-width:520px;}
+.cogv3__feats{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:16px 0 0; padding:0; list-style:none;}
+.cogv3__feats li{display:flex; flex-direction:column; align-items:center; gap:7px; text-align:center;
+  font-size:11px; font-weight:700; color:var(--ink); background:var(--surface); border:1px solid var(--rule);
+  border-radius:12px; padding:13px 6px;}
+.cogv3__feats svg{width:18px; height:18px; color:var(--accent-deep);}
 
-/* stat strip */
-.cog__stats{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:26px;
-  border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); padding:22px 8px;}
-.cog__stats > div{text-align:center;}
-.cog__stats b{display:block; font-family:var(--serif); font-size:clamp(19px,1.9vw,25px); color:var(--ink);}
-.cog__stats span{display:block; font-size:11.5px; color:var(--muted); margin-top:4px; line-height:1.45;}
-
-.cog__close{margin-top:28px; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:18px;}
-.cog__close .cog__bridge{margin-top:0; max-width:560px;}
+.cogv3__bar{margin-top:40px; display:grid; grid-template-columns:1.1fr 1.6fr; gap:26px; align-items:center;
+  background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg); box-shadow:var(--shadow-1); padding:22px 26px;}
+.cogv3__bridge{margin:0; font-size:14px; line-height:1.6; color:var(--muted); border-left:3px solid var(--accent); padding-left:15px;}
+.cogv3__bridge b{color:var(--ink); font-family:var(--serif); font-size:16.5px;}
+.cogv3__stats{display:grid; grid-template-columns:repeat(4,1fr); gap:12px;}
+.cogv3__stats > div{text-align:center;}
+.cogv3__stats b{display:block; font-family:var(--serif); font-size:clamp(20px,2vw,26px); color:var(--accent-deep);}
+.cogv3__stats span{display:block; font-size:11px; color:var(--muted); margin-top:3px; line-height:1.4;}
 
 @media (max-width:920px){
-  .cog__cards{grid-template-columns:1fr;}
-  .cog__stats{grid-template-columns:repeat(2,1fr); row-gap:20px;}
-  .cogsteps__row{grid-template-columns:repeat(2,1fr);}
-  .cogstep::after{display:none;}
+  .cogv3__top{grid-template-columns:1fr; gap:34px;}
+  .cogv3__rail{grid-template-columns:repeat(2,1fr); row-gap:22px;}
+  .cogv3__feats{grid-template-columns:repeat(2,1fr);}
+  .cogv3__bar{grid-template-columns:1fr;}
+  .cogv3__stats{grid-template-columns:repeat(2,1fr); row-gap:16px;}
 }
