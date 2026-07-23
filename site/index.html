@@ -522,14 +522,14 @@
 
       <!-- LEFT: the value proposition -->
       <div class="vh__copy reveal">
-        <p class="vh__eye"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg>Patent No. 584433 &middot; Made in India &middot; AI Powered</p>
+        <p class="vh__eye"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg>Patent No. 584433 &middot; Made in India &middot; AI Powered</p>
         <h1 class="vh__h1">The ballpoint pen.<br><em>Reinvented for the AI era.</em></h1>
         <p class="vh__sub">Write naturally with real ink on any paper. Every stroke becomes searchable, analysed, securely synced, and always available.</p>
         <ul class="vh__ticks" role="list">
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Real ink</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Any paper</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>AI powered</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>No camera</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6L9 17l-5-5"/></svg>Real ink</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6L9 17l-5-5"/></svg>Any paper</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6L9 17l-5-5"/></svg>AI powered</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6L9 17l-5-5"/></svg>No camera</li>
         </ul>
         <div class="vh__cta">
           <a class="vh-btn vh-btn--primary" href="see-in-action.html" data-nav>
@@ -542,6 +542,7 @@
         <ul class="vh__badges" role="list">
           <li>Made in India</li><li>Granted Patent</li><li>Consent-First</li><li>Works Offline</li><li>Cloud Sync</li>
         </ul>
+        <p class="pf__why">Curious why handwriting still matters in an AI era? <a href="why-handwriting.html" data-nav>See the research &rarr;</a></p>
       </div>
 
       <!-- RIGHT: the pen, the halo, the story -->
@@ -627,7 +628,7 @@
           <li>Learning analytics</li>
           <li>Motor assessment</li>
         </ul>
-        <!-- the 6-beat story -->
+        <!-- the 5-beat story -->
         <ol class="vh__frames" aria-hidden="true">
           <li>Write</li><li>Sense</li><li>Capture</li><li>Reconstruct</li><li>Sync</li>
         </ol>
@@ -1283,7 +1284,7 @@
 
 <script>
 /* vh hero: 5-beat story loop, write → sense → capture → reconstruct → sync.
-   2s per beat (12s full loop), paused off-screen, static composite frame under
+   2s per beat (10s full loop), paused off-screen, static composite frame under
    prefers-reduced-motion, restarted cleanly after bfcache restores. */
 (function(){
   var hero=document.getElementById('vhHero'); if(!hero) return;
@@ -1336,9 +1337,20 @@
   if(reduce){ sec.classList.add('cal--static'); set(1); return; }
   if(narrow){
     sec.classList.add('cal--static');
-    var t0=null;
-    function tick(ts){ if(t0==null) t0=ts; set(((ts-t0)/9000)%1); requestAnimationFrame(tick); }
-    requestAnimationFrame(tick);
+    var nRaf=null, nT0=null, nVisible=true;
+    function nTick(ts){ if(nT0==null) nT0=ts; set(((ts-nT0)/9000)%1); nRaf=requestAnimationFrame(nTick); }
+    function nStart(){ if(nRaf) return; nT0=null; nRaf=requestAnimationFrame(nTick); }
+    function nStop(){ if(nRaf){ cancelAnimationFrame(nRaf); nRaf=null; } }
+    nStart();
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(function(es){
+        nVisible = es[0].isIntersecting;
+        if(nVisible && !document.hidden) nStart(); else nStop();
+      },{threshold:0.05}).observe(sec);
+    }
+    document.addEventListener('visibilitychange', function(){
+      if(document.hidden) nStop(); else if(nVisible) nStart();
+    });
     return;
   }
   var raf=null;

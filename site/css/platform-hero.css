@@ -473,9 +473,9 @@
 
 
 /* ============================================================
-   VH HERO — "Looks like a pen. Thinks like AI."
+   VH HERO — "The ballpoint pen. Reinvented for the AI era."
    Site's normal light palette (ink on paper, teal accent), premium
-   composition: halo, LED pen, holographic cards, 6-beat story loop.
+   composition: halo, LED pen, holographic cards, 5-beat story loop.
    Scoped to .vh.
    ============================================================ */
 .vh{position:relative; overflow:hidden; background:var(--ivory); color:var(--muted); padding:84px 0 0;}
