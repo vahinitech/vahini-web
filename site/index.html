@@ -1056,7 +1056,8 @@
     feed.innerHTML = items.map(function(u){
       var tag = '<span class="feed__cat cat--'+u.cat+'">'+esc(D.catLabel[u.cat]||'Update')+'</span>';
       var main = '<span class="feed__main"><span class="feed__meta">'+tag+'<span class="feed__date">'+esc(u.dateLabel)+'</span></span><span class="feed__t">'+esc(u.title)+'</span></span>';
-      return '<a class="feed__item" href="'+(u.href||'updates.html')+'" data-nav>'+main+arr+'</a>';
+      var attrs = u.external ? ' target="_blank" rel="noopener"' : ' data-nav';
+      return '<a class="feed__item" href="'+(u.href||'updates.html')+'"'+attrs+'>'+main+arr+'</a>';
     }).join('');
   }
 })();

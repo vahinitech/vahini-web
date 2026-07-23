@@ -59,6 +59,10 @@
   ];
 
   var UPDATES = [
+    { sort:20260628, dateLabel:"28 Jun 2026", cat:"recognition", title:"Featured in The New Indian Express", pinned:true,
+      blurb:"“One smart pen, numerous learning possibilities”: a feature on Vahini's origin (why should a visually impaired student's ability to write an exam depend on someone else's availability), the dual-IMU sensing behind the pen, and the personalised handwriting-improvement research it enables.",
+      href:"https://epaper.newindianexpress.com/c/80234866", linkText:"Read the feature", external:true },
+
     { sort:20260110, dateLabel:"Jan 2026", cat:"award", title:"Winner, DeepTech Innovation Award", pinned:true,
       blurb:"Vahini won the DeepTech Innovation Award at the Andhra Pradesh Digital Technology Summit 2026, Visakhapatnam, for outstanding innovation & excellence.",
       href:"awards.html", linkText:"See the award" },
