@@ -44,6 +44,7 @@
     { href: "about.html", t: "About", d: "The signal layer beneath handwriting" },
     { href: "awards.html", t: "Awards", d: "DeepTech Innovation Award winner" },
     { href: "patents.html", t: "Patents", d: "Granted IP, No. 584433" },
+    { href: "press.html", t: "Press", d: "Vahini in print, newspaper & magazine coverage" },
     { href: "updates.html", t: "Updates", d: "News, awards & recognition" },
     { href: "why-handwriting.html", t: "Why handwriting matters", d: "Live feed: research, news & viral videos" },
     { href: "events.html", t: "Events", d: "Where we\u2019ve shown Vahini" }
@@ -77,6 +78,7 @@
     { t:"Specifications & benchmarks", u:P("benchmarks.html"), d:"Writing time, charging, memory, measured honestly", k:"specs specifications benchmarks battery charging writing time memory performance quality speed pressure" },
     { t:"Project Akshara", u:P("project-akshara.html"), d:"The world's first handwriting-motion dataset", k:"akshara dataset schools collection motion corpus indic scripts marathon investors" },
     { t:"Patents & IP", u:P("patents.html"), d:"Granted Patent No. 584433", k:"patents ip granted intellectual property privacy consent dpdp how it works" },
+    { t:"Press", u:P("press.html"), d:"Vahini in print, newspaper & magazine coverage", k:"press newspaper magazine coverage clipping media new indian express feature" },
     { t:"About Vahini", u:P("about.html"), d:"How it started, where we are", k:"about story founder origin team" },
     { t:"Investor Book", u:P("investor.html"), d:"The motion-data field notebook", k:"investors funding round roadmap motion data moat deep tech notebook" },
     { t:"Developer SDK & API", u:P("developers.html"), d:"Scan scoring & pen motion as an API", k:"developer sdk api endpoints rest keys metering pricing saas partners integrate motion scan ocr" },
@@ -200,6 +202,7 @@
           '<a href="'+P("why-handwriting.html")+'" data-nav>Why handwriting matters</a>'+
           '<a href="'+P("awards.html")+'" data-nav>Awards</a>'+
           '<a href="'+P("patents.html")+'" data-nav>Patents</a>'+
+          '<a href="'+P("press.html")+'" data-nav>Press</a>'+
           '<a href="'+P("updates.html")+'" data-nav>Updates</a>'+
           '<a href="'+P("events.html")+'" data-nav>Events</a></div>'+
         '<div class="foot__col"><h5>Get in touch</h5>'+
