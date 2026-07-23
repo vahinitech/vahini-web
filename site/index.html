@@ -523,8 +523,8 @@
       <!-- LEFT: the value proposition -->
       <div class="vh__copy reveal">
         <p class="vh__eye"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg>Patent No. 584433 &middot; Made in India &middot; AI Powered</p>
-        <h1 class="vh__h1">Looks like a pen.<br><em>Thinks like AI.</em></h1>
-        <p class="vh__sub">Write naturally on paper. Every stroke becomes a searchable digital note &mdash; analysed, synced, never lost.</p>
+        <h1 class="vh__h1">The ballpoint pen.<br><em>Reinvented for the AI era.</em></h1>
+        <p class="vh__sub">Write naturally with real ink on any paper. Every stroke becomes searchable, analysed, securely synced &mdash; and always available.</p>
         <ul class="vh__ticks" role="list">
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Real ink</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Any paper</li>
@@ -545,7 +545,7 @@
       </div>
 
       <!-- RIGHT: the pen, the halo, the story -->
-      <div class="vh__stage reveal" data-d="1" aria-label="The Vahini smart pen writing on a notebook: strokes are sensed, captured, digitised, analysed and synced to the cloud">
+      <div class="vh__stage reveal" data-d="1" aria-label="The Vahini smart pen writing on a notebook: strokes are sensed, captured, reconstructed from motion and synced to the cloud">
         <div class="vh__halo" aria-hidden="true"><i></i><i></i><i></i></div>
         <svg class="vh__scene" viewBox="0 0 560 470" aria-hidden="true">
           <!-- notebook -->
@@ -555,8 +555,8 @@
             <line x1="150" y1="358" x2="430" y2="358" stroke="#D9D4C9" stroke-width="1.4" transform="skewX(-8)"/>
             <line x1="150" y1="386" x2="430" y2="386" stroke="#D9D4C9" stroke-width="1.4" transform="skewX(-8)"/>
             <line x1="150" y1="414" x2="430" y2="414" stroke="#D9D4C9" stroke-width="1.4" transform="skewX(-8)"/>
-            <clipPath id="vhInkReveal"><rect class="vh-inkclip" x="104" y="308" width="210" height="56" transform="skewX(-8)"/></clipPath>
-            <text class="vh-word" x="112" y="350" transform="skewX(-8)" clip-path="url(#vhInkReveal)"
+            <clipPath id="vhInkReveal"><rect class="vh-inkclip" x="140" y="308" width="210" height="56" transform="skewX(-8)"/></clipPath>
+            <text class="vh-word" x="148" y="350" transform="skewX(-8)" clip-path="url(#vhInkReveal)"
               font-family="Caveat, cursive" font-weight="700" font-size="38" fill="#2456A6">Vahini</text>
           </g>
           <!-- pen: slim, tip resting on the paper where the ink ends -->
@@ -599,17 +599,17 @@
           </svg>
           <span>accel &middot; gyro &middot; pressure</span>
         </div>
-        <!-- holographic UI: digital note -->
-        <div class="vh-holo vh-holo--note" aria-hidden="true">
-          <b>Digital note</b>
-          <span class="vh-holo__line" style="width:86%"></span>
-          <span class="vh-holo__line" style="width:64%"></span>
-          <span class="vh-holo__line" style="width:74%"></span>
-          <div class="vh-holo__tools">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.4-4.4"/></svg>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 11l4 4 4-4"/><path d="M4 21h16"/></svg>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 0 0 .4-9A6 6 0 0 0 6.2 8.6 4.2 4.2 0 0 0 7 17z"/></svg>
-          </div>
+        <!-- holographic UI: pen-tip reconstruction (frame 3) -->
+        <div class="vh-holo vh-holo--recon" aria-hidden="true">
+          <b>Pen-tip reconstruction</b>
+          <svg viewBox="0 0 170 56">
+            <path class="vh-reconpath" d="M8 38 q10 -22 20 -4 t22 2 q6 -26 14 -6 t20 4 q8 -18 16 -2 t22 2 q10 -14 18 0"
+              fill="none" stroke-width="2.2" stroke-linecap="round"/>
+            <g class="vh-reconpts">
+              <circle cx="28" cy="32" r="2"/><circle cx="64" cy="30" r="2"/><circle cx="100" cy="34" r="2"/><circle cx="140" cy="32" r="2"/>
+            </g>
+          </svg>
+          <span>trajectory rebuilt from motion &middot; no camera</span>
         </div>
         <!-- holographic UI: live analysis -->
         <div class="vh-holo vh-holo--ai" aria-hidden="true">
@@ -629,7 +629,7 @@
         </ul>
         <!-- the 6-beat story -->
         <ol class="vh__frames" aria-hidden="true">
-          <li>Write</li><li>Sense</li><li>Capture</li><li>Digitise</li><li>Analyse</li><li>Sync</li>
+          <li>Write</li><li>Sense</li><li>Capture</li><li>Reconstruct</li><li>Sync</li>
         </ol>
       </div>
     </div>
@@ -643,41 +643,99 @@
     </div>
   </section>
 
-  <!-- ============ THE BRIDGE · why handwriting wires the brain ============ -->
+  <!-- ============ THE BRIDGE · your brain makes 5 decisions ============ -->
   <section class="cog" id="cognition" data-screen-label="The bridge">
     <div class="wrap">
+      <div class="cog__head reveal">
+        <p class="eyebrow" style="display:inline-flex;">The bridge &middot; tradition, connected to digital</p>
+        <h2>Your brain makes <em>5 decisions</em><br>before your hand moves.</h2>
+        <p class="cog__lede">That&rsquo;s why we sometimes push a door that says <b>pull</b>. The half-second isn&rsquo;t carelessness &mdash; it&rsquo;s five brain steps running before the hand even starts.</p>
+      </div>
+
       <div class="cog__grid">
-        <div class="reveal">
-          <p class="eyebrow" style="display:inline-flex;">The bridge &middot; tradition, connected to digital</p>
-          <h2>Ever pushed a door that said <em>pull</em>?</h2>
-          <p class="cog__lede">That half-second freeze isn&rsquo;t carelessness. Every action runs a chain in the brain &mdash; <b>see it, place it, decide, plan, move</b>. Designers call the classic failure a Norman door: the handle says pull, the door needs push, and the chain jams. The same jam is why left gets confused with right, and push with pull.</p>
-          <ul class="cog__points">
-            <li><b>That chain is wired in childhood</b> &mdash; and handwriting is its richest daily training. Every letter is a planned sequence of directions: left, right, up, down, push, pull, under fine pressure control.</li>
-            <li><b>A page of writing is hundreds of planned movements.</b> A swipe on a tab is one gesture, repeated. Less handwriting means less of exactly this training.</li>
-            <li><b>The habit shouldn&rsquo;t cost the digital world.</b> With Vahini the page stays in the notebook &mdash; and its copy lives in the cloud: searchable in seconds, easier to revise, never lost.</li>
-          </ul>
-          <p class="cog__bridge">Vahini is the bridge: the traditional habits a society still needs, carried into the digital world it lives in.</p>
-          <div class="cog__cta">
-            <a class="btn btn--dark" href="why-handwriting.html" data-nav>Why handwriting matters</a>
-            <a class="link-arrow" href="solution-assistive.html" data-nav>Motor assessment research &rarr;</a>
-          </div>
+        <!-- the moment: pushing a PULL door -->
+        <figure class="cog-door reveal" data-d="1">
+          <svg viewBox="0 0 300 250" role="img" aria-label="Someone pushes a door labelled pull; a half-second later the correct action follows">
+            <rect x="70" y="20" width="150" height="210" rx="6" fill="var(--surface)" stroke="var(--rule-2)" stroke-width="2"/>
+            <g class="cogd-door">
+              <rect x="82" y="32" width="126" height="186" rx="4" fill="#C9A87C"/>
+              <rect x="82" y="32" width="126" height="186" rx="4" fill="none" stroke="rgba(0,0,0,.14)" stroke-width="2"/>
+              <rect x="188" y="110" width="7" height="34" rx="3.5" fill="#4A4F57"/>
+              <rect x="104" y="58" width="52" height="20" rx="3" fill="#fff" stroke="var(--rule-2)"/>
+              <text x="130" y="72" text-anchor="middle" font-size="11" font-weight="800" letter-spacing="2" fill="var(--ink)">PULL</text>
+            </g>
+            <g class="cogd-hand">
+              <circle cx="248" cy="150" r="13" fill="#E8B48C"/>
+              <rect x="252" y="142" width="40" height="17" rx="8" fill="#E8B48C"/>
+            </g>
+            <g class="cogd-flash">
+              <circle cx="216" cy="52" r="13" fill="#C0392B"/>
+              <text x="216" y="57" text-anchor="middle" font-size="16" font-weight="900" fill="#fff">!</text>
+            </g>
+          </svg>
+          <figcaption><b>The moment we push instead of pull.</b> Happens in half a second &mdash; to nearly everyone.</figcaption>
+        </figure>
+
+        <!-- the five steps, alive -->
+        <div class="cogsteps reveal" data-d="2" role="img" aria-label="Five brain steps for one action: see, locate, decide, plan, move">
+          <p class="cogchain__title">One action &middot; five brain steps</p>
+          <ol class="cogsteps__row">
+            <li class="cogstep" style="--i:0">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+              <b>See</b><span>visual cortex</span>
+            </li>
+            <li class="cogstep" style="--i:1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.1 7-11a7 7 0 1 0-14 0c0 5.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
+              <b>Locate</b><span>parietal</span>
+            </li>
+            <li class="cogstep" style="--i:2">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4a4 4 0 0 0-4 4c-2.2.4-4 2-4 4.5C4 15.5 6 17 8 17h1v3h6v-3h1c2 0 4-1.5 4-4.5 0-2.5-1.8-4.1-4-4.5a4 4 0 0 0-4-4z"/></svg>
+              <b>Decide</b><span>prefrontal</span>
+            </li>
+            <li class="cogstep" style="--i:3">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5M4 12h9M13 12l-3-3M13 12l-3 3M17 19a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+              <b>Plan</b><span>premotor</span>
+            </li>
+            <li class="cogstep" style="--i:4">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V12m0-6.5v-1a1.5 1.5 0 0 1 3 0V12m0-6v1.5a1.5 1.5 0 0 1 3 0V14m0-5v2a1.5 1.5 0 0 1 3 0v4a7 7 0 0 1-7 7h-1a7 7 0 0 1-7-7v-3a1.5 1.5 0 0 1 3 0"/></svg>
+              <b>Move</b><span>motor cortex</span>
+            </li>
+          </ol>
+          <p class="cogchain__jam"><i></i>When the chain jams mid-way, the hand starts the wrong move: push instead of pull.</p>
         </div>
-        <div class="cogchain reveal" data-d="1" role="img" aria-label="The brain&rsquo;s action chain: see, place, decide, plan, move &mdash; handwriting trains every link">
-          <p class="cogchain__title">One action, five brain steps</p>
-          <div class="cogchain__row">
-            <div class="cogchain__node"><b>See</b><span>visual</span></div>
-            <svg class="cogchain__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            <div class="cogchain__node"><b>Place</b><span>parietal</span></div>
-            <svg class="cogchain__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            <div class="cogchain__node"><b>Decide</b><span>prefrontal</span></div>
-            <svg class="cogchain__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            <div class="cogchain__node"><b>Plan</b><span>premotor</span></div>
-            <svg class="cogchain__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            <div class="cogchain__node"><b>Move</b><span>motor</span></div>
-          </div>
-          <div class="cogchain__pulse" aria-hidden="true"><i></i></div>
-          <p class="cogchain__jam"><i></i>When the chain jams mid-way, the hand starts the wrong move: pull instead of push.</p>
-          <p class="cogchain__foot"><b>One letter runs this chain about five times.</b> A page of handwriting is hundreds of runs &mdash; daily training no swipe can replace. The Vahini pen keeps that training on real paper, and measures it as it happens.</p>
+      </div>
+
+      <!-- why handwriting trains this chain: scan, don't read -->
+      <p class="cog__rowtitle reveal">Why handwriting trains this chain every day</p>
+      <div class="cog__cards reveal" data-d="1">
+        <div class="cogcard">
+          <div class="cogcard__chips"><span>Left</span><span>Right</span><span>Up</span><span>Down</span></div>
+          <p><b>Thousands of directional decisions.</b> Every letter is a planned sequence of left, right, up, down, push, pull.</p>
+        </div>
+        <div class="cogcard">
+          <div class="cogcard__chips"><span>Pressure</span><span>Angle</span><span>Speed</span></div>
+          <p><b>Fine motor control.</b> Pressure, angle and rhythm build precise hand&ndash;eye coordination.</p>
+        </div>
+        <div class="cogcard">
+          <div class="cogcard__chips"><span>Memory</span><span>Planning</span><span>Coordination</span></div>
+          <p><b>Hundreds of brain runs.</b> One page exercises memory, planning and coordination together.</p>
+        </div>
+      </div>
+
+      <!-- numbers, not paragraphs -->
+      <div class="cog__stats reveal" data-d="2" role="list">
+        <div role="listitem"><b>5</b><span>brain regions work together for every stroke</span></div>
+        <div role="listitem"><b>Hundreds</b><span>of planned movements on a single page</span></div>
+        <div role="listitem"><b>Thousands</b><span>of motor decisions in one writing session</span></div>
+        <div role="listitem"><b>Every stroke</b><span>captured by Vahini in real time</span></div>
+      </div>
+
+      <!-- payoff -->
+      <div class="cog__close reveal" data-d="2">
+        <p class="cog__bridge">Handwriting is your brain&rsquo;s daily workout. Vahini keeps that workout alive &mdash; and brings every page into the digital world: searchable, analysed, never lost.</p>
+        <div class="cog__cta">
+          <a class="btn btn--dark" href="why-handwriting.html" data-nav>Why handwriting matters &rarr;</a>
+          <a class="link-arrow" href="solution-assistive.html" data-nav>Motor assessment research &rarr;</a>
         </div>
       </div>
     </div>
@@ -1206,14 +1264,14 @@
 </script>
 
 <script>
-/* vh hero: 6-beat story loop, write → sense → capture → digitise → analyse → sync.
+/* vh hero: 5-beat story loop, write → sense → capture → reconstruct → sync.
    2s per beat (12s full loop), paused off-screen, static composite frame under
    prefers-reduced-motion, restarted cleanly after bfcache restores. */
 (function(){
   var hero=document.getElementById('vhHero'); if(!hero) return;
-  var FRAMES=6, BEAT=2000, i=0, t=null, visible=true;
+  var FRAMES=5, BEAT=2000, i=0, t=null, visible=true;
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduce){ hero.setAttribute('data-frame','4'); return; }
+  if(reduce){ hero.setAttribute('data-frame','3'); return; }
   function stop(){ if(t){ clearTimeout(t); t=null; } }
   function tick(){
     stop();
