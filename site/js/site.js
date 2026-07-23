@@ -267,16 +267,18 @@
        model that traffic instead of reporting it as zero. See wireConsent()
        and loadAnalytics(), which only flips analytics_storage to granted. */
     window.dataLayer = window.dataLayer || [];
-    window.gtag = function(){ dataLayer.push(arguments); };
-    gtag('consent', 'default', {
+    window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
+    window.gtag('consent', 'default', {
       ad_storage:'denied', analytics_storage:'denied',
       ad_user_data:'denied', ad_personalization:'denied'
     });
-    /* Google Tag Manager */
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-52M7T5DJ');
+    /* Google Tag Manager -- appended straight to head (this runs from
+       injectHead()), rather than the stock snippet's insertBefore-the-first-
+       script-tag, which would land in <body> on pages that load site.js there. */
+    (function(w,d,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var j=d.createElement('script'),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;d.head.appendChild(j);})(window,document,'dataLayer','GTM-52M7T5DJ');
     /* Google Analytics 4 */
     var ga=document.createElement('script'); ga.async=true; ga.src='https://www.googletagmanager.com/gtag/js?id=G-8FV4KRMPX8'; document.head.appendChild(ga);
-    gtag('js', new Date()); gtag('config','G-8FV4KRMPX8', { anonymize_ip:true });
+    window.gtag('js', new Date()); window.gtag('config','G-8FV4KRMPX8', { anonymize_ip:true });
   }
 
   /* ---- cookie consent (GDPR / CCPA) ---------------------------------------
@@ -308,7 +310,7 @@
     /* GTM/GA4 are already loaded (see injectHead()) -- opting in just flips
        Consent Mode from denied to granted, unlocking cookies/identifiers. */
     if (analyticsLoaded) return; analyticsLoaded = true;
-    if (window.gtag) gtag('consent','update',{ analytics_storage:'granted' });
+    if (window.gtag) window.gtag('consent','update',{ analytics_storage:'granted' });
   }
 
   function wireConsent(){
