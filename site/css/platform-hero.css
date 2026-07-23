@@ -719,3 +719,26 @@
   .cogv3__bar{grid-template-columns:1fr;}
   .cogv3__stats{grid-template-columns:repeat(2,1fr); row-gap:16px;}
 }
+
+
+/* ---- bridge moment v2: person vs PULL door, two outcomes ----------------- */
+.cgm-figA{animation:cgmShove 5s var(--ease) infinite; transform-origin:96px 168px;}
+@keyframes cgmShove{0%,14%{transform:translateX(-14px)} 26%,44%{transform:translateX(2px)} 50%,58%{transform:translateX(-2px)} 70%,100%{transform:translateX(-14px)}}
+.cgm-doorA{animation:cgmResist 5s linear infinite; transform-origin:152px 163px;}
+@keyframes cgmResist{26%{transform:translateX(0)} 30%{transform:translateX(-3px)} 34%{transform:translateX(2px)} 38%,100%{transform:translateX(0)}}
+.cgm-tangle{animation:cgmTangle 5s ease-in-out infinite; transform-origin:66px 76px;}
+@keyframes cgmTangle{0%,20%{opacity:.35} 30%,60%{opacity:1} 75%,100%{opacity:.35}}
+.cgm-bang{opacity:0; animation:cgmBang 5s linear infinite;}
+@keyframes cgmBang{0%,26%{opacity:0} 32%,62%{opacity:1} 72%,100%{opacity:0}}
+
+.cgm-dir path{stroke:var(--accent-deep); opacity:.3;}
+.cgm-dir{animation:cgmDir 4s linear infinite; animation-delay:calc(var(--i) * .5s);}
+@keyframes cgmDir{0%,8%{opacity:.3} 12%,30%{opacity:1} 40%,100%{opacity:.3}}
+.cgm-figB{animation:cgmPull 5s var(--ease) infinite; transform-origin:108px 170px;}
+@keyframes cgmPull{0%,30%{transform:translateX(6px)} 48%,74%{transform:translateX(-4px)} 90%,100%{transform:translateX(6px)}}
+.cgm-doorB{transform-origin:270px 163px; animation:cgmOpen 5s var(--ease) infinite;}
+@keyframes cgmOpen{0%,32%{transform:rotate(0deg)} 52%,78%{transform:rotate(-10deg)} 94%,100%{transform:rotate(0deg)}}
+.cgm-check{opacity:0; transform-origin:248px 62px; animation:cgmCheck 5s var(--ease) infinite;}
+@keyframes cgmCheck{0%,48%{opacity:0; transform:scale(.5)} 56%,84%{opacity:1; transform:scale(1)} 94%,100%{opacity:0; transform:scale(.5)}}
+.cgm-loop{stroke-dasharray:70; animation:cgmLoop 4s var(--ease) infinite;}
+@keyframes cgmLoop{0%{stroke-dashoffset:70} 45%,100%{stroke-dashoffset:0}}

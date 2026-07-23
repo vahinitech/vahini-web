@@ -652,38 +652,84 @@
           <h2 class="cogv3__h2">Your brain makes <em>5 decisions</em> before your hand moves.</h2>
           <p class="cog__lede">That&rsquo;s why we sometimes push a door that says <b>pull</b>. The half-second isn&rsquo;t carelessness &mdash; it&rsquo;s five brain steps racing before the hand even starts.</p>
           <figure class="cogv3__moment">
-            <svg viewBox="0 0 560 260" role="img" aria-label="Someone pushes a door labelled pull while the brain runs its five steps">
-              <rect x="0" y="0" width="560" height="260" rx="16" fill="var(--ivory)"/>
-              <g transform="translate(20 6) scale(.96)">
-                <rect x="70" y="20" width="150" height="210" rx="6" fill="var(--surface)" stroke="var(--rule-2)" stroke-width="2"/>
-                <g class="cogd-door">
-                  <rect x="82" y="32" width="126" height="186" rx="4" fill="#C9A87C"/>
-                  <rect x="82" y="32" width="126" height="186" rx="4" fill="none" stroke="rgba(0,0,0,.14)" stroke-width="2"/>
-                  <rect x="188" y="110" width="7" height="34" rx="3.5" fill="#4A4F57"/>
-                  <rect x="104" y="58" width="52" height="20" rx="3" fill="#fff" stroke="var(--rule-2)"/>
-                  <text x="130" y="72" text-anchor="middle" font-size="11" font-weight="800" letter-spacing="2" fill="var(--ink)">PULL</text>
+            <svg viewBox="0 0 580 320" role="img" aria-label="Without practice a person pushes a door marked pull and directions tangle; with daily handwriting the direction sense stays sharp and the door is pulled correctly">
+              <rect x="0" y="0" width="580" height="320" rx="16" fill="var(--ivory)"/>
+              <line x1="290" y1="26" x2="290" y2="246" stroke="var(--rule)" stroke-width="1.5" stroke-dasharray="3 6"/>
+
+              <!-- ============ SCENE A: without practice ============ -->
+              <g transform="translate(6 0)">
+                <text x="140" y="34" text-anchor="middle" font-size="10.5" font-weight="800" letter-spacing="1.6" fill="#C0392B">WITHOUT PRACTICE</text>
+                <!-- tangled directions above the head -->
+                <g class="cgm-tangle" stroke="#C0392B" stroke-width="2.6" stroke-linecap="round" fill="none">
+                  <path d="M38 66 h34 M64 58 l8 8 -8 8"/>
+                  <path d="M96 82 h-32 M72 74 l-8 8 8 8"/>
+                  <path d="M52 96 v-26 M44 78 l8 -8 8 8" opacity=".75"/>
                 </g>
-                <g class="cogd-hand">
-                  <circle cx="248" cy="150" r="13" fill="#E8B48C"/>
-                  <rect x="252" y="142" width="40" height="17" rx="8" fill="#E8B48C"/>
+                <text class="cgm-bang" x="112" y="60" font-size="26" font-weight="900" fill="#C0392B">?!</text>
+                <!-- pictogram person pushing -->
+                <g class="cgm-figA">
+                  <circle cx="70" cy="120" r="12" fill="var(--ink)"/>
+                  <g stroke="var(--ink)" stroke-width="9" stroke-linecap="round" fill="none">
+                    <path d="M72 134 Q84 152 96 168"/>
+                    <path d="M78 142 L146 150"/>
+                    <path d="M82 154 L144 166"/>
+                    <path d="M96 168 L66 224"/>
+                    <path d="M96 168 L122 220"/>
+                  </g>
                 </g>
-                <g class="cogd-flash">
-                  <circle cx="216" cy="52" r="13" fill="#C0392B"/>
-                  <text x="216" y="57" text-anchor="middle" font-size="16" font-weight="900" fill="#fff">!</text>
+                <!-- the PULL door, resisting -->
+                <g class="cgm-doorA">
+                  <rect x="152" y="88" width="110" height="150" rx="5" fill="#C9A87C" stroke="rgba(0,0,0,.15)" stroke-width="2"/>
+                  <rect x="168" y="104" width="46" height="18" rx="3" fill="#fff" stroke="var(--rule)"/>
+                  <text x="191" y="117" text-anchor="middle" font-size="10" font-weight="800" letter-spacing="1.6" fill="var(--ink)">PULL</text>
+                  <rect x="158" y="150" width="6" height="30" rx="3" fill="#4A4F57"/>
                 </g>
+                <text x="140" y="264" text-anchor="middle" font-size="11" fill="var(--muted)">Push&hellip; on a pull door. Left&ndash;right, push&ndash;pull tangle.</text>
               </g>
-              <!-- head profile, brain regions glowing in step order -->
-              <g transform="translate(330 18)">
-                <path d="M118 12 C74 8 40 34 34 74 c-3 22 2 34 -8 48 l-12 16 c-3 5 -1 10 5 11 l14 3 v22 c0 9 6 14 15 13 l26 -3 c6 14 10 22 24 22 h32 c30 0 58 -22 64 -54 8 -44 -14 -96 -64 -100 z"
-                  fill="var(--surface)" stroke="var(--rule-2)" stroke-width="2.5"/>
-                <polyline points="150,58 118,38 84,52 108,74 128,102" fill="none" stroke="rgba(0,173,181,.4)" stroke-width="1.6" stroke-dasharray="4 5"/>
-                <g class="cogv3__region" style="--i:0"><circle cx="150" cy="58" r="9"/><text x="176" y="62">See</text></g>
-                <g class="cogv3__region" style="--i:1"><circle cx="118" cy="38" r="9"/><text x="112" y="15">Locate</text></g>
-                <g class="cogv3__region" style="--i:2"><circle cx="84" cy="52" r="9"/><text x="48" y="40">Decide</text></g>
-                <g class="cogv3__region" style="--i:3"><circle cx="108" cy="74" r="9"/><text x="72" y="92">Plan</text></g>
-                <g class="cogv3__region" style="--i:4"><circle cx="128" cy="102" r="9"/><text x="150" y="122">Move</text></g>
+
+              <!-- ============ SCENE B: with daily handwriting ============ -->
+              <g transform="translate(296 0)">
+                <text x="140" y="34" text-anchor="middle" font-size="10.5" font-weight="800" letter-spacing="1.6" fill="var(--accent-deep)">WITH DAILY HANDWRITING</text>
+                <!-- tidy directions above the head, lighting in order -->
+                <g stroke-width="2.6" stroke-linecap="round" fill="none">
+                  <g class="cgm-dir" style="--i:0"><path d="M34 70 h26 M52 62 l8 8 -8 8"/></g>
+                  <g class="cgm-dir" style="--i:1"><path d="M96 70 h-26 M78 62 l-8 8 8 8"/></g>
+                  <g class="cgm-dir" style="--i:2"><path d="M114 84 v-24 M106 68 l8 -8 8 8"/></g>
+                  <g class="cgm-dir" style="--i:3"><path d="M134 60 v24 M126 76 l8 8 8 -8"/></g>
+                </g>
+                <!-- pictogram person pulling correctly -->
+                <g class="cgm-figB">
+                  <circle cx="120" cy="120" r="12" fill="var(--ink)"/>
+                  <g stroke="var(--ink)" stroke-width="9" stroke-linecap="round" fill="none">
+                    <path d="M118 134 Q112 152 108 170"/>
+                    <path d="M116 142 L164 156"/>
+                    <path d="M108 170 L84 224"/>
+                    <path d="M108 170 L126 222"/>
+                  </g>
+                </g>
+                <!-- door swings OPEN toward the person -->
+                <g class="cgm-doorB">
+                  <rect x="170" y="88" width="100" height="150" rx="5" fill="#C9A87C" stroke="rgba(0,0,0,.15)" stroke-width="2"/>
+                  <rect x="184" y="104" width="46" height="18" rx="3" fill="#fff" stroke="var(--rule)"/>
+                  <text x="207" y="117" text-anchor="middle" font-size="10" font-weight="800" letter-spacing="1.6" fill="var(--ink)">PULL</text>
+                  <rect x="176" y="150" width="6" height="30" rx="3" fill="#4A4F57"/>
+                </g>
+                <g class="cgm-check">
+                  <circle cx="248" cy="62" r="14" fill="var(--accent-deep)"/>
+                  <path d="M241 62 l5 5 9 -10" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </g>
+                <text x="140" y="264" text-anchor="middle" font-size="11" fill="var(--muted)">The chain stays sharp. Right move, first try.</text>
               </g>
-              <text x="290" y="243" text-anchor="middle" font-size="11.5" fill="var(--muted)">The moment we push instead of pull &mdash; and the five steps racing behind it.</text>
+
+              <!-- ============ the cause, centre-bottom: daily writing ============ -->
+              <g transform="translate(178 274)">
+                <rect x="0" y="0" width="224" height="36" rx="18" fill="var(--surface)" stroke="rgba(0,173,181,.35)"/>
+                <g transform="translate(14 8)">
+                  <path class="cgm-loop" d="M2 14 q5 -12 10 0 t10 0 t10 0 t10 0" fill="none" stroke="var(--accent-deep)" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M46 16 L52 6 l3 3 -6 9z" fill="var(--accent-deep)"/>
+                </g>
+                <text x="146" y="23" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--ink)">Daily handwriting trains this</text>
+              </g>
             </svg>
           </figure>
         </div>
