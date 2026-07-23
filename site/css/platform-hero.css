@@ -554,10 +554,10 @@
 .vh-holo--imu svg{width:100%; height:54px; display:block;}
 .vh-holo--imu span{display:block; margin-top:7px; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);}
 .vh-trace--1{stroke:var(--accent-deep);} .vh-trace--2{stroke:var(--accent);} .vh-trace--3{stroke:#C8952E;}
-.vh[data-frame="2"] .vh-holo--imu, .vh[data-frame="3"] .vh-holo--imu{opacity:1; transform:translateY(0);}
+.vh[data-frame="2"] .vh-holo--imu{opacity:1; transform:translateY(0);}
 .vh-trace{stroke-dasharray:170; stroke-dashoffset:170;}
 .vh[data-frame="2"] .vh-trace{animation:vhTraceDraw 1.4s var(--ease) both;}
-.vh[data-frame="3"] .vh-trace{stroke-dashoffset:0;}
+
 .vh[data-frame="2"] .vh-trace--2{animation-delay:.2s}
 .vh[data-frame="2"] .vh-trace--3{animation-delay:.4s}
 @keyframes vhTraceDraw{to{stroke-dashoffset:0}}
@@ -566,7 +566,7 @@
 .vh-holo{position:absolute; z-index:2; background:rgba(255,255,255,.92); border:1px solid var(--rule);
   border-radius:14px; padding:14px 16px; backdrop-filter:blur(6px); box-shadow:var(--shadow-2);
   opacity:0; transform:translateY(14px); transition:opacity .5s var(--ease), transform .5s var(--ease);}
-.vh-holo--recon{left:-2%; bottom:22%; width:206px;}
+.vh-holo--recon{left:-2%; top:8%; width:206px;}
 .vh-holo--recon b{display:block; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent-deep); margin-bottom:8px;}
 .vh-holo--recon svg{width:100%; height:56px; display:block;}
 .vh-holo--recon span{display:block; margin-top:7px; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);}
@@ -632,7 +632,7 @@
   .vh__grid2{grid-template-columns:1fr; gap:30px;}
   .vh__stage{min-height:430px;}
   .vh__halo{width:340px; height:340px; right:50%; transform:translate(50%,-50%);}
-  .vh-holo--recon{left:0; bottom:10%;}
+  .vh-holo--recon{left:0; top:0;}
   .vh-holo--ai{right:0; top:0;}
   .vh__stats{grid-template-columns:repeat(2,1fr); row-gap:22px;}
 }
@@ -662,83 +662,66 @@
 
 
 
-/* ---- bridge v3: mockup-style timeline + door/brain moment ---------------- */
-.cogv3__top{display:grid; grid-template-columns:1fr 1.08fr; gap:44px; align-items:start; margin-top:8px;}
-.cogv3__h2{font-family:var(--serif); font-size:clamp(28px,3.4vw,42px); line-height:1.14; margin:12px 0 0;}
-.cogv3__h2 em{font-style:normal; color:var(--accent-deep);}
-.cogv3__moment{margin:26px 0 0; background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg); box-shadow:var(--shadow-1); padding:10px;}
-.cogv3__moment svg{width:100%; height:auto; display:block;}
-.cogv3__region circle{fill:rgba(0,173,181,.18); stroke:var(--accent-deep); stroke-width:2;
-  animation:cogRegion 10s ease-in-out infinite; animation-delay:calc(var(--i) * 2s);}
-.cogv3__region text{font-size:11px; font-weight:700; fill:var(--muted); text-anchor:middle;}
-@keyframes cogRegion{0%,18%{fill:rgba(0,173,181,.55); stroke-width:3.5; r:11;} 22%,100%{fill:rgba(0,173,181,.18); stroke-width:2;}}
 
-.cogv3__label{font-size:11.5px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin:0 0 14px;}
-.cogv3__rail{display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin:0; padding:0; list-style:none;}
-.cogv3__step{position:relative; background:var(--surface); border:1.5px solid var(--rule); border-radius:14px;
-  padding:30px 10px 12px; text-align:center; box-shadow:var(--shadow-1);
-  animation:cogGlow 10s ease-in-out infinite; animation-delay:calc(var(--i) * 2s);}
-.cogv3__num{position:absolute; top:-13px; left:50%; transform:translateX(-50%); width:26px; height:26px;
-  border-radius:50%; background:var(--accent-deep); color:#fff; font-size:13px; font-weight:800;
-  display:grid; place-items:center; box-shadow:0 4px 12px rgba(4,138,145,.35);}
-.cogv3__step svg{width:22px; height:22px; color:var(--accent-deep); display:block; margin:0 auto 8px;}
-.cogv3__step b{display:block; font-size:13.5px; color:var(--ink);}
-.cogv3__step > span:not(.cogv3__num){display:block; font-size:10px; color:var(--muted); line-height:1.45; margin-top:4px;}
-.cogv3__track{position:relative; height:5px; margin:16px 2px 0; background:var(--rule); border-radius:99px; overflow:hidden;}
-.cogv3__track i{position:absolute; top:0; bottom:0; width:20%; border-radius:99px; background:var(--accent);
-  animation:cogTrack 10s linear infinite;}
-@keyframes cogTrack{from{left:-20%} to{left:100%}}
-.cogv3__jam{display:flex; align-items:flex-start; gap:10px; margin:16px 0 0; padding:12px 15px; font-size:12.5px; line-height:1.5;
-  color:var(--ink-2, var(--muted)); background:rgba(0,173,181,.07); border:1px solid rgba(0,173,181,.25); border-radius:12px;}
-.cogv3__jam svg{width:17px; height:17px; flex:0 0 auto; color:var(--accent-deep); margin-top:1px;}
-.cogv3__jam b{color:var(--ink);}
 
-.cogv3__runs{margin-top:26px;}
-.cogv3__runs h3{font-family:var(--serif); font-size:clamp(19px,1.9vw,24px); margin:0;}
-.cogv3__runs h3 em{font-style:normal; color:var(--accent-deep);}
-.cogv3__runs p{font-size:13.5px; line-height:1.6; color:var(--muted); margin:8px 0 0; max-width:520px;}
-.cogv3__feats{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:16px 0 0; padding:0; list-style:none;}
-.cogv3__feats li{display:flex; flex-direction:column; align-items:center; gap:7px; text-align:center;
-  font-size:11px; font-weight:700; color:var(--ink); background:var(--surface); border:1px solid var(--rule);
-  border-radius:12px; padding:13px 6px;}
-.cogv3__feats svg{width:18px; height:18px; color:var(--accent-deep);}
+/* ---- bridge v4: daily calibration (compare + learning loop) -------------- */
+.cogv4__head{max-width:760px; margin:0 auto; text-align:center;}
+.cogv4__h2{font-family:var(--serif); font-size:clamp(30px,3.8vw,46px); line-height:1.12; margin:12px 0 0;}
+.cogv4__h2 em{font-style:normal; color:var(--accent-deep);}
+.cogv4__lede{font-size:15.5px; line-height:1.66; color:var(--muted); margin-top:16px;}
+.cogv4__lede b{color:var(--ink);}
+.cogv4__grid{display:grid; grid-template-columns:1.05fr .95fr; gap:26px; margin-top:40px; align-items:stretch;}
+.cogv4__label{font-size:11.5px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin:0 0 12px; text-align:center;}
 
-.cogv3__bar{margin-top:40px; display:grid; grid-template-columns:1.1fr 1.6fr; gap:26px; align-items:center;
+/* compare card */
+.cogv4__compare{background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg); box-shadow:var(--shadow-1); padding:20px 22px; display:flex; flex-direction:column;}
+.cmp__heads{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:6px;}
+.cmp__h{display:inline-flex; align-items:center; justify-content:center; gap:8px; font-size:13px; font-weight:800; letter-spacing:.04em; padding:9px 6px; border-radius:11px;}
+.cmp__h svg{width:17px; height:17px;}
+.cmp__h--type{background:var(--ivory); color:var(--muted); border:1px solid var(--rule);}
+.cmp__h--hand{background:rgba(0,173,181,.09); color:var(--accent-deep); border:1px solid rgba(0,173,181,.35);}
+.cmp__row{display:grid; grid-template-columns:1fr 1fr; gap:12px; border-bottom:1px dashed var(--rule); padding:10px 2px;}
+.cmp__row span{font-size:13px; line-height:1.45;}
+.cmp__row span:first-child{color:var(--hint);}
+.cmp__row span:last-child{color:var(--ink); font-weight:600; position:relative; padding-left:20px;}
+.cmp__row span:last-child::before{content:"✓"; position:absolute; left:0; color:var(--accent-deep); font-weight:800;}
+.cmp__punch{margin:16px 0 0; padding:12px 15px; border-radius:12px; background:rgba(0,173,181,.07);
+  border:1px solid rgba(0,173,181,.25); font-size:13.5px; line-height:1.5; color:var(--muted); text-align:center;}
+.cmp__punch b{color:var(--accent-deep);}
+
+/* learning loop */
+.cogv4__loop{background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg); box-shadow:var(--shadow-1); padding:20px 22px; display:flex; flex-direction:column;}
+.cogv4__loop svg{width:min(330px,100%); margin:0 auto; display:block; flex:1;}
+.lp-orbit{transform-origin:150px 150px; animation:vhSpin 12s linear infinite;}
+.lp-node circle{fill:rgba(0,173,181,.16); stroke:var(--accent-deep); stroke-width:2;
+  animation:lpGlow 12s linear infinite; animation-delay:calc(var(--i) * 1.5s);}
+.lp-node text{font-size:12px; font-weight:700; fill:var(--muted); text-anchor:middle;}
+@keyframes lpGlow{0%,10%{fill:rgba(0,173,181,.6); stroke-width:3.5;} 14%,100%{fill:rgba(0,173,181,.16); stroke-width:2;}}
+.cogv4__loopcap{margin:14px 0 0; font-size:13px; line-height:1.55; color:var(--muted); text-align:center;}
+.cogv4__loopcap b{color:var(--ink);}
+
+/* compounding chain + analogy */
+.cogv4__chain{display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:10px 12px; margin-top:30px;}
+.cogv4__chain span{font-size:13px; font-weight:600; color:var(--ink); background:var(--surface); border:1px solid var(--rule);
+  border-radius:99px; padding:9px 17px; box-shadow:var(--shadow-1);}
+.cogv4__chain span b{color:var(--accent-deep);}
+.cogv4__chain svg{width:16px; height:16px; color:var(--accent-deep); flex:0 0 auto;}
+.cogv4__analogy{margin:18px auto 0; max-width:640px; text-align:center; font-size:13.5px; line-height:1.6; color:var(--muted);}
+.cogv4__analogy b{color:var(--ink);}
+
+/* bridge bar */
+.cogv4__bar{margin-top:36px; display:grid; grid-template-columns:1.15fr 1.55fr; gap:26px; align-items:center;
   background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg); box-shadow:var(--shadow-1); padding:22px 26px;}
-.cogv3__bridge{margin:0; font-size:14px; line-height:1.6; color:var(--muted); border-left:3px solid var(--accent); padding-left:15px;}
-.cogv3__bridge b{color:var(--ink); font-family:var(--serif); font-size:16.5px;}
-.cogv3__stats{display:grid; grid-template-columns:repeat(4,1fr); gap:12px;}
-.cogv3__stats > div{text-align:center;}
-.cogv3__stats b{display:block; font-family:var(--serif); font-size:clamp(20px,2vw,26px); color:var(--accent-deep);}
-.cogv3__stats span{display:block; font-size:11px; color:var(--muted); margin-top:3px; line-height:1.4;}
+.cogv4__bridge{margin:0; font-size:13.5px; line-height:1.6; color:var(--muted); border-left:3px solid var(--accent); padding-left:15px;}
+.cogv4__bridge b{color:var(--ink); font-family:var(--serif); font-size:16px;}
+.cogv4__bridge small{display:block; margin-top:8px; font-size:11px; color:var(--hint); line-height:1.5;}
+.cogv4__stats{display:grid; grid-template-columns:repeat(4,1fr); gap:12px;}
+.cogv4__stats > div{text-align:center;}
+.cogv4__stats b{display:block; font-family:var(--serif); font-size:clamp(20px,2vw,26px); color:var(--accent-deep);}
+.cogv4__stats span{display:block; font-size:11px; color:var(--muted); margin-top:3px; line-height:1.4;}
 
 @media (max-width:920px){
-  .cogv3__top{grid-template-columns:1fr; gap:34px;}
-  .cogv3__rail{grid-template-columns:repeat(2,1fr); row-gap:22px;}
-  .cogv3__feats{grid-template-columns:repeat(2,1fr);}
-  .cogv3__bar{grid-template-columns:1fr;}
-  .cogv3__stats{grid-template-columns:repeat(2,1fr); row-gap:16px;}
+  .cogv4__grid{grid-template-columns:1fr;}
+  .cogv4__bar{grid-template-columns:1fr;}
+  .cogv4__stats{grid-template-columns:repeat(2,1fr); row-gap:16px;}
 }
-
-
-/* ---- bridge moment v2: person vs PULL door, two outcomes ----------------- */
-.cgm-figA{animation:cgmShove 5s var(--ease) infinite; transform-origin:96px 168px;}
-@keyframes cgmShove{0%,14%{transform:translateX(-14px)} 26%,44%{transform:translateX(2px)} 50%,58%{transform:translateX(-2px)} 70%,100%{transform:translateX(-14px)}}
-.cgm-doorA{animation:cgmResist 5s linear infinite; transform-origin:152px 163px;}
-@keyframes cgmResist{26%{transform:translateX(0)} 30%{transform:translateX(-3px)} 34%{transform:translateX(2px)} 38%,100%{transform:translateX(0)}}
-.cgm-tangle{animation:cgmTangle 5s ease-in-out infinite; transform-origin:66px 76px;}
-@keyframes cgmTangle{0%,20%{opacity:.35} 30%,60%{opacity:1} 75%,100%{opacity:.35}}
-.cgm-bang{opacity:0; animation:cgmBang 5s linear infinite;}
-@keyframes cgmBang{0%,26%{opacity:0} 32%,62%{opacity:1} 72%,100%{opacity:0}}
-
-.cgm-dir path{stroke:var(--accent-deep); opacity:.3;}
-.cgm-dir{animation:cgmDir 4s linear infinite; animation-delay:calc(var(--i) * .5s);}
-@keyframes cgmDir{0%,8%{opacity:.3} 12%,30%{opacity:1} 40%,100%{opacity:.3}}
-.cgm-figB{animation:cgmPull 5s var(--ease) infinite; transform-origin:108px 170px;}
-@keyframes cgmPull{0%,30%{transform:translateX(6px)} 48%,74%{transform:translateX(-4px)} 90%,100%{transform:translateX(6px)}}
-.cgm-doorB{transform-origin:270px 163px; animation:cgmOpen 5s var(--ease) infinite;}
-@keyframes cgmOpen{0%,32%{transform:rotate(0deg)} 52%,78%{transform:rotate(-10deg)} 94%,100%{transform:rotate(0deg)}}
-.cgm-check{opacity:0; transform-origin:248px 62px; animation:cgmCheck 5s var(--ease) infinite;}
-@keyframes cgmCheck{0%,48%{opacity:0; transform:scale(.5)} 56%,84%{opacity:1; transform:scale(1)} 94%,100%{opacity:0; transform:scale(.5)}}
-.cgm-loop{stroke-dasharray:70; animation:cgmLoop 4s var(--ease) infinite;}
-@keyframes cgmLoop{0%{stroke-dashoffset:70} 45%,100%{stroke-dashoffset:0}}
