@@ -30,6 +30,9 @@ const gzip = promisify(zlib.gzip);
 
 const SKIP_STATE = ".sweep-skip.json";
 const DAY_MS = 24 * 60 * 60 * 1000;
+// already-compressed formats: gzip never earns its keep, so don't even try
+// (and don't bloat .sweep-skip.json with one entry per upload)
+const INCOMPRESSIBLE_EXT = new Set([".jpg", ".jpeg", ".png", ".gif", ".webp", ".zip", ".gz"]);
 
 async function listFiles(dir) {
   const out = [];
@@ -68,6 +71,7 @@ async function compressPass(dir, compressDays, now, stats) {
   let skipDirty = false;
   for (const file of await listFiles(dir)) {
     if (file.endsWith(".gz")) continue;
+    if (INCOMPRESSIBLE_EXT.has(path.extname(file).toLowerCase())) continue;
     if (skip.has(path.relative(dir, file))) continue;
     let st;
     try {
@@ -143,12 +147,16 @@ async function evictPass(dirs, { evictDays, capMB }, now, stats) {
   }
 }
 
+function finiteOrDefault(n, def) {
+  return Number.isFinite(n) && n >= 0 ? n : def;
+}
+
 /* opts: { dirs, compressDays=14, evictDays=0, capMB=0, now=Date.now() } */
 async function sweep(opts) {
   const { dirs } = opts;
-  const compressDays = opts.compressDays ?? 14;
-  const evictDays = opts.evictDays ?? 0;
-  const capMB = opts.capMB ?? 0;
+  const compressDays = finiteOrDefault(opts.compressDays, 14);
+  const evictDays = finiteOrDefault(opts.evictDays, 0);
+  const capMB = finiteOrDefault(opts.capMB, 0);
   const now = opts.now ?? Date.now();
   const stats = { compressed: 0, evicted: 0, savedBytes: 0, errors: [] };
   for (const dir of dirs) await compressPass(dir, compressDays, now, stats);

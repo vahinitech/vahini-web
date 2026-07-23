@@ -428,14 +428,21 @@ server.requestTimeout = 120 * 1000;
    remembered). Deletion is opt-in only: SWEEP_EVICT_DAYS drops files older
    than the horizon, SWEEP_CAP_MB sweeps oldest-first back under the cap.
    SWEEP_ENABLE=0 turns the whole thing off. */
+function sweepEnvNumber(name, def) {
+  const n = Number(process.env[name]);
+  return Number.isFinite(n) && n >= 0 ? n : def;
+}
 const SWEEP_ENABLE = process.env.SWEEP_ENABLE !== "0";
-const SWEEP_COMPRESS_DAYS = Number(process.env.SWEEP_COMPRESS_DAYS || 14);
-const SWEEP_EVICT_DAYS = Number(process.env.SWEEP_EVICT_DAYS || 0);
-const SWEEP_CAP_MB = Number(process.env.SWEEP_CAP_MB || 0);
-const SWEEP_INTERVAL_H = Number(process.env.SWEEP_INTERVAL_H || 24);
+const SWEEP_COMPRESS_DAYS = sweepEnvNumber("SWEEP_COMPRESS_DAYS", 14);
+const SWEEP_EVICT_DAYS = sweepEnvNumber("SWEEP_EVICT_DAYS", 0);
+const SWEEP_CAP_MB = sweepEnvNumber("SWEEP_CAP_MB", 0);
+const SWEEP_INTERVAL_H = sweepEnvNumber("SWEEP_INTERVAL_H", 24);
 const { sweep } = require("./lib/sweeper");
 
+let sweeping = false;
 async function runSweep() {
+  if (sweeping) return; // a prior sweep is still running (slow I/O or a short interval)
+  sweeping = true;
   try {
     const stats = await sweep({
       dirs: [DIR_UPLOADS, DIR_REPORTS, DIR_FEEDBACK],
@@ -450,6 +457,8 @@ async function runSweep() {
     for (const e of stats.errors.slice(0, 5)) console.warn(`sweeper: ${e}`);
   } catch (err) {
     console.error("sweeper failed", err);
+  } finally {
+    sweeping = false;
   }
 }
 
