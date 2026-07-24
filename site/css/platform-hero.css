@@ -636,7 +636,7 @@
 @keyframes calNudge{0%,100%{transform:translateY(0)} 50%{transform:translateY(5px)}}
 .cal.is-done .cal__hint{opacity:0;}
 .cal__done{margin-top:26px; opacity:0; transform:translateY(10px); transition:opacity .5s var(--ease), transform .5s var(--ease);}
-.cal.is-done .cal__done, .cal--static .cal__done{opacity:1; transform:none;}
+.cal.is-done .cal__done{opacity:1; transform:none;}
 .cal__donestamp{display:inline-flex; align-items:center; gap:9px; font-family:var(--serif); font-size:19px; color:var(--accent-deep); margin:0;}
 .cal__donestamp svg{width:19px; height:19px;}
 .cal__done p:not(.cal__donestamp){font-size:13.5px; color:var(--muted); margin:8px 0 0; line-height:1.55;}
