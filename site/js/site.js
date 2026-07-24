@@ -227,6 +227,14 @@
       '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'+inner+'</svg></a>';
   }
 
+  /* Declared ahead of injectHead()/wireConsent() (which both read these) so
+     there's no doubt they're initialized before use -- they're plain `var`s
+     in this IIFE's top-level scope, but keeping the declaration textually
+     before its first read avoids relying on execution-order reasoning. */
+  var CONSENT_KEY = "vahini_consent";
+  var CONSENT_LOG = "vahini_consent_log";
+  var CONSENT_VERSION = 1;
+
   /* ---- inject favicons + analytics into <head>, once, on every page ---- */
   function injectHead(){
     if (document.getElementById("vt-head-meta")) return;
@@ -293,9 +301,6 @@
      stay cookieless/denied until explicit consent flips analytics_storage to
      granted. The choice is stored, and every decision is appended to an
      audit log. */
-  var CONSENT_KEY = "vahini_consent";
-  var CONSENT_LOG = "vahini_consent_log";
-  var CONSENT_VERSION = 1;
   var analyticsGranted = false;
 
   function getConsent(){
