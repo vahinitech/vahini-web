@@ -33,6 +33,14 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 // already-compressed formats: gzip never earns its keep, so don't even try
 // (and don't bloat .sweep-skip.json with one entry per upload)
 const INCOMPRESSIBLE_EXT = new Set([".jpg", ".jpeg", ".png", ".gif", ".webp", ".zip", ".gz"]);
+// server.js only ever logs the first 5; cap well above that for diagnosis
+// without letting a volume full of unreadable files grow this unbounded.
+const MAX_ERRORS = 50;
+
+function pushError(stats, msg) {
+  if (stats.errors.length < MAX_ERRORS) stats.errors.push(msg);
+  else stats.errorsTruncated = (stats.errorsTruncated || 0) + 1;
+}
 
 async function listFiles(dir) {
   const out = [];
@@ -96,7 +104,7 @@ async function compressPass(dir, compressDays, now, stats) {
       stats.compressed += 1;
       stats.savedBytes += raw.length - gz.length;
     } catch (err) {
-      stats.errors.push(`${file}: ${err.message}`);
+      pushError(stats, `${file}: ${err.message}`);
     }
   }
   if (skipDirty) await saveSkip(dir, skip);
@@ -122,7 +130,7 @@ async function evictPass(dirs, { evictDays, capMB }, now, stats) {
         stats.savedBytes += f.size;
         f.gone = true;
       } catch (err) {
-        stats.errors.push(`${f.file}: ${err.message}`);
+        pushError(stats, `${f.file}: ${err.message}`);
       }
     }
   }
@@ -140,7 +148,7 @@ async function evictPass(dirs, { evictDays, capMB }, now, stats) {
           stats.evicted += 1;
           stats.savedBytes += f.size;
         } catch (err) {
-          stats.errors.push(`${f.file}: ${err.message}`);
+          pushError(stats, `${f.file}: ${err.message}`);
         }
       }
     }

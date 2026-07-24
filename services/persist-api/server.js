@@ -450,9 +450,10 @@ async function runSweep() {
       evictDays: SWEEP_EVICT_DAYS,
       capMB: SWEEP_CAP_MB,
     });
+    const errorNote = stats.errorsTruncated ? `${stats.errors.length}+${stats.errorsTruncated} truncated` : stats.errors.length;
     console.log(
       `sweeper: compressed=${stats.compressed} evicted=${stats.evicted} ` +
-        `saved=${(stats.savedBytes / 1024 / 1024).toFixed(1)}MB errors=${stats.errors.length}`,
+        `saved=${(stats.savedBytes / 1024 / 1024).toFixed(1)}MB errors=${errorNote}`,
     );
     for (const e of stats.errors.slice(0, 5)) console.warn(`sweeper: ${e}`);
   } catch (err) {
