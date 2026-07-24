@@ -27,6 +27,14 @@
 <meta name="twitter:description" content="A patented sensor pen for ordinary paper that captures handwriting motion for AI-powered handwriting intelligence.">
 <meta name="twitter:image" content="https://vahinitech.com/site/assets/ev/vahini-mark.png">
 <meta name="twitter:image:alt" content="The Vahini logo">
+<!-- The Product node below (#vahini-pen) intentionally has no `offers`: the
+     pen has no public price yet (pre-order/reservation only, no price shown
+     on reach.html). Google's Product-snippet/Merchant-listing checks require
+     offers.price to match a price actually displayed on the page, adding
+     one here without a real displayed price is exactly the "price mismatch"
+     violation those checks exist to catch. Add `offers` back only once a
+     real price is live on reach.html, with that same price (keep in sync
+     with the corresponding node in product.html). -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -92,13 +100,7 @@
         { "@type": "PropertyValue", "name": "Paper Compatibility", "value": "Ordinary Paper" },
         { "@type": "PropertyValue", "name": "Patent", "value": "Indian Patent No. 584433" },
         { "@type": "PropertyValue", "name": "Applications", "value": "Handwriting Intelligence, Digital Notes, Learning Analytics, Motor Assessment, Signature Intelligence, Developer SDK" }
-      ],
-      "offers": {
-        "@type": "Offer",
-        "availability": "https://schema.org/PreOrder",
-        "priceCurrency": "INR",
-        "url": "https://vahinitech.com/reach.html"
-      }
+      ]
     },
     {
       "@type": "SoftwareApplication",

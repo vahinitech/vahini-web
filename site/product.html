@@ -33,6 +33,14 @@
 <link rel="stylesheet" href="css/theme.css">
 <link rel="stylesheet" href="css/site.css">
 <link rel="stylesheet" href="css/product.css">
+<!-- The Product node below intentionally has no `offers`: the pen has no
+     public price yet (pre-order/reservation only, no price shown on
+     reach.html). Google's Product-snippet/Merchant-listing checks require
+     offers.price to match a price actually displayed on the page, adding
+     one here without a real displayed price is exactly the "price mismatch"
+     violation those checks exist to catch (Search Console flagged the
+     opposite problem: missing price). Add `offers` back only once a real
+     price is live on reach.html, with that same price. -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -97,13 +105,7 @@
           "name": "Patent",
           "value": "Indian Patent No. 584433"
         }
-      ],
-      "offers": {
-        "@type": "Offer",
-        "availability": "https://schema.org/PreOrder",
-        "priceCurrency": "INR",
-        "url": "https://vahinitech.com/reach.html"
-      }
+      ]
     }
   ]
 }
