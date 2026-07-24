@@ -55,7 +55,7 @@
 .fx-grid__item p{font-size:14px; color:var(--muted); line-height:1.55;}
 
 /* tight step list: bold title inline, one short line, no numbered circles */
-.fx-steps{display:flex; flex-direction:column; gap:18px; margin-top:4px;}
+.fx-steps{display:flex; flex-direction:column; gap:18px; margin:4px 0 0; padding:0; list-style:none;}
 .fx-steps li{display:flex; gap:12px; align-items:baseline;}
 .fx-steps li::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--accent); flex:0 0 auto; transform:translateY(-4px);}
 .fx-steps b{font-family:var(--sans); font-weight:700; color:var(--ink);}
