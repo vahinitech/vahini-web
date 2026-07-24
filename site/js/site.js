@@ -265,11 +265,18 @@
        (vs. withholding the script entirely) lets Google send anonymous
        consent-mode pings for visitors who never opt in, which GA4 uses to
        model that traffic instead of reporting it as zero. See wireConsent()
-       and loadAnalytics(), which only flips analytics_storage to granted. */
+       and grantAnalyticsConsent()/denyAnalyticsConsent(), which flip
+       analytics_storage after the initial default set below. */
     window.dataLayer = window.dataLayer || [];
     window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
+    /* A later consent 'update' only affects hits gtag.js processes AFTER it,
+       not the 'config' hit queued just below -- so a returning visitor who
+       already opted in needs analytics_storage GRANTED in this very default,
+       not granted via a follow-up update from wireConsent(). */
+    var priorAnalytics = false;
+    try { var pc = JSON.parse(localStorage.getItem(CONSENT_KEY)); priorAnalytics = !!(pc && pc.v === CONSENT_VERSION && pc.analytics); } catch(e){}
     window.gtag('consent', 'default', {
-      ad_storage:'denied', analytics_storage:'denied',
+      ad_storage:'denied', analytics_storage: priorAnalytics ? 'granted' : 'denied',
       ad_user_data:'denied', ad_personalization:'denied'
     });
     /* Google Tag Manager -- appended straight to head (this runs from
@@ -289,7 +296,7 @@
   var CONSENT_KEY = "vahini_consent";
   var CONSENT_LOG = "vahini_consent_log";
   var CONSENT_VERSION = 1;
-  var analyticsLoaded = false;
+  var analyticsGranted = false;
 
   function getConsent(){
     try { var c = JSON.parse(localStorage.getItem(CONSENT_KEY)); return (c && c.v===CONSENT_VERSION) ? c : null; }
@@ -306,16 +313,22 @@
     try { localStorage.setItem(CONSENT_KEY, JSON.stringify({ v:CONSENT_VERSION, decision:decision, analytics:!!analytics, ts:Date.now() })); } catch(e){}
     logConsent(decision, analytics);
   }
-  function loadAnalytics(){
-    /* GTM/GA4 are already loaded (see injectHead()) -- opting in just flips
-       Consent Mode from denied to granted, unlocking cookies/identifiers. */
-    if (analyticsLoaded) return; analyticsLoaded = true;
+  /* GTM/GA4 are already loaded on every visit (see injectHead()) -- these
+     just flip Consent Mode between denied and granted, unlocking or
+     re-blocking cookies/identifiers. Both are idempotent against the
+     current known state, so re-clicking a button is a harmless no-op. */
+  function grantAnalyticsConsent(){
+    if (analyticsGranted) return; analyticsGranted = true;
     if (window.gtag) window.gtag('consent','update',{ analytics_storage:'granted' });
+  }
+  function denyAnalyticsConsent(){
+    if (!analyticsGranted) return; analyticsGranted = false;
+    if (window.gtag) window.gtag('consent','update',{ analytics_storage:'denied' });
   }
 
   function wireConsent(){
     var prior = getConsent();
-    if (prior && prior.analytics) loadAnalytics();   // returning visitor who opted in
+    if (prior && prior.analytics) grantAnalyticsConsent();   // returning visitor who opted in (matches the default injectHead() already set)
 
     var esc = function(s){ return String(s); };
     var banner = document.createElement('div');
@@ -355,11 +368,11 @@
 
     function close(){ banner.classList.add('cc--gone'); document.body.classList.remove('cc-open'); setTimeout(function(){ banner.remove(); }, 320); }
 
-    banner.querySelector('#cc-accept').addEventListener('click', function(){ saveConsent('accept_all', true); loadAnalytics(); close(); });
-    banner.querySelector('#cc-reject').addEventListener('click', function(){ saveConsent('reject_non_essential', false); close(); });
+    banner.querySelector('#cc-accept').addEventListener('click', function(){ saveConsent('accept_all', true); grantAnalyticsConsent(); close(); });
+    banner.querySelector('#cc-reject').addEventListener('click', function(){ saveConsent('reject_non_essential', false); denyAnalyticsConsent(); close(); });
     banner.querySelector('#cc-prefs').addEventListener('click', function(){ panel.hidden = !panel.hidden; });
     banner.querySelector('#cc-save').addEventListener('click', function(){
-      var a = toggle.checked; saveConsent('custom', a); if (a) loadAnalytics(); close();
+      var a = toggle.checked; saveConsent('custom', a); if (a) grantAnalyticsConsent(); else denyAnalyticsConsent(); close();
     });
 
     // only auto-show the banner if no prior decision exists
