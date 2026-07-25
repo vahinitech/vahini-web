@@ -472,8 +472,10 @@ ensureDirs()
       console.log(`feedback=${DIR_FEEDBACK}`);
       if (SWEEP_ENABLE) {
         runSweep(); // once at boot, then daily
-        const t = setInterval(runSweep, SWEEP_INTERVAL_H * 60 * 60 * 1000);
-        t.unref();
+        if (SWEEP_INTERVAL_H > 0) {
+          const t = setInterval(runSweep, SWEEP_INTERVAL_H * 60 * 60 * 1000);
+          t.unref();
+        } // SWEEP_INTERVAL_H=0 means "boot sweep only" -- don't reschedule back-to-back
       }
     });
   })

@@ -38,6 +38,14 @@ const rand = Buffer.alloc(60_000);
 for (let i = 0; i < rand.length; i++) rand[i] = Math.floor(Math.random() * 256);
 writeFileSync(oldBlob, rand);
 ageFile(oldBlob, 30);
+// an already-encrypted/opaque blob with no extension in INCOMPRESSIBLE_EXT --
+// exercises the dynamic (gzip-and-measure) skip-list path, not the static
+// extension fast-path that .jpg above short-circuits.
+const oldOpaque = join(uploads, "session.enc");
+const randOpaque = Buffer.alloc(60_000);
+for (let i = 0; i < randOpaque.length; i++) randOpaque[i] = Math.floor(Math.random() * 256);
+writeFileSync(oldOpaque, randOpaque);
+ageFile(oldOpaque, 30);
 const fresh = join(reports, "r2.json");
 writeFileSync(fresh, JSON.stringify({ pad: "y".repeat(50_000) }));
 ageFile(fresh, 1);
@@ -51,8 +59,15 @@ check("gzip round-trips to original content", (() => {
 })());
 check("gz keeps the original mtime (age preserved)", now - statSync(oldJson + ".gz").mtimeMs > 29 * DAY);
 check("incompressible blob left alone", existsSync(oldBlob) && !existsSync(oldBlob + ".gz"));
+check("opaque blob left alone too", existsSync(oldOpaque) && !existsSync(oldOpaque + ".gz"));
 check("fresh file untouched", existsSync(fresh));
 check("stats counted one compression", stats.compressed === 1 && stats.savedBytes > 0);
+check("skip-list written with the opaque blob's relative path", (() => {
+  const skipPath = join(uploads, ".sweep-skip.json");
+  if (!existsSync(skipPath)) return false;
+  const skip = JSON.parse(readRaw(skipPath, "utf8"));
+  return Array.isArray(skip) && skip.includes("session.enc");
+})());
 
 console.log("sweeper: skip-list prevents re-compressing the blob");
 stats = await sweep({ dirs: [uploads, reports], compressDays: 14, now });
