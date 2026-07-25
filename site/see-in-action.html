@@ -95,6 +95,8 @@
 .chan em{display:block; font-style:normal; font-family:"Patrick Hand",cursive; font-size:12.5px; color:#5b6472; margin-bottom:7px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 .chan .tr{display:flex; gap:5px; align-items:flex-end; height:16px;}
 .chan .tr i{flex:1; height:4px; border-radius:2px; background:var(--ch,#2a8c82); opacity:.85; transform-origin:bottom; transition:height .12s linear;}
+.chan .wv{display:block; width:100%; height:16px;}
+.chan .wv polyline{fill:none; stroke:var(--ch,#2a8c82); stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; opacity:.85;}
 
 .pg-paper .btnrow{display:flex; gap:12px; margin-top:16px;}
 .pbtn{font-family:"Patrick Hand",cursive; font-size:17px; letter-spacing:.5px; border-radius:10px; padding:10px 20px;
@@ -327,23 +329,46 @@ window.addEventListener('resize', function(){ gD = fit(draw); gR = fit(recon); r
 var INK = '#22306b';           /* fountain-pen blue on paper */
 var GLOW = '#7fd4c8';          /* engine teal on the dark page */
 
-/* ---------- sensor bus (6 channels × 3 traces = 16-axis feel) ---------- */
+/* ---------- sensor bus (6 channels × 3 traces = 16-axis feel) ----------
+   gyro channels get a sine trace instead of level bars -- a gyro reads
+   angular rate, and an oscillating wave reads correctly as that, where a
+   bar-meter reads as a plain amplitude/level (matches accel/magneto/tip
+   force, which really are level-style readings). */
 var CH = [
-  ['IMU-A · accel', '#2a8c82'], ['IMU-A · gyro', '#4a67c9'], ['IMU-A · magneto', '#9b7bd4'],
-  ['IMU-B · accel', '#2a8c82'], ['IMU-B · gyro', '#4a67c9'], ['tip force · analog', '#e2a32b']
+  ['IMU-A · accel', '#2a8c82'], ['IMU-A · gyro', '#4a67c9', 'wave'], ['IMU-A · magneto', '#9b7bd4'],
+  ['IMU-B · accel', '#2a8c82'], ['IMU-B · gyro', '#4a67c9', 'wave'], ['tip force · analog', '#e2a32b']
 ];
 var bus = document.getElementById('siaBus');
 bus.innerHTML = CH.map(function(c){
-  return '<div class="chan" style="--ch:' + c[1] + '"><em>' + c[0] + '</em><div class="tr"><i></i><i></i><i></i></div></div>';
+  var inner = c[2] === 'wave'
+    ? '<svg class="wv" viewBox="0 0 100 16" preserveAspectRatio="none"><polyline points="0,8 100,8"/></svg>'
+    : '<div class="tr"><i></i><i></i><i></i></div>';
+  return '<div class="chan" style="--ch:' + c[1] + '"><em>' + c[0] + '</em>' + inner + '</div>';
 }).join('');
 var traces = [].slice.call(bus.querySelectorAll('.tr i'));
+var waves = [].slice.call(bus.querySelectorAll('.wv polyline'));
+function wavePoints(speed, idx){
+  var amp = Math.min(6.5, 1 + speed * 0.42);
+  var pts = [];
+  for (var x = 0; x <= 100; x += 5){
+    var y = 8 + Math.sin(x * 0.24 + samples * 0.14 + idx * 1.7) * amp;
+    pts.push(x + ',' + y.toFixed(1));
+  }
+  return pts.join(' ');
+}
 function pulseBus(speed){
   for (var k = 0; k < traces.length; k++){
     var h = 4 + Math.min(12, speed * 1.6) * (0.4 + 0.6 * Math.abs(Math.sin(samples * 0.09 + k * 2.1)));
     traces[k].style.height = h + 'px';
   }
+  for (var w = 0; w < waves.length; w++){
+    waves[w].setAttribute('points', wavePoints(speed, w));
+  }
 }
-function calmBus(){ traces.forEach(function(el){ el.style.height = '4px'; }); }
+function calmBus(){
+  traces.forEach(function(el){ el.style.height = '4px'; });
+  waves.forEach(function(el){ el.setAttribute('points', '0,8 100,8'); });
+}
 
 /* ---------- live sensor waveform (right/dark page, while the pen moves) ---------- */
 var WCH = [['#2a8c82', 1.0, 0], ['#4a67c9', 1.4, 1.1], ['#9b7bd4', 0.8, 2.3], ['#e2a32b', 1.7, 3.6]];
