@@ -304,7 +304,7 @@
   var dots = document.getElementById("akDots");
   if (!word || !anim) return;
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var i = 0, timer = null, hovered = false;
+  var i = 0, timer = null, hovered = false, visible = true;
   function show(idx){
     var s = SCRIPTS[idx];
     word.textContent = s.word;
@@ -316,15 +316,25 @@
     anim.classList.add("ak-anim");
   }
   function tick(){ if (hovered) return; i = (i + 1) % SCRIPTS.length; show(i); }
+  function startAuto(){ if (!timer && visible && !document.hidden) timer = setInterval(tick, 3400); }
+  function stopAuto(){ if (timer){ clearInterval(timer); timer = null; } }
   show(0);
   if (!reduce){
-    timer = setInterval(tick, 3400);
+    startAuto();
     stage.addEventListener("pointerenter", function(){ hovered = true; });
     stage.addEventListener("pointerleave", function(){ hovered = false; });
     document.addEventListener("visibilitychange", function(){
-      if (document.hidden){ clearInterval(timer); timer = null; }
-      else if (!timer){ timer = setInterval(tick, 3400); }
+      if (document.hidden) stopAuto(); else startAuto();
     });
+    // Scrolled far off-screen, the recording demo shouldn't keep animating
+    // in the background -- matches the auto-advance gating pattern used
+    // for the homepage's tabfly section.
+    if ("IntersectionObserver" in window){
+      new IntersectionObserver(function(es){
+        visible = es[0].isIntersecting;
+        if (visible) startAuto(); else stopAuto();
+      }, { threshold: 0.2 }).observe(stage);
+    }
   }
 })();
 </script>
