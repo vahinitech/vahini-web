@@ -39,6 +39,13 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+# Every job here only reads the repo: checkout, build, test. Declaring the
+# token's scope at workflow level rather than per job means a job added later
+# inherits read-only instead of the repository default, which on a repo whose
+# default is permissive would be write.
+permissions:
+  contents: read
+
 jobs:
   security:
     runs-on: ubuntu-latest

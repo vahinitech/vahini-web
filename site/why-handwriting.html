@@ -352,11 +352,21 @@
   }).join('');
 
   function playVid(frame){
+    /* data-id has round-tripped through the DOM since the facade was rendered,
+       so treat it as untrusted on the way back out. A YouTube id is exactly 11
+       characters of [A-Za-z0-9_-] and nothing else ever belongs in an embed
+       URL; build the iframe with DOM calls rather than an innerHTML string so
+       the id is never parsed as markup either (CodeQL js/xss-through-dom). */
     var id = frame.getAttribute('data-id');
-    if(!id || frame.dataset.loaded) return;
+    if(!id || !/^[A-Za-z0-9_-]{11}$/.test(id) || frame.dataset.loaded) return;
     frame.dataset.loaded = "1";
-    frame.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&rel=0" '+
-      'title="Handwriting video" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+    var f = document.createElement('iframe');
+    f.src = 'https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&rel=0';
+    f.title = 'Handwriting video';
+    f.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture');
+    f.setAttribute('allowfullscreen', '');
+    frame.textContent = '';
+    frame.appendChild(f);
   }
   vwrap.addEventListener('click', function(e){ var f = e.target.closest('.hw-vid__frame'); if(f) playVid(f); });
   vwrap.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ var f = e.target.closest('.hw-vid__frame'); if(f){ e.preventDefault(); playVid(f); } } });
