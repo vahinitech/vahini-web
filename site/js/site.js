@@ -227,6 +227,14 @@
       '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'+inner+'</svg></a>';
   }
 
+  /* Declared ahead of injectHead()/wireConsent() (which both read these) so
+     there's no doubt they're initialized before use -- they're plain `var`s
+     in this IIFE's top-level scope, but keeping the declaration textually
+     before its first read avoids relying on execution-order reasoning. */
+  var CONSENT_KEY = "vahini_consent";
+  var CONSENT_LOG = "vahini_consent_log";
+  var CONSENT_VERSION = 1;
+
   /* ---- inject favicons + analytics into <head>, once, on every page ---- */
   function injectHead(){
     if (document.getElementById("vt-head-meta")) return;
@@ -258,24 +266,42 @@
       add('<meta name="twitter:description" content="'+exc+'">');
       add('<meta name="author" content="'+(post.author||"Vahini Technologies")+'">');
     }
-    /* Analytics is GATED behind consent (GDPR/CCPA). Google Consent Mode v2 is
-       set to denied by default; the real GTM/GA tags load only after the user
-       opts in via the cookie banner. See wireConsent(). */
+    /* Analytics uses Google Consent Mode v2, ADVANCED mode (GDPR/CCPA): the
+       GTM/GA4 libraries load on every visit, but consent defaults to denied,
+       so they run cookieless -- no identifiers, no ad signals -- until the
+       visitor opts in via the cookie banner. Loading them unconditionally
+       (vs. withholding the script entirely) lets Google send anonymous
+       consent-mode pings for visitors who never opt in, which GA4 uses to
+       model that traffic instead of reporting it as zero. See wireConsent()
+       and grantAnalyticsConsent()/denyAnalyticsConsent(), which flip
+       analytics_storage after the initial default set below. */
     window.dataLayer = window.dataLayer || [];
-    window.gtag = function(){ dataLayer.push(arguments); };
-    gtag('consent', 'default', {
-      ad_storage:'denied', analytics_storage:'denied',
+    window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
+    /* A later consent 'update' only affects hits gtag.js processes AFTER it,
+       not the 'config' hit queued just below -- so a returning visitor who
+       already opted in needs analytics_storage GRANTED in this very default,
+       not granted via a follow-up update from wireConsent(). */
+    var priorAnalytics = false;
+    try { var pc = JSON.parse(localStorage.getItem(CONSENT_KEY)); priorAnalytics = !!(pc && pc.v === CONSENT_VERSION && pc.analytics); } catch(e){}
+    window.gtag('consent', 'default', {
+      ad_storage:'denied', analytics_storage: priorAnalytics ? 'granted' : 'denied',
       ad_user_data:'denied', ad_personalization:'denied'
     });
+    /* Google Tag Manager -- appended straight to head (this runs from
+       injectHead()), rather than the stock snippet's insertBefore-the-first-
+       script-tag, which would land in <body> on pages that load site.js there. */
+    (function(w,d,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var j=d.createElement('script'),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;d.head.appendChild(j);})(window,document,'dataLayer','GTM-52M7T5DJ');
+    /* Google Analytics 4 */
+    var ga=document.createElement('script'); ga.async=true; ga.src='https://www.googletagmanager.com/gtag/js?id=G-8FV4KRMPX8'; document.head.appendChild(ga);
+    window.gtag('js', new Date()); window.gtag('config','G-8FV4KRMPX8', { anonymize_ip:true });
   }
 
   /* ---- cookie consent (GDPR / CCPA) ---------------------------------------
-     Non-essential scripts (GTM, GA4) stay blocked until explicit consent.
-     The choice is stored, and every decision is appended to an audit log. */
-  var CONSENT_KEY = "vahini_consent";
-  var CONSENT_LOG = "vahini_consent_log";
-  var CONSENT_VERSION = 1;
-  var analyticsLoaded = false;
+     GTM/GA4 load on every page (see injectHead(), Advanced Consent Mode) but
+     stay cookieless/denied until explicit consent flips analytics_storage to
+     granted. The choice is stored, and every decision is appended to an
+     audit log. */
+  var analyticsGranted = false;
 
   function getConsent(){
     try { var c = JSON.parse(localStorage.getItem(CONSENT_KEY)); return (c && c.v===CONSENT_VERSION) ? c : null; }
@@ -292,19 +318,22 @@
     try { localStorage.setItem(CONSENT_KEY, JSON.stringify({ v:CONSENT_VERSION, decision:decision, analytics:!!analytics, ts:Date.now() })); } catch(e){}
     logConsent(decision, analytics);
   }
-  function loadAnalytics(){
-    if (analyticsLoaded) return; analyticsLoaded = true;
-    if (window.gtag) gtag('consent','update',{ analytics_storage:'granted' });
-    /* Google Tag Manager */
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-52M7T5DJ');
-    /* Google Analytics 4 */
-    var ga=document.createElement('script'); ga.async=true; ga.src='https://www.googletagmanager.com/gtag/js?id=G-8FV4KRMPX8'; document.head.appendChild(ga);
-    gtag('js', new Date()); gtag('config','G-8FV4KRMPX8', { anonymize_ip:true });
+  /* GTM/GA4 are already loaded on every visit (see injectHead()) -- these
+     just flip Consent Mode between denied and granted, unlocking or
+     re-blocking cookies/identifiers. Both are idempotent against the
+     current known state, so re-clicking a button is a harmless no-op. */
+  function grantAnalyticsConsent(){
+    if (analyticsGranted) return; analyticsGranted = true;
+    if (window.gtag) window.gtag('consent','update',{ analytics_storage:'granted' });
+  }
+  function denyAnalyticsConsent(){
+    if (!analyticsGranted) return; analyticsGranted = false;
+    if (window.gtag) window.gtag('consent','update',{ analytics_storage:'denied' });
   }
 
   function wireConsent(){
     var prior = getConsent();
-    if (prior && prior.analytics) loadAnalytics();   // returning visitor who opted in
+    if (prior && prior.analytics) grantAnalyticsConsent();   // returning visitor who opted in (matches the default injectHead() already set)
 
     var esc = function(s){ return String(s); };
     var banner = document.createElement('div');
@@ -344,11 +373,11 @@
 
     function close(){ banner.classList.add('cc--gone'); document.body.classList.remove('cc-open'); setTimeout(function(){ banner.remove(); }, 320); }
 
-    banner.querySelector('#cc-accept').addEventListener('click', function(){ saveConsent('accept_all', true); loadAnalytics(); close(); });
-    banner.querySelector('#cc-reject').addEventListener('click', function(){ saveConsent('reject_non_essential', false); close(); });
+    banner.querySelector('#cc-accept').addEventListener('click', function(){ saveConsent('accept_all', true); grantAnalyticsConsent(); close(); });
+    banner.querySelector('#cc-reject').addEventListener('click', function(){ saveConsent('reject_non_essential', false); denyAnalyticsConsent(); close(); });
     banner.querySelector('#cc-prefs').addEventListener('click', function(){ panel.hidden = !panel.hidden; });
     banner.querySelector('#cc-save').addEventListener('click', function(){
-      var a = toggle.checked; saveConsent('custom', a); if (a) loadAnalytics(); close();
+      var a = toggle.checked; saveConsent('custom', a); if (a) grantAnalyticsConsent(); else denyAnalyticsConsent(); close();
     });
 
     // only auto-show the banner if no prior decision exists
