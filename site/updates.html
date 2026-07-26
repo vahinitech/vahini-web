@@ -41,9 +41,13 @@
 
 .feat{display:grid; grid-template-columns:1.3fr 1fr; gap:24px; margin-top:8px;}
 .feat__main{background:linear-gradient(160deg,var(--dark),var(--dark-2)); color:#EEEEEE; border-radius:var(--radius-lg); padding:38px; display:flex; flex-direction:column; justify-content:center;}
+.feat__main.has-clip{display:grid; grid-template-columns:auto 1fr; gap:28px; align-items:center; padding:24px;}
+.feat__clip{width:150px; height:150px; border-radius:12px; overflow:hidden; flex:0 0 auto; box-shadow:0 10px 26px rgba(0,0,0,.35);}
+.feat__clip img{width:100%; height:100%; object-fit:cover; object-position:top; display:block;}
 .feat__main .cat{font-size:11.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--crimson-lite);}
 .feat__main h2{color:#fff; font-size:clamp(26px,3vw,36px); margin:12px 0 12px; line-height:1.1;}
 .feat__main p{color:rgba(238,238,238,.75); font-size:16px; line-height:1.6;}
+@media (max-width:640px){ .feat__main.has-clip{grid-template-columns:1fr;} .feat__clip{width:100%; height:150px;} }
 .feat__side{display:flex; flex-direction:column; gap:16px;}
 .feat__card{background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg); padding:24px; flex:1; box-shadow:var(--shadow-1); display:flex; flex-direction:column; justify-content:center;}
 .feat__card .v{font-family:var(--serif); font-size:26px; font-weight:700; color:var(--ink); line-height:1.05;}
@@ -58,6 +62,7 @@
 .tag{font-size:10.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:3px 10px; border-radius:20px;}
 .tag--announcement{color:var(--crimson-deep); background:var(--crimson-soft);}
 .tag--recognition{color:var(--live); background:var(--live-bg);}
+.tag--press{color:var(--ink); background:var(--surface-2);}
 .tag--award{color:var(--dev); background:var(--dev-bg);}
 .tag--news{color:var(--research); background:var(--research-bg);}
 .tag--blog{color:var(--hot-deep); background:var(--hot-soft);}
@@ -108,6 +113,7 @@
       <div class="up-filter reveal" data-d="3" id="filter">
         <button class="chip-btn on" data-cat="all">All</button>
         <button class="chip-btn" data-cat="announcement">Announcements</button>
+        <button class="chip-btn" data-cat="press">Press</button>
         <button class="chip-btn" data-cat="recognition">Recognitions</button>
         <button class="chip-btn" data-cat="award">Awards</button>
         <button class="chip-btn" data-cat="news">News</button>
@@ -119,10 +125,15 @@
   <section class="block--alt" style="padding:48px 0;" data-screen-label="Featured">
     <div class="wrap">
       <div class="feat reveal">
-        <div class="feat__main">
-          <span class="cat">Announcement</span>
-          <h2>Indian Patent No. 584433, granted.</h2>
-          <p>Our dual-IMU sensing approach is protected by a granted Indian patent. Defensible IP at the hardware and signal layer is the moat under the whole platform.</p>
+        <div class="feat__main has-clip">
+          <a class="feat__clip" href="press.html" data-nav aria-label="See our press coverage">
+            <img src="assets/vahini_indian_express_post.jpeg" width="1382" height="1386" loading="eager" decoding="async" fetchpriority="high" alt="The New Indian Express clipping: &quot;One smart pen, numerous learning possibilities&quot;, featuring the Vahini sensor pen and founder K Mallikarjuna Rao">
+          </a>
+          <div>
+            <span class="cat">Press</span>
+            <h2>Featured in The New Indian Express.</h2>
+            <p>&ldquo;One smart pen, numerous learning possibilities&rdquo; (28 Jun 2026): a feature on why Vahini exists, the dual-IMU sensing behind the pen, and the personalised handwriting-improvement research it enables. <a href="press.html" data-nav style="color:#fff; text-decoration:underline; text-underline-offset:3px;">See press coverage &rarr;</a></p>
+          </div>
         </div>
         <div class="feat__side">
           <div class="feat__card">
@@ -170,7 +181,8 @@
   if(window.VahiniData && grid){
     var D=window.VahiniData;
     grid.innerHTML = D.updates.map(function(u){
-      var more = u.href ? '<a class="upc__more" href="'+u.href+'" data-nav>'+esc(u.linkText||'Read more')+' '+arrow+'</a>' : '';
+      var attrs = u.external ? ' target="_blank" rel="noopener"' : ' data-nav';
+      var more = u.href ? '<a class="upc__more" href="'+u.href+'"'+attrs+'>'+esc(u.linkText||'Read more')+' '+arrow+'</a>' : '';
       return '<article class="upc reveal" data-cat="'+u.cat+'">'+
         '<div class="upc__top"><span class="tag tag--'+u.cat+'">'+esc(D.catLabel[u.cat]||'Update')+'</span><span class="upc__date">'+esc(u.dateLabel)+'</span></div>'+
         '<h3>'+esc(u.title)+'</h3><p>'+esc(u.blurb)+'</p>'+more+'</article>';

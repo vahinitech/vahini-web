@@ -58,7 +58,21 @@
       ] }
   ];
 
+  // print/paper articles about Vahini — shown on press.html, newest first via `sort`
+  var PRESS = [
+    { id:"nie-2026-06-28", sort:20260628, dateLabel:"28 Jun 2026", publication:"The New Indian Express",
+      byline:"Nethaji Kumaramangalam", place:"Tirupati",
+      headline:"One smart pen, numerous learning possibilities",
+      blurb:"A feature on Vahini's origin (why should a visually impaired student's ability to write an exam depend on someone else's availability), the dual-IMU sensing behind the pen, and the personalised handwriting-improvement research it enables.",
+      image:"assets/vahini_indian_express_post.jpeg", imgW:1382, imgH:1386,
+      url:"https://epaper.newindianexpress.com/c/80234866" }
+  ];
+
   var UPDATES = [
+    { sort:20260628, dateLabel:"28 Jun 2026", cat:"press", title:"Featured in The New Indian Express", pinned:true,
+      blurb:"“One smart pen, numerous learning possibilities”: a feature on Vahini's origin (why should a visually impaired student's ability to write an exam depend on someone else's availability), the dual-IMU sensing behind the pen, and the personalised handwriting-improvement research it enables.",
+      href:"press.html", linkText:"See press coverage" },
+
     { sort:20260110, dateLabel:"Jan 2026", cat:"award", title:"Winner, DeepTech Innovation Award", pinned:true,
       blurb:"Vahini won the DeepTech Innovation Award at the Andhra Pradesh Digital Technology Summit 2026, Visakhapatnam, for outstanding innovation & excellence.",
       href:"awards.html", linkText:"See the award" },
@@ -105,13 +119,14 @@
     { v:"Live", k:"20-factor analyser, free to try", href:"updates.html" }
   ];
 
-  var CAT_LABEL = { announcement:"Announcement", recognition:"Recognition", award:"Award", news:"News", blog:"Blog" };
+  var CAT_LABEL = { announcement:"Announcement", recognition:"Recognition", press:"Press", award:"Award", news:"News", blog:"Blog" };
 
   function bySort(a,b){ return b.sort - a.sort; }
 
   root.VahiniData = {
     events: EVENTS.slice().sort(bySort),
     updates: UPDATES.slice().sort(bySort),
+    press: PRESS.slice().sort(bySort),
     achievements: ACHIEVEMENTS,
     catLabel: CAT_LABEL,
     // most recent N updates (for the homepage list)

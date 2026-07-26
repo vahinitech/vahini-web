@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+     © 2026 Vahini Technologies. All rights reserved. -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>Press, Vahini in print</title>
+<meta name="description" content="What's been written about Vahini Technologies in print, newspaper and magazine coverage of the dual-IMU sensor pen.">
+<link rel="canonical" href="https://vahinitech.com/press.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Vahini Technologies">
+<meta property="og:title" content="Press, Vahini in print">
+<meta property="og:description" content="What's been written about Vahini Technologies in print, newspaper and magazine coverage of the dual-IMU sensor pen.">
+<meta property="og:url" content="https://vahinitech.com/press.html">
+<meta property="og:image" content="https://vahinitech.com/site/assets/ev/vahini-mark.png">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
+<meta property="og:image:alt" content="The Vahini logo">
+<meta property="og:locale" content="en_IN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@vahinitech">
+<meta name="twitter:title" content="Press, Vahini in print">
+<meta name="twitter:description" content="What's been written about Vahini Technologies in print, newspaper and magazine coverage of the dual-IMU sensor pen.">
+<meta name="twitter:image" content="https://vahinitech.com/site/assets/ev/vahini-mark.png">
+<meta name="twitter:image:alt" content="The Vahini logo">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="js/theme.config.js"></script>
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/site.css">
+<style>
+.pr-badge{display:inline-flex; align-items:center; gap:9px; font-size:12.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--ink); background:var(--surface-2); padding:6px 14px; border-radius:30px;}
+.pr-badge svg{width:16px; height:16px;}
+.pr-list{display:flex; flex-direction:column; gap:22px; margin-top:8px;}
+.pr-card{display:grid; grid-template-columns:auto 1fr; gap:28px; align-items:center; background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-xl); padding:30px; box-shadow:var(--shadow-1); transition:transform .25s var(--ease), box-shadow .25s var(--ease);}
+.pr-card:hover{transform:translateY(-3px); box-shadow:var(--shadow-2);}
+.pr-clip{display:block; width:160px; height:160px; border-radius:12px; overflow:hidden; flex:0 0 auto; box-shadow:0 10px 26px rgba(20,26,34,.22);}
+.pr-clip img{width:100%; height:100%; object-fit:cover; object-position:top; display:block; transition:transform .35s var(--ease);}
+.pr-card:hover .pr-clip img{transform:scale(1.04);}
+.pr-pub{font-size:13px; font-weight:700; letter-spacing:.03em; color:var(--accent-ink);}
+.pr-byline{font-size:13px; color:var(--hint); margin-left:8px;}
+.pr-card h2{font-size:clamp(20px,2.4vw,26px); line-height:1.2; margin:8px 0 10px;}
+.pr-card p{font-size:15.5px; color:var(--muted); line-height:1.65; max-width:640px;}
+.pr-more{margin-top:14px; font-size:13.5px; font-weight:600; color:var(--crimson-deep); display:inline-flex; align-items:center; gap:6px;}
+.pr-more svg{width:14px; height:14px;}
+.pr-empty{text-align:center; color:var(--muted); padding:40px 0; font-size:16px;}
+@media (max-width:640px){ .pr-card{grid-template-columns:1fr; gap:16px;} .pr-clip{width:100%; height:180px;} }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://vahinitech.com/press.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://vahinitech.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Press",
+          "item": "https://vahinitech.com/press.html"
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body class="booting">
+<div id="site-nav"></div>
+<main class="page-fade">
+
+  <section class="phero" data-screen-label="Hero">
+    <div class="wrap">
+      <span class="pr-badge reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V6a2 2 0 0 1 2-2h9l5 5v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="M14 4v5h5M8 13h8M8 17h5"/></svg>Press</span>
+      <h1 class="reveal" data-d="1" style="margin-top:16px;">What's been written about Vahini in print.</h1>
+      <p class="lede reveal" data-d="2">Newspaper and magazine coverage of the dual-IMU sensor pen, in the words of journalists who've seen it work.</p>
+    </div>
+  </section>
+
+  <section class="block" data-screen-label="Coverage">
+    <div class="wrap">
+      <div class="pr-list" id="prList"></div>
+      <p class="pr-empty" id="prEmpty" style="display:none;">No press coverage yet, check back soon.</p>
+    </div>
+  </section>
+
+  <section class="bigcta block--alt" data-screen-label="CTA">
+    <div class="wrap reveal">
+      <h2>Covering Vahini?</h2>
+      <p>Reach out for the pen, founder interviews or high-resolution assets.</p>
+      <div class="bigcta__row">
+        <a class="btn btn--crimson btn--lg" href="reach.html" data-nav>Get in touch</a>
+        <a class="btn btn--ghost btn--lg" href="updates.html" data-nav>All updates</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+<script src="js/site-data.js"></script>
+<script src="js/site.js"></script>
+<script>
+(function(){
+  var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+  var arrow='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+  var list=document.getElementById('prList'), empty=document.getElementById('prEmpty');
+  if(window.VahiniData && list){
+    var press=window.VahiniData.press||[];
+    if(!press.length){ empty.style.display='block'; }
+    list.innerHTML = press.map(function(p){
+      var byline = p.byline ? '<span class="pr-byline">' + esc(p.byline) + (p.place ? ', '+esc(p.place) : '') + ' &middot; ' + esc(p.dateLabel) + '</span>'
+                             : '<span class="pr-byline">' + esc(p.dateLabel) + '</span>';
+      var img = p.image ? '<a class="pr-clip" href="'+esc(p.url)+'" target="_blank" rel="noopener" aria-label="Open the '+esc(p.publication)+' feature">'+
+        '<img src="'+esc(p.image)+'" width="'+(p.imgW||160)+'" height="'+(p.imgH||160)+'" loading="lazy" decoding="async" alt="'+esc(p.publication)+' clipping: &quot;'+esc(p.headline)+'&quot;"></a>' : '';
+      return '<article class="pr-card reveal">'+img+
+        '<div><span class="pr-pub">'+esc(p.publication)+'</span>'+byline+
+        '<h2>&ldquo;'+esc(p.headline)+'&rdquo;</h2>'+
+        '<p>'+esc(p.blurb)+'</p>'+
+        '<a class="pr-more" href="'+esc(p.url)+'" target="_blank" rel="noopener">Read the original clipping '+arrow+'</a></div>'+
+        '</article>';
+    }).join('');
+    if(window.VahiniRevealScan) window.VahiniRevealScan();
+  }
+})();
+</script>
+</body>
+</html>
