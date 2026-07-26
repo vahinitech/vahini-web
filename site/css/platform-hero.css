@@ -452,19 +452,25 @@
    and a ~45% two-up track at 920px (see the max-width:920px block below), so
    viewport-relative sizing alone put the two <br>-separated lines of the
    headline into 2-4 wraps depending which side of that switch you were on.
-   6.4cqw keeps both "For 100 years, pens recorded ink." (the longer line,
-   33 chars) and "Now they record intelligence." to one line each at every
-   column width the grid produces, so it stays exactly 2 lines everywhere --
-   re-measure this if the headline text changes. The vw clamp declared
+   The display face is Spectral (the site's serif; every other heading uses
+   it) at 7.2cqw -- measured so the longer line, "For 100 years, pens
+   recorded ink." (33 chars), stays on one line at every column width the
+   grid produces, keeping the headline exactly 2 lines everywhere.
+   Re-measure if the headline text or family changes. The vw clamp declared
    first is a progressive-enhancement fallback for browsers without
    container query units -- an unsupported unit invalidates the whole
    clamp(), so without it those browsers would drop font-size entirely
    rather than degrade to the old (imperfect but not broken) vw sizing. */
-.vh__h1{font-family:var(--sans); font-weight:800; font-size:clamp(20px,3.7vw,64px); font-size:clamp(20px,6.4cqw,64px); line-height:1.06;
-  letter-spacing:-.02em; color:var(--ink); margin:18px 0 0;}
-.vh__h1 em{font-style:normal;
+.vh__h1{font-family:var(--serif); font-weight:700; font-size:clamp(24px,4.2vw,80px); font-size:clamp(24px,7.2cqw,80px); line-height:1.1;
+  letter-spacing:-.015em; color:var(--ink); margin:18px 0 0;}
+/* second line: Spectral's true italic cut (loaded at weight 500 only) with
+   the brand gradient -- the ink/intelligence contrast carried by type */
+.vh__h1 em{font-style:italic; font-weight:500;
   background:linear-gradient(100deg, var(--accent-deep), var(--accent)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
-.vh__sub{font-size:clamp(16px,1.6vw,21px); line-height:1.55; color:var(--muted); max-width:480px; margin:22px 0 0;}
+/* text-wrap:balance: when the sentence has to wrap (narrow columns), break
+   it evenly instead of orphaning the last word; ignored by older browsers */
+.vh__sub{font-size:clamp(17px,1.9vw,24px); line-height:1.5; color:var(--muted); max-width:560px; margin:22px 0 0; text-wrap:balance;}
+.vh__sub strong{color:var(--ink); font-weight:700;}
 .vh__ticks{display:flex; flex-wrap:wrap; gap:8px 22px; margin:24px 0 0; padding:0; list-style:none;}
 .vh__ticks li{display:inline-flex; align-items:center; gap:8px; font-size:14.5px; font-weight:600; color:var(--ink);}
 .vh__ticks svg{width:15px; height:15px; color:var(--accent-deep);}
@@ -477,8 +483,8 @@
 .vh-btn--ghost{border:1px solid var(--rule); color:var(--ink); background:var(--surface);}
 .vh-btn--ghost:hover{border-color:var(--accent-deep); transform:translateY(-2px);}
 /* trust bar: credentials, not feature pills -- each item is verifiable
-   elsewhere on the site (patent/DPIIT on privacy, RTIH on about, the
-   award on awards.html), so keep this list in sync with those pages. */
+   elsewhere on the site (patent, DPIIT and RTIH on about.html; the award
+   on awards.html), so keep this list in sync with those pages. */
 .vh__trust{display:flex; flex-wrap:wrap; gap:7px 20px; margin:28px 0 0; padding:14px 0 0; list-style:none;
   border-top:1px solid var(--rule);}
 .vh__trust li{display:inline-flex; align-items:center; gap:7px; font-size:11.5px; font-weight:800;
