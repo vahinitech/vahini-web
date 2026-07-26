@@ -24,6 +24,26 @@ function ageFile(p, days) {
   utimesSync(p, t, t);
 }
 
+// Deterministic PRNG (mulberry32), not Math.random(): the "incompressible"
+// fixtures below need bytes that don't happen to gzip well, and a run that
+// only sometimes hits that by luck would be a flaky test, not a real one.
+function mulberry32(seed) {
+  let a = seed;
+  return function () {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function randomBytes(size, seed) {
+  const rand = mulberry32(seed);
+  const buf = Buffer.alloc(size);
+  for (let i = 0; i < size; i++) buf[i] = Math.floor(rand() * 256);
+  return buf;
+}
+
 const root = mkdtempSync(join(tmpdir(), "sweep-"));
 const uploads = join(root, "uploads");
 const reports = join(root, "reports");
@@ -34,17 +54,13 @@ const oldJson = join(reports, "r1.json");
 writeFileSync(oldJson, JSON.stringify({ pad: "x".repeat(50_000) }, null, 2));
 ageFile(oldJson, 30);
 const oldBlob = join(uploads, "img.jpg");
-const rand = Buffer.alloc(60_000);
-for (let i = 0; i < rand.length; i++) rand[i] = Math.floor(Math.random() * 256);
-writeFileSync(oldBlob, rand);
+writeFileSync(oldBlob, randomBytes(60_000, 1));
 ageFile(oldBlob, 30);
 // an already-encrypted/opaque blob with no extension in INCOMPRESSIBLE_EXT --
 // exercises the dynamic (gzip-and-measure) skip-list path, not the static
 // extension fast-path that .jpg above short-circuits.
 const oldOpaque = join(uploads, "session.enc");
-const randOpaque = Buffer.alloc(60_000);
-for (let i = 0; i < randOpaque.length; i++) randOpaque[i] = Math.floor(Math.random() * 256);
-writeFileSync(oldOpaque, randOpaque);
+writeFileSync(oldOpaque, randomBytes(60_000, 2));
 ageFile(oldOpaque, 30);
 const fresh = join(reports, "r2.json");
 writeFileSync(fresh, JSON.stringify({ pad: "y".repeat(50_000) }));
