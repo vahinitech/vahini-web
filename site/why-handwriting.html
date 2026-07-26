@@ -367,6 +367,13 @@
     f.setAttribute('allowfullscreen', '');
     frame.textContent = '';
     frame.appendChild(f);
+    /* The facade was a button; the loaded player is not. Leaving role/tabindex
+       in place would keep a keyboard tab stop on a control that now does
+       nothing, and keep announcing "Play: <title>" for a video already
+       playing. Hand focus over to the iframe's own controls. */
+    frame.removeAttribute('role');
+    frame.removeAttribute('tabindex');
+    frame.removeAttribute('aria-label');
   }
   vwrap.addEventListener('click', function(e){ var f = e.target.closest('.hw-vid__frame'); if(f) playVid(f); });
   vwrap.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ var f = e.target.closest('.hw-vid__frame'); if(f){ e.preventDefault(); playVid(f); } } });

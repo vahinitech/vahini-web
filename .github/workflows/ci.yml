@@ -44,16 +44,14 @@ concurrency:
 # inherits read-only instead of the repository default, which on a repo whose
 # default is permissive would be write.
 #
-# `actions: write` covers the caching steps (actions/cache, and
-# docker/build-push-action's type=gha). Those authenticate with
-# ACTIONS_RUNTIME_TOKEN rather than GITHUB_TOKEN, so they work without it --
-# this workflow's own runs restored both caches under contents:read alone. It is
-# granted because review asked for it and the cost is small: the token gains
-# workflow-run and cache management, while repo contents stay read-only, which
-# is the property that actually matters.
+# Deliberately NOT granting `actions: write`. The caching steps below
+# (actions/cache, and docker/build-push-action's type=gha) authenticate with
+# ACTIONS_RUNTIME_TOKEN, not GITHUB_TOKEN, so workflow permissions do not gate
+# them: this workflow's own runs logged "Cache restored successfully" for both
+# the npm and Playwright caches under contents:read alone. Adding it would hand
+# the token workflow-run and cache management it never uses.
 permissions:
   contents: read
-  actions: write
 
 jobs:
   security:

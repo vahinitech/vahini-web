@@ -27,15 +27,14 @@ on:
     # Mondays 06:00 UTC -- catch config drift / an accidentally exposed port.
     - cron: "0 6 * * 1"
 
-# Checkout plus an artifact upload; neither writes to the repo. The artifact
-# API authenticates with ACTIONS_RUNTIME_TOKEN rather than GITHUB_TOKEN, so
-# `actions: write` should not be needed -- but this workflow is manual plus a
-# weekly cron, so unlike ci.yml there is no run proving it. On a job that fires
-# once a week a silently dropped report would go unnoticed for a long time, so
-# it is granted here rather than gambling on it. Repo contents stay read-only.
+# Checkout plus an artifact upload; neither writes to the repo, and
+# actions/upload-artifact authenticates with ACTIONS_RUNTIME_TOKEN rather than
+# GITHUB_TOKEN, so `actions: write` is not required. This workflow is manual
+# plus a weekly cron, so watch the first scheduled run after this lands: if the
+# artifact is missing from the run page, that assumption was wrong and the
+# scope needs revisiting.
 permissions:
   contents: read
-  actions: write
 
 jobs:
   scan:
