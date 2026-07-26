@@ -74,9 +74,12 @@
   text-transform:uppercase; color:#F3D889; background:rgba(217,166,46,.16); border:1px solid rgba(217,166,46,.55);
   border-radius:999px; padding:3px 11px; white-space:nowrap;}
 
-.padbox{position:relative; border:2px dashed #d8c9a2; border-radius:10px; background:transparent;}
+.padbox{position:relative; border:2px dashed #d8c9a2; border-radius:10px; background:transparent; transition:opacity .2s;}
 .padbox canvas{display:block; width:100%; height:330px; touch-action:none;}
 @media (hover:hover) and (pointer:fine){ .padbox canvas{cursor:none;} }
+/* one shape captured -- further strokes are ignored until Clear */
+.padbox.locked{opacity:.62;}
+.padbox.locked canvas{cursor:not-allowed;}
 .pad-hint{position:absolute; inset:0; display:grid; place-items:center; pointer-events:none; transition:opacity .3s;}
 .pad-hint span{font-family:"Caveat",cursive; font-size:25px; color:#a8b0bd;}
 .pad-hint.off{opacity:0;}
@@ -127,6 +130,7 @@
 @keyframes blePkt{0%{opacity:0; left:0} 15%{opacity:1} 85%{opacity:1} 100%{opacity:0; left:calc(100% - 8px)}}
 .ble__meta{display:flex; justify-content:space-between; font-family:"Patrick Hand",cursive; font-size:13px; color:#8fa0c4; margin-top:7px;}
 .ble__meta b{color:#e8eefc; font-weight:400;}
+.ble__eq{font-family:"Patrick Hand",cursive; font-size:12px; color:#6b7ba3; margin-top:5px; min-height:1em;}
 
 .mm{font-family:"Caveat",cursive; font-weight:700; font-size:29px; color:#7fd4c8; margin:0 0 8px; display:flex; align-items:center; gap:10px;}
 .mm svg{width:26px; height:16px;}
@@ -264,6 +268,7 @@
           <div class="ble" id="siaBle">
             <div class="ble__line"><span>pen</span><span class="ble__dash"></span><span>&#9099; BLE</span></div>
             <div class="ble__meta"><span>16 channels clubbed into packets</span><span><b id="siaPkts">0</b> packets sent</span></div>
+            <div class="ble__eq" id="siaEq"></div>
           </div>
 
           <p class="mm">motion <svg viewBox="0 0 26 16" fill="none" stroke="#7fd4c8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h20M16 2l6 6-6 6"/></svg> meaning</p>
@@ -335,8 +340,8 @@ var GLOW = '#7fd4c8';          /* engine teal on the dark page */
    bar-meter reads as a plain amplitude/level (matches accel/magneto/tip
    force, which really are level-style readings). */
 var CH = [
-  ['IMU-A · accel', '#2a8c82'], ['IMU-A · gyro', '#4a67c9', 'wave'], ['IMU-A · magneto', '#9b7bd4'],
-  ['IMU-B · accel', '#2a8c82'], ['IMU-B · gyro', '#4a67c9', 'wave'], ['tip force · analog', '#e2a32b']
+  ['IMU-A · accel', '#2a8c82', 'wave'], ['IMU-A · gyro', '#4a67c9', 'wave'], ['IMU-A · magneto', '#9b7bd4', 'wave'],
+  ['IMU-B · accel', '#2a8c82', 'wave'], ['IMU-B · gyro', '#4a67c9', 'wave'], ['tip force · analog', '#e2a32b']
 ];
 var bus = document.getElementById('siaBus');
 bus.innerHTML = CH.map(function(c){
@@ -399,8 +404,15 @@ function waveStop(){ cancelAnimationFrame(waveRaf); waveRaf = null; waveT = 0; w
 
 /* ---------- state + elements ---------- */
 var strokes = [], cur = null, samples = 0, lastPt = null, drawing = false, sendTimer = null, replayRaf = null;
+/* Every template is a single unbroken shape (see TEMPLATES below), so once
+   one stroke is on the page there's nothing more for this demo to capture --
+   without this, starting a fresh stroke right after finishing one just
+   cancels the pending auto-digitise (pointerdown clears sendTimer) and lets
+   a second, unrelated shape get drawn into the same "letter". */
+var locked = false;
 var hint = document.getElementById('siaHint'), waitLay = document.getElementById('siaWait');
 var sampleEl = document.getElementById('siaSamples'), pktEl = document.getElementById('siaPkts');
+var eqEl = document.getElementById('siaEq');
 var ble = document.getElementById('siaBle');
 var statusEl = document.getElementById('siaStatus'), statusTx = document.getElementById('siaStatusTx');
 var verdict = document.getElementById('siaVerdict'), glyphEl = document.getElementById('siaGlyph');
@@ -435,6 +447,7 @@ function line(g, a, b, w, col, glow){
   g.beginPath(); g.moveTo(a.x, a.y); g.lineTo(b.x, b.y); g.stroke();
 }
 draw.addEventListener('pointerdown', function(e){
+  if (locked) return;
   e.preventDefault(); draw.setPointerCapture(e.pointerId);
   drawing = true; cur = [pos(e)]; lastPt = cur[0];
   hint.classList.add('off'); clearTimeout(sendTimer);
@@ -458,7 +471,11 @@ function endStroke(){
   if (cur && cur.length > 2) strokes.push(cur);
   cur = null;
   clearTimeout(sendTimer);
-  if (strokes.length){ setStatus('', 'Stroke captured. Digitise, or keep writing…'); sendTimer = setTimeout(transmit, 1100); }
+  if (strokes.length){
+    locked = true; pad.classList.add('locked');
+    setStatus('', 'Shape captured. Digitising…');
+    sendTimer = setTimeout(transmit, 1100);
+  }
 }
 draw.addEventListener('pointerup', endStroke);
 draw.addEventListener('pointercancel', endStroke);
@@ -471,15 +488,20 @@ function repaint(){
 }
 
 /* ---------- transmit → denoise → reconstruct → recognise ---------- */
+/* Same sensor samples the left page counts (208 Hz) get batched into BLE
+   packets here -- previously "packets sent" was derived from raw mouse
+   pointer-move points instead, an unrelated number with no visible
+   relationship to the samples count next to it. */
+var SAMPLES_PER_PACKET = 20;
 function transmit(){
   if (!strokes.length) return;
-  var pts = strokes.reduce(function(n, s){ return n + s.length; }, 0);
   setStep(0);
   setStatus('busy', 'Streaming packets over BLE…');
   ble.classList.add('streaming');
   verdict.classList.remove('on');
   /* packets count up while streaming */
-  var total = Math.max(3, Math.round(pts / 6)), sent = 0;
+  var total = Math.max(1, Math.ceil(samples / SAMPLES_PER_PACKET)), sent = 0;
+  eqEl.textContent = samples.toLocaleString() + ' samples ÷ ' + SAMPLES_PER_PACKET + '/packet = ' + total + ' packets';
   var pktTick = setInterval(function(){
     sent = Math.min(total, sent + Math.max(1, Math.round(total / 14)));
     pktEl.textContent = sent;
@@ -686,8 +708,8 @@ function recognise(){
 
 /* ---------- clear ---------- */
 document.getElementById('siaClear').addEventListener('click', function(){
-  strokes = []; cur = null; samples = 0;
-  sampleEl.textContent = '0'; pktEl.textContent = '0';
+  strokes = []; cur = null; samples = 0; locked = false; pad.classList.remove('locked');
+  sampleEl.textContent = '0'; pktEl.textContent = '0'; eqEl.textContent = '';
   clearTimeout(sendTimer); cancelAnimationFrame(replayRaf); waveStop();
   gD.clearRect(0, 0, draw.width, draw.height);
   gR.clearRect(0, 0, recon.width, recon.height);
