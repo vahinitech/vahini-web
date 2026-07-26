@@ -9,25 +9,37 @@
    ============================================================ */
 
 .fx-hero{padding:88px 0 0; text-align:center;}
+.fx-hero .wrap{container-type:inline-size;}
 .fx-hero__eyebrow{display:flex; justify-content:center;}
-.fx-hero h1{max-width:18ch; margin:18px auto 0; font-size:clamp(34px,4.6vw,58px); line-height:1.06; letter-spacing:-.02em;}
+/* max-width:18ch capped this well below the wrap's actual width regardless
+   of how much room was available, forcing "Everyone photographed the
+   page." / "Nobody recorded the hand." into 3-5 wraps instead of the one
+   line per <br>-separated phrase this is written for. Sized off the wrap's
+   own width (container query units, measured against the real Spectral
+   600 metrics) instead, so it keeps to 2 lines from phones up through the
+   page's max width. */
+.fx-hero h1{margin:18px auto 0; font-size:clamp(15px,5.5cqw,60px); line-height:1.06; letter-spacing:-.02em;}
 
 .fx-pill{display:inline-flex; align-items:center; gap:8px; font-family:var(--sans); font-size:13px; font-weight:700;
   color:var(--accent-ink,var(--crimson-deep)); background:var(--accent-soft,var(--crimson-soft)); border-radius:99px; padding:7px 16px 7px 14px;}
 .fx-pill svg{width:15px; height:15px;}
 
-/* the hero detail card: visual one side, the actual explanation + CTA the other */
-.fx-lead{display:grid; grid-template-columns:1.05fr .95fr; gap:40px 64px; align-items:center; margin-top:56px;}
+/* the hero detail card: visual one side, the actual explanation + CTA the
+   other. Reads as body copy, not part of the centered hero banner above it
+   -- text-align:left overrides the .fx-hero centering it would otherwise
+   inherit (.fx-stats below resets it the same way). */
+.fx-lead{display:grid; grid-template-columns:1.05fr .95fr; gap:40px 64px; align-items:center; margin-top:56px; text-align:left;}
 .fx-lead__copy h2{font-size:clamp(22px,2.6vw,30px); line-height:1.16;}
 .fx-lead__copy .fx-pill{margin-top:16px;}
 .fx-lead__copy p{margin-top:16px; font-size:16.5px; line-height:1.65; color:var(--muted); max-width:46ch;}
 .fx-lead__copy .btn{margin-top:22px;}
 @media (max-width:880px){ .fx-lead{grid-template-columns:1fr;} .fx-lead .fx-art{order:-1;} }
 
-/* alternating feature rows */
+/* feature rows: image on the left, copy on the right, every time -- kept
+   identical across the page rather than alternating, so the eye doesn't
+   have to re-locate the picture on every block. */
 .fx-feat{display:grid; grid-template-columns:1fr 1fr; gap:40px 64px; align-items:center; padding:72px 0;}
 .fx-feat + .fx-feat{border-top:1px solid var(--rule);}
-.fx-feat--flip .fx-art{order:2;}
 .fx-feat__copy{max-width:480px;}
 .fx-feat__copy .eyebrow{display:block; margin-bottom:12px;}
 .fx-feat__copy h2{font-size:clamp(24px,2.8vw,34px); line-height:1.14; letter-spacing:-.01em;}
@@ -35,7 +47,6 @@
 .fx-feat__copy .btn{margin-top:20px;}
 @media (max-width:880px){
   .fx-feat{grid-template-columns:1fr; gap:26px; padding:48px 0;}
-  .fx-feat--flip .fx-art{order:0;}
   .fx-feat__copy{max-width:none;}
 }
 
@@ -54,19 +65,31 @@
 .fx-grid__item h3{font-size:16.5px; margin-bottom:6px;}
 .fx-grid__item p{font-size:14px; color:var(--muted); line-height:1.55;}
 
-/* tight step list: bold title inline, one short line, no numbered circles */
+/* tight step list: label and description in fixed columns so the
+   description starts at the same x on every row regardless of how long
+   that row's bold label is (a flex row here staggers the description per
+   row -- each row's label takes its own natural width, so the next item
+   starts wherever that width happened to end). Baseline alignment lines
+   up each row's first line even when the label or description wraps. */
 .fx-steps{display:flex; flex-direction:column; gap:18px; margin:4px 0 0; padding:0; list-style:none;}
-.fx-steps li{display:flex; gap:12px; align-items:baseline;}
-.fx-steps li::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--accent); flex:0 0 auto; transform:translateY(-4px);}
+.fx-steps li{display:grid; grid-template-columns:6px minmax(170px,200px) 1fr; column-gap:12px; align-items:baseline;}
+.fx-steps li::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--accent); align-self:start; margin-top:7px;}
 .fx-steps b{font-family:var(--sans); font-weight:700; color:var(--ink);}
 .fx-steps span{color:var(--muted);}
+@media (max-width:560px){
+  .fx-steps li{grid-template-columns:6px 1fr; row-gap:4px;}
+  .fx-steps span{grid-column:2;}
+}
 
 /* bold word + one-line caption, reused from the homepage stat-strip idea */
 .fx-stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:22px; margin-top:48px; padding-top:30px; border-top:1px solid var(--rule); text-align:left;}
 .fx-stats b{display:block; font-family:var(--serif); font-size:clamp(19px,2.1vw,23px); color:var(--ink); line-height:1.15;}
 .fx-stats span{display:block; margin-top:6px; font-size:13.5px; color:var(--muted); line-height:1.5;}
 
-/* short, centered, no-visual block for things that don't need a picture */
-.fx-plain{max-width:640px; margin:0 auto; text-align:center;}
+/* short, no-visual block for things that don't need a picture. The block
+   itself is centered on the page (a narrower column reads better for a
+   couple of sentences); the text inside stays left-aligned, matching the
+   ragged-right body copy used everywhere else on the page. */
+.fx-plain{max-width:640px; margin:0 auto; text-align:left;}
 .fx-plain h2{font-size:clamp(24px,2.8vw,34px);}
 .fx-plain p{margin-top:16px; font-size:16.5px; line-height:1.65; color:var(--muted);}
