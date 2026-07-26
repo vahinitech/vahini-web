@@ -85,5 +85,22 @@ stats = await sweep({ dirs: [uploads, reports], compressDays: 14, capMB: 1, now 
 check("oldest file deleted to get under cap", !existsSync(a));
 check("newest large file kept", existsSync(b));
 
+console.log("sweeper: a failed compress doesn't leak the .gz.tmp partial");
+{
+  const root2 = mkdtempSync(join(tmpdir(), "sweep-fail-"));
+  const dir2 = join(root2, "uploads");
+  mkdirSync(dir2, { recursive: true });
+  const src = join(dir2, "r.json");
+  writeFileSync(src, JSON.stringify({ pad: "z".repeat(50_000) }, null, 2));
+  ageFile(src, 30);
+  // Force the rename(tmp, gzPath) step to fail: pre-occupy the .gz path with
+  // a directory, so renaming a file onto it throws EISDIR.
+  mkdirSync(src + ".gz", { recursive: true });
+  const stats2 = await sweep({ dirs: [dir2], compressDays: 14, now });
+  check("compress failure recorded", stats2.errors.length === 1);
+  check(".gz.tmp partial not left behind", !existsSync(src + ".gz.tmp"));
+  check("source file untouched on failure", existsSync(src));
+}
+
 if (failures) { console.error(`${failures} sweeper test(s) failed`); process.exit(1); }
 console.log("sweeper tests passed");

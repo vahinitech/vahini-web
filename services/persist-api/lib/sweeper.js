@@ -97,8 +97,16 @@ async function compressPass(dir, compressDays, now, stats) {
         continue;
       }
       const gzPath = file + ".gz";
-      await fsp.writeFile(gzPath + ".tmp", gz);
-      await fsp.rename(gzPath + ".tmp", gzPath);
+      const tmpPath = gzPath + ".tmp";
+      try {
+        await fsp.writeFile(tmpPath, gz);
+        await fsp.rename(tmpPath, gzPath);
+      } catch (err) {
+        // listFiles() permanently ignores *.tmp, so a partial left behind
+        // here would never be revisited or cleaned by a later sweep.
+        await fsp.unlink(tmpPath).catch(() => {});
+        throw err;
+      }
       await fsp.utimes(gzPath, st.atime, st.mtime); // keep true age for evict
       await fsp.unlink(file);
       stats.compressed += 1;
