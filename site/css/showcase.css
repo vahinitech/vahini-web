@@ -17,8 +17,12 @@
    line per <br>-separated phrase this is written for. Sized off the wrap's
    own width (container query units, measured against the real Spectral
    600 metrics) instead, so it keeps to 2 lines from phones up through the
-   page's max width. */
-.fx-hero h1{margin:18px auto 0; font-size:clamp(15px,5.5cqw,60px); line-height:1.06; letter-spacing:-.02em;}
+   page's max width.
+   A browser without container-query support drops the whole cqw
+   declaration as invalid rather than partially applying it, so the vw-based
+   value is declared first as a fallback -- cascade order then lets the cqw
+   line win on any browser that does understand it. */
+.fx-hero h1{margin:18px auto 0; font-size:clamp(34px,4.6vw,58px); font-size:clamp(15px,5.5cqw,60px); line-height:1.06; letter-spacing:-.02em;}
 
 .fx-pill{display:inline-flex; align-items:center; gap:8px; font-family:var(--sans); font-size:13px; font-weight:700;
   color:var(--accent-ink,var(--crimson-deep)); background:var(--accent-soft,var(--crimson-soft)); border-radius:99px; padding:7px 16px 7px 14px;}
