@@ -1,0 +1,72 @@
+/* SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+   © 2026 Vahini Technologies. All rights reserved. */
+/* ============================================================
+   SHOWCASE — a reusable "what's new"-style feature-page pattern:
+   one big claim, then alternating blocks that each pair a short
+   paragraph with a single visual inside a soft gradient card.
+   Built for project-akshara.html; intended for reuse across other
+   story/marketing pages. Loaded after site.css.
+   ============================================================ */
+
+.fx-hero{padding:88px 0 0; text-align:center;}
+.fx-hero__eyebrow{display:flex; justify-content:center;}
+.fx-hero h1{max-width:18ch; margin:18px auto 0; font-size:clamp(34px,4.6vw,58px); line-height:1.06; letter-spacing:-.02em;}
+
+.fx-pill{display:inline-flex; align-items:center; gap:8px; font-family:var(--sans); font-size:13px; font-weight:700;
+  color:var(--accent-ink,var(--crimson-deep)); background:var(--accent-soft,var(--crimson-soft)); border-radius:99px; padding:7px 16px 7px 14px;}
+.fx-pill svg{width:15px; height:15px;}
+
+/* the hero detail card: visual one side, the actual explanation + CTA the other */
+.fx-lead{display:grid; grid-template-columns:1.05fr .95fr; gap:40px 64px; align-items:center; margin-top:56px;}
+.fx-lead__copy h2{font-size:clamp(22px,2.6vw,30px); line-height:1.16;}
+.fx-lead__copy .fx-pill{margin-top:16px;}
+.fx-lead__copy p{margin-top:16px; font-size:16.5px; line-height:1.65; color:var(--muted); max-width:46ch;}
+.fx-lead__copy .btn{margin-top:22px;}
+@media (max-width:880px){ .fx-lead{grid-template-columns:1fr;} .fx-lead .fx-art{order:-1;} }
+
+/* alternating feature rows */
+.fx-feat{display:grid; grid-template-columns:1fr 1fr; gap:40px 64px; align-items:center; padding:72px 0;}
+.fx-feat + .fx-feat{border-top:1px solid var(--rule);}
+.fx-feat--flip .fx-art{order:2;}
+.fx-feat__copy{max-width:480px;}
+.fx-feat__copy .eyebrow{display:block; margin-bottom:12px;}
+.fx-feat__copy h2{font-size:clamp(24px,2.8vw,34px); line-height:1.14; letter-spacing:-.01em;}
+.fx-feat__copy p{margin-top:16px; font-size:16px; line-height:1.65; color:var(--muted);}
+.fx-feat__copy .btn{margin-top:20px;}
+@media (max-width:880px){
+  .fx-feat{grid-template-columns:1fr; gap:26px; padding:48px 0;}
+  .fx-feat--flip .fx-art{order:0;}
+  .fx-feat__copy{max-width:none;}
+}
+
+/* the gradient card every visual sits in */
+.fx-art{border-radius:26px; padding:30px; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;}
+.fx-art svg{display:block; width:100%; height:auto; position:relative; z-index:1;}
+.fx-art--sand{background:linear-gradient(155deg,#FBF6EC,#F1E6D2);}
+.fx-art--teal{background:linear-gradient(155deg,var(--accent-soft),#E4F3F1);}
+.fx-art--dawn{background:linear-gradient(160deg,#FBEDE3,#F5D8C7);}
+.fx-inner{background:var(--surface); border:1px solid var(--rule); border-radius:16px; box-shadow:var(--shadow-2); padding:20px; width:100%;}
+
+/* compact grid: short title + one line, no long-form cards */
+.fx-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:26px; margin-top:30px;}
+.fx-grid__item .ic{width:38px; height:38px; border-radius:10px; background:var(--accent-soft); color:var(--accent-deep); display:grid; place-items:center; margin-bottom:14px;}
+.fx-grid__item .ic svg{width:19px; height:19px;}
+.fx-grid__item h3{font-size:16.5px; margin-bottom:6px;}
+.fx-grid__item p{font-size:14px; color:var(--muted); line-height:1.55;}
+
+/* tight step list: bold title inline, one short line, no numbered circles */
+.fx-steps{display:flex; flex-direction:column; gap:18px; margin:4px 0 0; padding:0; list-style:none;}
+.fx-steps li{display:flex; gap:12px; align-items:baseline;}
+.fx-steps li::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--accent); flex:0 0 auto; transform:translateY(-4px);}
+.fx-steps b{font-family:var(--sans); font-weight:700; color:var(--ink);}
+.fx-steps span{color:var(--muted);}
+
+/* bold word + one-line caption, reused from the homepage stat-strip idea */
+.fx-stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:22px; margin-top:48px; padding-top:30px; border-top:1px solid var(--rule); text-align:left;}
+.fx-stats b{display:block; font-family:var(--serif); font-size:clamp(19px,2.1vw,23px); color:var(--ink); line-height:1.15;}
+.fx-stats span{display:block; margin-top:6px; font-size:13.5px; color:var(--muted); line-height:1.5;}
+
+/* short, centered, no-visual block for things that don't need a picture */
+.fx-plain{max-width:640px; margin:0 auto; text-align:center;}
+.fx-plain h2{font-size:clamp(24px,2.8vw,34px);}
+.fx-plain p{margin-top:16px; font-size:16.5px; line-height:1.65; color:var(--muted);}
