@@ -29,7 +29,13 @@
   function escHtml(s){
     return String(s).replace(/[&<>"']/g, function(c){ return HTML_ESC[c]; });
   }
-    var ANALYSER = (BASE ? "analyser.html" : "../analyser/analyser.html");
+  /* One path through P(), not a branch on whether BASE is empty. The old
+     `BASE ? "analyser.html" : "../analyser/analyser.html"` was right at the
+     site root and on the analyser page, but every /blog/ page also sets a
+     non-empty base ("../"), so it produced /blog/analyser.html there and the
+     mega-menu link 404'd on all of them. Relative to each page's own base the
+     analyser is always one level out of the site tree and into /analyser. */
+  var ANALYSER = P("../analyser/analyser.html");
 
   /* ===== FEEDBACK / AUDIENCE ENDPOINT (one place, loads on every page) =====
      Paste your Google Apps Script web-app URL between the quotes to receive
