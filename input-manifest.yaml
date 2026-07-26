@@ -1,0 +1,51 @@
+# input-manifest.yaml -- external inputs pulled into this repo.
+#
+# One entry per input: where it comes from, which exact commit is pinned,
+# and how this repo consumes it. CI (ci.yml, "security" job) fails if the
+# `commit` here drifts from the actual submodule gitlink, so this file is
+# always trustworthy -- when you bump a pin, update this file in the same
+# commit.
+#
+# Bump procedure for a git-submodule input:
+#   cd <path> && git fetch origin && git checkout <new-commit-or-tag> && cd ..
+#   git add <path> input-manifest.yaml   # update commit/version below first
+#   git commit -m "chore: bump <name> to <short-sha>"
+# deploy/release.sh runs `git submodule sync/update` on every deploy, so a
+# stale local checkout self-heals at deploy time; CI and local dev only see
+# the pin committed here.
+
+manifest_version: 1
+
+inputs:
+  - name: analyser
+    description: 20-factor handwriting analyser (frontend app + FastAPI OCR backend)
+    repo: https://github.com/vahinitech/20factor-analyser
+    license: AGPL-3.0-only
+    mechanism: git-submodule        # see .gitmodules
+    path: analyser
+    branch: main
+    version: v0.7-4-gece7fe8        # git -C analyser describe --tags; NOT a tag
+    # Quoted so a sha that happens to be all digits still loads as a string.
+    commit: "ece7fe805ece359b7c511f6731318d4588114536"
+    consumed_as:
+      # Docker image: compose service "analyser" builds analyser/deployment/Dockerfile
+      # in docker-compose.yml + deploy/docker-compose.{stage,prod}.yml. The container
+      # listens on PORT=8868 (compose env; the Dockerfile's EXPOSE 8080 is a stale
+      # default the app overrides at runtime).
+      - docker-image
+      # Reverse-proxied by deploy/nginx.conf. /analyser/ serves the whole app;
+      # the API routes are consumed by that app in the browser. Legacy redirects
+      # (/report.css, /engine.bundle.js, /Vahini%20Analyser.html, ...) keep old
+      # asset URLs working.
+      - route: /analyser/
+      - route: /ocr
+      - route: /ocr/health
+      - route: /analyze-vl
+      - route: /report-python
+    reverse_contract: >
+      analyser.html hardcodes <script src="../site/site.js"> to load this
+      site's shared nav. site.js moved to site/js/site.js, so deploy/nginx.conf
+      301-redirects /site/site.js to keep that reference working. If
+      site/js/site.js moves again, move the redirect (or coordinate a change
+      in both repos).
+    rules: never edit files under analyser/ from this repo; bump the pin instead.

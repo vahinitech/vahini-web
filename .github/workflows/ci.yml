@@ -47,6 +47,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
+      - name: input-manifest.yaml matches the pinned submodules
+        # Keeps the manifest's duplicated pins honest. The checker walks every
+        # git-submodule input and compares each entry's own commit against the
+        # gitlink at the path that entry declares, so adding/reordering inputs
+        # can never leave one silently unvalidated.
+        run: python3 tools/check-input-manifest.py
       - name: Persist API abuse limits + OCR input guard
         run: npm run test:security
 
