@@ -587,34 +587,8 @@
   .vh__stats{grid-template-columns:repeat(2,1fr); row-gap:22px;}
 }
 @media (prefers-reduced-motion: reduce){
-  .vh__p, .vh__halo i, .vh-led{animation:none !important;}
+  .vh__p, .vh__halo i, .vh-led, .vh-ledring, .vh-pulse, .vh-updot{animation:none !important;}
 }
-
-
-/* ---- bridge v2: story-first, scannable ---------------------------------- */
-.cog__head{max-width:660px;}
-.cog__head h2{font-family:var(--serif); font-size:clamp(30px,3.8vw,46px); line-height:1.12; margin:12px 0 0;}
-.cog__head h2 em{font-style:normal; color:var(--accent-deep);}
-.cog__rowtitle{margin:46px 0 16px; font-size:11.5px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); text-align:center;}
-.cog__grid{margin-top:34px; align-items:stretch;}
-
-/* door vignette: push the PULL door, flash, loop */
-.cog-door{margin:0; background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg); box-shadow:var(--shadow-1); padding:18px 16px 14px;}
-.cog-door svg{width:100%; height:auto; display:block;}
-.cog-door figcaption{font-size:12.5px; color:var(--muted); line-height:1.5; margin-top:8px;}
-.cog-door figcaption b{color:var(--ink);}
-.cogd-hand{animation:cogdPush 6s var(--ease) infinite;}
-.cogd-door{transform-origin:82px 125px; animation:cogdShake 6s linear infinite;}
-.cogd-flash{opacity:0; animation:cogdFlash 6s linear infinite;}
-@keyframes cogdPush{0%,12%{transform:translateX(46px)} 26%,46%{transform:translateX(6px)} 60%,100%{transform:translateX(46px)}}
-@keyframes cogdShake{26%{transform:translateX(0)} 29%{transform:translateX(-3px)} 32%{transform:translateX(2px)} 35%,100%{transform:translateX(0)}}
-@keyframes cogdFlash{0%,27%{opacity:0} 31%,48%{opacity:1} 56%,100%{opacity:0}}
-
-
-
-
-
-
 
 /* ============================================================
    CALIBRATION SCROLLYTELLING — one letter, one learning loop
