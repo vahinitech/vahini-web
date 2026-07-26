@@ -72,7 +72,9 @@ git pull → ./deploy/release.sh stage → verify stag.vahinitech.com → ./depl
   stale branding — open the image).
 - `analyser/` is a **git submodule** pinned to a vahinitech/20factor-analyser
   tag. Never edit files inside it here; bump the pin instead. `analyser.html`
-  hardcodes `../site/site.js` — a cross-repo contract, keep the redirect.
+  hardcodes `../site/site.js` — a cross-repo contract, keep the redirect. See
+  `docs/INPUT-MANIFEST.md` for the full list of what's actually consumed
+  (Docker image, proxied routes, this contract) and how to bump the pin.
 - The six-products card animation and hero flywheel are **inline scripts in
   site/index.html**, not in `site/js/site.js`.
 - Footer/nav are injected by `site/js/site.js` on every page — a fix there
