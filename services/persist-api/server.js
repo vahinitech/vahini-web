@@ -7,7 +7,7 @@ const path = require("node:path");
 const http = require("node:http");
 const crypto = require("node:crypto");
 const { sanitizeText, validatePublicUrl } = require("./lib/textguard");
-const { loadEmailConfig } = require("./lib/email-config");
+const { loadEmailConfig, readCredentials } = require("./lib/email-config");
 const { createMailer } = require("./lib/mailer");
 const { buildFeedbackEmail } = require("./lib/feedback-email");
 
@@ -612,12 +612,28 @@ let EMAIL_CONFIG = null;
 let MAILER = null;
 function initMail() {
   try {
-    EMAIL_CONFIG = loadEmailConfig();
-    MAILER = createMailer(EMAIL_CONFIG);
-    const fb = (EMAIL_CONFIG.notifications && EMAIL_CONFIG.notifications.feedback) || {};
+    const cfg = loadEmailConfig();
+    const fb = (cfg.notifications && cfg.notifications.feedback) || {};
+
+    // SMTP submission without credentials would build a transport happily and
+    // then fail on every single send, once per feedback submission. Catch it
+    // here instead: one line at boot beats an error per visitor, and it makes
+    // "remove the credentials to turn mail off" behave the way the README says.
+    if (fb.enabled && cfg.transport === "smtp" && !readCredentials()) {
+      EMAIL_CONFIG = null;
+      MAILER = null;
+      console.warn(
+        "mail: disabled (transport=smtp with feedback notifications on, but " +
+          "VAHINI_SMTP_USER/VAHINI_SMTP_PASS are not set)",
+      );
+      return;
+    }
+
+    EMAIL_CONFIG = cfg;
+    MAILER = createMailer(cfg);
     console.log(
-      `mail: transport=${EMAIL_CONFIG.transport} feedback=${fb.enabled ? `on -> ${(fb.to || []).join(", ")}` : "off"}` +
-        `${EMAIL_CONFIG.hasLocalOverride ? " (local override applied)" : ""}`,
+      `mail: transport=${cfg.transport} feedback=${fb.enabled ? `on -> ${(fb.to || []).join(", ")}` : "off"}` +
+        `${cfg.hasLocalOverride ? " (local override applied)" : ""}`,
     );
   } catch (err) {
     EMAIL_CONFIG = null;

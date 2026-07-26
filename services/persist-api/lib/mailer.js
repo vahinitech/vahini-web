@@ -156,25 +156,36 @@ function createMailer(cfg, deps = {}) {
       ? `\n\n(${gate.suppressed} further notification${gate.suppressed === 1 ? "" : "s"} were suppressed by the hourly cap.)`
       : "";
 
-    const envelope = {
+    const to = (message.to || []).join(", ");
+    const mail = {
       from: cfg.identity.from,
-      sender: cfg.identity.envelopeFrom || undefined,
-      to: (message.to || []).join(", "),
+      to,
       subject: safeHeader(message.subject, 180),
       text: (message.text || "") + headerNote,
       attachments: message.attachments || undefined,
     };
     const replyTo = safeAddress(message.replyTo);
-    if (replyTo) envelope.replyTo = replyTo;
+    if (replyTo) mail.replyTo = replyTo;
+
+    /* envelopeFrom is the SMTP MAIL FROM -- where bounces go -- which is not
+       the From header. nodemailer's `sender` option only writes a Sender:
+       header and leaves MAIL FROM as the From address. Measured against a test
+       server: from=display@ with sender=bounce@ put `MAIL FROM:<display@...>`
+       on the wire and added `Sender: bounce@...`, while envelope.from gave
+       `MAIL FROM:<bounce@...>`. `to` is repeated inside the envelope because
+       supplying one replaces the recipient list as well as the sender. */
+    if (cfg.identity.envelopeFrom) {
+      mail.envelope = { from: cfg.identity.envelopeFrom, to };
+    }
 
     if (cfg.transport === "log") {
-      log.log(`mailer[log]: to=${envelope.to} subject=${envelope.subject}`);
+      log.log(`mailer[log]: to=${to} subject=${mail.subject}`);
       stats.sent += 1;
       return true;
     }
 
     try {
-      await transport.sendMail(envelope);
+      await transport.sendMail(mail);
       stats.sent += 1;
       return true;
     } catch (err) {

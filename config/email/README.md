@@ -60,34 +60,53 @@ Spaces in the displayed value are cosmetic; store it with or without, both work.
 
 ### 2. Put the secret on the host, outside the repo
 
+The compose files look for it under `$VAHINI_HOST_DATA`, which defaults to the
+deploy user's home directory. As that user:
+
 ```bash
-sudo -u vishnu tee /home/vishnu/vahini-mail.env >/dev/null <<'EOF'
+umask 077                                   # created 0600, never briefly world-readable
+tee "$HOME/vahini-mail.env" >/dev/null <<'EOF'
 VAHINI_SMTP_USER=vahinitechfirm@gmail.com
 VAHINI_SMTP_PASS=xxxxxxxxxxxxxxxx
 VAHINI_FEEDBACK_EMAIL_ENABLED=1
 VAHINI_FEEDBACK_EMAIL_TO=info@vahinitech.com,vishnu.kosuri@vahinitech.com
 EOF
-chmod 600 /home/vishnu/vahini-mail.env
 ```
 
 `deploy/docker-compose.prod.yml` loads this file into the persist container.
 It is listed as required, so a missing file fails the deploy rather than
 bringing the stack up with notifications quietly off.
 
+**Where the compose files look.** The persist volumes and this env file all
+hang off `$VAHINI_HOST_DATA`, which `deploy/release.sh` sets to `$HOME` unless
+you export something else first:
+
+```bash
+VAHINI_HOST_DATA=/srv/vahini ./deploy/release.sh prod
+```
+
+Running `docker compose` by hand without that variable set fails with a message
+naming it, rather than silently mounting `/uploads` at the filesystem root.
+
 ### 3. Verify before trusting it
+
+Source the env file rather than passing it through `env $(...)`. That form puts
+the App Password in the command line, where `ps` can read it for the life of the
+process and where it lands in shell history.
 
 ```bash
 cd /path/to/web-live
-env $(grep -v '^#' /home/vishnu/vahini-mail.env | xargs) \
-  VAHINI_EMAIL_CONFIG_DIR=./config/email \
-  node tools/send-test-email.mjs --check          # authenticates, sends nothing
+set -a; . "$HOME/vahini-mail.env"; set +a    # secret stays out of argv
+export VAHINI_EMAIL_CONFIG_DIR=./config/email
+
+node tools/send-test-email.mjs --check       # authenticates, sends nothing
 ```
 
-Then a real one:
+Then a real one, in the same shell:
 
 ```bash
-... node tools/send-test-email.mjs --to you@example.com
-... node tools/send-test-email.mjs --sample       # a synthetic feedback notification
+node tools/send-test-email.mjs --to you@example.com
+node tools/send-test-email.mjs --sample      # a synthetic feedback notification
 ```
 
 | Symptom | Cause |

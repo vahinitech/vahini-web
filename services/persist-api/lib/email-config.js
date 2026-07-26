@@ -149,9 +149,11 @@ function validate(cfg) {
   return cfg;
 }
 
-/* Credentials, read straight from the environment at send time. Returned
-   separately from the config object so that logging or serialising the config
-   can never print them. */
+/* Credentials, read straight from the environment. Returned separately from
+   the config object so that logging or serialising the config can never print
+   them. Callers read this once while building the transport, which happens at
+   startup -- rotating VAHINI_SMTP_PASS therefore needs a restart to take
+   effect, not just a new value in the environment. */
 function readCredentials() {
   const user = envStr("VAHINI_SMTP_USER");
   const pass = envStr("VAHINI_SMTP_PASS");

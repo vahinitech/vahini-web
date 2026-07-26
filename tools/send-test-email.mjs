@@ -14,10 +14,13 @@
 
    Reads the same config the persist API does, so a pass here means the
    service will send. Run it from the repo root with the same environment the
-   container gets:
+   container gets. Source the env file rather than `env $(...)`: the latter
+   puts the App Password in argv, where ps can read it and shell history keeps
+   it.
 
-     env $(grep -v '^#' /home/vishnu/vahini-mail.env | xargs) \
-       VAHINI_EMAIL_CONFIG_DIR=./config/email node tools/send-test-email.mjs --check
+     set -a; . "$HOME/vahini-mail.env"; set +a
+     export VAHINI_EMAIL_CONFIG_DIR=./config/email
+     node tools/send-test-email.mjs --check
 */
 
 import { createRequire } from "node:module";

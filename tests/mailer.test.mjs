@@ -17,7 +17,7 @@ import { createRequire } from "node:module";
 
 const require = createRequire(import.meta.url);
 const SVC = "../services/persist-api/lib";
-const { loadEmailConfig, _merge } = require(`${SVC}/email-config.js`);
+const { loadEmailConfig, readCredentials, _merge } = require(`${SVC}/email-config.js`);
 const { createMailer, safeHeader, safeAddress } = require(`${SVC}/mailer.js`);
 const { buildFeedbackEmail, subjectFor } = require(`${SVC}/feedback-email.js`);
 
@@ -278,6 +278,10 @@ group("smtp: a real conversation with a throwaway server");
         !headerNames.includes("bcc") && !headerNames.includes("cc"), JSON.stringify(headerNames));
   check("exactly one To header", headerNames.filter((n) => n === "to").length === 1);
   check("body still carries the feedback", seen.data.includes("Telugu") || seen.data.includes("VGVsdWd1"));
+  // envelopeFrom must reach MAIL FROM, not just a Sender: header. nodemailer's
+  // `sender` option does the latter, which is what this used to do.
+  check("envelopeFrom lands on the SMTP envelope",
+        seen.from.includes("noreply@vahinitech.com"), seen.from);
 
   delete process.env.VAHINI_SMTP_USER;
   delete process.env.VAHINI_SMTP_PASS;
@@ -295,6 +299,81 @@ group("smtp: an unreachable server fails soft");
   check("send returns false rather than throwing", result === false);
   check("failure counted", mailer.stats().failed === 1);
   check("failure reason recorded", mailer.stats().lastError.length > 0);
+}
+
+group("smtp: envelope sender is distinct from the From header");
+{
+  const seen = { from: "", headers: "" };
+  const server = createServer((sock) => {
+    let buf = "", inData = false;
+    sock.write("220 fixture ESMTP\r\n");
+    sock.on("data", (c) => {
+      buf += c.toString(); let i;
+      while ((i = buf.indexOf("\r\n")) !== -1) {
+        const line = buf.slice(0, i); buf = buf.slice(i + 2);
+        if (inData) { if (line === ".") { inData = false; sock.write("250 ok\r\n"); } else seen.headers += line + "\n"; continue; }
+        const up = line.toUpperCase();
+        if (up.startsWith("EHLO")) sock.write("250-fixture\r\n250 OK\r\n");
+        else if (up.startsWith("MAIL FROM")) { seen.from = line; sock.write("250 ok\r\n"); }
+        else if (up === "DATA") { inData = true; sock.write("354 go\r\n"); }
+        else if (up === "QUIT") { sock.write("221 bye\r\n"); sock.end(); }
+        else sock.write("250 ok\r\n");
+      }
+    });
+    sock.on("error", () => {});
+  });
+  await new Promise((r) => server.listen(0, "127.0.0.1", r));
+
+  const cfg = clone(BASE_CONFIG);
+  cfg.transport = "smtp";
+  cfg.smtp = { host: "127.0.0.1", port: server.address().port, secure: false, requireTLS: false };
+  // Deliberately different so the two cannot be confused for one another.
+  cfg.identity = { from: "Vahini Web <display@vahinitech.com>", envelopeFrom: "bounce@vahinitech.com" };
+
+  const mailer = createMailer(cfg, { log: { log() {}, error() {} } });
+  await mailer.send({ to: ["hello@vahinitech.com"], subject: "s", text: "t" });
+  await new Promise((r) => server.close(r));
+
+  check("MAIL FROM is envelopeFrom", seen.from.includes("bounce@vahinitech.com"), seen.from);
+  check("MAIL FROM is NOT the From header address", !seen.from.includes("display@vahinitech.com"), seen.from);
+  check("From header keeps the display identity", /^from:.*display@vahinitech\.com/im.test(seen.headers));
+  check("recipient survives the explicit envelope", /^to:.*hello@vahinitech\.com/im.test(seen.headers));
+}
+
+group("startup: smtp without credentials is refused, not attempted");
+{
+  const dir = mkdtempSync(path.join(tmpdir(), "vahini-email-creds-"));
+  writeFileSync(path.join(dir, "email.config.json"), JSON.stringify({
+    transport: "smtp",
+    smtp: { host: "smtp.gmail.com", port: 587 },
+    identity: { from: "Vahini <vahinitechfirm@gmail.com>" },
+    notifications: { feedback: { enabled: true, to: ["info@vahinitech.com"] } },
+  }));
+  delete process.env.VAHINI_SMTP_USER;
+  delete process.env.VAHINI_SMTP_PASS;
+
+  const cfg = loadEmailConfig(dir);
+  const fb = cfg.notifications.feedback;
+  // Mirrors the guard in server.js initMail().
+  const wouldDisable = (c) =>
+    c.notifications.feedback.enabled && c.transport === "smtp" && !readCredentials();
+
+  check("config itself still loads", cfg.transport === "smtp" && fb.enabled === true);
+  check("no credentials means mail is disabled", wouldDisable(cfg) === true);
+
+  process.env.VAHINI_SMTP_USER = "vahinitechfirm@gmail.com";
+  process.env.VAHINI_SMTP_PASS = "app-password";
+  check("credentials present means mail stays enabled", wouldDisable(loadEmailConfig(dir)) === false);
+
+  // A partial credential pair must not count as present.
+  delete process.env.VAHINI_SMTP_PASS;
+  check("user without password does not count", wouldDisable(loadEmailConfig(dir)) === true);
+  delete process.env.VAHINI_SMTP_USER;
+
+  // Transports that need no credentials are unaffected by the guard.
+  writeFileSync(path.join(dir, "email.config.local.json"), JSON.stringify({ transport: "log" }));
+  check("log transport unaffected by missing credentials", wouldDisable(loadEmailConfig(dir)) === false);
+  rmSync(dir, { recursive: true, force: true });
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);
