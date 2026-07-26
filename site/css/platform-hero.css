@@ -445,26 +445,34 @@
 /* copy column */
 .vh__copy{container-type:inline-size;}
 .vh__eye{display:inline-flex; align-items:center; gap:9px; font-size:11.5px; font-weight:800;
-  letter-spacing:.14em; text-transform:uppercase; color:var(--accent-deep); white-space:nowrap;}
+  letter-spacing:.14em; text-transform:uppercase; color:var(--accent-deep);}
 .vh__eye svg{width:16px; height:16px; flex:0 0 auto;}
 /* Sized off this column's own rendered width (container query units), not the
    viewport: the grid switches this column between a full-width single stack
    and a ~45% two-up track at 920px (see the max-width:920px block below), so
    viewport-relative sizing alone put the two <br>-separated lines of the
    headline into 2-4 wraps depending which side of that switch you were on.
-   8.3cqw keeps both "The ballpoint pen." and "Reinvented for the AI era." to
-   one line each (measured against the real Hanken Grotesk 800 metrics, with
-   headroom below the ~9cqw wrap point) at every column width the grid
-   produces, so it stays exactly 2 lines everywhere. The vw clamp declared
+   The display face is Spectral (the site's serif; every other heading uses
+   it) at 6.7cqw -- measured so the longer line, "For 100 years, pens
+   recorded ink." (33 chars), fills ~92% of the column, leaving ~8%
+   headroom for OS/browser font-metric and scrollbar-width differences.
+   7.2cqw measured as a 98.7% fill in headless Chromium and wrapped on a
+   real machine -- keep the margin. Re-measure if the text or family
+   changes. The vw clamp declared
    first is a progressive-enhancement fallback for browsers without
    container query units -- an unsupported unit invalidates the whole
    clamp(), so without it those browsers would drop font-size entirely
    rather than degrade to the old (imperfect but not broken) vw sizing. */
-.vh__h1{font-family:var(--sans); font-weight:800; font-size:clamp(20px,4.8vw,72px); font-size:clamp(20px,8.3cqw,72px); line-height:1.04;
-  letter-spacing:-.02em; color:var(--ink); margin:18px 0 0;}
-.vh__h1 em{font-style:normal;
+.vh__h1{font-family:var(--serif); font-weight:700; font-size:clamp(24px,3.9vw,80px); font-size:clamp(24px,6.7cqw,80px); line-height:1.1;
+  letter-spacing:-.015em; color:var(--ink); margin:18px 0 0;}
+/* second line: Spectral's true italic cut (loaded at weight 500 only) with
+   the brand gradient -- the ink/intelligence contrast carried by type */
+.vh__h1 em{font-style:italic; font-weight:500;
   background:linear-gradient(100deg, var(--accent-deep), var(--accent)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
-.vh__sub{font-size:clamp(16px,1.6vw,21px); line-height:1.55; color:var(--muted); max-width:480px; margin:22px 0 0;}
+/* text-wrap:balance: when the sentence has to wrap (narrow columns), break
+   it evenly instead of orphaning the last word; ignored by older browsers */
+.vh__sub{font-size:clamp(15.5px,1.45vw,19px); line-height:1.55; color:var(--muted); max-width:560px; margin:20px 0 0; text-wrap:balance;}
+.vh__sub strong{color:var(--ink); font-weight:700;}
 .vh__ticks{display:flex; flex-wrap:wrap; gap:8px 22px; margin:24px 0 0; padding:0; list-style:none;}
 .vh__ticks li{display:inline-flex; align-items:center; gap:8px; font-size:14.5px; font-weight:600; color:var(--ink);}
 .vh__ticks svg{width:15px; height:15px; color:var(--accent-deep);}
@@ -476,111 +484,90 @@
 .vh-btn--primary:hover{transform:translateY(-2px); background:var(--accent);}
 .vh-btn--ghost{border:1px solid var(--rule); color:var(--ink); background:var(--surface);}
 .vh-btn--ghost:hover{border-color:var(--accent-deep); transform:translateY(-2px);}
-.vh__badges{display:flex; flex-wrap:wrap; gap:8px; margin:30px 0 0; padding:0; list-style:none;}
-.vh__badges li{font-size:12px; font-weight:600; color:var(--muted); border:1px solid var(--rule);
-  background:var(--surface); border-radius:99px; padding:7px 14px;}
+/* trust bar: credentials, not feature pills -- each item is verifiable
+   elsewhere on the site (patent, DPIIT and RTIH on about.html; the award
+   on awards.html), so keep this list in sync with those pages. */
+.vh__trust{display:flex; flex-wrap:wrap; gap:7px 20px; margin:28px 0 0; padding:14px 0 0; list-style:none;
+  border-top:1px solid var(--rule);}
+.vh__trust li{display:inline-flex; align-items:center; gap:7px; font-size:11.5px; font-weight:800;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--muted); white-space:nowrap;}
+.vh__trust li::before{content:""; width:5px; height:5px; border-radius:50%; background:var(--accent); flex:0 0 auto;}
+/* the scale line: why this market is huge, in one sentence */
+.vh__scale{margin:16px 0 0; font-size:14px; line-height:1.55; color:var(--muted); max-width:480px;}
+.vh__scale a{color:var(--accent-deep); font-weight:700; text-decoration:none;}
+.vh__scale a:hover{text-decoration:underline;}
 
-/* stage */
-.vh__stage{position:relative; min-height:520px;}
-.vh__halo{position:absolute; right:4%; top:42%; transform:translateY(-50%); width:480px; height:480px; pointer-events:none;}
+/* stage: the platform stack -- one technology at the bottom, six products
+   on top. Layers light up bottom-to-top as the signal climbs (a layer is
+   lit whenever its data-beat <= the section's data-frame, so lit layers
+   accumulate instead of blinking one at a time), and a pulse rises through
+   the connector that the signal is currently crossing. */
+.vh__stage{position:relative; min-height:520px; display:flex; flex-direction:column; justify-content:center;}
+.vh__halo{position:absolute; right:50%; top:46%; transform:translate(50%,-50%); width:520px; height:520px; pointer-events:none;}
 .vh__halo i{position:absolute; inset:0; border:1px solid rgba(0,173,181,.22); border-radius:50%;}
 .vh__halo i:nth-child(1){animation:vhSpin 44s linear infinite; border-style:dashed; border-color:rgba(0,173,181,.15);}
 .vh__halo i:nth-child(2){inset:11%; border-color:rgba(0,173,181,.19);}
 .vh__halo i:nth-child(3){inset:24%; animation:vhSpinR 30s linear infinite; border-style:dotted; border-color:rgba(0,173,181,.26);}
 @keyframes vhSpin{to{transform:rotate(360deg)}}
 @keyframes vhSpinR{to{transform:rotate(-360deg)}}
-.vh__scene{position:relative; z-index:1; width:100%; height:auto; display:block;}
 
-/* pen: LED + sensor ring */
-.vh-led{fill:var(--accent); animation:asmBreathe 1.9s ease-in-out infinite;}
-.vh-ledring{stroke:var(--accent); opacity:0; transform-origin:58px 0px;}
-.vh[data-frame="1"] .vh-ledring{animation:vhRing 1.9s ease-out infinite;}
-@keyframes vhRing{0%{opacity:.9; transform:scale(1)} 100%{opacity:0; transform:scale(3.4)}}
+.vh-stack{position:relative; z-index:1; display:flex; flex-direction:column; max-width:430px; margin:0 auto; width:100%;}
+.vh-layer{display:flex; align-items:center; gap:13px; background:rgba(255,255,255,.9); border:1px solid var(--rule);
+  border-radius:14px; padding:12px 16px; backdrop-filter:blur(6px); box-shadow:var(--shadow-1);
+  opacity:.42; filter:saturate(.35);
+  transition:opacity .5s var(--ease), filter .5s var(--ease), border-color .5s, box-shadow .5s;}
+.vh-layer__ic{width:38px; height:38px; border-radius:11px; display:grid; place-items:center; flex:0 0 auto;
+  background:rgba(0,173,181,.12); color:var(--accent-deep);}
+.vh-layer__ic svg{width:20px; height:20px;}
+.vh-layer b{display:block; font-size:14.5px; font-weight:700; color:var(--ink); line-height:1.25;}
+.vh-layer > div > span{display:block; font-size:11.5px; color:var(--muted); margin-top:2px; line-height:1.4;}
 
-/* frame 0: the pen writes "Vahini" (clip reveal toward the tip) */
-.vh[data-frame="0"] .vh-inkclip{animation:vhWriteReveal 1.9s var(--ease) both;}
-@keyframes vhWriteReveal{from{width:0} to{width:210px}}
+/* lit = the signal has reached this layer (beat <= frame, so it stays lit) */
+.vh[data-frame="0"] .vh-layer[data-beat="0"],
+.vh[data-frame="1"] .vh-layer[data-beat="0"], .vh[data-frame="1"] .vh-layer[data-beat="1"],
+.vh[data-frame="2"] .vh-layer[data-beat="0"], .vh[data-frame="2"] .vh-layer[data-beat="1"], .vh[data-frame="2"] .vh-layer[data-beat="2"],
+.vh[data-frame="3"] .vh-layer[data-beat="0"], .vh[data-frame="3"] .vh-layer[data-beat="1"], .vh[data-frame="3"] .vh-layer[data-beat="2"], .vh[data-frame="3"] .vh-layer[data-beat="3"],
+.vh[data-frame="4"] .vh-layer{opacity:1; filter:none;}
+/* active = the beat currently narrated on the rail below */
+.vh[data-frame="0"] .vh-layer[data-beat="0"],
+.vh[data-frame="1"] .vh-layer[data-beat="1"],
+.vh[data-frame="2"] .vh-layer[data-beat="2"],
+.vh[data-frame="3"] .vh-layer[data-beat="3"],
+.vh[data-frame="4"] .vh-layer[data-beat="4"]{border-color:rgba(0,173,181,.45); box-shadow:var(--shadow-2);}
 
-/* frame 1: pulse travels the pen barrel */
-.vh-pulse{opacity:0; fill:var(--accent-deep); offset-path:path('M372 176 L242 344');}
-.vh[data-frame="1"] .vh-pulse{animation:vhTravel 1.8s ease-in-out infinite;}
-@keyframes vhTravel{0%{opacity:0; offset-distance:0%} 15%{opacity:1} 85%{opacity:1} 100%{opacity:0; offset-distance:100%}}
+/* the applications layer: the "one pen -> six products" payoff */
+.vh-layer--apps{display:block; padding:14px 16px;}
+.vh-layer__head b{font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--accent-deep);}
+.vh-stack-apps{display:grid; grid-template-columns:1fr 1fr; gap:7px; margin:10px 0 0; padding:0; list-style:none;}
+.vh-stack-apps li{font-size:12px; font-weight:700; color:var(--ink); background:var(--surface);
+  border:1px solid var(--rule); border-radius:99px; padding:6px 8px; text-align:center; white-space:nowrap;}
+.vh[data-frame="4"] .vh-stack-apps li{animation:vhChipPop .4s var(--ease) both; border-color:rgba(0,173,181,.35); color:var(--accent-deep);}
+.vh[data-frame="4"] .vh-stack-apps li:nth-child(1){animation-delay:.10s}
+.vh[data-frame="4"] .vh-stack-apps li:nth-child(2){animation-delay:.22s}
+.vh[data-frame="4"] .vh-stack-apps li:nth-child(3){animation-delay:.34s}
+.vh[data-frame="4"] .vh-stack-apps li:nth-child(4){animation-delay:.46s}
+.vh[data-frame="4"] .vh-stack-apps li:nth-child(5){animation-delay:.58s}
+.vh[data-frame="4"] .vh-stack-apps li:nth-child(6){animation-delay:.70s}
+@keyframes vhChipPop{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
 
-/* frame 2: the IMU analyses the strokes: three live traces draw.
-   Shares the pen-tip reconstruction card's exact slot (top-left) so the
-   capture -> reconstruct handoff reads as one card updating in place,
-   not a new card appearing elsewhere. The data-frame attribute flips
-   2->3 in one JS write, so this card's fade-out and the reconstruction
-   card's fade-in run on the same .vh-holo .5s transition at the same
-   time -- a brief crossfade in the shared slot, not a strict sequence. */
-.vh-holo--imu{left:-2%; top:8%; width:206px;}
-.vh-holo--imu b{display:block; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent-deep); margin-bottom:8px;}
-.vh-holo--imu svg{width:100%; height:54px; display:block;}
-.vh-holo--imu span{display:block; margin-top:7px; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);}
-.vh-trace--1{stroke:var(--accent-deep);} .vh-trace--2{stroke:var(--accent);} .vh-trace--3{stroke:#C8952E;}
-.vh[data-frame="2"] .vh-holo--imu{opacity:1; transform:translateY(0);}
-.vh-trace{stroke-dasharray:170; stroke-dashoffset:170;}
-.vh[data-frame="2"] .vh-trace{animation:vhTraceDraw 1.4s var(--ease) both;}
+/* connectors: each carries data-beat = the beat when the signal crosses it
+   upward; the line warms once crossed and a pulse rises while crossing */
+.vh-rise{position:relative; width:2px; height:16px; margin:0 auto; background:var(--rule); transition:background .5s;}
+.vh[data-frame="1"] .vh-rise[data-beat="1"], .vh[data-frame="2"] .vh-rise[data-beat="1"], .vh[data-frame="2"] .vh-rise[data-beat="2"],
+.vh[data-frame="3"] .vh-rise[data-beat="1"], .vh[data-frame="3"] .vh-rise[data-beat="2"], .vh[data-frame="3"] .vh-rise[data-beat="3"],
+.vh[data-frame="4"] .vh-rise{background:rgba(0,173,181,.5);}
+.vh-rise i{position:absolute; left:50%; bottom:-2px; width:7px; height:7px; margin-left:-3.5px; border-radius:50%;
+  background:var(--accent-deep); opacity:0;}
+.vh[data-frame="1"] .vh-rise[data-beat="1"] i,
+.vh[data-frame="2"] .vh-rise[data-beat="2"] i,
+.vh[data-frame="3"] .vh-rise[data-beat="3"] i,
+.vh[data-frame="4"] .vh-rise[data-beat="4"] i{animation:vhRisePulse 1.4s ease-in-out infinite;}
+@keyframes vhRisePulse{0%{bottom:-4px; opacity:0} 22%{opacity:1} 78%{opacity:1} 100%{bottom:calc(100% - 3px); opacity:0}}
 
-.vh[data-frame="2"] .vh-trace--2{animation-delay:.2s}
-.vh[data-frame="2"] .vh-trace--3{animation-delay:.4s}
-@keyframes vhTraceDraw{to{stroke-dashoffset:0}}
-
-/* holo cards: note (frame 3) + analysis (frame 4) */
-.vh-holo{position:absolute; z-index:2; background:rgba(255,255,255,.92); border:1px solid var(--rule);
-  border-radius:14px; padding:14px 16px; backdrop-filter:blur(6px); box-shadow:var(--shadow-2);
-  opacity:0; transform:translateY(14px); transition:opacity .5s var(--ease), transform .5s var(--ease);}
-.vh-holo--recon{left:-2%; top:8%; width:206px;}
-.vh-holo--recon b{display:block; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent-deep); margin-bottom:8px;}
-.vh-holo--recon svg{width:100%; height:56px; display:block;}
-.vh-holo--recon span{display:block; margin-top:7px; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);}
-.vh-reconpath{stroke:var(--accent-deep); stroke-dasharray:340; stroke-dashoffset:340;}
-.vh[data-frame="3"] .vh-reconpath{animation:vhTraceDraw 1.5s var(--ease) both .15s;}
-.vh-reconpts circle{fill:var(--accent); opacity:0;}
-.vh[data-frame="3"] .vh-reconpts circle{animation:vhAppIn .3s ease both 1.2s;}
-.vh-holo--ai{right:0; top:6%; width:230px; display:flex; gap:14px; align-items:center;}
-/* Reconstruct's card is specific to that beat (trajectory rebuild); once the
-   story moves on to Sync it fades back out via the base .vh-holo transition
-   instead of lingering next to the sync-only apps list. */
-.vh[data-frame="3"] .vh-holo--recon,
-.vh[data-frame="3"] .vh-holo--ai, .vh[data-frame="4"] .vh-holo--ai{opacity:1; transform:translateY(0);}
-.vh-gauge{position:relative; width:64px; height:64px; flex:0 0 auto;}
-.vh-gauge svg{width:64px; height:64px; display:block;}
-.vh-gauge b{position:absolute; inset:0; display:grid; place-items:center; color:var(--ink); font-size:19px;}
-.vh-gauge circle:first-child{stroke:var(--rule);}
-.vh-gauge__arc{stroke:var(--accent-deep); transition:stroke-dashoffset 1s var(--ease);}
-.vh-bars{flex:1; display:flex; flex-direction:column; gap:8px;}
-.vh-bar span{font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);}
-.vh-bar i{display:block; height:5px; border-radius:99px; background:var(--rule); margin-top:3px; overflow:hidden;}
-.vh-bar b{display:block; height:100%; width:0; border-radius:99px; background:linear-gradient(90deg, var(--accent-deep), var(--accent));}
-.vh[data-frame="3"] .vh-bar b, .vh[data-frame="4"] .vh-bar b{width:var(--w); transition:width .9s var(--ease);}
-
-/* final beat, Sync (data-frame="4"): notes fly to the cloud */
-.vh-cloud path{stroke:var(--accent-deep); fill:rgba(0,173,181,.08);}
-.vh-cloud{opacity:.45; transition:opacity .4s;}
-.vh[data-frame="4"] .vh-cloud{opacity:1;}
-.vh-updot{fill:var(--accent-deep); opacity:0;}
-.vh[data-frame="4"] .vh-updot{animation:vhUp 1.9s ease-in infinite;}
-.vh[data-frame="4"] .vh-updot--2{animation-delay:.55s}
-.vh[data-frame="4"] .vh-updot--3{animation-delay:1.1s}
-@keyframes vhUp{0%{transform:translate(0,0); opacity:0} 14%{opacity:1} 82%{opacity:1} 100%{transform:translate(78px,-104px); opacity:0}}
-
-/* final beat, Sync (data-frame="4"): the capture templated into the listed applications */
-.vh-apps{position:absolute; z-index:2; right:0; top:46%; margin:0; padding:0; list-style:none;
-  display:flex; flex-direction:column; gap:8px; align-items:flex-end;}
-.vh-apps li{font-size:12px; font-weight:700; color:var(--accent-deep); background:var(--surface);
-  border:1px solid rgba(0,173,181,.35); border-radius:99px; padding:7px 14px; box-shadow:var(--shadow-1);
-  opacity:0; transform:translateX(16px);}
-.vh[data-frame="4"] .vh-apps li{animation:vhAppIn .45s var(--ease) both;}
-.vh[data-frame="4"] .vh-apps li:nth-child(1){animation-delay:.15s}
-.vh[data-frame="4"] .vh-apps li:nth-child(2){animation-delay:.38s}
-.vh[data-frame="4"] .vh-apps li:nth-child(3){animation-delay:.61s}
-.vh[data-frame="4"] .vh-apps li:nth-child(4){animation-delay:.84s}
-@keyframes vhAppIn{from{opacity:0; transform:translateX(16px)} to{opacity:1; transform:translateX(0)}}
-
-/* the story rail */
-.vh__frames{display:flex; gap:4px; margin:18px 0 0; padding:0; list-style:none;}
-.vh__frames li{flex:1; text-align:center; font-size:10.5px; font-weight:700; letter-spacing:.09em;
+/* the story rail (labels are outcomes, not engineering steps; the longest,
+   "AI Reconstruction", is what sets the small size + tight tracking here) */
+.vh__frames{display:flex; gap:4px; margin:20px 0 0; padding:0; list-style:none;}
+.vh__frames li{flex:1; text-align:center; font-size:9.5px; font-weight:700; letter-spacing:.04em;
   text-transform:uppercase; color:var(--hint); padding:9px 2px 0; border-top:2px solid var(--rule);
   transition:color .3s, border-color .3s;}
 .vh[data-frame="0"] .vh__frames li:nth-child(1), .vh[data-frame="1"] .vh__frames li:nth-child(2),
@@ -596,18 +583,18 @@
 
 @media (max-width:920px){
   .vh{padding-top:56px;}
-  .vh__grid2{grid-template-columns:1fr; gap:30px;}
-  .vh__stage{min-height:430px;}
-  .vh__halo{width:340px; height:340px; right:50%; transform:translate(50%,-50%);}
-  .vh-holo--recon{left:0; top:0;}
-  .vh-holo--ai{right:0; top:0;}
-  .vh-holo--imu{left:0; top:0; width:170px;}
-  .vh-holo--imu svg{height:34px;}
-  .vh-holo--imu span{display:none;}
+  .vh__grid2{grid-template-columns:1fr; gap:34px;}
+  .vh__stage{min-height:0;}
+  .vh__halo{width:340px; height:340px;}
+  .vh__trust{gap:7px 16px;}
   .vh__stats{grid-template-columns:repeat(2,1fr); row-gap:22px;}
 }
+@media (max-width:400px){
+  .vh-stack-apps{grid-template-columns:1fr;}
+  .vh-stack-apps li{white-space:normal;}
+}
 @media (prefers-reduced-motion: reduce){
-  .vh__p, .vh__halo i, .vh-led, .vh-ledring, .vh-pulse, .vh-updot{animation:none !important;}
+  .vh__p, .vh__halo i, .vh-rise i, .vh-stack-apps li{animation:none !important;}
 }
 
 /* ============================================================
