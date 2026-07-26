@@ -47,6 +47,18 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
+      - name: input-manifest.yaml matches the pinned submodule
+        # The manifest duplicates the gitlink so humans and tools can read the
+        # pin without git; this check is what keeps the duplicate honest.
+        # git ls-tree reads the gitlink without needing submodule init.
+        run: |
+          manifest=$(grep -E '^\s*commit:' input-manifest.yaml | head -1 | awk '{print $2}')
+          gitlink=$(git ls-tree HEAD analyser | awk '{print $3}')
+          echo "manifest=$manifest gitlink=$gitlink"
+          if [ -z "$manifest" ] || [ "$manifest" != "$gitlink" ]; then
+            echo "::error::input-manifest.yaml commit ($manifest) != analyser submodule gitlink ($gitlink). Update input-manifest.yaml in the same commit as the pin bump."
+            exit 1
+          fi
       - name: Persist API abuse limits + OCR input guard
         run: npm run test:security
 
