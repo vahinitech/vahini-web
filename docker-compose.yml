@@ -66,6 +66,12 @@ services:
       - PERSIST_UPLOADS_DIR=/data/uploads
       - PERSIST_REPORTS_DIR=/data/reports
       - PERSIST_FEEDBACK_DIR=/data/feedback
+      # Local stack never delivers. `log` composes the notification and prints
+      # a one-line summary to the container log, so the wiring is verifiable
+      # (`docker compose logs persist`) without credentials or a real send.
+      - VAHINI_EMAIL_TRANSPORT=log
+      - VAHINI_FEEDBACK_EMAIL_ENABLED=1
+      - VAHINI_FEEDBACK_EMAIL_TO=dev-null@localhost
     volumes:
       - persist_data:/data
     healthcheck:

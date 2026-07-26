@@ -79,6 +79,15 @@ git pull → ./deploy/release.sh stage → verify stag.vahinitech.com → ./depl
   routes, this contract) and the bump procedure — CI fails if the manifest
   drifts from the real pin, so update it in the same commit as any pin bump
   (`python3 tools/check-input-manifest.py` runs the same check locally).
+- **Email config lives in `config/email/`**, read by persist-api at boot.
+  Credentials are environment-only (`VAHINI_SMTP_USER`/`VAHINI_SMTP_PASS`, a
+  Gmail **App Password**, not the account password) and come from an env file
+  outside the repo, which compose loads and git never sees.
+  `config/` is in the root `.dockerignore` deliberately: the web image does
+  `COPY . .` into the public web root, so without that entry the SMTP host and
+  recipient list would be downloadable at `/config/email/email.config.json`.
+  Check a host with `node tools/send-test-email.mjs --check` (authenticates,
+  sends nothing). Full setup in `config/email/README.md`.
 - The six-products card animation and hero flywheel are **inline scripts in
   site/index.html**, not in `site/js/site.js`.
 - Footer/nav are injected by `site/js/site.js` on every page — a fix there

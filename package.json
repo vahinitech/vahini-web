@@ -7,12 +7,13 @@
     "test": "node tests/smoke-http.mjs",
     "test:e2e": "node tests/e2e-pages.mjs",
     "test:recognition": "node tests/e2e-recognition.mjs",
-    "test:security": "node tests/security-abuse.test.mjs && node tests/ocr-input-guard.test.mjs && node tests/sweeper.test.mjs",
+    "test:security": "node tests/security-abuse.test.mjs && node tests/ocr-input-guard.test.mjs && node tests/sweeper.test.mjs && node tests/mailer.test.mjs",
     "test:all": "node tests/e2e-pages.mjs",
     "test:regression:install": "./node_modules/.bin/playwright install chromium"
   },
   "devDependencies": {
     "http-server": "^14.1.1",
-    "playwright": "^1.61.1"
+    "playwright": "^1.61.1",
+    "nodemailer": "^9.0.3"
   }
 }

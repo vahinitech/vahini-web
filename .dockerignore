@@ -40,6 +40,11 @@ deploy/certbot/cloudflare-credentials.ini
 # also blocks public /services/ regardless (deploy/nginx.conf), so the web
 # image not shipping it is belt-and-suspenders, not the only protection.
 services/
+# Global email configuration. `COPY . .` puts the build context into the public
+# web root, so without this the SMTP host and the notification recipient list
+# would be downloadable at /config/email/email.config.json. The persist-api
+# image copies this directory in deliberately; the web image never needs it.
+config/
 tools/
 node_modules/
 package.json

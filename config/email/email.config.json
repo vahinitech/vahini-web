@@ -1,0 +1,60 @@
+{
+  "$comment": [
+    "GLOBAL EMAIL CONFIGURATION. Committed, so it must never contain a secret.",
+    "Credentials come from the environment only: VAHINI_SMTP_USER / VAHINI_SMTP_PASS.",
+    "For Gmail, VAHINI_SMTP_PASS is a 16-character App Password, NOT the account",
+    "password -- Gmail rejects the account password for SMTP. See README.md.",
+    "Per-host overrides go in email.config.local.json (gitignored, see the example",
+    "file next to this one). Every value here can also be overridden by an env var;",
+    "the precedence and the full var list are in README.md."
+  ],
+
+  "transport": "smtp",
+
+  "smtp": {
+    "$comment": "Standard Gmail submission. 587 + STARTTLS; use 465 with secure:true for implicit TLS.",
+    "host": "smtp.gmail.com",
+    "port": 587,
+    "secure": false,
+    "requireTLS": true,
+    "minTlsVersion": "TLSv1.2",
+    "connectionTimeoutMs": 15000,
+    "greetingTimeoutMs": 10000,
+    "socketTimeoutMs": 20000
+  },
+
+  "pop": {
+    "$comment": [
+      "Reference only -- the persist API sends mail and never reads it, so nothing",
+      "in the codebase consumes this block. It lives here so the mailbox's settings",
+      "are in one place for whoever configures a desktop or phone client.",
+      "Requires POP to be switched on in Gmail: Settings -> Forwarding and POP/IMAP."
+    ],
+    "host": "pop.gmail.com",
+    "port": 995,
+    "secure": true
+  },
+
+  "identity": {
+    "$comment": [
+      "From must be the authenticated Gmail account (or an alias verified under",
+      "Gmail's 'Send mail as'). Gmail rewrites or refuses anything else, so setting",
+      "this to noreply@vahinitech.com without verifying that alias first would",
+      "either silently change the visible sender or fail the send."
+    ],
+    "from": "Vahini Web <vahinitechfirm@gmail.com>",
+    "envelopeFrom": "vahinitechfirm@gmail.com"
+  },
+
+  "notifications": {
+    "feedback": {
+      "enabled": false,
+      "to": ["vahinitechfirm@gmail.com"],
+      "subjectPrefix": "[Vahini feedback]",
+      "replyToVisitor": true,
+      "includeFullRecord": true,
+      "attachRecordJson": true,
+      "maxPerHour": 60
+    }
+  }
+}

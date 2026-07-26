@@ -10,9 +10,11 @@
 # also strip persist-api's own source (services/persist-api/lib) from its
 # own build.
 #
-# The Dockerfile only COPYs two explicit paths (server.js, lib/), so nothing
-# listed here can leak into the image regardless -- this file only trims
-# what gets sent to the build daemon as context, for faster builds.
+# The Dockerfile only COPYs explicit paths (package*.json, server.js, lib/,
+# config/email), so nothing listed here can leak into the image regardless --
+# this file mostly trims what gets sent to the build daemon as context, for
+# faster builds. The one entry that is load-bearing rather than cosmetic is
+# the email.config.local.json exclusion below, since config/email IS copied.
 .git
 node_modules/
 analyser/
@@ -25,4 +27,8 @@ scraps/
 site/video-src/
 docs/
 deploy/certbot/cloudflare-credentials.ini
+# A builder's own host override must never be baked into a shared image: it
+# names internal recipients and may point at an internal relay. Host-specific
+# values reach the container through the environment instead.
+config/email/email.config.local.json
 *.md

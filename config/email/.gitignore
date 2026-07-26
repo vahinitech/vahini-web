@@ -1,0 +1,4 @@
+# Per-host overrides. May name internal recipients and internal relay hosts,
+# so it stays out of git even though secrets themselves live in the
+# environment rather than in this file.
+email.config.local.json

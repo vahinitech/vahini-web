@@ -7,6 +7,9 @@ const path = require("node:path");
 const http = require("node:http");
 const crypto = require("node:crypto");
 const { sanitizeText, validatePublicUrl } = require("./lib/textguard");
+const { loadEmailConfig } = require("./lib/email-config");
+const { createMailer } = require("./lib/mailer");
+const { buildFeedbackEmail } = require("./lib/feedback-email");
 
 const PORT = Number(process.env.PORT || 8090);
 
@@ -455,7 +458,29 @@ async function handleFeedback(req, res, clientIp) {
   await fsp.writeFile(filePath, JSON.stringify(rec, null, 2), "utf8");
   await appendNdjson(streamPath, rec);
 
+  // Answer the visitor first, then notify. Disk is the system of record; mail
+  // is a convenience, and a slow or dead SMTP server must never turn into a
+  // slow feedback form. notifyFeedback never rejects.
   send(res, 200, { ok: true, id: feedbackId });
+  notifyFeedback(rec);
+}
+
+/* Fire-and-forget. Every failure path is swallowed here rather than at the
+   call site, so there is exactly one place that has to be right about not
+   throwing into a request that has already been answered. */
+function notifyFeedback(rec) {
+  if (!MAILER || !EMAIL_CONFIG) return;
+  let message;
+  try {
+    message = buildFeedbackEmail(rec, EMAIL_CONFIG);
+  } catch (err) {
+    console.error(`feedback email: could not build message for ${rec.id}: ${err.message}`);
+    return;
+  }
+  if (!message) return;
+  MAILER.send(message).catch((err) => {
+    console.error(`feedback email: send threw for ${rec.id}: ${err && err.message ? err.message : err}`);
+  });
 }
 
 // Returns true when the request was fully answered here. Cross-origin
@@ -578,8 +603,32 @@ async function runSweep() {
   }
 }
 
+/* ---- Outbound mail (config/email/, lib/mailer.js) ------------------------
+   Notification-only: nothing this service sends is load-bearing, so a bad or
+   absent email config degrades to "no mail" rather than a boot failure. The
+   config is read once at startup so a syntax error shows up in the boot log
+   next to the other settings, not on the first visitor's feedback. */
+let EMAIL_CONFIG = null;
+let MAILER = null;
+function initMail() {
+  try {
+    EMAIL_CONFIG = loadEmailConfig();
+    MAILER = createMailer(EMAIL_CONFIG);
+    const fb = (EMAIL_CONFIG.notifications && EMAIL_CONFIG.notifications.feedback) || {};
+    console.log(
+      `mail: transport=${EMAIL_CONFIG.transport} feedback=${fb.enabled ? `on -> ${(fb.to || []).join(", ")}` : "off"}` +
+        `${EMAIL_CONFIG.hasLocalOverride ? " (local override applied)" : ""}`,
+    );
+  } catch (err) {
+    EMAIL_CONFIG = null;
+    MAILER = null;
+    console.warn(`mail: disabled (${err.message})`);
+  }
+}
+
 ensureDirs()
   .then(() => {
+    initMail();
     server.listen(PORT, "0.0.0.0", () => {
       console.log(`persist-api listening on :${PORT}`);
       console.log(`uploads=${DIR_UPLOADS}`);

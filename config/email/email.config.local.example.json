@@ -1,0 +1,25 @@
+{
+  "$comment": [
+    "Copy to email.config.local.json (gitignored) on a host that needs to differ",
+    "from the committed defaults. Deep-merged over email.config.json, so include",
+    "only the keys you are changing. Still no secrets: user and password come",
+    "from VAHINI_SMTP_USER / VAHINI_SMTP_PASS in the environment (for Gmail the",
+    "password is a 16-character App Password).",
+    "Arrays REPLACE rather than merge, so the `to` list below is the whole list."
+  ],
+
+  "transport": "sendmail",
+
+  "sendmail": {
+    "path": "/usr/sbin/sendmail",
+    "args": ["-t", "-i"]
+  },
+
+  "notifications": {
+    "feedback": {
+      "enabled": true,
+      "to": ["hello@vahinitech.com", "vishnu@vahinitech.com"],
+      "maxPerHour": 30
+    }
+  }
+}
