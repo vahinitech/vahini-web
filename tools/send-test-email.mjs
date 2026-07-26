@@ -24,10 +24,15 @@
 */
 
 import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
 import path from "node:path";
 
 const require = createRequire(import.meta.url);
-const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
+// fileURLToPath, not new URL().pathname: the latter stays percent-encoded, so a
+// checkout under a directory containing a space resolves to a path with a
+// literal "%20" and every require below fails. tests/e2e-pages.mjs and
+// tests/e2e-recognition.mjs already resolve their root this way.
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const { loadEmailConfig, readCredentials } = require(path.join(root, "services/persist-api/lib/email-config.js"));
 const { createMailer } = require(path.join(root, "services/persist-api/lib/mailer.js"));
 const { buildFeedbackEmail } = require(path.join(root, "services/persist-api/lib/feedback-email.js"));

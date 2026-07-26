@@ -29,11 +29,29 @@ esac
 # ":?" form so an unset value aborts rather than silently mounting /uploads at
 # the filesystem root. Export it before calling this script to deploy from a
 # different location.
+#
+# Under sudo, $HOME is commonly /root. That directory EXISTS, so a plain
+# "is it a directory" check passes and the deploy silently mounts the persist
+# volumes under /root, creating empty ones and presenting as total data loss.
+# Prefer the invoking user's home whenever SUDO_USER is set, and fall back to
+# $HOME only when the script is not running under sudo.
+if [[ -z "${VAHINI_HOST_DATA:-}" && -n "${SUDO_USER:-}" ]]; then
+  VAHINI_HOST_DATA="$(getent passwd "${SUDO_USER}" | cut -d: -f6)"
+  echo "[release] running under sudo; using ${SUDO_USER}'s home: ${VAHINI_HOST_DATA}"
+fi
 export VAHINI_HOST_DATA="${VAHINI_HOST_DATA:-${HOME:-}}"
 if [[ -z "${VAHINI_HOST_DATA}" || ! -d "${VAHINI_HOST_DATA}" ]]; then
   echo "[release] ERROR: VAHINI_HOST_DATA='${VAHINI_HOST_DATA}' is not a directory." >&2
   echo "[release] \$HOME is unset or wrong for this user (sudo/cron often drops it);" >&2
   echo "[release] export VAHINI_HOST_DATA explicitly." >&2
+  exit 1
+fi
+# Last guard: /root is never where this stack's data lives. Reaching it means
+# the resolution above was wrong, and continuing would be worse than stopping.
+if [[ "${VAHINI_HOST_DATA}" == "/root" ]]; then
+  echo "[release] ERROR: VAHINI_HOST_DATA resolved to /root." >&2
+  echo "[release] That is almost certainly sudo's \$HOME, not the deploy user's." >&2
+  echo "[release] Re-run without sudo, or export VAHINI_HOST_DATA explicitly." >&2
   exit 1
 fi
 
