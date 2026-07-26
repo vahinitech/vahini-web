@@ -1,0 +1,81 @@
+# SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+# © 2026 Vahini Technologies. All rights reserved.
+#
+# CodeQL, advanced setup. This file REPLACES GitHub's default setup -- the two
+# cannot both be active. Disable default setup (Settings -> Code security ->
+# Code scanning -> CodeQL analysis -> Disable) before this workflow runs, or
+# every run here fails when it tries to upload results.
+#
+# Why advanced setup: the query suite, the analysed paths, and the schedule
+# become reviewable code rather than a per-repo checkbox. security-extended
+# adds precision-medium queries that default setup leaves off, so expect the
+# first scan after switching to surface alerts the previous one never ran.
+#
+# Deliberately NO paths-ignore on the triggers below. Once "CodeQL" is a
+# required status check, a run skipped by a path filter never reports a
+# conclusion, and the PR stays permanently un-mergeable. Filter what gets
+# ANALYSED in .github/codeql/codeql-config.yml instead -- that shrinks the
+# scan without skipping the check.
+name: CodeQL
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Mondays 03:00 UTC. Catches newly published queries against code that
+    # hasn't changed, which the push/PR triggers alone would never re-scan.
+    - cron: "0 3 * * 1"
+
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      # Uploading the SARIF result is what creates/closes alerts.
+      security-events: write
+      # The action reads workflow run metadata to attribute alerts to a run.
+      actions: read
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Both are interpreted -- nothing to compile, so build-mode: none.
+          # Keep this list in step with what the repo actually contains; a
+          # language listed here but absent from the tree fails the run.
+          - language: actions
+            build-mode: none
+          - language: javascript-typescript
+            build-mode: none
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        # No submodules on purpose: analyser/ is vahinitech/20factor-analyser
+        # and is scanned by that repo's own CodeQL. Pulling it here would
+        # duplicate its alerts into this repo's security tab.
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+          config-file: ./.github/codeql/codeql-config.yml
+
+      - name: Analyze
+        uses: github/codeql-action/analyze@v3
+        with:
+          # The category keeps each language's results in their own SARIF
+          # namespace. Without it the second matrix leg overwrites the first's
+          # alerts instead of adding to them.
+          category: "/language:${{ matrix.language }}"

@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+# © 2026 Vahini Technologies. All rights reserved.
+#
+# Analysis scope for .github/workflows/codeql.yml. This controls what CodeQL
+# READS; it is not a trigger filter. See the note in the workflow about why
+# the triggers there deliberately have no paths-ignore.
+name: "Vahini web-live CodeQL config"
+
+queries:
+  # security-extended = the default security suite plus lower-precision
+  # queries. Broader recall at the cost of more to triage, which is the right
+  # trade for a public marketing site that takes file uploads.
+  - uses: security-extended
+
+paths-ignore:
+  # Vendored/generated JavaScript. Alerts here are not ours to fix and the
+  # bundled sources blow up analysis time.
+  - node_modules
+  # The 20factor-analyser submodule. Checkout above does not fetch it, so this
+  # is belt-and-braces for anyone running the analysis locally with submodules
+  # already checked out.
+  - analyser
+  # Test fixtures are intentionally malformed inputs; findings in them are
+  # noise, not defects.
+  - tests/fixtures
