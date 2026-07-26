@@ -58,7 +58,7 @@
       ] }
   ];
 
-  // print/paper articles about Vahini — shown on press.html, newest first via `sort`
+  // print/paper articles about Vahini -- shown on press.html, newest first via `sort`
   var PRESS = [
     { id:"nie-2026-06-28", sort:20260628, dateLabel:"28 Jun 2026", publication:"The New Indian Express",
       byline:"Nethaji Kumaramangalam", place:"Tirupati",

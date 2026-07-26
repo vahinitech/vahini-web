@@ -23,7 +23,7 @@
   window.VAHINI_INSIGHTS = window.VAHINI_INSIGHTS || {};
   if (!window.VAHINI_INSIGHTS.endpoint) window.VAHINI_INSIGHTS.endpoint = "/persist/feedback";
 
-  /* CANONICAL APPLICATIONS LIST — single source of truth.
+  /* CANONICAL APPLICATIONS LIST -- single source of truth.
      The same six applications appear here (mega menu), on index.html, and on
      investors.html, with identical names + statuses. Apps without a product page
      yet link to the investor roadmap. Keep these in sync across all three. */
