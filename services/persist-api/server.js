@@ -288,6 +288,37 @@ async function logUploadFailure(err, req, clientIp, attempted) {
   }
 }
 
+// Matches id("upload") exactly (nowStamp + 5 random bytes as hex) so a
+// crafted upload.id in a report payload can never walk outside DIR_UPLOADS.
+const UPLOAD_ID_RE = /^upload_\d{8}T\d{6}Z_[0-9a-f]{10}$/;
+
+// Retention: we keep the report itself and the upload's metadata (source,
+// consent, size, timestamps) for observability, but the uploaded image is
+// only ever meant to live long enough to produce a report from it -- once
+// that succeeds, the binary is purged. Best-effort: a purge failure must
+// never fail the report save that already completed.
+async function purgeUploadedImage(uploadId) {
+  if (!UPLOAD_ID_RE.test(String(uploadId || ""))) return;
+  const metaPath = path.join(DIR_UPLOADS, `${uploadId}.json`);
+  let meta;
+  try {
+    meta = JSON.parse(await fsp.readFile(metaPath, "utf8"));
+  } catch {
+    return; // no matching upload record on disk (bogus id, or already purged)
+  }
+  if (meta.imageDeleted || !meta.fileName) return;
+  const imagePath = path.join(DIR_UPLOADS, `${uploadId}__${meta.fileName}`);
+  try {
+    await fsp.unlink(imagePath);
+  } catch (err) {
+    if (err.code !== "ENOENT") throw err;
+  }
+  meta.imageDeleted = true;
+  meta.imageDeletedAt = new Date().toISOString();
+  meta.imageDeletedReason = "generated-report";
+  await fsp.writeFile(metaPath, JSON.stringify(meta, null, 2), "utf8");
+}
+
 async function handleUploadImage(req, res, clientIp) {
   let json = {};
   try {
@@ -383,6 +414,15 @@ async function handleGeneratedReport(req, res, clientIp) {
   await fsp.writeFile(jsonPath, JSON.stringify(body, null, 2), "utf8");
   if (reportHtml.trim()) {
     await fsp.writeFile(htmlPath, reportHtml, "utf8");
+  }
+
+  const uploadId = json.upload && typeof json.upload.id === "string" ? json.upload.id : "";
+  if (uploadId) {
+    try {
+      await purgeUploadedImage(uploadId);
+    } catch (err) {
+      console.error("persist-api: failed to purge uploaded image after report", err);
+    }
   }
 
   send(res, 200, { ok: true, id: reportId });
