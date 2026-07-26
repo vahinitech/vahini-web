@@ -496,6 +496,48 @@ const server = http.createServer(async (req, res) => {
 server.headersTimeout = 15 * 1000;
 server.requestTimeout = 120 * 1000;
 
+/* ---- Disk sweeper (lib/sweeper.js) --------------------------------------
+   The persist volume only ever grows (uploads + reports + feedback, no
+   deletes). Nightly, files older than SWEEP_COMPRESS_DAYS are gzipped in
+   place (JSON/HTML shrink 80-90%; incompressible JPEGs are skipped and
+   remembered). Deletion is opt-in only: SWEEP_EVICT_DAYS drops files older
+   than the horizon, SWEEP_CAP_MB sweeps oldest-first back under the cap.
+   SWEEP_ENABLE=0 turns the whole thing off. */
+function sweepEnvNumber(name, def) {
+  const n = Number(process.env[name]);
+  return Number.isFinite(n) && n >= 0 ? n : def;
+}
+const SWEEP_ENABLE = process.env.SWEEP_ENABLE !== "0";
+const SWEEP_COMPRESS_DAYS = sweepEnvNumber("SWEEP_COMPRESS_DAYS", 14);
+const SWEEP_EVICT_DAYS = sweepEnvNumber("SWEEP_EVICT_DAYS", 0);
+const SWEEP_CAP_MB = sweepEnvNumber("SWEEP_CAP_MB", 0);
+const SWEEP_INTERVAL_H = sweepEnvNumber("SWEEP_INTERVAL_H", 24);
+const { sweep } = require("./lib/sweeper");
+
+let sweeping = false;
+async function runSweep() {
+  if (sweeping) return; // a prior sweep is still running (slow I/O or a short interval)
+  sweeping = true;
+  try {
+    const stats = await sweep({
+      dirs: [DIR_UPLOADS, DIR_REPORTS, DIR_FEEDBACK],
+      compressDays: SWEEP_COMPRESS_DAYS,
+      evictDays: SWEEP_EVICT_DAYS,
+      capMB: SWEEP_CAP_MB,
+    });
+    const errorNote = stats.errorsTruncated ? `${stats.errors.length}+${stats.errorsTruncated} truncated` : stats.errors.length;
+    console.log(
+      `sweeper: compressed=${stats.compressed} evicted=${stats.evicted} ` +
+        `saved=${(stats.savedBytes / 1024 / 1024).toFixed(1)}MB errors=${errorNote}`,
+    );
+    for (const e of stats.errors.slice(0, 5)) console.warn(`sweeper: ${e}`);
+  } catch (err) {
+    console.error("sweeper failed", err);
+  } finally {
+    sweeping = false;
+  }
+}
+
 ensureDirs()
   .then(() => {
     server.listen(PORT, "0.0.0.0", () => {
@@ -503,6 +545,13 @@ ensureDirs()
       console.log(`uploads=${DIR_UPLOADS}`);
       console.log(`reports=${DIR_REPORTS}`);
       console.log(`feedback=${DIR_FEEDBACK}`);
+      if (SWEEP_ENABLE) {
+        runSweep(); // once at boot, then daily
+        if (SWEEP_INTERVAL_H > 0) {
+          const t = setInterval(runSweep, SWEEP_INTERVAL_H * 60 * 60 * 1000);
+          t.unref();
+        } // SWEEP_INTERVAL_H=0 means "boot sweep only" -- don't reschedule back-to-back
+      }
     });
   })
   .catch((err) => {
