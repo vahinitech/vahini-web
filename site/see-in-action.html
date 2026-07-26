@@ -335,23 +335,31 @@ var INK = '#22306b';           /* fountain-pen blue on paper */
 var GLOW = '#7fd4c8';          /* engine teal on the dark page */
 
 /* ---------- sensor bus (6 channels × 3 traces = 16-axis feel) ----------
-   gyro channels get a sine trace instead of level bars -- a gyro reads
-   angular rate, and an oscillating wave reads correctly as that, where a
-   bar-meter reads as a plain amplitude/level (matches accel/magneto/tip
-   force, which really are level-style readings). */
+   accel/gyro/magneto get a sine trace: each is an oscillating vector
+   component while the hand writes, so a periodic wave reads correctly as
+   that. Tip force is different -- it's a single continuous ANALOG reading
+   (how hard the tip presses), not a periodic signal, so a fixed-frequency
+   sine would misrepresent it as oscillating when it isn't. It instead gets
+   a scrolling strip-chart trace: real pressure samples pushed in and read
+   off left-to-right, the same way an oscilloscope or ECG shows one analog
+   channel over time -- no bars (discrete/quantized) and no imposed
+   periodicity (this signal doesn't have one). */
 var CH = [
   ['IMU-A · accel', '#2a8c82', 'wave'], ['IMU-A · gyro', '#4a67c9', 'wave'], ['IMU-A · magneto', '#9b7bd4', 'wave'],
-  ['IMU-B · accel', '#2a8c82', 'wave'], ['IMU-B · gyro', '#4a67c9', 'wave'], ['tip force · analog', '#e2a32b']
+  ['IMU-B · accel', '#2a8c82', 'wave'], ['IMU-B · gyro', '#4a67c9', 'wave'], ['tip force · analog', '#e2a32b', 'level']
 ];
 var bus = document.getElementById('siaBus');
 bus.innerHTML = CH.map(function(c){
-  var inner = c[2] === 'wave'
+  var inner = (c[2] === 'wave' || c[2] === 'level')
     ? '<svg class="wv" viewBox="0 0 100 16" preserveAspectRatio="none"><polyline points="0,8 100,8"/></svg>'
     : '<div class="tr"><i></i><i></i><i></i></div>';
   return '<div class="chan" style="--ch:' + c[1] + '"><em>' + c[0] + '</em>' + inner + '</div>';
 }).join('');
 var traces = [].slice.call(bus.querySelectorAll('.tr i'));
-var waves = [].slice.call(bus.querySelectorAll('.wv polyline'));
+var waveEls = [].slice.call(bus.querySelectorAll('.wv polyline'));
+var waveKinds = CH.filter(function(c){ return c[2] === 'wave' || c[2] === 'level'; }).map(function(c){ return c[2]; });
+var LEVEL_STEPS = 21;                                  /* one point per 5 viewBox units, 0..100 */
+var levelHistory = waveKinds.map(function(k){ return k === 'level' ? new Array(LEVEL_STEPS).fill(8) : null; });
 function wavePoints(speed, idx){
   var amp = Math.min(6.5, 1 + speed * 0.42);
   var pts = [];
@@ -361,18 +369,28 @@ function wavePoints(speed, idx){
   }
   return pts.join(' ');
 }
+function levelPoints(speed, idx){
+  var amp = Math.min(6.5, 1 + speed * 0.42);
+  var hist = levelHistory[idx];
+  hist.shift();
+  hist.push(8 - amp);                                   /* newest reading enters from the right */
+  var pts = [];
+  for (var i = 0; i < hist.length; i++) pts.push((i * 5) + ',' + hist[i].toFixed(1));
+  return pts.join(' ');
+}
 function pulseBus(speed){
   for (var k = 0; k < traces.length; k++){
     var h = 4 + Math.min(12, speed * 1.6) * (0.4 + 0.6 * Math.abs(Math.sin(samples * 0.09 + k * 2.1)));
     traces[k].style.height = h + 'px';
   }
-  for (var w = 0; w < waves.length; w++){
-    waves[w].setAttribute('points', wavePoints(speed, w));
+  for (var w = 0; w < waveEls.length; w++){
+    waveEls[w].setAttribute('points', waveKinds[w] === 'level' ? levelPoints(speed, w) : wavePoints(speed, w));
   }
 }
 function calmBus(){
   traces.forEach(function(el){ el.style.height = '4px'; });
-  waves.forEach(function(el){ el.setAttribute('points', '0,8 100,8'); });
+  levelHistory.forEach(function(h){ if (h) h.fill(8); });
+  waveEls.forEach(function(el){ el.setAttribute('points', '0,8 100,8'); });
 }
 
 /* ---------- live sensor waveform (right/dark page, while the pen moves) ---------- */
@@ -491,8 +509,26 @@ function repaint(){
 /* Same sensor samples the left page counts (208 Hz) get batched into BLE
    packets here -- previously "packets sent" was derived from raw mouse
    pointer-move points instead, an unrelated number with no visible
-   relationship to the samples count next to it. */
-var SAMPLES_PER_PACKET = 20;
+   relationship to the samples count next to it, and packet size was a
+   flat guess (20 samples/packet) with no link to an actual BLE frame.
+   calculateBleDataPacketSize() instead works from the real on-air packet
+   structure -- Preamble + Access Address + PDU (header + ATT notification
+   header + payload) + CRC -- and fits as many 16-axis samples as the
+   payload budget allows, so "N samples -> M packets" reflects a real
+   packet size instead of an arbitrary constant. */
+function calculateBleDataPacketSize(){
+  var AXES = 16, BYTES_PER_AXIS = 2;                    /* int16 per axis: accel/gyro/magneto x2 IMUs + tip force */
+  var BYTES_PER_SAMPLE = AXES * BYTES_PER_AXIS;          /* 32 B: one full 16-axis snapshot */
+  var PREAMBLE = 1, ACCESS_ADDRESS = 4, LL_PDU_HEADER = 2, CRC = 3;  /* BLE Link Layer framing (Core Spec) */
+  var ATT_NOTIFICATION_HEADER = 3;                       /* ATT opcode (1B) + attribute handle (2B) */
+  var ATT_MTU = 247;                                     /* common negotiated MTU on BLE 4.2+ with Data Length Extension */
+  var payloadBudget = ATT_MTU - ATT_NOTIFICATION_HEADER;
+  var samplesPerPacket = Math.max(1, Math.floor(payloadBudget / BYTES_PER_SAMPLE));
+  var payloadBytes = samplesPerPacket * BYTES_PER_SAMPLE;
+  var packetBytes = PREAMBLE + ACCESS_ADDRESS + LL_PDU_HEADER + ATT_NOTIFICATION_HEADER + payloadBytes + CRC;
+  return { samplesPerPacket: samplesPerPacket, packetBytes: packetBytes, bytesPerSample: BYTES_PER_SAMPLE };
+}
+var BLE_PACKET = calculateBleDataPacketSize();
 function transmit(){
   if (!strokes.length) return;
   setStep(0);
@@ -500,8 +536,9 @@ function transmit(){
   ble.classList.add('streaming');
   verdict.classList.remove('on');
   /* packets count up while streaming */
-  var total = Math.max(1, Math.ceil(samples / SAMPLES_PER_PACKET)), sent = 0;
-  eqEl.textContent = samples.toLocaleString() + ' samples ÷ ' + SAMPLES_PER_PACKET + '/packet = ' + total + ' packets';
+  var total = Math.max(1, Math.ceil(samples / BLE_PACKET.samplesPerPacket)), sent = 0;
+  eqEl.textContent = samples.toLocaleString() + ' samples ÷ ' + BLE_PACKET.samplesPerPacket + '/packet (' +
+    BLE_PACKET.bytesPerSample + 'B×16 axes, ' + BLE_PACKET.packetBytes + 'B on-air incl. preamble/addr/PDU/CRC) = ' + total + ' packets';
   var pktTick = setInterval(function(){
     sent = Math.min(total, sent + Math.max(1, Math.round(total / 14)));
     pktEl.textContent = sent;
