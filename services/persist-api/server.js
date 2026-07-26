@@ -136,6 +136,16 @@ function id(prefix) {
   return `${prefix}_${nowStamp()}_${crypto.randomBytes(5).toString("hex")}`;
 }
 
+// Every client-facing error is created here with an explicit, hand-authored
+// publicMessage. The outer handler below reads ONLY that field (never
+// err.message or String(err)) when building a response, so a caught
+// exception's own message/stack can never reach an HTTP client, whatever
+// that exception turns out to be -- codeql flags this exact category as
+// "information exposure through a stack trace".
+function httpError(statusCode, publicMessage, extra) {
+  return Object.assign(new Error(publicMessage), { statusCode, publicMessage, ...extra });
+}
+
 function send(res, status, payload, extraHeaders) {
   res.writeHead(status, {
     "Content-Type": "application/json; charset=utf-8",
@@ -154,9 +164,7 @@ function parseBody(req, maxBytes) {
     // reading (and paying bandwidth for) the rest of a 150MB flood.
     const declared = Number(req.headers["content-length"] || 0);
     if (declared > cap) {
-      const err = new Error("Body too large");
-      err.statusCode = 413;
-      reject(err);
+      reject(httpError(413, "Body too large"));
       return;
     }
     let total = 0;
@@ -164,12 +172,9 @@ function parseBody(req, maxBytes) {
     req.on("data", (chunk) => {
       total += chunk.length;
       if (total > cap) {
-        const err = new Error("Body too large");
-        err.statusCode = 413;
-        err.abortStream = true;
         req.removeAllListeners("data");
         req.removeAllListeners("end");
-        reject(err);
+        reject(httpError(413, "Body too large", { abortStream: true }));
         return;
       }
       chunks.push(chunk);
@@ -185,7 +190,7 @@ function parseBody(req, maxBytes) {
         try {
           resolve({ raw, json: JSON.parse(raw.toString("utf8")) });
         } catch {
-          reject(new Error("Invalid JSON"));
+          reject(httpError(400, "Invalid JSON"));
         }
         return;
       }
@@ -214,13 +219,34 @@ function normalizeName(name, fallbackExt) {
   return `${base || "upload"}.${fallbackExt}`;
 }
 
-function extFromMime(mime) {
-  const m = String(mime || "").toLowerCase();
-  if (m.includes("png")) return "png";
-  if (m.includes("webp")) return "webp";
-  if (m.includes("gif")) return "gif";
-  if (m.includes("jpeg") || m.includes("jpg")) return "jpg";
-  return "bin";
+// Trust the actual bytes, never the client-declared mimeType: a data: URL's
+// prefix is attacker-controlled, so an SVG (or any script-bearing text file)
+// relabeled as "image/png" must still be caught. Each entry's magic number
+// is the real gate; only these four raster formats are ever accepted.
+const MAGIC_SNIFFERS = [
+  { ext: "png", mimeType: "image/png", check: (b) => b.length >= 8 && b[0] === 0x89 && b[1] === 0x50 && b[2] === 0x4e && b[3] === 0x47 && b[4] === 0x0d && b[5] === 0x0a && b[6] === 0x1a && b[7] === 0x0a },
+  { ext: "jpg", mimeType: "image/jpeg", check: (b) => b.length >= 3 && b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff },
+  { ext: "gif", mimeType: "image/gif", check: (b) => b.length >= 6 && (b.toString("ascii", 0, 6) === "GIF87a" || b.toString("ascii", 0, 6) === "GIF89a") },
+  { ext: "webp", mimeType: "image/webp", check: (b) => b.length >= 12 && b.toString("ascii", 0, 4) === "RIFF" && b.toString("ascii", 8, 12) === "WEBP" },
+];
+function sniffImageType(buffer) {
+  for (const s of MAGIC_SNIFFERS) {
+    if (s.check(buffer)) return { ext: s.ext, mimeType: s.mimeType };
+  }
+  return null;
+}
+
+function formatBytes(bytes) {
+  if (!Number.isFinite(bytes) || bytes < 0) return "0 B";
+  if (bytes < 1024) return `${bytes} B`;
+  const units = ["KB", "MB", "GB"];
+  let n = bytes / 1024;
+  let i = 0;
+  while (n >= 1024 && i < units.length - 1) {
+    n /= 1024;
+    i += 1;
+  }
+  return `${n.toFixed(n < 10 ? 1 : 0)} ${units[i]}`;
 }
 
 function parseDataUrl(dataUrl) {
@@ -236,42 +262,86 @@ async function appendNdjson(filePath, record) {
   await fsp.appendFile(filePath, `${JSON.stringify(record)}\n`, "utf8");
 }
 
+// Every rejection (bad format, quota, oversized body) is recorded here too,
+// so upload failures are visible on disk instead of only ever reaching the
+// client as a dropped error -- this is what actually lets us tell "nobody's
+// using it" apart from "everyone's upload is silently failing".
+async function logUploadFailure(err, req, clientIp, attempted) {
+  try {
+    const failId = id("upload-failed");
+    const record = {
+      id: failId,
+      ts: new Date().toISOString(),
+      reason: (err && err.message) || "Unknown error",
+      statusCode: Number(err && err.statusCode) || 500,
+      fileName: attempted.fileName || "",
+      mimeType: attempted.mimeType || "",
+      consent: attempted.consent || null,
+      origin: req.headers.origin || "",
+      referer: req.headers.referer || "",
+      ip: clientIp,
+      userAgent: req.headers["user-agent"] || "",
+    };
+    await fsp.writeFile(path.join(DIR_UPLOADS, `${failId}.json`), JSON.stringify(record, null, 2), "utf8");
+  } catch {
+    /* logging the failure must never itself crash the request */
+  }
+}
+
 async function handleUploadImage(req, res, clientIp) {
-  const { json } = await parseBody(req, CAP_UPLOAD_BYTES);
-  const parsed = parseDataUrl(json.dataUrl || "");
-  if (!parsed || !parsed.buffer || !parsed.buffer.length) {
-    send(res, 400, { ok: false, error: "Missing valid dataUrl" });
-    return;
+  let json = {};
+  try {
+    ({ json } = await parseBody(req, CAP_UPLOAD_BYTES));
+    const parsed = parseDataUrl(json.dataUrl || "");
+    if (!parsed || !parsed.buffer || !parsed.buffer.length) {
+      throw httpError(400, "Missing valid dataUrl");
+    }
+    const sniffed = sniffImageType(parsed.buffer);
+    if (!sniffed) {
+      throw httpError(400, "Unsupported or invalid image format");
+    }
+    if (!takeQuota(clientIp, parsed.buffer.length)) {
+      throw httpError(429, "Daily upload quota exceeded", { retryAfter: "86400" });
+    }
+
+    const uploadId = id("upload");
+    const fileName = normalizeName(json.fileName, sniffed.ext);
+    const imageName = `${uploadId}__${fileName}`;
+    const imagePath = path.join(DIR_UPLOADS, imageName);
+    const metaPath = path.join(DIR_UPLOADS, `${uploadId}.json`);
+
+    await fsp.writeFile(imagePath, parsed.buffer);
+    const meta = {
+      id: uploadId,
+      ts: new Date().toISOString(),
+      source: json.source || "upload",
+      fileName,
+      mimeType: sniffed.mimeType,
+      bytes: parsed.buffer.length,
+      bytesHuman: formatBytes(parsed.buffer.length),
+      meta: json.meta || {},
+      // Set by the client from its own consent-cookie read (site.js's
+      // "vahini_consent" localStorage key) -- absent means no consent
+      // decision has been recorded yet for this visitor.
+      consent: (json.meta && json.meta.consent) || null,
+      origin: req.headers.origin || "",
+      referer: req.headers.referer || "",
+      ip: clientIp,
+      userAgent: req.headers["user-agent"] || "",
+    };
+    await fsp.writeFile(metaPath, JSON.stringify(meta, null, 2), "utf8");
+
+    // Only the id goes back to the client -- server filesystem layout is not
+    // part of the API contract and should never be disclosed.
+    send(res, 200, { ok: true, id: uploadId, fileName, bytes: parsed.buffer.length });
+  } catch (err) {
+    await logUploadFailure(err, req, clientIp, {
+      fileName: json.fileName,
+      mimeType: json.mimeType,
+      consent: json.meta && json.meta.consent,
+    });
+    throw err; // the top-level handler sends the response (and tears down an aborted stream)
   }
-  if (!takeQuota(clientIp, parsed.buffer.length)) {
-    send(res, 429, { ok: false, error: "Daily upload quota exceeded" }, { "Retry-After": "86400" });
-    return;
-  }
-
-  const uploadId = id("upload");
-  const ext = extFromMime(json.mimeType || parsed.mimeType);
-  const fileName = normalizeName(json.fileName, ext);
-  const imageName = `${uploadId}__${fileName}`;
-  const imagePath = path.join(DIR_UPLOADS, imageName);
-  const metaPath = path.join(DIR_UPLOADS, `${uploadId}.json`);
-
-  await fsp.writeFile(imagePath, parsed.buffer);
-  const meta = {
-    id: uploadId,
-    ts: new Date().toISOString(),
-    source: json.source || "upload",
-    fileName,
-    mimeType: json.mimeType || parsed.mimeType,
-    bytes: parsed.buffer.length,
-    meta: json.meta || {},
-    ip: clientIp,
-    userAgent: req.headers["user-agent"] || "",
-  };
-  await fsp.writeFile(metaPath, JSON.stringify(meta, null, 2), "utf8");
-
-  // Only the id goes back to the client -- server filesystem layout is not
-  // part of the API contract and should never be disclosed.
-  send(res, 200, { ok: true, id: uploadId, fileName, bytes: parsed.buffer.length });
 }
 
 async function handleGeneratedReport(req, res, clientIp) {
@@ -406,10 +476,15 @@ const server = http.createServer(async (req, res) => {
     send(res, 404, { ok: false, error: "Not found" });
   } catch (err) {
     const code = Number(err && err.statusCode) || 500;
-    // Internal errors stay internal; the client learns the status, not the stack.
-    const message = code >= 500 ? "Internal error" : String(err && err.message ? err.message : err);
+    // Internal errors stay internal; the client learns the status, not the
+    // stack. publicMessage is the only field ever read here -- err.message
+    // (and the exception object itself) never flow into the response, so an
+    // unexpected/uncrafted error can't leak internals through this path.
+    const message = code >= 500 || typeof (err && err.publicMessage) !== "string" ? "Internal error" : err.publicMessage;
     if (code >= 500) console.error("persist-api error:", err);
-    if (!res.headersSent) send(res, code, { ok: false, error: message });
+    if (!res.headersSent) {
+      send(res, code, { ok: false, error: message }, err && err.retryAfter ? { "Retry-After": err.retryAfter } : undefined);
+    }
     // An oversized stream is torn down, not drained: finish the response,
     // then drop the connection so the client stops sending.
     if (err && err.abortStream) res.destroy();

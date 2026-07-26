@@ -9,7 +9,7 @@
    Run directly (node tests/security-abuse.test.mjs) or via `make security-test`. */
 
 import { spawn } from "node:child_process";
-import { mkdtempSync } from "node:fs";
+import { mkdtempSync, readdirSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
@@ -17,6 +17,19 @@ import { setTimeout as delay } from "node:timers/promises";
 const PORT = 8391;
 const BASE = `http://127.0.0.1:${PORT}`;
 const dataDir = mkdtempSync(join(tmpdir(), "persist-abuse-"));
+
+// A real PNG signature followed by filler bytes -- passes the server's
+// magic-byte sniff while padding out to whatever size a test needs.
+function fakePng(totalBytes) {
+  const sig = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+  return Buffer.concat([sig, Buffer.alloc(Math.max(0, totalBytes - sig.length), 7)]);
+}
+
+function uploadRecords(dir) {
+  return readdirSync(dir)
+    .filter((f) => f.endsWith(".json"))
+    .map((f) => JSON.parse(readFileSync(join(dir, f), "utf8")));
+}
 
 const child = spawn(process.execPath, ["services/persist-api/server.js"], {
   env: {
@@ -143,7 +156,7 @@ try {
   // 7. Daily byte quota: uploads beyond 40KB/day from one IP -> 429.
   {
     const ip = "203.0.113.15";
-    const png = Buffer.alloc(30000, 7).toString("base64");
+    const png = fakePng(30000).toString("base64");
     const payload = JSON.stringify({ dataUrl: `data:image/png;base64,${png}`, fileName: "a.png" });
     const first = await post("/persist/upload-image", payload, { ip });
     const second = await post("/persist/upload-image", payload, { ip });
@@ -171,6 +184,45 @@ try {
   {
     const res = await post("/persist/feedback", JSON.stringify({ message: "fresh ip" }), { ip: "203.0.113.99" });
     check("fresh IP unaffected by other IPs' floods", res.status === 200, `got ${res.status}`);
+  }
+
+  // 10. An SVG (or any non-magic-byte content) relabeled as image/png is
+  // rejected outright, and the rejection is recorded as a failed-upload record.
+  {
+    const ip = "203.0.113.20";
+    const svg = Buffer.from('<svg onload="alert(1)"><script>alert(1)</script></svg>').toString("base64");
+    const payload = JSON.stringify({ dataUrl: `data:image/png;base64,${svg}`, fileName: "evil.svg" });
+    const res = await post("/persist/upload-image", payload, { ip });
+    check("SVG masquerading as PNG rejected", res.status === 400, `got ${res.status}`);
+
+    const records = uploadRecords(join(dataDir, "uploads"));
+    const failure = records.find((r) => r.id.startsWith("upload-failed_") && r.fileName === "evil.svg");
+    check("rejection recorded as a failed-upload record", Boolean(failure));
+    check("failed record carries the actual reason", Boolean(failure && /unsupported or invalid image format/i.test(failure.reason)));
+  }
+
+  // 11. A genuine PNG upload's metadata carries human-readable size, the
+  // client-forwarded consent state, and the request's Origin/Referer.
+  {
+    const ip = "203.0.113.21";
+    const png = fakePng(2048).toString("base64");
+    const payload = JSON.stringify({
+      dataUrl: `data:image/png;base64,${png}`,
+      fileName: "note.png",
+      meta: { page: "/analyser/analyser.html", consent: { decision: "accept", analytics: true, ts: 1785000000000 } },
+    });
+    const res = await post("/persist/upload-image", payload, {
+      ip,
+      origin: "https://vahinitech.com",
+    });
+    check("well-formed PNG upload accepted", res.status === 200, `got ${res.status}`);
+
+    const records = uploadRecords(join(dataDir, "uploads"));
+    const meta = records.find((r) => r.fileName === "note.png" && !r.id.startsWith("upload-failed_"));
+    check("metadata written", Boolean(meta));
+    check("bytesHuman is human-readable", Boolean(meta && meta.bytesHuman === "2.0 KB"));
+    check("consent forwarded from the client", Boolean(meta && meta.consent && meta.consent.decision === "accept" && meta.consent.analytics === true));
+    check("origin captured", Boolean(meta && meta.origin === "https://vahinitech.com"));
   }
 } catch (err) {
   failures += 1;
