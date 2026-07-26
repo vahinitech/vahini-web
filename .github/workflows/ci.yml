@@ -43,8 +43,17 @@ concurrency:
 # token's scope at workflow level rather than per job means a job added later
 # inherits read-only instead of the repository default, which on a repo whose
 # default is permissive would be write.
+#
+# `actions: write` covers the caching steps (actions/cache, and
+# docker/build-push-action's type=gha). Those authenticate with
+# ACTIONS_RUNTIME_TOKEN rather than GITHUB_TOKEN, so they work without it --
+# this workflow's own runs restored both caches under contents:read alone. It is
+# granted because review asked for it and the cost is small: the token gains
+# workflow-run and cache management, while repo contents stay read-only, which
+# is the property that actually matters.
 permissions:
   contents: read
+  actions: write
 
 jobs:
   security:
