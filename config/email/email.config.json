@@ -49,7 +49,7 @@
   "notifications": {
     "feedback": {
       "enabled": false,
-      "to": ["vahinitechfirm@gmail.com"],
+      "to": ["info@vahinitech.com", "vishnu.kosuri@vahinitech.com"],
       "subjectPrefix": "[Vahini feedback]",
       "replyToVisitor": true,
       "includeFullRecord": true,

@@ -65,7 +65,7 @@ sudo -u vishnu tee /home/vishnu/vahini-mail.env >/dev/null <<'EOF'
 VAHINI_SMTP_USER=vahinitechfirm@gmail.com
 VAHINI_SMTP_PASS=xxxxxxxxxxxxxxxx
 VAHINI_FEEDBACK_EMAIL_ENABLED=1
-VAHINI_FEEDBACK_EMAIL_TO=vahinitechfirm@gmail.com
+VAHINI_FEEDBACK_EMAIL_TO=info@vahinitech.com,vishnu.kosuri@vahinitech.com
 EOF
 chmod 600 /home/vishnu/vahini-mail.env
 ```

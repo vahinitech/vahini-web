@@ -18,7 +18,7 @@
   "notifications": {
     "feedback": {
       "enabled": true,
-      "to": ["hello@vahinitech.com", "vishnu@vahinitech.com"],
+      "to": ["info@vahinitech.com", "vishnu.kosuri@vahinitech.com"],
       "maxPerHour": 30
     }
   }
