@@ -136,6 +136,16 @@ function id(prefix) {
   return `${prefix}_${nowStamp()}_${crypto.randomBytes(5).toString("hex")}`;
 }
 
+// Every client-facing error is created here with an explicit, hand-authored
+// publicMessage. The outer handler below reads ONLY that field (never
+// err.message or String(err)) when building a response, so a caught
+// exception's own message/stack can never reach an HTTP client, whatever
+// that exception turns out to be -- codeql flags this exact category as
+// "information exposure through a stack trace".
+function httpError(statusCode, publicMessage, extra) {
+  return Object.assign(new Error(publicMessage), { statusCode, publicMessage, ...extra });
+}
+
 function send(res, status, payload, extraHeaders) {
   res.writeHead(status, {
     "Content-Type": "application/json; charset=utf-8",
@@ -154,9 +164,7 @@ function parseBody(req, maxBytes) {
     // reading (and paying bandwidth for) the rest of a 150MB flood.
     const declared = Number(req.headers["content-length"] || 0);
     if (declared > cap) {
-      const err = new Error("Body too large");
-      err.statusCode = 413;
-      reject(err);
+      reject(httpError(413, "Body too large"));
       return;
     }
     let total = 0;
@@ -164,12 +172,9 @@ function parseBody(req, maxBytes) {
     req.on("data", (chunk) => {
       total += chunk.length;
       if (total > cap) {
-        const err = new Error("Body too large");
-        err.statusCode = 413;
-        err.abortStream = true;
         req.removeAllListeners("data");
         req.removeAllListeners("end");
-        reject(err);
+        reject(httpError(413, "Body too large", { abortStream: true }));
         return;
       }
       chunks.push(chunk);
@@ -185,7 +190,7 @@ function parseBody(req, maxBytes) {
         try {
           resolve({ raw, json: JSON.parse(raw.toString("utf8")) });
         } catch {
-          reject(new Error("Invalid JSON"));
+          reject(httpError(400, "Invalid JSON"));
         }
         return;
       }
@@ -289,14 +294,14 @@ async function handleUploadImage(req, res, clientIp) {
     ({ json } = await parseBody(req, CAP_UPLOAD_BYTES));
     const parsed = parseDataUrl(json.dataUrl || "");
     if (!parsed || !parsed.buffer || !parsed.buffer.length) {
-      throw Object.assign(new Error("Missing valid dataUrl"), { statusCode: 400 });
+      throw httpError(400, "Missing valid dataUrl");
     }
     const sniffed = sniffImageType(parsed.buffer);
     if (!sniffed) {
-      throw Object.assign(new Error("Unsupported or invalid image format"), { statusCode: 400 });
+      throw httpError(400, "Unsupported or invalid image format");
     }
     if (!takeQuota(clientIp, parsed.buffer.length)) {
-      throw Object.assign(new Error("Daily upload quota exceeded"), { statusCode: 429, retryAfter: "86400" });
+      throw httpError(429, "Daily upload quota exceeded", { retryAfter: "86400" });
     }
 
     const uploadId = id("upload");
@@ -471,8 +476,11 @@ const server = http.createServer(async (req, res) => {
     send(res, 404, { ok: false, error: "Not found" });
   } catch (err) {
     const code = Number(err && err.statusCode) || 500;
-    // Internal errors stay internal; the client learns the status, not the stack.
-    const message = code >= 500 ? "Internal error" : String(err && err.message ? err.message : err);
+    // Internal errors stay internal; the client learns the status, not the
+    // stack. publicMessage is the only field ever read here -- err.message
+    // (and the exception object itself) never flow into the response, so an
+    // unexpected/uncrafted error can't leak internals through this path.
+    const message = code >= 500 || typeof (err && err.publicMessage) !== "string" ? "Internal error" : err.publicMessage;
     if (code >= 500) console.error("persist-api error:", err);
     if (!res.headersSent) {
       send(res, code, { ok: false, error: message }, err && err.retryAfter ? { "Retry-After": err.retryAfter } : undefined);
