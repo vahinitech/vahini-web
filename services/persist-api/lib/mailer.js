@@ -144,6 +144,11 @@ function createMailer(cfg, deps = {}) {
     }
     if (transportError) {
       stats.failed += 1;
+      // Record the reason here too. A transport that never built fails every
+      // send, and without this the stats show a failure count with no cause --
+      // which reads identically to a network problem and sends you looking in
+      // the wrong place.
+      stats.lastError = `transport unavailable: ${transportError.message}`;
       return false;
     }
 

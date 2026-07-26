@@ -2,10 +2,12 @@
 # © 2026 Vahini Technologies. All rights reserved.
 # Vahini CI — runs on every commit (push + PR) that touches a non-docs file;
 # see the paths-ignore note below.
-#  - security       : pure-Node unit tests for the persist API's abuse limits
-#                     and the OCR-input guard (rate limits, quotas, CORS,
-#                     homoglyph/SSRF). No Docker/browser -- runs in seconds,
-#                     so it's a separate job rather than tacked onto e2e.
+#  - security       : Node unit tests for the persist API's abuse limits, the
+#                     OCR-input guard (rate limits, quotas, CORS,
+#                     homoglyph/SSRF) and the mailer. No Docker/browser --
+#                     runs in seconds, so it's a separate job rather than
+#                     tacked onto e2e. It does need `npm ci`: the mailer tests
+#                     speak real SMTP to a throwaway server via nodemailer.
 #                     (External nmap/testssl scanning of live infra is a
 #                     separate, non-blocking workflow: security-scan.yml.)
 #  - e2e            : headless Chrome — marketing pages load, analyser smoke check.
@@ -47,13 +49,21 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: npm
       - name: input-manifest.yaml matches the pinned submodules
         # Keeps the manifest's duplicated pins honest. The checker walks every
         # git-submodule input and compares each entry's own commit against the
         # gitlink at the path that entry declares, so adding/reordering inputs
         # can never leave one silently unvalidated.
         run: python3 tools/check-input-manifest.py
-      - name: Persist API abuse limits + OCR input guard
+      # These tests were dependency-free until the mailer landed. mailer.test.mjs
+      # drives nodemailer against a throwaway SMTP server rather than a stub, so
+      # the package has to be installed -- without it the transport never builds
+      # and the SMTP checks fail for a reason that has nothing to do with the
+      # code under test. The manifest check above is pure python and runs first,
+      # so a drifted pin still fails fast without paying for an install.
+      - run: npm ci
+      - name: Persist API abuse limits, OCR input guard, mailer
         run: npm run test:security
 
   e2e:
