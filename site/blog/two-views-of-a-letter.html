@@ -59,7 +59,7 @@
 
       <p>A 2024 study from Google researchers, led by Anastasiia Fadeeva, proposes a fix that is elegant precisely because it changes the <em>representation</em> rather than the model. They encode digital ink, "online" handwriting captured as it's written, as a <strong>tokenized sequence that carries both views at once</strong>: the strokes laid out as a time-ordered sequence the model can read like text, and the same strokes rendered as an image. The model sees what the writing looks like <em>and</em> the order and motion that produced it.</p>
 
-      <p>The payoff is twofold. First, this combined representation matches or beats specialised, state-of-the-art online handwriting recognisers, while running on <strong>off-the-shelf vision-language models with no architectural surgery</strong>. Second, it generalises: the authors show it working across two different VLM families and several public datasets. A careful ablation pins down which parts of the representation do the heavy lifting, evidence, not just a result.</p>
+      <p>The payoff is twofold. First, this combined representation matches or beats specialised online handwriting recognisers built for exactly this task, while running on <strong>off-the-shelf vision-language models with no architectural surgery</strong>. Second, it generalises: the authors show it working across two different VLM families and several public datasets. A careful ablation pins down which parts of the representation do the heavy lifting, evidence, not just a result.</p>
 
       <figure class="post-fig">
         <svg viewBox="0 0 720 220" role="img" aria-label="The same letter shown as a pixel image and as a numbered sequence of strokes, both feeding one model">
