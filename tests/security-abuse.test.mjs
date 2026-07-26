@@ -9,7 +9,7 @@
    Run directly (node tests/security-abuse.test.mjs) or via `make security-test`. */
 
 import { spawn } from "node:child_process";
-import { mkdtempSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readdirSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
@@ -223,6 +223,58 @@ try {
     check("bytesHuman is human-readable", Boolean(meta && meta.bytesHuman === "2.0 KB"));
     check("consent forwarded from the client", Boolean(meta && meta.consent && meta.consent.decision === "accept" && meta.consent.analytics === true));
     check("origin captured", Boolean(meta && meta.origin === "https://vahinitech.com"));
+  }
+
+  // 12. Retention: a successful report save purges the image its upload.id
+  // points at, but keeps the metadata record (with an imageDeleted marker)
+  // rather than storing the uploaded image indefinitely.
+  {
+    const ip = "203.0.113.22";
+    const png = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 1, 2, 3, 4]).toString("base64");
+    const uploadRes = await post(
+      "/persist/upload-image",
+      JSON.stringify({ dataUrl: `data:image/png;base64,${png}`, fileName: "retain-me.png" }),
+      { ip }
+    );
+    const uploadBody = await uploadRes.json();
+    check("upload for retention test accepted", uploadRes.status === 200 && typeof uploadBody.id === "string");
+
+    const uploadMetaPath = join(dataDir, "uploads", `${uploadBody.id}.json`);
+    const imagePath = join(dataDir, "uploads", `${uploadBody.id}__${uploadBody.fileName}`);
+    check("uploaded image present before report", existsSync(imagePath));
+
+    const reportRes = await post(
+      "/persist/generated-report",
+      JSON.stringify({ trigger: "test", upload: uploadBody, reportHtml: "<p>ok</p>", reportText: "ok" }),
+      { ip }
+    );
+    check("report save accepted", reportRes.status === 200, `got ${reportRes.status}`);
+
+    check("uploaded image purged after successful report", !existsSync(imagePath));
+    const metaPresent = existsSync(uploadMetaPath);
+    check("upload metadata record kept", metaPresent);
+    // Guarded, not chained off the check above: an unhandled readFileSync
+    // throw here would escape to the top-level catch and abort the whole
+    // suite (including test 13 below) instead of just failing this check.
+    const meta = metaPresent ? JSON.parse(readFileSync(uploadMetaPath, "utf8")) : null;
+    check("metadata marked imageDeleted", !!meta && meta.imageDeleted === true);
+  }
+
+  // 13. A bogus/foreign upload.id in a report payload is ignored, not used
+  // to walk the uploads directory (path-traversal / cross-tenant guard).
+  {
+    const ip = "203.0.113.23";
+    const res = await post(
+      "/persist/generated-report",
+      JSON.stringify({
+        trigger: "test",
+        upload: { id: "../../etc/passwd", fileName: "x" },
+        reportHtml: "<p>ok</p>",
+        reportText: "ok",
+      }),
+      { ip }
+    );
+    check("report with bogus upload.id still saved", res.status === 200, `got ${res.status}`);
   }
 } catch (err) {
   failures += 1;
