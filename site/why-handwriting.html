@@ -360,6 +360,11 @@
     var id = frame.getAttribute('data-id');
     if(!id || !/^[A-Za-z0-9_-]{11}$/.test(id) || frame.dataset.loaded) return;
     frame.dataset.loaded = "1";
+    /* Sampled before the facade stops being focusable below. True for both
+       keyboard activation and a mouse click (clicking a tabindex="0" element
+       focuses it), and false when playVid is driven from elsewhere with focus
+       somewhere else entirely -- which must not have focus yanked away. */
+    var hadFocus = (document.activeElement === frame);
     var f = document.createElement('iframe');
     f.src = 'https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&rel=0';
     f.title = 'Handwriting video';
@@ -370,10 +375,15 @@
     /* The facade was a button; the loaded player is not. Leaving role/tabindex
        in place would keep a keyboard tab stop on a control that now does
        nothing, and keep announcing "Play: <title>" for a video already
-       playing. Hand focus over to the iframe's own controls. */
+       playing. */
     frame.removeAttribute('role');
     frame.removeAttribute('tabindex');
     frame.removeAttribute('aria-label');
+    /* Removing tabindex from the focused element strands focus: it is no
+       longer focusable, so the browser has nothing to move it to and the next
+       Tab restarts from the top of the document. Move focus into the iframe,
+       which is where the controls the user just asked for now live. */
+    if(hadFocus) f.focus();
   }
   vwrap.addEventListener('click', function(e){ var f = e.target.closest('.hw-vid__frame'); if(f) playVid(f); });
   vwrap.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ var f = e.target.closest('.hw-vid__frame'); if(f){ e.preventDefault(); playVid(f); } } });
