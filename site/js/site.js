@@ -12,9 +12,30 @@
 
     /* base-aware paths so the SAME nav works from /site pages and from the
       analyser pages in /analyser. */
-  var BASE = (document.documentElement.getAttribute("data-site-base") || "");
+  /* data-site-base is page-authored ("" at the site root, "../" under /blog and
+     /analyser) and P() concatenates it straight into href/src attributes inside
+     the innerHTML strings below, so it is DOM text on its way back into markup.
+     Accept only the relative-path shapes we actually emit and fall back to the
+     root otherwise -- nothing with a quote, angle bracket or scheme in it is a
+     base this site ever sets (CodeQL js/xss-through-dom). Widen the pattern if
+     a page ever needs a new base shape; do not drop the check. */
+  var RAW_BASE = document.documentElement.getAttribute("data-site-base") || "";
+  var BASE = /^(?:\.\.\/)*(?:[A-Za-z0-9._-]+\/)*$/.test(RAW_BASE) ? RAW_BASE : "";
   function P(h){ return BASE + h; }
-    var ANALYSER = (BASE ? "analyser.html" : "../analyser/analyser.html");
+
+  /* Escape before interpolating anything into the innerHTML strings below.
+     Covers both attribute values and text nodes, so one helper is enough. */
+  var HTML_ESC = { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" };
+  function escHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){ return HTML_ESC[c]; });
+  }
+  /* One path through P(), not a branch on whether BASE is empty. The old
+     `BASE ? "analyser.html" : "../analyser/analyser.html"` was right at the
+     site root and on the analyser page, but every /blog/ page also sets a
+     non-empty base ("../"), so it produced /blog/analyser.html there and the
+     mega-menu link 404'd on all of them. Relative to each page's own base the
+     analyser is always one level out of the site tree and into /analyser. */
+  var ANALYSER = P("../analyser/analyser.html");
 
   /* ===== FEEDBACK / AUDIENCE ENDPOINT (one place, loads on every page) =====
      Paste your Google Apps Script web-app URL between the quotes to receive
@@ -260,14 +281,18 @@
     var post = (window.VahiniPosts || []).filter(function(p){ return p.url === here; })[0];
     if (post){
       var kw = (window.VahiniPostKW && window.VahiniPostKW[post.slug]) || "";
-      if (kw) add('<meta name="keywords" content="'+kw.replace(/"/g,"&quot;")+'">');
-      var ttl = post.title.replace(/"/g,"&quot;"), exc = post.excerpt.replace(/"/g,"&quot;");
+      if (kw) add('<meta name="keywords" content="'+escHtml(kw)+'">');
+      var ttl = escHtml(post.title), exc = escHtml(post.excerpt);
       add('<meta property="og:title" content="'+ttl+'">');
       add('<meta property="og:description" content="'+exc+'">');
-      add('<meta property="og:url" content="'+location.href.split("#")[0]+'">');
+      /* Strips the query string as well as the hash: og:url is the canonical
+         address of the post, and neither belongs in it. That also keeps the
+         one attacker-reachable part of location out of the injected markup --
+         escHtml is the backstop, not the only defence. */
+      add('<meta property="og:url" content="'+escHtml(location.origin + location.pathname)+'">');
       add('<meta name="twitter:title" content="'+ttl+'">');
       add('<meta name="twitter:description" content="'+exc+'">');
-      add('<meta name="author" content="'+(post.author||"Vahini Technologies")+'">');
+      add('<meta name="author" content="'+escHtml(post.author||"Vahini Technologies")+'">');
     }
     /* Analytics uses Google Consent Mode v2, ADVANCED mode (GDPR/CCPA): the
        GTM/GA4 libraries load on every visit, but consent defaults to denied,
@@ -338,7 +363,6 @@
     var prior = getConsent();
     if (prior && prior.analytics) grantAnalyticsConsent();   // returning visitor who opted in (matches the default injectHead() already set)
 
-    var esc = function(s){ return String(s); };
     var banner = document.createElement('div');
     banner.className = 'cc'; banner.id = 'vt-cc';
     banner.setAttribute('role','dialog');
@@ -501,7 +525,6 @@
     var results = document.getElementById("vt-search-results");
     var closeB = document.getElementById("vt-search-close");
     if(!btn || !box || !input || !results) return;
-    var esc = function(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
 
     function render(q){
       q = (q||"").trim().toLowerCase();
@@ -521,7 +544,7 @@
       }
       if(!list.length){ results.innerHTML = '<p class="vsearch__empty">No matches. Try \u201cfactors\u201d, \u201cpen\u201d, \u201cblog\u201d or \u201cFAQ\u201d.</p>'; return; }
       results.innerHTML = list.map(function(it){
-        return '<a class="vsearch__hit" href="'+it.u+'"><span class="vh-t">'+esc(it.t)+'</span><span class="vh-d">'+esc(it.d)+'</span></a>';
+        return '<a class="vsearch__hit" href="'+escHtml(it.u)+'"><span class="vh-t">'+escHtml(it.t)+'</span><span class="vh-d">'+escHtml(it.d)+'</span></a>';
       }).join("");
     }
     function open(){ box.hidden=false; document.body.style.overflow="hidden"; render(""); setTimeout(function(){ input.focus(); }, 30); }

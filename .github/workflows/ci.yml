@@ -39,6 +39,20 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+# Every job here only reads the repo: checkout, build, test. Declaring the
+# token's scope at workflow level rather than per job means a job added later
+# inherits read-only instead of the repository default, which on a repo whose
+# default is permissive would be write.
+#
+# Deliberately NOT granting `actions: write`. The caching steps below
+# (actions/cache, and docker/build-push-action's type=gha) authenticate with
+# ACTIONS_RUNTIME_TOKEN, not GITHUB_TOKEN, so workflow permissions do not gate
+# them: this workflow's own runs logged "Cache restored successfully" for both
+# the npm and Playwright caches under contents:read alone. Adding it would hand
+# the token workflow-run and cache management it never uses.
+permissions:
+  contents: read
+
 jobs:
   security:
     runs-on: ubuntu-latest
