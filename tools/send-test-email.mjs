@@ -39,14 +39,34 @@ const { buildFeedbackEmail } = require(path.join(root, "services/persist-api/lib
 
 const argv = process.argv.slice(2);
 const has = (f) => argv.includes(f);
-const val = (f) => { const i = argv.indexOf(f); return i >= 0 ? argv[i + 1] : undefined; };
+/* A flag-looking token is never a value. Without this guard `--to --sample`
+   silently takes "--sample" as the address, which either sends a real message
+   to a nonsense recipient or fails with an error naming the wrong problem. */
+const val = (f) => {
+  const i = argv.indexOf(f);
+  if (i < 0) return undefined;
+  const next = argv[i + 1];
+  return next === undefined || next.startsWith("--") ? undefined : next;
+};
 
-if (has("--help") || (!has("--check") && !has("--sample") && !val("--to"))) {
-  console.log(`usage:
+const USAGE = `usage:
   --check         resolve config + verify credentials, send nothing
   --to <addr>     send one plain test message to <addr>
   --sample        send a synthetic feedback notification to the configured recipients
-  --config <dir>  config directory (default: $VAHINI_EMAIL_CONFIG_DIR or /config/email)`);
+  --config <dir>  config directory (default: $VAHINI_EMAIL_CONFIG_DIR or /config/email)`;
+
+/* Report a flag whose value is missing or flag-shaped as the typo it is,
+   rather than as a bare usage dump that leaves the cause to guesswork. */
+for (const flag of ["--to", "--config"]) {
+  if (has(flag) && val(flag) === undefined) {
+    console.error(`${flag} needs a value, e.g. ${flag} ${flag === "--to" ? "you@example.com" : "./config/email"}\n`);
+    console.log(USAGE);
+    process.exit(2);
+  }
+}
+
+if (has("--help") || (!has("--check") && !has("--sample") && !val("--to"))) {
+  console.log(USAGE);
   process.exit(has("--help") ? 0 : 2);
 }
 
