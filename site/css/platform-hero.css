@@ -225,11 +225,11 @@
    1 s flight so the leafing reads as a quick page turn. */
 .tf-card.fly{opacity:0; pointer-events:none; z-index:20;
   transition:transform 1s cubic-bezier(.45,-.15,.7,.35), opacity .4s .5s;}
-.tf-card.fly:nth-of-type(1){transform:translate(-115%,-42%) rotate(-31deg) scale(.62) skew(6deg,3deg);}
-.tf-card.fly:nth-of-type(2){transform:translate(108%,-52%) rotate(26deg) scale(.7) skew(-8deg,2deg);}
-.tf-card.fly:nth-of-type(3){transform:translate(-88%,-64%) rotate(-15deg) scale(.56) skew(4deg,-6deg);}
-.tf-card.fly:nth-of-type(4){transform:translate(96%,-30%) rotate(32deg) scale(.66) skew(-5deg,5deg);}
-.tf-card.fly:nth-of-type(5){transform:translate(-102%,-48%) rotate(-24deg) scale(.74) skew(7deg,-4deg);}
+.tf-card.fly:nth-of-type(1){transform:translate(-115%,-42%) rotate(-31deg) scale(.62);}
+.tf-card.fly:nth-of-type(2){transform:translate(108%,-52%) rotate(26deg) scale(.7);}
+.tf-card.fly:nth-of-type(3){transform:translate(-88%,-64%) rotate(-15deg) scale(.56);}
+.tf-card.fly:nth-of-type(4){transform:translate(96%,-30%) rotate(32deg) scale(.66);}
+.tf-card.fly:nth-of-type(5){transform:translate(-102%,-48%) rotate(-24deg) scale(.74);}
 @media (max-width:640px){
   .tabfly__tabs{gap:0 2px; margin-bottom:26px;}
   .tabfly__tab{font-size:12px; padding:8px 10px 12px;}
@@ -514,7 +514,7 @@
 .vh-stack{position:relative; z-index:1; display:flex; flex-direction:column; max-width:430px; margin:0 auto; width:100%;}
 .vh-layer{display:flex; align-items:center; gap:13px; background:rgba(255,255,255,.9); border:1px solid var(--rule);
   border-radius:14px; padding:12px 16px; backdrop-filter:blur(6px); box-shadow:var(--shadow-1);
-  opacity:.42; filter:saturate(.35);
+  opacity:.8; filter:saturate(.75);
   transition:opacity .5s var(--ease), filter .5s var(--ease), border-color .5s, box-shadow .5s;}
 .vh-layer__ic{width:38px; height:38px; border-radius:11px; display:grid; place-items:center; flex:0 0 auto;
   background:rgba(0,173,181,.12); color:var(--accent-deep);}

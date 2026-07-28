@@ -982,6 +982,10 @@
         <h2 class="h-2" style="margin-top:14px;">Built on real hardware, on real paper.</h2>
         <p style="color:var(--muted); font-size:17px; margin-top:16px;">The pen reads motion, not the page, so it works on whatever paper you already use.</p>
       </div>
+      <figure class="reveal" style="margin:38px auto 6px; max-width:720px; text-align:center;">
+        <img src="assets/pen-cut.png" alt="The Vahini pen opened up: the sensor board and ballpoint tip assembly above, and the assembled pen below with the board visible through the translucent barrel" loading="lazy" width="787" height="232" style="width:100%; height:auto; display:block; filter:drop-shadow(0 14px 28px rgba(20,30,40,.18));">
+        <figcaption style="font-size:13px; color:var(--hint); margin-top:14px;">The board inside the barrel: dual IMUs, tip force sensor, flash storage and the BLE radio.</figcaption>
+      </figure>
       <div class="tech__grid">
         <div class="tech__c reveal" style="background:var(--surface); border-color:var(--rule);">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-deep)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="6" rx="3"/><circle cx="8" cy="12" r="1.4" fill="currentColor"/><circle cx="16" cy="12" r="1.4" fill="currentColor"/></svg></div>
@@ -1181,7 +1185,7 @@
   function stopAuto(){ if (auto){ clearInterval(auto); auto = null; } }
   function startAuto(){
     if (reduce || hovered || !visible || auto) return;
-    auto = setInterval(function(){ setActive(current % tabs.length + 1); }, 2200);
+    auto = setInterval(function(){ setActive(current % tabs.length + 1); }, 4500);
   }
   if (root && !reduce){
     /* pointerenter also fires when the section scrolls under a cursor that
