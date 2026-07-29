@@ -44,9 +44,10 @@ async function main() {
     fail('OCR backend reachable', String(e));
   }
 
+  let browser = null;
   try {
     const { chromium } = await import('playwright');
-    const browser = await chromium.launch({ headless: true });
+    browser = await chromium.launch({ headless: true });
     const page = await browser.newPage();
     const pageErrors = [];
     page.on('pageerror', (e) => pageErrors.push(String(e)));
@@ -77,8 +78,14 @@ async function main() {
     if (pageErrors.length === 0) ok('no page errors'); else fail('no page errors', pageErrors.join('|').slice(0, 160));
 
     await browser.close();
+    browser = null;
   } catch (err) {
     fail('harness', String(err && err.message ? err.message : err));
+  } finally {
+    // A failure path that skips browser.close() leaves Playwright's child
+    // processes holding the event loop open: the summary prints and node
+    // then hangs until the CI runner's 6-hour kill (seen live on PR #52).
+    if (browser) { try { await browser.close(); } catch (_e) { /* closing */ } }
   }
 
   let passed = 0;
@@ -87,4 +94,8 @@ async function main() {
   if (passed !== results.length || results.length === 0) process.exitCode = 1;
 }
 
-main();
+// process.exit, not just exitCode: exitCode only takes effect once the
+// event loop drains, and a leaked handle (browser, fetch keep-alive)
+// otherwise turns a 15-second failure into a 6-hour hung job.
+main().then(() => process.exit(process.exitCode || 0),
+  (e) => { console.error(e); process.exit(1); });
