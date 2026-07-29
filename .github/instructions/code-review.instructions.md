@@ -81,6 +81,8 @@ mistakes before they ship — review accordingly.
   tested against a real render (Playwright screenshot or a manual
   browser check), not just read for correctness — several real bugs here
   looked correct in the source and were wrong on screen.
-- Flag content changes reusing the `vahini-pen-og.jpg`/`og-home.jpg`
-  banner images — they may still carry stale branding baked into the
-  image pixels (not visible via `grep`); open the image if unsure.
+- Flag any reused banner or hero image without someone having opened it:
+  product names and logos live in image *pixels*, where `grep` cannot
+  reach. The two banners that carried a retired product name have been
+  deleted; `site/assets/pen-hero.jpeg` still shows a pen with a non-Vahini
+  logo on the barrel, so treat it the same way.

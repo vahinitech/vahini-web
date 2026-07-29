@@ -68,8 +68,8 @@ git pull → ./deploy/release.sh stage → verify stag.vahinitech.com → ./depl
 - OG/social images: URLs must use `/site/assets/...` — bare `/assets/` is
   intercepted by a legacy redirect in `deploy/nginx.conf` and breaks link
   previews. Check **both** the meta tags and the JSON-LD blocks; also
-  page-header images live in image pixels (grep can't find "Battu"-style
-  stale branding — open the image).
+  brand names and logos also live in image *pixels*, where grep cannot
+  reach — open the image and look before reusing any asset.
 - `analyser/` is a **git submodule** pinned to an exact
   vahinitech/20factor-analyser commit (not necessarily a tag — today's pin is
   4 commits past v0.7). Never edit files inside it here; bump the pin instead.
