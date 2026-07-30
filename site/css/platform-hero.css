@@ -696,3 +696,35 @@
 @media (prefers-reduced-motion: reduce){
   .cal__hint svg,.cal__taps i,.cal__facets em{animation:none !important;}
 }
+
+
+/* ---- hero stage: the pen itself (replaces the platform stack).
+   The source PNG is a wide board-plus-pen composition sitting low in a
+   portrait canvas; aspect-ratio + object-fit crop the empty canvas so
+   the pen carries the stage. Particles begin after ~2s - the pen looks
+   ordinary first, then clearly is not. ---- */
+.vh__stage--pen{display:flex; align-items:center; justify-content:center;}
+.vh-pen{position:relative; width:min(100%,560px); margin:0;}
+.vh-pen img{width:100%; height:auto; aspect-ratio:640/340; object-fit:cover; object-position:50% 84%;
+  display:block; filter:drop-shadow(0 24px 44px rgba(0,0,0,.16));
+  animation:vh-pen-float 8s ease-in-out infinite;}
+.vh-pen__cap{margin-top:14px; text-align:center; font-size:13.5px;
+  letter-spacing:.05em; color:var(--muted);}
+.vh-pen__p{position:absolute; left:var(--px); top:var(--py); width:5px; height:5px;
+  border-radius:50%; background:var(--accent); opacity:0;
+  animation:vh-pen-p 5.5s ease-in-out infinite; animation-delay:var(--pd);}
+@keyframes vh-pen-float{
+  0%,100%{transform:translateY(0) rotate(-1.2deg);}
+  50%{transform:translateY(-10px) rotate(1.2deg);}
+}
+@keyframes vh-pen-p{
+  0%{opacity:0; transform:translateY(0);}
+  25%{opacity:.85;}
+  55%{opacity:.35;}
+  80%{opacity:.8; transform:translateY(-24px);}
+  100%{opacity:0; transform:translateY(-32px);}
+}
+@media (prefers-reduced-motion: reduce){
+  .vh-pen img{animation:none;}
+  .vh-pen__p{display:none;}
+}
