@@ -126,7 +126,7 @@
 <script src="js/theme.config.js"></script>
 <link rel="stylesheet" href="css/theme.css">
 <link rel="stylesheet" href="css/site.css">
-<link rel="stylesheet" href="css/story.css">
+<link rel="stylesheet" href="css/platform-hero.css">
 <style>
 /* ===== LATEST FROM VAHINI ===== */
 /* ===== COMPANY UPDATES, credibility band (under hero) ===== */
@@ -511,120 +511,333 @@
 
 <main class="page-fade">
 
-  <!-- ============ HERO · One question. One pen. ============
-       ~70% white space, one typeface, the accent on one word. The pen
-       looks ordinary for two seconds, then the particles start — the
-       visitor discovers the electronics instead of being told. -->
-  <section class="st-hero" data-screen-label="Hero">
-    <div class="wrap st-hero__in">
-      <h1 class="st-hero__h1">What if your everyday ballpoint pen <em>remembered</em> everything you&nbsp;write?</h1>
-      <ul class="st-hero__no" role="list">
-        <li>No special paper.</li>
-        <li>No photos.</li>
-        <li>No scanning.</li>
-        <li>Just writing.</li>
-      </ul>
-      <div class="st-hero__cta">
-        <a class="btn btn--primary btn--lg" href="see-in-action.html" data-nav>Watch demo</a>
-        <a class="btn btn--ghost btn--lg" href="#wish">Learn more</a>
+  <!-- ============ HERO · A sensing platform, not a smart pen ============ -->
+  <section class="vh" id="vhHero" data-frame="0" data-screen-label="Hero">
+    <div class="vh__bg" aria-hidden="true">
+      <i class="vh__glow"></i>
+      <i class="vh__grid"></i>
+      <span class="vh__p" style="--x:8%;--y:22%;--d:9s"></span><span class="vh__p" style="--x:16%;--y:74%;--d:12s"></span>
+      <span class="vh__p" style="--x:38%;--y:12%;--d:10s"></span><span class="vh__p" style="--x:56%;--y:82%;--d:14s"></span>
+      <span class="vh__p" style="--x:72%;--y:30%;--d:11s"></span><span class="vh__p" style="--x:88%;--y:64%;--d:13s"></span>
+      <span class="vh__p" style="--x:64%;--y:8%;--d:15s"></span><span class="vh__p" style="--x:92%;--y:18%;--d:9.5s"></span>
+    </div>
+    <div class="wrap vh__grid2">
+
+      <!-- LEFT: the platform story. The headline sells the shift (ink -> intelligence),
+           the sub sells the platform, the ticks answer objections, the trust bar
+           carries the credentials the old eyebrow + badges split between them. -->
+      <div class="vh__copy reveal">
+        <p class="vh__eye"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg>One pen &middot; Six AI products &middot; One motion dataset</p>
+        <h1 class="vh__h1">For 100 years, pens recorded ink.<br><em>Now they record intelligence.</em></h1>
+        <p class="vh__sub">Every pen stroke becomes <strong>AI-ready motion data</strong>.</p>
+        <ul class="vh__ticks" role="list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6L9 17l-5-5"/></svg>Ordinary paper</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6L9 17l-5-5"/></svg>No camera</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6L9 17l-5-5"/></svg>No special notebook</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6L9 17l-5-5"/></svg>Works offline</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6L9 17l-5-5"/></svg>AI powered</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6L9 17l-5-5"/></svg>Patent protected</li>
+        </ul>
+        <div class="vh__cta">
+          <a class="vh-btn vh-btn--primary" href="see-in-action.html" data-nav>
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8 5v14l11-7z"/></svg>See It in Action
+          </a>
+          <a class="vh-btn vh-btn--ghost" href="#applications">Explore the Platform
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+        <!-- Trust bar: every item is verifiable elsewhere on the site
+             (patent, DPIIT and RTIH on about.html; the award on awards.html). -->
+        <ul class="vh__trust" role="list" aria-label="Credentials">
+          <li>Patent No. 584433</li><li>Made in India</li><li>DPIIT Startup</li><li>RTIH Incubated</li><li>DeepTech Innovation Award</li>
+        </ul>
+        <p class="vh__scale">Billions of pen strokes are written every day. Almost none of them become digital intelligence. <a href="why-handwriting.html" data-nav>Why that matters &rarr;</a></p>
       </div>
-      <figure class="st-hero__pen">
-        <img src="assets/pen-transparent.png" width="832" height="1248" fetchpriority="high"
-             alt="The Vahini pen: an ordinary-looking ballpoint pen with its sensor board faintly visible through the translucent barrel">
-        <span class="st-orb st-orb--1">Every stroke</span>
-        <span class="st-orb st-orb--2">Every movement</span>
-        <span class="st-orb st-orb--3">Every word</span>
-        <i class="st-p st-p--1" aria-hidden="true"></i><i class="st-p st-p--2" aria-hidden="true"></i><i class="st-p st-p--3" aria-hidden="true"></i><i class="st-p st-p--4" aria-hidden="true"></i><i class="st-p st-p--5" aria-hidden="true"></i>
-        <figcaption>A normal pen. With an <strong>extraordinary memory</strong>.</figcaption>
-      </figure>
-      <p class="st-hero__trust">Patent No. 584433 &middot; Made in India &middot; DPIIT Startup &middot; DeepTech Innovation Award</p>
+
+      <!-- RIGHT: the platform stack. One technology, many products -- the signal
+           climbs from paper to applications, one layer per animation beat
+           (data-beat 0-4 = data-frame 0-4; lit layers accumulate as it rises). -->
+      <div class="vh__stage vh__stage--stack reveal" data-d="1" aria-label="The Vahini platform stack: ordinary pen and paper at the base, the intelligent ballpoint pen senses motion, an AI engine reconstructs the writing, a writing-intelligence layer scores it, and six AI products sit on top">
+        <div class="vh__halo" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="vh-stack" aria-hidden="true">
+
+          <div class="vh-layer vh-layer--apps" data-beat="4">
+            <div class="vh-layer__head"><b>One pen &rarr; six AI products</b></div>
+            <ul class="vh-stack-apps">
+              <li>Handwriting Intelligence</li>
+              <li>Digital Notes</li>
+              <li>Learning Analytics</li>
+              <li>Signature Intelligence</li>
+              <li>Motor Assessment</li>
+              <li>Developer SDK</li>
+            </ul>
+          </div>
+
+          <div class="vh-rise" data-beat="4"><i></i></div>
+
+          <div class="vh-layer" data-beat="3">
+            <span class="vh-layer__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></span>
+            <div><b>Writing intelligence</b><span>handwriting scored, trends tracked, coaching generated</span></div>
+          </div>
+
+          <div class="vh-rise" data-beat="3"><i></i></div>
+
+          <div class="vh-layer" data-beat="2">
+            <span class="vh-layer__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4c0 1.5-.8 2.8-2 3.4V12h3a4 4 0 0 1 4 4v1"/><path d="M12 2a4 4 0 0 0-4 4c0 1.5.8 2.8 2 3.4V12H7a4 4 0 0 0-4 4v1"/><circle cx="3" cy="20" r="1.6"/><circle cx="21" cy="20" r="1.6"/><circle cx="12" cy="20" r="1.6"/><path d="M12 12v6"/></svg></span>
+            <div><b>AI reconstruction engine</b><span>the stroke rebuilt from motion, no camera on the page</span></div>
+          </div>
+
+          <div class="vh-rise" data-beat="2"><i></i></div>
+
+          <div class="vh-layer" data-beat="1">
+            <span class="vh-layer__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3l4 4L8 20l-5 1 1-5z"/><path d="M14 6l4 4"/></svg></span>
+            <div><b>Intelligent ballpoint pen</b><span>16-axis dual-IMU &middot; 208 Hz &middot; works offline</span></div>
+          </div>
+
+          <div class="vh-rise" data-beat="1"><i></i></div>
+
+          <div class="vh-layer" data-beat="0">
+            <span class="vh-layer__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/><path d="M9 13h7M9 17h7"/></svg></span>
+            <div><b>Ordinary pen &amp; paper</b><span>any notebook, real ink, nothing special on the page</span></div>
+          </div>
+
+        </div>
+        <!-- the 5-beat story, outcomes not engineering -->
+        <ol class="vh__frames" aria-hidden="true">
+          <li>Natural Writing</li><li>Motion Capture</li><li>AI Reconstruction</li><li>Insights</li><li>Applications</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- REAL numbers only: measured hardware spec + granted IP -->
+    <div class="wrap vh__stats reveal" data-d="2" role="list">
+      <div role="listitem"><b>208 Hz</b><span>Motion capture</span></div>
+      <div role="listitem"><b>16-axis</b><span>Dual-IMU sensing</span></div>
+      <div role="listitem"><b>5 scripts</b><span>Indic + English analysis</span></div>
+      <div role="listitem"><b>No. 584433</b><span>Granted Indian patent</span></div>
     </div>
   </section>
 
-  <!-- ============ THE STORY · wish → potential → possibility → reveal.
-       No boxes, no icons: sentences that fade in as you scroll. -->
-  <section class="st-beat" id="wish" data-screen-label="The wish">
-    <div class="wrap">
-      <p class="st-beat__kicker st-in">01 &middot; The wish</p>
-      <h2 class="st-beat__line st-in" style="--std:.1s">&ldquo;I wish my pen could remember <em>everything</em>.&rdquo;</h2>
-      <p class="st-beat__sub st-in" style="--std:.2s">You already trust your pen. It writes on paper. Now imagine it never forgets.</p>
-    </div>
-  </section>
+  <!-- ============ THE BRIDGE · scrollytelling: one letter, the whole loop ============
+       Temporarily disabled (kept for later): wrapped in an inert <template>
+       so it does not render; remove the wrapper to bring it back. -->
+  <template hidden data-disabled="cognition">
+  <section class="cal" id="cognition" data-screen-label="The bridge">
+    <div class="cal__track">
+      <div class="cal__sticky">
+        <div class="wrap cal__grid">
 
-  <section class="st-beat st-beat--tint" data-screen-label="The potential">
-    <div class="wrap">
-      <p class="st-beat__kicker st-in">02 &middot; The potential</p>
-      <h2 class="st-beat__line st-in" style="--std:.1s">What if it understood <em>how</em> you write?</h2>
-    </div>
-  </section>
+          <div class="cal__copy">
+            <p class="cal__label">The bridge &middot; tradition, connected to digital</p>
+            <h2 class="cal__h2">Handwriting is the brain&rsquo;s <em>daily calibration</em>.</h2>
+            <p class="cal__desc">Your brain wasn&rsquo;t designed to tap. Watch one letter being written. Every stroke runs a full learning loop.</p>
+            <p class="cal__hint" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>Keep scrolling to write the letter</p>
+            <div class="cal__done">
+              <p class="cal__donestamp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Learning reinforced.</p>
+              <p>One letter, a complete learning cycle. Now imagine a whole page.</p>
+            </div>
+          </div>
 
-  <section class="st-beat" data-screen-label="The possibility">
+          <div class="cal__scene" aria-label="As the letter A is written stroke by stroke, the brain steps light up: see, recognise, remember, plan, move, correct, learn">
+            <svg class="cal__art" viewBox="0 0 400 520">
+              <!-- brain -->
+              <g class="cal__brain">
+                <circle class="cal__brainglow" cx="200" cy="96" r="76" fill="rgba(0,173,181,.22)"/>
+                <path d="M186 34 a30 30 0 0 0 -26 16 a26 26 0 0 0 -18 24 a24 24 0 0 0 4 38 a26 26 0 0 0 22 30 a28 28 0 0 0 32 12 v-120 z"
+                  fill="var(--surface)" stroke="var(--accent-deep)" stroke-width="2.5"/>
+                <path d="M214 34 a30 30 0 0 1 26 16 a26 26 0 0 1 18 24 a24 24 0 0 1 -4 38 a26 26 0 0 1 -22 30 a28 28 0 0 1 -32 12 v-120 z"
+                  fill="var(--surface)" stroke="var(--accent-deep)" stroke-width="2.5"/>
+                <path d="M200 34 v120 M170 60 q14 8 0 20 M230 60 q-14 8 0 20 M176 108 q12 -6 20 4 M224 108 q-12 -6 -20 4"
+                  fill="none" stroke="rgba(0,173,181,.5)" stroke-width="2"/>
+              </g>
+              <!-- signal path: brain → pen tip -->
+              <path class="cal__signalpath" d="M200 158 C 200 220, 150 250, 138 300" fill="none" stroke="rgba(0,173,181,.35)" stroke-width="1.6" stroke-dasharray="3 7"/>
+              <g class="cal__particles">
+                <circle class="cal__pt cal__pt--1" r="3.4" fill="var(--accent)"/>
+                <circle class="cal__pt cal__pt--2" r="3.4" fill="var(--accent)"/>
+                <circle class="cal__pt cal__pt--3" r="3.4" fill="var(--accent)"/>
+              </g>
+              <!-- paper -->
+              <g>
+                <rect x="52" y="300" width="296" height="190" rx="14" fill="#FDFCF9" stroke="var(--rule)" stroke-width="1.5"/>
+                <line x1="76" y1="350" x2="324" y2="350" stroke="#E4E0D6" stroke-width="1.4"/>
+                <line x1="76" y1="400" x2="324" y2="400" stroke="#E4E0D6" stroke-width="1.4"/>
+                <line x1="76" y1="450" x2="324" y2="450" stroke="#E4E0D6" stroke-width="1.4"/>
+              </g>
+              <!-- the letter A: three strokes, drawn by scroll -->
+              <g stroke="#2456A6" stroke-width="5" stroke-linecap="round" fill="none">
+                <path class="cal__stroke cal__stroke--1" style="--len:118" stroke-dasharray="118" d="M162 448 L 200 342"/>
+                <path class="cal__stroke cal__stroke--2" style="--len:118" stroke-dasharray="118" d="M200 342 L 238 448"/>
+                <path class="cal__stroke cal__stroke--3" style="--len:52" stroke-dasharray="52" d="M176 412 L 226 412"/>
+              </g>
+              <!-- pen poised at the letter -->
+              <g class="cal__pen" transform="translate(236 340) rotate(-52)">
+                <path d="M0 0 L20 -5.5 L20 5.5 Z" fill="#12151A"/>
+                <rect x="20" y="-6.5" width="11" height="13" rx="2.5" fill="#3A424C"/>
+                <rect x="31" y="-7.5" width="128" height="15" rx="7.5" fill="#1B2027"/>
+                <rect x="159" y="-6" width="11" height="12" rx="4" fill="#20262E"/>
+                <circle cx="45" cy="0" r="2.8" fill="var(--accent)"/>
+              </g>
+            </svg>
+            <ol class="cal__nodes" aria-hidden="true">
+              <li class="cal__node"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></i>See</li>
+              <li class="cal__node"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 3a3 3 0 0 0-3 3 3.5 3.5 0 0 0-2 6.2A3.5 3.5 0 0 0 7 18.5c.4 1.5 1.7 2.5 3.3 2.5H12V3z"/><path d="M14.5 3a3 3 0 0 1 3 3 3.5 3.5 0 0 1 2 6.2 3.5 3.5 0 0 1-2.5 6.3c-.4 1.5-1.7 2.5-3.3 2.5H12"/></svg></i>Think</li>
+              <li class="cal__node"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5M4 12h9M13 12l-3-3M13 12l-3 3M17 19a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg></i>Plan</li>
+              <li class="cal__node"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></i>Move</li>
+              <li class="cal__node"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v4h4"/></svg></i>Correct</li>
+              <li class="cal__node"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.9 6.3 6.6.6-5 4.5 1.5 6.6L12 16.7 6 20l1.5-6.6-5-4.5 6.6-.6z"/></svg></i>Learn</li>
+            </ol>
+            <p class="cal__loopline" aria-hidden="true">Every letter repeats this learning loop.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
     <div class="wrap">
-      <p class="st-beat__kicker st-in">03 &middot; The possibility</p>
-      <h2 class="st-beat__line st-in" style="--std:.1s">It captures more than just your words.</h2>
-      <ul class="st-every" role="list">
-        <li class="st-in" style="--std:.15s">Every <em>movement</em>.</li>
-        <li class="st-in" style="--std:.3s">Every <em>rhythm</em>.</li>
-        <li class="st-in" style="--std:.45s">Every <em>pressure</em>.</li>
-        <li class="st-in" style="--std:.6s">Every <em>stroke</em>.</li>
+      <!-- typing vs handwriting, minimal -->
+      <div class="cal__versus reveal">
+        <div class="cal__vt">
+          <b>Typing</b>
+          <span class="cal__taps" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <small>the same motion, repeated</small>
+        </div>
+        <span class="cal__vs">vs</span>
+        <div class="cal__vh">
+          <b>Handwriting</b>
+          <span class="cal__facets" aria-hidden="true">
+            <em style="--i:0">Pressure</em><em style="--i:1">Direction</em><em style="--i:2">Speed</em><em style="--i:3">Angle</em><em style="--i:4">Rhythm</em><em style="--i:5">Spacing</em><em style="--i:6">Correction</em>
+          </span>
+          <small>a new movement every letter</small>
+        </div>
+      </div>
+      <p class="cal__punchline reveal" data-d="1">Digital devices make answers faster. <b>Handwriting makes brains stronger.</b></p>
+
+      <ul class="cal__ticks reveal" data-d="1" role="list">
+        <li>Better focus</li><li>Better memory</li><li>Better fine motor control</li><li>Better learning</li><li>Better handwriting</li>
       </ul>
+
+      <div class="cal__finale reveal" data-d="2">
+        <p class="cal__stanza">One page.<br>500 letters.<br>Thousands of brain loops.<br><b>That&rsquo;s where Vahini begins.</b></p>
+        <a class="btn btn--dark" href="see-in-action.html" data-nav>See how Vahini measures every stroke &rarr;</a>
+      </div>
+    </div>
+    </div>
+  </section>
+  </template>
+
+  <!-- ============ APPLICATIONS POWERED BY ONE SIGNAL ============ -->
+  <section class="sec pf" id="applications" data-screen-label="Applications" style="padding:64px 0 78px;">
+    <div class="wrap">
+      <!-- tabfly, split layout: the heading + the six-product index sit in
+           the left column, the leafed card stack animates on the right,
+           saving a full screen of vertical space vs the stacked layout -->
+      <div class="tabfly tabfly--split reveal" data-d="1">
+        <div class="tabfly__left">
+          <p class="eyebrow" style="display:inline-flex;">Many products, one motion model</p>
+          <h2 class="h-2" style="margin-top:14px;">One signal. Six products today. Hundreds tomorrow.</h2>
+          <p class="tabfly__lede">Every product here runs on the <strong>same</strong> proprietary handwriting-motion dataset and one model. Handwriting analysis is the live proof; each new product both ships value and <strong>feeds more motion data back into the moat</strong>, so the platform compounds instead of being capped by any single product.</p>
+          <div class="tabfly__tabs" role="tablist" aria-label="Vahini products">
+            <button class="tabfly__tab is-active" role="tab" aria-selected="true" data-id="1" style="--tc:var(--live);">Handwriting Intelligence<small>20-factor analysis across five Indic scripts, live today</small></button>
+            <button class="tabfly__tab" role="tab" aria-selected="false" data-id="2" style="--tc:var(--dev);">Digital Notes<small>Write on any paper, digitised in real time</small></button>
+            <button class="tabfly__tab" role="tab" aria-selected="false" data-id="3" style="--tc:var(--pilot);">Learning Analytics<small>Classroom-level insight into how students write</small></button>
+            <button class="tabfly__tab" role="tab" aria-selected="false" data-id="4" style="--tc:var(--assess);">Motor Assessment<small>Early motor screening, studied with clinicians</small></button>
+            <button class="tabfly__tab" role="tab" aria-selected="false" data-id="5" style="--tc:#B4502E;">Signature Intelligence<small>Verify how a signature was written, from motion</small></button>
+            <button class="tabfly__tab" role="tab" aria-selected="false" data-id="6" style="--tc:var(--future);">Developer SDK<small>Motion intelligence as an API for partners</small></button>
+          </div>
+        </div>
+        <div class="tabfly__stage" id="tabflyStage">
+          <article class="tf-card" role="tabpanel" aria-label="Handwriting Intelligence">
+            <span class="tf-card__mini" style="--mcc:var(--live);--mcbg:var(--live-bg);" title="Handwriting Intelligence"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span>
+            <span class="pf-acard__ic ic--live"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span>
+            <h3>Handwriting Intelligence</h3>
+            <p>20-factor analysis and personalised practice across five Indic scripts, live today.</p>
+            <span class="pf-acard__mat"><span class="pf-pill pf-pill--live">Live</span><i><b style="--m:100%; --mc:var(--live);"></b></i></span>
+            <span class="pf-acard__who"><em>Who buys</em><span class="wb-row"><span class="wb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-4 7 4v13M10 21v-5h4v5M12 8h.01"/></svg>Schools</span><span class="wb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="3"/><path d="M4 21v-2a5 5 0 0 1 5-5"/><circle cx="16.5" cy="11" r="2.2"/><path d="M13 21v-1a3.5 3.5 0 0 1 7 0v1"/></svg>Parents</span><span class="wb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3" width="8" height="4" rx="1"/><path d="M16 5h2a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2"/><path d="M9 14l2 2 4-4"/></svg>Coaches</span></span></span>
+            <a class="tf-card__go" href="solution-handwriting.html" data-nav>Explore the product <span aria-hidden="true">&rarr;</span></a>
+          </article>
+          <article class="tf-card" role="tabpanel" aria-label="Digital Notes">
+            <span class="tf-card__mini" style="--mcc:var(--dev);--mcbg:var(--dev-bg);" title="Digital Notes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg></span>
+            <span class="pf-acard__ic ic--dev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></span>
+            <h3>Digital Notes</h3>
+            <p>Write on any paper, screen-free, and watch it digitise in real time.</p>
+            <span class="pf-acard__mat"><span class="pf-pill pf-pill--dev">In dev</span><i><b style="--m:55%; --mc:var(--dev);"></b></i></span>
+            <span class="pf-acard__who"><em>Who buys</em><span class="wb-row"><span class="wb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 9L12 4 2 9l10 5 10-5z"/><path d="M6 11.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5"/></svg>Students</span><span class="wb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg>Professionals</span><span class="wb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V9h6v12M11 21V4h8v17M14 8h.01M17 8h.01M14 12h.01M17 12h.01"/></svg>Enterprises</span></span></span>
+            <a class="tf-card__go" href="solution-digitization.html" data-nav>Explore the product <span aria-hidden="true">&rarr;</span></a>
+          </article>
+          <article class="tf-card" role="tabpanel" aria-label="Learning Analytics">
+            <span class="tf-card__mini" style="--mcc:var(--pilot);--mcbg:var(--pilot-bg);" title="Learning Analytics"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6"/><rect x="13" y="7" width="3" height="10"/></svg></span>
+            <span class="pf-acard__ic ic--pilot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6"/><rect x="13" y="7" width="3" height="10"/></svg></span>
+            <h3>Learning Analytics</h3>
+            <p>Classroom-level insight into how students write, for better outcomes.</p>
+            <span class="pf-acard__mat"><span class="pf-pill pf-pill--pilot">Pilot</span><i><b style="--m:70%; --mc:var(--pilot);"></b></i></span>
+            <span class="pf-acard__who"><em>Who buys</em><span class="wb-row"><span class="wb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-4 7 4v13M10 21v-5h4v5M12 8h.01"/></svg>Schools</span><span class="wb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg>Districts</span><span class="wb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M4 18h16M6 18v-8M10 18v-8M14 18v-8M18 18v-8M3 8l9-5 9 5z"/></svg>Governments</span></span></span>
+            <a class="tf-card__go" href="solution-insights.html" data-nav>Explore the product <span aria-hidden="true">&rarr;</span></a>
+          </article>
+          <article class="tf-card" role="tabpanel" aria-label="Motor Assessment">
+            <span class="tf-card__mini" style="--mcc:var(--assess);--mcbg:var(--assess-bg);" title="Motor Assessment"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
+            <span class="pf-acard__ic ic--assess"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
+            <h3>Motor Assessment</h3>
+            <p>Early motor screening and intervention, studied with clinicians.</p>
+            <span class="pf-acard__mat"><span class="pf-pill pf-pill--assess">Research</span><i><b style="--m:30%; --mc:var(--assess);"></b></i></span>
+            <span class="pf-acard__who"><em>Who buys</em><span class="wb-row"><span class="wb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.6-9.3-9A5.4 5.4 0 0 1 12 6.3 5.4 5.4 0 0 1 21.3 12c-2.3 4.4-9.3 9-9.3 9z"/></svg>Therapists</span><span class="wb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M12 8v8M8 12h8"/></svg>Hospitals</span><span class="wb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>Clinics</span></span></span>
+            <a class="tf-card__go" href="solution-assistive.html" data-nav>Explore the product <span aria-hidden="true">&rarr;</span></a>
+          </article>
+          <article class="tf-card" role="tabpanel" aria-label="Signature Intelligence">
+            <span class="tf-card__mini" style="--mcc:#B4502E;--mcbg:#F7E7DF;" title="Signature Intelligence"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg></span>
+            <span class="pf-acard__ic ic--next" style="color:#B4502E;background:#F7E7DF;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg></span>
+            <h3>Signature Intelligence</h3>
+            <p>Verify how a signature was written, not just how it looks, from the motion itself.</p>
+            <span class="pf-acard__mat"><span class="pf-pill" style="color:#B4502E;background:#F7E7DF;">Next</span><i><b style="--m:18%; --mc:#B4502E;"></b></i></span>
+            <span class="pf-acard__who"><em>Who buys</em><span class="wb-row"><span class="wb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 18v-8M9.5 18v-8M14.5 18v-8M19 18v-8M2 10l10-6 10 6z"/></svg>Banks</span><span class="wb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg>Insurance</span><span class="wb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M8 21h8M6 7L3 13a3 3 0 0 0 6 0zM18 7l-3 6a3 3 0 0 0 6 0zM4 7h16"/></svg>Legal</span></span></span>
+            <a class="tf-card__go" href="investor.html" data-nav>The roadmap, in the notebook <span aria-hidden="true">&rarr;</span></a>
+          </article>
+          <article class="tf-card" role="tabpanel" aria-label="Developer SDK">
+            <span class="tf-card__mini" style="--mcc:var(--future);--mcbg:var(--future-bg);" title="Developer SDK"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 9l-3 3 3 3M15 9l3 3-3 3"/></svg></span>
+            <span class="pf-acard__ic ic--future" style="color:var(--future);background:var(--future-bg);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3M9 9l-2 3 2 3M15 9l2 3-2 3"/></svg></span>
+            <h3>Developer SDK</h3>
+            <p>Motion intelligence as an API, build the future on Vahini for partners and researchers.</p>
+            <span class="pf-acard__mat"><span class="pf-pill pf-pill--future">Future</span><i><b style="--m:10%; --mc:var(--future);"></b></i></span>
+            <span class="pf-acard__who"><em>Who buys</em><span class="wb-row"><span class="wb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 8l-4 4 4 4M15 8l4 4-4 4"/></svg>Developers</span><span class="wb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7L12 5"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7L12 19"/></svg>Partners</span><span class="wb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg>AI labs</span></span></span>
+            <a class="tf-card__go" href="developers.html" data-nav>Explore the API plan <span aria-hidden="true">&rarr;</span></a>
+          </article>
+        </div>
+        <noscript><style>.tf-card{position:static !important; transform:none !important; margin-bottom:16px;}.tabfly__stage{height:auto !important;}</style></noscript>
+      </div>
     </div>
   </section>
 
-  <section class="st-beat st-beat--tint" data-screen-label="The reveal">
+  <!-- ============ MARKET STACK (scalability) ============ -->
+  <section class="sec" id="markets" data-screen-label="Markets" hidden>
     <div class="wrap">
-      <p class="st-beat__kicker st-in">04 &middot; The reveal</p>
-      <h2 class="st-beat__line st-in" style="--std:.1s">Meet <em>Vahini</em>.</h2>
-      <p class="st-beat__sub st-in" style="--std:.2s">The world&rsquo;s first connected AI ballpoint pen.</p>
-      <figure class="st-reveal__fig st-in" style="--std:.3s">
-        <img src="assets/pen-cut.png" width="787" height="232" loading="lazy"
-             alt="The Vahini pen opened up: the sensor board and ballpoint tip assembly above, and the assembled pen below with the board visible through the translucent barrel">
-      </figure>
-    </div>
-  </section>
-
-  <!-- ============ HOW IT WORKS · five words, one line ============ -->
-  <section class="st-how" data-screen-label="How it works">
-    <div class="wrap">
-      <p class="st-h2 st-in">How it works</p>
-      <ol>
-        <li class="st-in" style="--std:.05s"><div>Write naturally<small>on any paper</small></div></li>
-        <li class="st-in" style="--std:.15s"><div>Motion captured<small>by precision sensors</small></div></li>
-        <li class="st-in" style="--std:.25s"><div>AI understands<small>your unique handwriting</small></div></li>
-        <li class="st-in" style="--std:.35s"><div>Connected<small>to your digital world</small></div></li>
-        <li class="st-in" style="--std:.45s"><div>Insights<small>learning &middot; progress &middot; growth</small></div></li>
-      </ol>
-    </div>
-  </section>
-
-  <!-- ============ BUILT FOR EVERY WRITER ============ -->
-  <section class="st-rows st-beat--tint" data-screen-label="Writers">
-    <div class="wrap">
-      <p class="st-h2 st-in">Built for every writer</p>
-      <ul role="list">
-        <li class="st-in" style="--std:.05s"><strong>Students</strong><span>learn better</span></li>
-        <li class="st-in" style="--std:.1s"><strong>Educators</strong><span>teach smarter</span></li>
-        <li class="st-in" style="--std:.15s"><strong>Professionals</strong><span>work effortlessly</span></li>
-        <li class="st-in" style="--std:.2s"><strong>Healthcare</strong><span>record accurately</span></li>
-        <li class="st-in" style="--std:.25s"><strong>Signatures</strong><span>verify securely</span></li>
-        <li class="st-in" style="--std:.3s"><strong>Creators</strong><span>capture ideas</span></li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- ============ TECHNOLOGY · numbers from the shipping firmware;
-       capabilities only, never component identities or mechanisms. -->
-  <section class="st-rows" id="technology" data-screen-label="Technology">
-    <div class="wrap">
-      <p class="st-h2 st-in">The technology, in six lines</p>
-      <ul role="list">
-        <li class="st-spec st-in" style="--std:.05s"><strong>208</strong><span>motion samples, every second</span></li>
-        <li class="st-spec st-in" style="--std:.1s"><strong>Twin</strong><span>motion sensors along the barrel</span></li>
-        <li class="st-spec st-in" style="--std:.15s"><strong>Pressure</strong><span>sensed at the writing tip</span></li>
-        <li class="st-spec st-in" style="--std:.2s"><strong>Weeks</strong><span>of writing stored on the pen</span></li>
-        <li class="st-spec st-in" style="--std:.25s"><strong>All-day</strong><span>writing on one charge</span></li>
-        <li class="st-spec st-in" style="--std:.3s"><strong>Wireless</strong><span>phone sync and over-the-air updates</span></li>
-      </ul>
+      <div class="reveal" style="max-width:760px;">
+        <p class="eyebrow">One pen · one signal · many markets</p>
+        <h2 class="h-2" style="margin-top:14px;">The pen is the core. Each market is the same signal, put to work.</h2>
+        <p style="font-size:17px; color:var(--muted); margin-top:16px;">Vahini came first: screen-free, paper-based, motion-aware. The 20-factor analyser exists to <em>back</em> the pen with a product people can use today. From there, the same motion signal reaches market after market, no new hardware, no new data.</p>
+      </div>
+      <div class="mstack reveal" data-d="1">
+        <div class="mlayer is-moat">
+          <div class="mlayer__tag"><b>Vahini</b><span>The core</span></div>
+          <div class="mlayer__body"><p>A dual-IMU sensor ballpoint that writes on ordinary paper and captures the motion of every stroke at 208 Hz, screen-free.</p><span class="who">The source every market below draws from · Patent No. 584433</span></div>
+        </div>
+        <div class="mlayer is-live">
+          <div class="mlayer__tag"><b>Handwriting</b><span>Live today</span></div>
+          <div class="mlayer__body"><p>20-factor analysis &amp; personalised practice across five Indic scripts, the product that backs the pen.</p><span class="who">Coaches, parents, students &amp; schools</span></div>
+        </div>
+        <div class="mlayer is-dev">
+          <div class="mlayer__tag"><b>Digital notes</b><span>In build</span></div>
+          <div class="mlayer__body"><p>Class notes written on paper, reconstructed from the IMU signal into a digital page. No tablet, no app open, no screen-time.</p><span class="who">Students, schools &amp; anyone who thinks better on paper · our founding idea</span></div>
+        </div>
+        <div class="mlayer is-next">
+          <div class="mlayer__tag"><b>Assistive &amp; screening</b><span>Research</span></div>
+          <div class="mlayer__body"><p>Support for writing difficulty and the early motor signals behind it, studied <em>with</em> clinicians, never a standalone diagnosis.</p><span class="who">Special schools, occupational therapists, accessibility &amp; research partners</span></div>
+        </div>
+        <div class="mlayer is-moat">
+          <div class="mlayer__tag"><b>The dataset</b><span>The moat</span></div>
+          <div class="mlayer__body"><p>India’s consented, multi-script handwriting-motion data, a defensible asset and a future licensing line.</p><span class="who">What makes every market above hard to copy</span></div>
+        </div>
+      </div>
+      <p class="mstack-note">Markets shown to illustrate scope; size each with primary research before external use.</p>
     </div>
   </section>
 
@@ -714,14 +927,102 @@
     </div>
   </section>
 
-    <!-- ============ CLOSER ============ -->
+  <!-- ============ HANDWRITING DEEP DIVE ============ -->
+  <section class="sec" style="background:var(--ivory-2); border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);" data-screen-label="Handwriting proof">
+    <div class="wrap"><div class="hw hw--text-only">
+      <div class="reveal">
+        <p class="eyebrow">Proven first in handwriting · <span style="color:var(--live)">Live today</span></p>
+        <h2 style="margin-top:16px;">Proof the signal becomes real insight.</h2>
+        <p>Our handwriting solution is live now. Upload any handwritten page and get a 20-factor analysis with personalised exercises, across five Indic scripts. It's the working proof of everything the platform promises.</p>
+        <div class="hw__cta">
+          <a class="btn btn--dark btn--lg" href="../analyser/analyser.html">See the Pen in Action
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn--ghost btn--lg" href="solution-handwriting.html" data-nav>How it works</a>
+        </div>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- ============ DATASET MOAT ============ -->
+  <section class="sec" id="dataset" style="background:var(--ivory-2); border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);" data-screen-label="Dataset">
+    <div class="wrap"><div class="dset">
+      <div class="reveal">
+        <p class="eyebrow">The asset nobody else holds</p>
+        <h2 style="margin-top:14px;">India’s consented multi-script handwriting dataset.</h2>
+        <p>Every analysed page and every pen-stroke, captured with explicit consent, builds a corpus that doesn’t exist anywhere else: real handwriting motion across five Indic scripts and many ages. A camera company can scrape finished pages; only Vahini owns the <strong>motion</strong> behind them.</p>
+        <div class="dset__points">
+          <div class="dpt"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><div><b>Consent-first</b><span>Collected only with explicit consent, never quietly scraped.</span></div></div>
+          <div class="dpt"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-5 4 4 8-8M3 21h18"/></svg></span><div><b>Motion, not content</b><span>We store the signal, pressure control, pen control, writing flow, never the words written.</span></div></div>
+          <div class="dpt"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg></span><div><b>DPDP-aligned, India-processed</b><span>Privacy by design under the DPDP Act 2023, a sales advantage, not just compliance.</span></div></div>
+        </div>
+      </div>
+      <div class="reveal" data-d="2">
+        <div class="dset__card">
+          <span class="lab">The corpus</span>
+          <div class="big">Five scripts, two signal layers, one compounding moat.</div>
+          <div class="dset__scripts">
+            <span>English</span><span>हिन्दी</span><span>తెలుగు</span><span>தமிழ்</span><span>ಕನ್ನಡ</span>
+          </div>
+          <div class="dset__meta">
+            <div class="m"><div class="v">208 Hz</div><div class="k">Motion sampled per second by the pen</div></div>
+            <div class="m"><div class="v">Image + IMU</div><div class="k">Photo-scan labels and sensor streams</div></div>
+            <div class="m"><div class="v">5 scripts</div><div class="k">Indic coverage Western pens don’t serve</div></div>
+            <div class="m"><div class="v">Licensable</div><div class="k">A future revenue line, not just training data</div></div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- ============ TECHNOLOGY ============ -->
+  <section class="sec" data-screen-label="Technology">
+    <div class="wrap">
+      <div class="reveal" style="max-width:640px;">
+        <p class="eyebrow">The technology</p>
+        <h2 class="h-2" style="margin-top:14px;">Built on real hardware, on real paper.</h2>
+        <p style="color:var(--muted); font-size:17px; margin-top:16px;">The pen reads motion, not the page, so it works on whatever paper you already use.</p>
+      </div>
+      <figure class="reveal" style="margin:38px auto 6px; max-width:720px; text-align:center;">
+        <img src="assets/pen-cut.png" alt="The Vahini pen opened up: the sensor board and ballpoint tip assembly above, and the assembled pen below with the board visible through the translucent barrel" loading="lazy" width="787" height="232" style="width:100%; height:auto; display:block; filter:drop-shadow(0 14px 28px rgba(20,30,40,.18));">
+        <figcaption style="font-size:13px; color:var(--hint); margin-top:14px;">The board inside the barrel: dual IMUs, tip force sensor, flash storage and the BLE radio.</figcaption>
+      </figure>
+      <div class="tech__grid">
+        <div class="tech__c reveal" style="background:var(--surface); border-color:var(--rule);">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-deep)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="6" rx="3"/><circle cx="8" cy="12" r="1.4" fill="currentColor"/><circle cx="16" cy="12" r="1.4" fill="currentColor"/></svg></div>
+          <h4>Dual-IMU sensing</h4>
+          <p>Two inertial units (one 9-axis with magnetometer, one 6-axis) plus a tip force sensor stream 16 axes at 208 Hz, Kalman-filtered.</p>
+        </div>
+        <div class="tech__c reveal" data-d="1" style="background:var(--surface); border-color:var(--rule);">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-deep)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16M4 19V5M8 15l3-4 3 2 4-7"/></svg></div>
+          <h4>Works on any paper</h4>
+          <p>No dot-pattern, no tablet, no special notebook. The signal comes from the pen, not the page.</p>
+        </div>
+        <div class="tech__c reveal" data-d="2" style="background:var(--surface); border-color:var(--rule);">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-deep)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14M5 12h9M5 16h14"/><circle cx="18" cy="12" r="2"/></svg></div>
+          <h4>Five-script modelling</h4>
+          <p>Motion models tuned across five Indic scripts, the basis of a consent-first motion dataset.</p>
+        </div>
+        <div class="tech__c reveal" data-d="3" style="background:var(--surface); border-color:var(--rule);">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-deep)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 6 6 .5-4.5 4 1.5 6L12 15l-5.5 3.5 1.5-6L3.5 8.5 9.5 8z"/></svg></div>
+          <h4>Patented</h4>
+          <p>Indian Patent No. 584433, DPIIT-recognised.</p>
+        </div>
+      </div>
+      <div class="reveal" data-d="2" style="margin-top:34px;">
+        <a class="btn btn--ghost" href="product.html" data-nav>Read the technology
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CLOSER ============ -->
   <section class="sec band-dark" data-screen-label="Closer">
-    <div class="wrap" style="text-align:center;">
-      <h2 class="st-in" style="font-size:clamp(30px,4vw,48px); letter-spacing:-0.02em; margin:0;">Experience the future of writing.</h2>
-      <p class="st-in" style="--std:.1s; font-size:19px; color:var(--muted-on,inherit); opacity:.85; margin:14px 0 0;">Simple like your pen. Powerful like AI.</p>
-      <div class="st-in" style="--std:.2s; margin-top:30px; display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
-        <a class="btn btn--primary btn--lg" href="reach.html" data-nav>Join the journey</a>
-        <a class="btn btn--ghost btn--lg" href="see-in-action.html" data-nav style="color:var(--ivory); border-color:var(--rule-on);">Watch demo</a>
+    <div class="wrap closer reveal">
+      <h2>One pen. Regular paper. Endless signal.</h2>
+      <p>Try the analyser that's live today, or help build the platform behind it.</p>
+      <div class="closer__cta">
+        <a class="btn btn--crimson btn--lg" href="../analyser/analyser.html">See the Pen in Action</a>
+        <a class="btn btn--ghost btn--lg" href="reach.html" data-nav style="color:var(--ivory); border-color:var(--rule-on);">Partner with us</a>
       </div>
     </div>
   </section>
@@ -732,6 +1033,10 @@
 
 <script src="js/image-slot.js"></script>
 <script src="js/site-data.js"></script>
+<!-- Self-hosted (was cdnjs) so the CSP needs no CDN origin and the hero
+     animation survives CDN outages; byte-for-byte gsap@3.12.5 from npm. -->
+<script src="js/vendor/gsap.min.js"></script>
+<script src="js/hero-imu.js"></script>
 <script src="js/site.js"></script>
 <script>
 /* ---- Event reviews marquee (from feedback collected in person) ---- */
@@ -821,23 +1126,227 @@
   }
 })();
 </script>
+<script>
+/* ---- tabfly: products stack, pages fly off as you move down the tabs ----
+   Vanilla port of the classic "flying tabs" pattern: picking tab N sends
+   cards 1..N-1 off the stack one by one (staggered), picking an earlier
+   tab deals them back in reverse order. */
+(function(){
+  var tabs = [].slice.call(document.querySelectorAll('.tabfly__tab'));
+  var cards = [].slice.call(document.querySelectorAll('.tf-card'));
+  if (!tabs.length || cards.length !== tabs.length) return;
+  var timers = [];
+  var current = 1;
+  function setActive(id){ /* 1-based */
+    current = id;
+    tabs.forEach(function(t, i){
+      var on = i === id - 1;
+      t.classList.toggle('is-active', on);
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    cards.forEach(function(c, i){ c.classList.toggle('is-top', i === id - 1); });
+    timers.forEach(clearTimeout); timers = [];
+    var flying = cards.filter(function(c){ return c.classList.contains('fly'); }).length;
+    cards.forEach(function(card, index){
+      var shouldFly = index < id - 1;
+      var isFlying = card.classList.contains('fly');
+      if (shouldFly && !isFlying){
+        timers.push(setTimeout(function(){ card.classList.add('fly'); card.setAttribute('aria-hidden','true'); }, index * 70));
+      } else if (!shouldFly && isFlying){
+        timers.push(setTimeout(function(){ card.classList.remove('fly'); card.removeAttribute('aria-hidden'); }, (flying - index) * 70));
+      }
+    });
+  }
+  tabs.forEach(function(t, i){
+    t.addEventListener('click', function(){ if (!t.classList.contains('is-active')) setActive(i + 1); });
+  });
+  /* the fanned pages behind the top one are clickable: tap a peeking
+     corner symbol to bring that product to the front */
+  cards.forEach(function(card, i){
+    card.addEventListener('click', function(e){
+      if (card.classList.contains('is-top')) return;
+      if (e.target.closest('a')) return;
+      setActive(i + 1);
+    });
+  });
+  cards[0].classList.add('is-top');
+
+  /* ---- auto-advance: gently loop the stack 1..N, deal-back at the end ----
+     Matches the hero flywheel's conventions: disabled under
+     prefers-reduced-motion, paused while off-screen or the tab is hidden,
+     and re-armed cleanly on bfcache restore. Also pauses whenever the user
+     hovers or keyboard-focuses the component, so it never fights someone
+     reading or clicking; an explicit tab/card pick just re-seats the loop at
+     that product (current is updated in setActive). This hover/focus pause +
+     reduced-motion opt-out is the WCAG 2.2.2 "pause moving content" hook. */
+  var root = document.querySelector('.tabfly');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var auto = null, hovered = false, visible = true;
+  function stopAuto(){ if (auto){ clearInterval(auto); auto = null; } }
+  function startAuto(){
+    if (reduce || hovered || !visible || auto) return;
+    auto = setInterval(function(){ setActive(current % tabs.length + 1); }, 4500);
+  }
+  if (root && !reduce){
+    /* pointerenter also fires when the section scrolls under a cursor that
+       never actually moved (desktop only -- touch has no passive hover), so
+       a scroll-by alone would pause the loop forever with no pointerleave
+       to undo it. Only pause once a real mousemove happens inside. */
+    function onRealHover(){ hovered = true; stopAuto(); }
+    root.addEventListener('pointerenter', function(e){
+      if (e.pointerType === 'mouse') root.addEventListener('mousemove', onRealHover, { once:true });
+      else onRealHover();
+    });
+    root.addEventListener('pointerleave', function(){ root.removeEventListener('mousemove', onRealHover); hovered = false; startAuto(); });
+    root.addEventListener('focusin',  function(){ hovered = true; stopAuto(); });
+    root.addEventListener('focusout', function(){
+      if (!root.contains(document.activeElement)){ hovered = false; startAuto(); }
+    });
+    document.addEventListener('visibilitychange', function(){
+      if (document.hidden) stopAuto(); else startAuto();
+    });
+    window.addEventListener('pageshow', function(e){ if (e.persisted) startAuto(); });
+    if ('IntersectionObserver' in window){
+      new IntersectionObserver(function(es){
+        visible = es[0].isIntersecting;
+        if (visible) startAuto(); else stopAuto();
+      }, { threshold: 0.25 }).observe(root);
+    } else {
+      startAuto();
+    }
+  }
+})();
+</script>
+<script>
+/* ---- hero signal demo ---- */
+(function(){
+  var cases = [
+    { name:"Handwriting analysis", tag:"Live today", bg:"var(--live-bg)", fg:"var(--live)", stroke:"var(--crimson)",
+      out:'<div style="display:flex; gap:9px;">'+[['Formation','72'],['Spacing','64'],['Size','88']].map(function(p){return '<span class="chip"><span class="v">'+p[1]+'</span><span class="k">'+p[0]+'</span></span>';}).join('')+'</div>' },
+    { name:"Assistive writing", tag:"Research", bg:"var(--research-bg)", fg:"var(--research)", stroke:"#1D9E75",
+      out:'<div style="text-align:center;"><div style="font-size:12px; color:var(--muted); margin-bottom:8px;">Steadier guidance as you write</div><svg viewBox="0 0 200 30" style="width:170px;height:26px;"><path d="M6,24 Q40,4 70,18 T134,12 T194,16" fill="none" stroke="#1D9E75" stroke-width="3" stroke-linecap="round"/></svg></div>' },
+    { name:"Diagnostics & screening", tag:"Research", bg:"var(--research-bg)", fg:"var(--research)", stroke:"#B0306B",
+      out:'<div><div style="display:flex; gap:10px; justify-content:center; align-items:flex-end; height:46px;">'+[60,30,75,45,68,38,55].map(function(h){return '<span style="width:12px; height:'+h+'%; background:#B0306B; opacity:.78; border-radius:3px 3px 0 0;"></span>';}).join('')+'</div><div style="text-align:center; font-size:10.5px; color:var(--hint); margin-top:7px;">motion-pattern signature</div></div>' },
+    { name:"Text reconstruction", tag:"In development", bg:"var(--dev-bg)", fg:"var(--dev)", stroke:"#BA7517",
+      out:'<div style="text-align:center; font-family:Caveat,cursive; font-size:26px; color:var(--ink); background:var(--surface); border:1px solid var(--rule); padding:6px 18px; border-radius:10px;">Vahini <span style="font-family:var(--sans); font-size:13px; color:var(--muted);">→ "Vahini"</span></div>' },
+    { name:"Actionable insights", tag:"In development", bg:"var(--dev-bg)", fg:"var(--dev)", stroke:"#7A5BD0",
+      out:'<div style="background:var(--surface); border:1px solid var(--rule); border-radius:10px; padding:11px 15px; font-size:13px; color:var(--muted); line-height:1.55; max-width:240px;"><b style="color:var(--ink); font-family:var(--serif);">Weekly report</b><br>Progress, weak spots &amp; next exercises, in one page.</div>' }
+  ];
+  var nameEl=document.getElementById('sigName'), tagEl=document.getElementById('sigTag'),
+      outEl=document.getElementById('sigOut'), dotsEl=document.getElementById('sigDots'),
+      path=document.getElementById('heroTrace');
+  if(path){
+  cases.forEach(function(c,idx){ var b=document.createElement('button'); b.dataset.i=idx; dotsEl.appendChild(b); });
+  var dots=Array.prototype.slice.call(dotsEl.children);
+  var len=path.getTotalLength(); path.style.strokeDasharray=len;
+  var i=0, timer;
+  function render(idx){
+    var c=cases[idx];
+    nameEl.textContent=c.name; tagEl.textContent=c.tag;
+    tagEl.style.background=c.bg; tagEl.style.color=c.fg;
+    path.setAttribute('stroke',c.stroke);
+    path.style.transition='none'; path.style.strokeDashoffset=len;
+    void path.getBoundingClientRect();
+    path.style.transition='stroke-dashoffset 1.15s var(--ease)'; path.style.strokeDashoffset=0;
+    outEl.style.opacity=0;
+    setTimeout(function(){ outEl.innerHTML=c.out; outEl.style.opacity=1; }, 600);
+    dots.forEach(function(d,di){ d.classList.toggle('on', di===idx); });
+  }
+  function tick(){ i=(i+1)%cases.length; render(i); }
+  function restart(){ clearInterval(timer); timer=setInterval(tick,3400); }
+  dots.forEach(function(d){ d.addEventListener('click',function(){ i=parseInt(d.dataset.i,10); render(i); restart(); }); });
+  render(0); restart();
+  }
+
+})();
+</script>
 
 <script>
-/* ---- story scroll-in: add .is-in as each beat enters the viewport.
-   Pure decoration: without JS (or with reduced motion) everything is
-   simply visible, so nothing depends on this running. ---- */
+/* vh hero: 5-beat platform-stack loop, the signal climbing paper → pen →
+   reconstruction → intelligence → applications (lit layers accumulate).
+   2s per beat (10s full loop), paused off-screen, fully-lit static stack under
+   prefers-reduced-motion, restarted cleanly after bfcache restores. */
 (function(){
-  var els = document.querySelectorAll('.st-in');
-  if(!('IntersectionObserver' in window)){
-    els.forEach(function(el){ el.classList.add('is-in'); });
+  var hero=document.getElementById('vhHero'); if(!hero) return;
+  var FRAMES=5, BEAT=2000, i=0, t=null, visible=true;
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){ hero.setAttribute('data-frame','4'); return; }
+  function stop(){ if(t){ clearTimeout(t); t=null; } }
+  function tick(){
+    stop();
+    t=setTimeout(function(){
+      i=(i+1)%FRAMES;
+      hero.setAttribute('data-frame', i);
+      tick();
+    }, BEAT);
+  }
+  function restart(){ i=0; hero.setAttribute('data-frame','0'); stop(); if(visible) tick(); }
+  restart();
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){
+      visible = es[0].isIntersecting;
+      if(visible){ if(!t) tick(); } else { stop(); }
+    },{threshold:0.05}).observe(hero);
+  }
+  window.addEventListener('pageshow', function(e){ if(e.persisted) restart(); });
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden){ stop(); } else if(visible && !t){ tick(); }
+  });
+})();
+</script>
+<script>
+/* calibration scrollytelling: scroll progress writes the letter and lights the
+   brain loop. Desktop drives from scroll position (sticky scene, ~2.4 screens
+   of travel); narrow/touch screens run the same timeline on a 9s clock;
+   prefers-reduced-motion gets the completed state, no motion. */
+(function(){
+  var sec=document.getElementById('cognition'); if(!sec) return;
+  var track=sec.querySelector('.cal__track'); if(!track) return;
+  var nodes=[].slice.call(sec.querySelectorAll('.cal__node'));
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var narrow=window.matchMedia&&window.matchMedia('(max-width: 920px)').matches;
+  function seg(name,p,a,b){ var v=(p-a)/(b-a); v=v<0?0:v>1?1:v; sec.style.setProperty(name,v); }
+  function set(p){
+    seg('--s1',p,.12,.34); seg('--s2',p,.36,.58); seg('--s3',p,.62,.74);
+    seg('--glow',p,.84,.95);
+    var stage = p<.08?0 : p<.22?1 : p<.4?2 : p<.56?3 : p<.72?4 : p<.86?5 : 6;
+    for(var i=0;i<nodes.length;i++) nodes[i].classList.toggle('on', i<stage);
+    sec.classList.toggle('is-writing', p>.12 && p<.8);
+    sec.classList.toggle('is-done', p>.9);
+  }
+  if(reduce){ sec.classList.add('cal--static'); set(1); return; }
+  if(narrow){
+    sec.classList.add('cal--static');
+    var nRaf=null, nT0=null, nVisible=true;
+    function nTick(ts){ if(nT0==null) nT0=ts; set(((ts-nT0)/9000)%1); nRaf=requestAnimationFrame(nTick); }
+    function nStart(){ if(nRaf) return; nT0=null; nRaf=requestAnimationFrame(nTick); }
+    function nStop(){ if(nRaf){ cancelAnimationFrame(nRaf); nRaf=null; } }
+    nStart();
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(function(es){
+        nVisible = es[0].isIntersecting;
+        if(nVisible && !document.hidden) nStart(); else nStop();
+      },{threshold:0.05}).observe(sec);
+    }
+    document.addEventListener('visibilitychange', function(){
+      if(document.hidden) nStop(); else if(nVisible) nStart();
+    });
     return;
   }
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(en){
-      if(en.isIntersecting){ en.target.classList.add('is-in'); io.unobserve(en.target); }
+  var raf=null;
+  function onScroll(){
+    if(raf) return;
+    raf=requestAnimationFrame(function(){
+      raf=null;
+      var r=track.getBoundingClientRect();
+      var total=r.height-window.innerHeight;
+      var p= total>0 ? (-r.top)/total : 1;
+      set(p<0?0:p>1?1:p);
     });
-  }, {threshold:0.25, rootMargin:'0px 0px -8% 0px'});
-  els.forEach(function(el){ io.observe(el); });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll);
+  onScroll();
 })();
 </script>
 </body>
