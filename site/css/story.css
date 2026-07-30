@@ -1,0 +1,142 @@
+/* SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+   (c) 2026 Vahini Technologies. All rights reserved.
+
+   story.css — the index scroll-story: one question, one pen, then the
+   narrative unfolds. Design rules this file encodes (from the redesign
+   review): ~70% white space in the hero, ONE typeface at display sizes
+   (58-72px on desktop), the accent colour on a single word per screen,
+   no boxes/no icons in the story beats, sentences fade in as you
+   scroll. Motion is decorative only — everything reads perfectly with
+   animation disabled (prefers-reduced-motion kills all of it). */
+
+/* ---------- hero ---------- */
+.st-hero{background:var(--ivory); padding:76px 0 40px; text-align:center;}
+.st-hero__in{display:flex; flex-direction:column; align-items:center;}
+.st-hero__h1{
+  font-family:"Hanken Grotesk",sans-serif;
+  font-size:clamp(38px,6vw,72px);
+  line-height:1.08; letter-spacing:-0.02em; font-weight:800;
+  max-width:17ch; margin:0 auto;
+}
+.st-hero__h1 em{font-style:normal; color:var(--accent);}
+.st-hero__no{list-style:none; margin:34px 0 0; padding:0;
+  font-size:clamp(17px,2vw,22px); color:var(--muted); line-height:1.75;}
+.st-hero__cta{display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-top:36px;}
+
+/* pen: the hero object. The source PNG is a wide composition (board +
+   tip above, assembled pen below) centred low in a portrait canvas with
+   large transparent margins - the aspect-ratio + object-fit pair crops
+   the empty canvas so the pen itself carries the visual weight. */
+.st-hero__pen{position:relative; margin:46px auto 0; width:min(94vw,780px);}
+.st-hero__pen img{width:100%; aspect-ratio:640/280; object-fit:cover;
+  object-position:50% 78%; display:block;
+  filter:drop-shadow(0 24px 48px rgba(0,0,0,.14));
+  animation:st-float 8s ease-in-out infinite;}
+.st-hero__pen figcaption{margin-top:18px; font-size:15px; color:var(--muted);}
+.st-hero__pen figcaption strong{color:var(--accent); font-weight:600;}
+@keyframes st-float{
+  0%,100%{transform:translateY(0) rotate(-1.2deg);}
+  50%{transform:translateY(-12px) rotate(1.2deg);}
+}
+
+/* orbit labels: three quiet facts drifting beside the pen */
+.st-orb{position:absolute; font-size:13px; color:var(--muted);
+  border:1px solid var(--rule); border-radius:999px; padding:5px 12px;
+  background:color-mix(in srgb, var(--ivory) 82%, transparent);
+  white-space:nowrap; opacity:0; animation:st-orb 9s ease-in-out infinite;}
+.st-orb::before{content:"○ "; color:var(--accent);}
+.st-orb--1{top:-10%; left:4%; animation-delay:2.2s;}
+.st-orb--2{top:16%; right:-2%; animation-delay:3.4s;}
+.st-orb--3{bottom:-4%; left:14%; animation-delay:4.6s;}
+@keyframes st-orb{
+  0%,12%{opacity:0; transform:translateY(6px);}
+  22%,86%{opacity:1; transform:translateY(0);}
+  100%{opacity:0; transform:translateY(-6px);}
+}
+
+/* the "something alive" moment: tiny accent particles that begin to
+   drift inside the barrel only after ~2s — first the pen looks
+   ordinary, then it clearly is not */
+.st-p{position:absolute; width:5px; height:5px; border-radius:50%;
+  background:var(--accent); opacity:0;
+  animation:st-p 5.5s ease-in-out infinite; animation-delay:2s;}
+.st-p--1{left:16%; top:66%;}
+.st-p--2{left:28%; top:60%; animation-delay:2.6s;}
+.st-p--3{left:41%; top:68%; animation-delay:3.2s;}
+.st-p--4{left:54%; top:61%; animation-delay:3.8s;}
+.st-p--5{left:64%; top:67%; animation-delay:4.4s;}
+@keyframes st-p{
+  0%{opacity:0; transform:translateY(0);}
+  25%{opacity:.85;}
+  55%{opacity:.35;}
+  80%{opacity:.8; transform:translateY(-26px);}
+  100%{opacity:0; transform:translateY(-34px);}
+}
+
+.st-hero__trust{margin:42px 0 0; font-size:13px; letter-spacing:.04em;
+  color:var(--muted);}
+
+/* ---------- story beats ---------- */
+.st-beat{min-height:62vh; display:flex; align-items:center; text-align:center;}
+.st-beat .wrap{width:100%;}
+.st-beat__kicker{font-size:13px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--accent); margin:0 0 18px;}
+.st-beat__line{
+  font-family:"Hanken Grotesk",sans-serif;
+  font-size:clamp(30px,4.6vw,56px); line-height:1.15; font-weight:800;
+  letter-spacing:-0.02em; max-width:22ch; margin:0 auto;}
+.st-beat__line em{font-style:normal; color:var(--accent);}
+.st-beat__sub{font-size:clamp(17px,2vw,21px); color:var(--muted); margin:20px auto 0; max-width:52ch;}
+.st-beat--tint{background:var(--ivory-2); border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);}
+
+/* the "every ..." cascade: one line at a time, staggered by JS delay */
+.st-every{list-style:none; margin:34px 0 0; padding:0;
+  font-size:clamp(24px,3.4vw,40px); font-weight:700; line-height:1.7;}
+.st-every em{font-style:normal; color:var(--accent);}
+
+/* reveal figure (the pen, opened) */
+.st-reveal__fig{margin:44px auto 0; max-width:640px;}
+.st-reveal__fig img{width:100%; height:auto; display:block; border-radius:14px;}
+
+/* ---------- how it works: five words, one thin line ---------- */
+.st-how{padding:88px 0;}
+.st-how ol{list-style:none; display:flex; flex-wrap:wrap; justify-content:center;
+  gap:10px 0; margin:38px 0 0; padding:0;}
+.st-how li{display:flex; align-items:center; font-size:clamp(16px,1.8vw,20px); font-weight:600;}
+.st-how li small{display:block; font-weight:400; color:var(--muted); font-size:13px;}
+.st-how li>div{text-align:center; padding:0 22px;}
+.st-how li+li::before{content:"→"; color:var(--accent); font-weight:400;}
+
+/* ---------- writers / tech: quiet rows, no cards ---------- */
+.st-rows{padding:84px 0;}
+.st-rows ul{list-style:none; margin:36px 0 0; padding:0;
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:0 32px;}
+.st-rows li{display:flex; justify-content:space-between; align-items:baseline; gap:16px;
+  padding:16px 2px; border-bottom:1px solid var(--rule); font-size:16px;}
+.st-rows li strong{font-weight:700;}
+.st-rows li span{color:var(--muted); text-align:right;}
+
+.st-spec{font-variant-numeric:tabular-nums;}
+.st-spec strong{color:var(--accent); font-size:clamp(20px,2.4vw,26px); font-weight:800;}
+
+/* section headings shared by how/rows */
+.st-h2{font-size:13px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--accent); text-align:center; margin:0;}
+.st-h2+.st-h2s{font-size:clamp(26px,3.4vw,40px); font-weight:800; text-align:center;
+  margin:14px auto 0; max-width:24ch; letter-spacing:-0.02em; line-height:1.15;}
+
+/* ---------- scroll-in behaviour ---------- */
+.st-in{opacity:0; transform:translateY(26px);
+  transition:opacity .7s ease, transform .7s ease;
+  transition-delay:var(--std,0s);}
+.st-in.is-in{opacity:1; transform:none;}
+
+@media (prefers-reduced-motion: reduce){
+  .st-hero__pen img,.st-orb,.st-p{animation:none;}
+  .st-orb{opacity:1;}
+  .st-p{display:none;}
+  .st-in{opacity:1; transform:none; transition:none;}
+}
+@media (max-width:720px){
+  .st-beat{min-height:46vh;}
+}
