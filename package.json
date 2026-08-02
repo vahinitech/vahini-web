@@ -9,7 +9,8 @@
     "test:recognition": "node tests/e2e-recognition.mjs",
     "test:security": "node tests/security-abuse.test.mjs && node tests/ocr-input-guard.test.mjs && node tests/sweeper.test.mjs",
     "test:all": "node tests/e2e-pages.mjs",
-    "test:regression:install": "./node_modules/.bin/playwright install chromium"
+    "test:regression:install": "./node_modules/.bin/playwright install chromium",
+    "test:routes": "node tests/nginx-routes.mjs"
   },
   "devDependencies": {
     "http-server": "^14.1.1",

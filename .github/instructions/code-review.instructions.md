@@ -34,11 +34,13 @@ mistakes before they ship — review accordingly.
 - User-supplied content (uploaded images, feedback text, report data)
   must never be interpolated into HTML/JS without escaping — check for
   `innerHTML`/`eval`/unescaped template interpolation.
-- `location ^~ /assets/` in `deploy/nginx.conf` is a legacy compatibility
-  redirect for the analyser app, not a general asset path — a PR that adds
-  new bare `/assets/...` URLs (site pages, OG tags, JSON-LD) is very
-  likely a bug, not a feature. Real static assets live under
-  `/site/assets/...`.
+- `location ^~ /assets/` in `deploy/nginx.conf` serves the site's own
+  files first and only falls back to the analyser's legacy redirect. Both
+  halves matter: dropping the `try_files /site$uri` breaks every relative
+  asset on the public URLs, and dropping the `@analyser_assets` fallback
+  breaks the analyser app. See "URL Routing and Assets" below. Anything
+  written by hand (OG tags, JSON-LD, hardcoded `src`) should still use the
+  explicit `/site/assets/...` form rather than relying on the fallback.
 
 ## Performance Red Flags
 
@@ -71,6 +73,47 @@ mistakes before they ship — review accordingly.
   project name) is present and untouched — removing it lets stage and
   prod destroy each other's containers on deploy (real incident,
   2026-07-20).
+
+## URL Routing and Assets
+
+`deploy/nginx.conf` decides which file a URL reaches, and the two test
+suites that run on most PRs (`test:e2e`, `smoke-http`) spawn
+`http-server` at the repo root — nginx never runs in them, so they
+cannot catch anything in this section. `npm run test:routes` is the one
+that can. Review these by hand:
+
+- **Pages serve at two depths.** Files live under `site/`, but every
+  public URL is the bare path (`/events.html`), served from `/site/` by
+  internal rewrite. A relative `assets/x.jpg` in the markup therefore
+  resolves to `/site/assets/x.jpg` at `/site/events.html` and to
+  `/assets/x.jpg` at the public `/events.html` — different nginx
+  locations, different outcomes. For any PR adding or moving an asset
+  reference, ask which URL it was checked at; "it works locally" usually
+  means `/site/…`, which is the shape that never breaks. Production
+  broke 33 assets across six pages exactly this way: the logo, the
+  favicons, every event photo, the patent preview.
+- **A bare-prefix location that unconditionally redirects swallows our
+  own files.** `^~` beats every regex, so `location ^~ /assets/ { return
+  302 …; }` captures the site's own assets before the static-file regex
+  runs. Any such prefix must `try_files /site$uri` first and only then
+  fall back. Flag new `^~` or `location =` blocks that return/redirect
+  without a local-file attempt.
+- **Location precedence is not source order.** `=` exact wins, then `^~`
+  prefix (which *stops* regex evaluation), then regexes in file order,
+  then longest prefix. A reviewer reasoning top-to-bottom will get this
+  wrong — ask for `test:routes` output instead of arguing it.
+- **One public URL per page.** `rel="canonical"`, `site/sitemap.xml` and
+  what nginx serves must agree. Flag a new page, redirect or sitemap
+  entry that creates a second live URL for the same content, and flag
+  sitemap entries that redirect rather than serving directly.
+- **`Dockerfile` `COPY . .` does not overwrite the nginx base image's own
+  `/usr/share/nginx/html/index.html`** (this repo has no root
+  `index.html`). If a change touches the Dockerfile's web-root handling,
+  confirm the `rm -f index.html 50x.html` is still there — without it
+  `/index.html` serves "Welcome to nginx!".
+- Health-check URLs in `Dockerfile`, `deploy/docker-compose.*.yml` and
+  `deploy/release.sh` should point at a URL that serves **200 directly**,
+  not one that redirects.
 
 ## Voice and AI Provenance
 

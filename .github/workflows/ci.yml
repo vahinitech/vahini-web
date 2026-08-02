@@ -71,6 +71,38 @@ jobs:
       - name: Persist API abuse limits + OCR input guard
         run: npm run test:security
 
+  # Routing against the REAL deploy/nginx.conf. The e2e job below spawns
+  # http-server at the repo root, so nginx never runs there and no amount of
+  # page testing can catch a routing bug -- production shipped a home page
+  # whose logo, favicon and every event photo 404'd while that job was green,
+  # because the pages serve at bare URLs (/events.html) where their relative
+  # asset refs resolve to /assets/... and a redirect sent those to the
+  # analyser. This job starts nginx on the actual config and fails on any
+  # subresource that is not 200. No Docker, no submodule: ~1 minute.
+  routes:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - name: Install nginx
+        # nginx-light carries the http core, rewrite, proxy and limit_req
+        # modules -- everything deploy/nginx.conf uses.
+        run: sudo apt-get update && sudo apt-get install -y nginx-light
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: playwright-${{ runner.os }}-
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: URL routing, canonicals and asset reachability
+        run: npm run test:routes
+
   e2e:
     timeout-minutes: 20
     runs-on: ubuntu-latest
