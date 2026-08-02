@@ -213,6 +213,22 @@ function canonicalHref(html) {
   return null;
 }
 
+// Parse the URL and compare origins; never prefix-match the host. A string
+// starting with "https://vahinitech.com" may continue with an arbitrary host
+// (https://vahinitech.com.example.test/), so startsWith would accept another
+// site's URL as ours. Returns the path+query when the URL really is on our
+// origin, null otherwise.
+function canonicalPathOf(raw) {
+  let u;
+  try {
+    u = new URL(raw);
+  } catch {
+    return null;                    // relative or malformed
+  }
+  if (u.origin !== CANONICAL_HOST) return null;
+  return (u.pathname || '/') + u.search;
+}
+
 function publicUrlOf(file) {
   const rel = path.relative(path.join(ROOT, 'site'), file).split(path.sep).join('/');
   return rel === 'index.html' ? '/' : `/${rel}`;
@@ -238,8 +254,8 @@ async function testSitemap() {
   const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
   const bad = [];
   for (const loc of locs) {
-    if (!loc.startsWith(CANONICAL_HOST)) { bad.push(`${loc} (not ${CANONICAL_HOST})`); continue; }
-    const p = loc.slice(CANONICAL_HOST.length) || '/';
+    const p = canonicalPathOf(loc);
+    if (p === null) { bad.push(`${loc} (not on ${CANONICAL_HOST})`); continue; }
     const r = await chase(p);
     // The analyser is a stub here, so its own URLs answer 404 -- what matters
     // is that nginx routed there directly instead of bouncing.
@@ -298,11 +314,11 @@ async function testCanonicalTags() {
     checked++;
     // Absolute, on our host: a relative canonical resolves against whatever
     // URL the page was reached at, which is the opposite of the point.
-    if (!href.startsWith(CANONICAL_HOST)) {
+    const want = canonicalPathOf(href);
+    if (want === null) {
       bad.push(`${url}: canonical "${href}" is not an absolute ${CANONICAL_HOST} URL`);
       continue;
     }
-    const want = href.slice(CANONICAL_HOST.length) || '/';
     // The named URL must be the one that serves, not one that redirects.
     const target = await chase(want);
     if (target.hops !== 0 || target.status !== 200) {
