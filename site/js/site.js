@@ -23,6 +23,14 @@
   var BASE = /^(?:\.\.\/)*(?:[A-Za-z0-9._-]+\/)*$/.test(RAW_BASE) ? RAW_BASE : "";
   function P(h){ return BASE + h; }
 
+  /* Assets are served from ONE place (/site/assets/...) but pages render at
+     two depths -- /site/about.html and the public /about.html -- so a
+     base-relative asset path resolves to /assets/... on the public URLs,
+     which is the analyser's legacy redirect, not the site's assets. Absolute
+     is the only form correct at both depths. Links stay relative (P) so
+     navigation keeps whichever URL shape the visitor arrived on. */
+  function ASSET(h){ return "/site/assets/" + h; }
+
   /* Escape before interpolating anything into the innerHTML strings below.
      Covers both attribute values and text nodes, so one helper is enough. */
   var HTML_ESC = { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" };
@@ -127,7 +135,7 @@
 
     return ''+
     '<header class="nav" id="vt-nav"><div class="nav__in">'+
-      '<a class="logo" href="'+P("index.html")+'" data-nav aria-label="Vahini home"><img src="'+P("assets/vahini-logo.png")+'" alt="Vahini"></a>'+
+      '<a class="logo" href="'+P("index.html")+'" data-nav aria-label="Vahini home"><img src="'+ASSET("vahini-logo.png")+'" alt="Vahini"></a>'+
       '<nav class="menu" aria-label="Primary"><ul>'+
         '<li class="has-mega" id="megaLi">'+
           '<button class="navtrig" aria-expanded="false">Applications '+caret+'</button>'+
@@ -212,7 +220,7 @@
       '<a href="'+P("factors.html")+'" data-nav>The 20 factors, explained</a>';
     return '<footer class="foot"><div class="wrap">'+
       '<div class="foot__grid">'+
-        '<div class="foot__brand"><b><img src="'+P("assets/vahini-logo.png")+'" alt="">Vahini</b>'+
+        '<div class="foot__brand"><b><img src="'+ASSET("vahini-logo.png")+'" alt="">Vahini</b>'+
           '<p>One dual-IMU sensor pen that captures the invisible motion behind every stroke, on ordinary paper. The signal layer beneath handwriting.</p></div>'+
         '<div class="foot__col"><h5>Applications</h5>'+sol+'</div>'+
         '<div class="foot__col"><h5>Company</h5>'+
@@ -262,13 +270,13 @@
   /* ---- inject favicons + analytics into <head>, once, on every page ---- */
   function injectHead(){
     if (document.getElementById("vt-head-meta")) return;
-    var head = document.head, P2 = P;
+    var head = document.head;
     var add = function(html){ var t=document.createElement("template"); t.innerHTML=html.trim(); head.appendChild(t.content.cloneNode(true)); };
     var marker = document.createElement("meta"); marker.id="vt-head-meta"; head.appendChild(marker);
-    add('<link rel="icon" type="image/png" sizes="32x32" href="'+P2("assets/favicon-32x32.png")+'">');
-    add('<link rel="icon" type="image/png" sizes="16x16" href="'+P2("assets/favicon-16x16.png")+'">');
-    add('<link rel="shortcut icon" href="'+P2("assets/favicon.ico")+'">');
-    add('<link rel="apple-touch-icon" sizes="180x180" href="'+P2("assets/apple-touch-icon.png")+'">');
+    add('<link rel="icon" type="image/png" sizes="32x32" href="'+ASSET("favicon-32x32.png")+'">');
+    add('<link rel="icon" type="image/png" sizes="16x16" href="'+ASSET("favicon-16x16.png")+'">');
+    add('<link rel="shortcut icon" href="'+ASSET("favicon.ico")+'">');
+    add('<link rel="apple-touch-icon" sizes="180x180" href="'+ASSET("apple-touch-icon.png")+'">');
     add('<meta name="theme-color" content="#00ADB5">');
     if (!document.querySelector('meta[property="og:site_name"]')){
       add('<meta property="og:site_name" content="Vahini Technologies">');

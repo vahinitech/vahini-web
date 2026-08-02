@@ -10,12 +10,12 @@ ENV_NAME="${1:-stage}"
 case "${ENV_NAME}" in
   stage)
     COMPOSE_FILE="${DEPLOY_DIR}/docker-compose.stage.yml"
-    WEB_HEALTH_URL="http://127.0.0.1:3016/site/index.html"
+    WEB_HEALTH_URL="http://127.0.0.1:3016/"
     OCR_HEALTH_URL="http://127.0.0.1:3016/ocr/health"
     ;;
   prod)
     COMPOSE_FILE="${DEPLOY_DIR}/docker-compose.prod.yml"
-    WEB_HEALTH_URL="http://127.0.0.1:3015/site/index.html"
+    WEB_HEALTH_URL="http://127.0.0.1:3015/"
     OCR_HEALTH_URL="http://127.0.0.1:3015/ocr/health"
     ;;
   *)

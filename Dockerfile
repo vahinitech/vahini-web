@@ -52,7 +52,14 @@ RUN cp /etc/nginx/conf.d/vahini.conf /etc/nginx/conf.d/vahini.conf.orig \
 WORKDIR /usr/share/nginx/html
 COPY . .
 
+# The base image ships nginx's own welcome page as index.html (plus 50x.html)
+# in this directory. The COPY above does NOT overwrite them, because this repo
+# has no root index.html -- so /index.html served "Welcome to nginx!" in
+# production while / served the real site. Delete them; the site lives under
+# /site and every public URL is routed by deploy/nginx.conf.
+RUN rm -f index.html 50x.html
+
 EXPOSE 80
-HEALTHCHECK --interval=30s --timeout=3s CMD wget -q -O /dev/null http://localhost/site/index.html || exit 1
+HEALTHCHECK --interval=30s --timeout=3s CMD wget -q -O /dev/null http://localhost/ || exit 1
 
 CMD ["nginx", "-g", "daemon off;"]

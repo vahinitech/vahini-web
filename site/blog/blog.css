@@ -82,17 +82,17 @@
 .post-author .pa-av{width:24px; height:24px; border-radius:50%; display:grid; place-items:center; font-family:var(--sans); font-size:11px; font-weight:800; color:#fff; background:var(--accent-deep);}
 .post-author .pa-av.malli{background:var(--hot-deep);}
 
-/* AI summary band (centered, just under the hero) */
-.post-ai{background:var(--ivory-2); border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);}
-.post-ai .wrap{max-width:720px; padding-top:30px; padding-bottom:30px;}
-.post-ai__card{position:relative; background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg);
+/* Summary band (centered, just under the hero) */
+.post-sum{background:var(--ivory-2); border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);}
+.post-sum .wrap{max-width:720px; padding-top:30px; padding-bottom:30px;}
+.post-sum__card{position:relative; background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg);
   box-shadow:var(--shadow-1); padding:24px 26px;}
-.post-ai__tag{display:inline-flex; align-items:center; gap:8px; font-family:var(--sans); font-size:11px; font-weight:700;
+.post-sum__tag{display:inline-flex; align-items:center; gap:8px; font-family:var(--sans); font-size:11px; font-weight:700;
   letter-spacing:.1em; text-transform:uppercase; color:var(--accent-ink); margin-bottom:12px;}
-.post-ai__tag svg{width:15px; height:15px;}
-.post-ai__card p{font-size:16px; line-height:1.66; color:var(--elephant); margin:0;}
-.post-ai__card p + p{margin-top:12px;}
-.post-ai__note{margin-top:14px; font-size:12px; color:var(--hint); font-style:italic;}
+.post-sum__tag svg{width:15px; height:15px;}
+.post-sum__card p{font-size:16px; line-height:1.66; color:var(--elephant); margin:0;}
+.post-sum__card p + p{margin-top:12px;}
+.post-sum__note{margin-top:14px; font-size:12px; color:var(--hint); font-style:italic;}
 
 /* table of contents */
 .post-toc{background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-lg); padding:20px 24px; margin-bottom:34px;}
