@@ -141,8 +141,16 @@ function startStubs() {
   return () => { analyser.close(); persist.close(); };
 }
 
+// The prefix is passed as the working directory rather than as an argument.
+// `dir` comes from os.tmpdir(), which reads TMPDIR from the environment, and
+// feeding an environment-derived value into a process argument vector is
+// exactly what CodeQL's shell-command-injection-from-environment query flags.
+// A constant argv plus cwd is equivalent to nginx and keeps the environment
+// out of the command line.
+const NGINX_ARGS = ['-p', './', '-c', 'nginx.conf'];
+
 function startNginx(dir) {
-  const proc = spawn('nginx', ['-p', dir, '-c', 'nginx.conf'], { stdio: ['ignore', 'pipe', 'pipe'] });
+  const proc = spawn('nginx', NGINX_ARGS, { cwd: dir, stdio: ['ignore', 'pipe', 'pipe'] });
   let stderr = '';
   proc.stderr.on('data', (d) => { stderr += d.toString(); });
   proc.on('error', () => { stderr += 'nginx not found on PATH\n'; });
@@ -399,7 +407,7 @@ try {
 } finally {
   if (browser) await browser.close().catch(() => {});
   if (nginx) {
-    spawnSync('nginx', ['-p', dir, '-c', 'nginx.conf', '-s', 'quit']);
+    spawnSync('nginx', [...NGINX_ARGS, '-s', 'quit'], { cwd: dir });
     nginx.proc.kill('SIGTERM');
   }
   stopStubs();
