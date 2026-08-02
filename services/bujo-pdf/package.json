@@ -1,0 +1,15 @@
+{
+  "name": "vahini-bujo-pdf",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Bullet-journal PDF print service wrapping bujo.js",
+  "license": "LicenseRef-Vahini-Proprietary",
+  "type": "module",
+  "main": "server.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "bujo.js": "github:vahinitech/bujo.js#2ba2c0af5545f9e6c1723c30a13e019ae1ac2edc"
+  }
+}

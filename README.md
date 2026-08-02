@@ -26,8 +26,8 @@ site/         marketing website + blog (static; deploy this folder)
 analyser/     git submodule -> vahinitech/20factor-analyser (AGPL-3.0), served at /analyser
 deploy/       nginx vhosts + release scripts
 docs/         this site's own deploy/persistence/blog/stall-demo docs
-services/     the persist API (uploads/reports/feedback)
-docker-compose.yml   local full stack (web + analyser OCR + persist)
+services/     the persist API (uploads/reports/feedback) + bujo-pdf (bullet-journal PDF printing)
+docker-compose.yml   local full stack (web + analyser OCR + persist + bujo-pdf)
 ```
 
 Scratch/PII folders (`uploads/`, `samples/`, `archive/`, `screenshots/`) and
@@ -61,6 +61,7 @@ make help        # every target, including release + certbot wrappers
 
 - http://localhost:8080 -> marketing site
 - http://localhost:8080/analyser/analyser.html -> the analyser
+- http://localhost:8080/site/planner.html -> bullet-journal PDF printer (bujo.js)
 
 Without make, the equivalent is `docker compose up --build -d --wait`.
 For front-end-only work with no Docker: `make site` (static server on :4173).

@@ -52,6 +52,21 @@ services:
       timeout: 5s
       retries: 3
 
+  bujo:
+    container_name: vahini-bujo-prod
+    build:
+      context: ..
+      dockerfile: services/bujo-pdf/Dockerfile
+    image: vahini/bujo-pdf:prod
+    restart: unless-stopped
+    environment:
+      - PORT=8091
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8091/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
   web:
     container_name: vahini-site-prod
     build:
@@ -66,6 +81,8 @@ services:
       analyser:
         condition: service_healthy
       persist:
+        condition: service_healthy
+      bujo:
         condition: service_healthy
     ports:
       - "127.0.0.1:3015:80"

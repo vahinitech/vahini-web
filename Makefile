@@ -87,7 +87,8 @@ wait: ## wait until web + analyser + persist answer through nginx
 smoke: ## curl every service through nginx (stack must be up)
 	@set -e; \
 	for path in /site/index.html /site/investor.html /site/developers.html \
-	            /analyser/analyser.html /ocr/health /persist/health; do \
+	            /site/planner.html /analyser/analyser.html /ocr/health \
+	            /persist/health /bujo/health; do \
 		code=$$(curl -s -o /dev/null -w "%{http_code}" $(WEB_URL)$$path); \
 		echo "  $$code  $$path"; \
 		[ "$$code" = "200" ] || { echo "SMOKE FAIL: $$path returned $$code"; exit 1; }; \

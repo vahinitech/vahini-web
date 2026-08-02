@@ -1,0 +1,23 @@
+# SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
+# © 2026 Vahini Technologies. All rights reserved.
+#
+# Per-Dockerfile ignore file for services/bujo-pdf/Dockerfile (BuildKit
+# convention: <dockerfile-name>.dockerignore next to the Dockerfile FULLY
+# REPLACES the root .dockerignore for this build). The build context is the
+# repo root (see docker-compose.yml), so trim everything the image does not
+# COPY to keep builds fast.
+.git
+node_modules/
+analyser/
+samples/
+archive/
+screenshots/
+uploads/
+shots/
+scraps/
+site/
+docs/
+tests/
+tools/
+deploy/
+*.md
