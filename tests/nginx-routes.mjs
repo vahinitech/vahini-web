@@ -337,7 +337,8 @@ async function testPagesLoadCleanly(browser) {
   // The one that would have caught the events-photo outage: real browser,
   // public URL, every subresource must come back 200.
   const pages = ['/', '/events.html', '/about.html', '/product.html', '/awards.html',
-                 '/press.html', '/blog/index.html', '/blog/a-computer-in-a-pen.html'];
+                 '/press.html', '/blog/index.html', '/blog/a-computer-in-a-pen.html',
+                 '/404.html'];
   const bad = [];
   for (const url of pages) {
     const page = await browser.newPage({ viewport: { width: 1440, height: 2400 } });
@@ -368,6 +369,31 @@ async function testPagesLoadCleanly(browser) {
   }
   if (bad.length) fail('pages load with every subresource 200', bad.join('\n     '));
   else ok(`pages load with every subresource 200 (${pages.length} pages)`);
+}
+
+async function testErrorPageAssets() {
+  // The 404 page is served by error_page at whatever depth the miss happened,
+  // so a relative asset ref in it resolves against a different directory every
+  // time -- a 404 inside the 404. Check the real error path at several depths,
+  // not just a direct GET of /404.html.
+  const misses = ['/no-such-page.html', '/blog/no-such-post.html',
+                  '/site/no/such/thing.html', '/deep/er/still/missing.html'];
+  const bad = [];
+  for (const m of misses) {
+    const r = await fetch(BASE + m, { redirect: 'follow' });
+    const body = await r.text();
+    if (r.status !== 404) { bad.push(`${m}: expected 404, got ${r.status}`); continue; }
+    for (const src of [...body.matchAll(/<img[^>]*?\ssrc=["']([^"']+)["']/gi)].map((x) => x[1])) {
+      if (!src.startsWith('/')) {
+        bad.push(`${m}: 404 page references "${src}" relatively; it must be an absolute path`);
+        continue;
+      }
+      const a = await fetch(BASE + src);
+      if (a.status !== 200) bad.push(`${m}: 404 page's ${src} returned ${a.status}`);
+    }
+  }
+  if (bad.length) fail('the 404 page and its assets serve at every depth', bad.join('\n     '));
+  else ok(`the 404 page and its assets serve at every depth (${misses.length} depths)`);
 }
 
 function testNoAssetLeakedToAnalyser() {
@@ -407,6 +433,7 @@ try {
   await testSitemap();
   await testCanonicalDuplicates();
   await testNoStockNginxPage();
+  await testErrorPageAssets();
 
   const { chromium } = await import('playwright');
   // VAHINI_CHROMIUM_PATH lets a machine with a system Chromium run this

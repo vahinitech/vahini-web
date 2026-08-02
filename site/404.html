@@ -3,7 +3,12 @@
 <!-- SPDX-License-Identifier: LicenseRef-Vahini-Proprietary
      © 2026 Vahini Technologies. All rights reserved.
      Served by nginx's error_page 404 with a real 404 status - never
-     rewrite misses to the home page with a 200 (soft 404). -->
+     rewrite misses to the home page with a 200 (soft 404).
+
+     The illustration is referenced by ABSOLUTE path. This page answers at
+     every depth (/nope.html, /blog/nope.html, /site/x/nope.html), so a
+     relative src would resolve against a different directory each time and
+     404 inside the 404. -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,16 +16,29 @@
 <title>Page not found | Vahini</title>
 <style>
   body{margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
-    background:#f4f4f2; color:#1c2128; font-family:system-ui,'Segoe UI',sans-serif;}
-  main{text-align:center; padding:32px; max-width:480px;}
+    background:#fff; color:#1c2128; font-family:system-ui,'Segoe UI',sans-serif;}
+  main{text-align:center; padding:32px; max-width:520px;}
+  /* aspect-ratio matches the file's real 880x683, so the space is reserved
+     before the image arrives and the copy below never jumps. */
+  img{display:block; width:100%; max-width:420px; height:auto; aspect-ratio:880/683;
+    margin:0 auto 8px;}
   h1{font-size:56px; margin:0 0 8px; letter-spacing:-.02em;}
   p{color:#5a6470; line-height:1.6; margin:0 0 24px;}
   a{display:inline-block; background:#048a91; color:#fff; text-decoration:none;
     font-weight:700; padding:13px 22px; border-radius:12px;}
+  a:hover{background:#03767c;}
+  @media (max-width:480px){
+    img{max-width:280px;}
+    h1{font-size:44px;}
+  }
 </style>
 </head>
 <body>
   <main>
+    <!-- Decorative: the illustration's own "PAGE NOT FOUND" lettering is
+         already carried by the heading and the sentence below it, so an alt
+         string here would read the same thing twice. -->
+    <img src="/site/assets/404-astronaut.png" alt="" width="880" height="683">
     <h1>404</h1>
     <p>That page isn't here. The ink dried somewhere else.</p>
     <a href="/">Back to the home page</a>
