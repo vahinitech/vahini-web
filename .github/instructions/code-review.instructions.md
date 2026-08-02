@@ -72,11 +72,27 @@ mistakes before they ship — review accordingly.
   prod destroy each other's containers on deploy (real incident,
   2026-07-20).
 
+## Voice and AI Provenance
+
+- **Flag any reader-facing text that labels our own content as
+  AI-written**: "AI summary", "machine-generated", "AI-generated",
+  "written by AI" and equivalents. Our posts carry an author byline and
+  are edited before publishing, so that framing describes the drafting
+  tool rather than what a reader is getting. Applies to markup, class
+  names, ids, filenames and comments for those blocks (`post-sum__*`,
+  never `post-ai__*`). Describing the PRODUCT's AI (the analyser, the
+  recognition engine) is accurate and stays.
+- **Flag em dashes in published copy.** The site uses none; commas,
+  colons and full stops carry the same sentences without reading as
+  machine-written.
+- **Flag AI-isms** in new copy or comments: "delve", "seamless", "robust
+  solution", "leverage", "It's important to note", filler superlatives.
+
 ## Review Style
 
 - Be specific: cite the exact selector, file path, or line, not "this
   could be cleaner."
-- No AI-isms in review comments or suggested copy — plain, direct language.
+- No AI-isms in review comments or suggested copy: plain, direct language.
 - If a PR touches `deploy/` and isn't purely docs, ask whether it's been
   tested against a real render (Playwright screenshot or a manual
   browser check), not just read for correctness — several real bugs here

@@ -15,10 +15,23 @@
   unattributed code reuse is an IP risk, and it applies with extra force
   to AI-assisted changes, since a model can reproduce code it saw during
   training without anyone noticing the provenance.
-- **No AI-isms** in site copy, commit messages, or docs: no "delve",
-  "seamless", "robust solution", "leverage", "It's important to note",
-  "in today's fast-paced world", or filler superlatives. Write like the
-  existing pages: plain, specific, confident.
+- **No AI-isms** in site copy, commit messages, docs, or code comments:
+  no "delve", "seamless", "robust solution", "leverage", "It's important
+  to note", "in today's fast-paced world", or filler superlatives. Write
+  like the existing pages: plain, specific, confident.
+- **No em dashes in published copy.** The site uses none today (checked:
+  zero across every page and post); commas, colons and full stops carry
+  the same sentences and do not read as machine-written. Hyphens in
+  compound words are fine.
+- **Never label our own content as AI-written.** No "AI summary",
+  "machine-generated", "AI-generated", "written by AI" or equivalent in
+  reader-facing text, and no `ai` in class names, ids, filenames or
+  comments for those blocks: a summary block is `post-sum__*`, not
+  `post-ai__*`. Posts carry an author byline and are edited before
+  publishing, so that framing describes the drafting tool rather than
+  what the reader is getting, and it undercuts the writing. This is
+  about our OWN content: describing the PRODUCT's AI (the analyser, the
+  recognition engine) is accurate and stays.
 - **Conventional commits** (`feat:`, `fix:`, `docs:`, `chore:`), imperative
   mood, body explains why. Match the existing `git log` style.
 - **Build and test before every commit.** CI (`.github/workflows/ci.yml`:
