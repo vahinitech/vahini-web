@@ -21,6 +21,7 @@
  *   node tests/e2e-pages.mjs
  */
 import { spawn } from 'node:child_process';
+import { assertPortFree, stopOnExit } from './lib/local-port.mjs';
 import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
@@ -35,14 +36,20 @@ const fail = (name, detail = '') => results.push({ name, ok: false, detail });
 
 const bin = (name) => path.join(ROOT, 'node_modules', '.bin', process.platform === 'win32' ? `${name}.cmd` : name);
 
-function startServer() {
+async function startServer() {
+  // A server left over from an interrupted run would answer on this port with
+  // ITS files, so the suite would silently grade an older tree. Refuse instead.
+  await assertPortFree(PORT, 'the local static server');
   const server = spawn(bin('http-server'), ['.', '-p', String(PORT), '-c-1', '--silent'], {
     cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'],
   });
+  // Killing only in the finally below left the server orphaned on Ctrl-C,
+  // holding the port for every later run.
+  const stop = stopOnExit(server);
   let log = '';
   server.stdout.on('data', (c) => { log += c; });
   server.stderr.on('data', (c) => { log += c; });
-  return { server, getLog: () => log };
+  return { server, stop, getLog: () => log };
 }
 
 async function serverUp() {
@@ -69,8 +76,18 @@ async function checkPage(page, url, mustContain, label) {
 }
 
 async function main() {
+  // Reusing a server someone already has running is a convenience, but it is
+  // also how a stale one from an older checkout ends up grading this run, so
+  // say so out loud rather than reusing it silently.
   const alreadyUp = await serverUp();
-  const local = alreadyUp ? null : startServer();
+  if (alreadyUp) {
+    console.warn(
+      `NOTE: reusing the server already listening on ${PORT}; this run tests ` +
+      `whatever IT serves, not necessarily this working tree.\n` +
+      `      To test this checkout instead: lsof -ti tcp:${PORT} | xargs kill`
+    );
+  }
+  const local = alreadyUp ? null : await startServer();
   try {
     await waitForServer();
     const { chromium } = await import('playwright');
@@ -94,7 +111,7 @@ async function main() {
       console.error('Missing Chromium deps. Run: ./node_modules/.bin/playwright install --with-deps chromium');
     }
   } finally {
-    if (local) local.server.kill('SIGTERM');
+    if (local) local.stop();
   }
 
   let passed = 0;

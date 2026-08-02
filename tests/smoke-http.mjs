@@ -2,6 +2,7 @@
    © 2026 Vahini Technologies. All rights reserved. */
 import { spawn } from 'node:child_process';
 import { setTimeout as delay } from 'node:timers/promises';
+import { assertPortFree, stopOnExit } from './lib/local-port.mjs';
 
 const PORT = 4173;
 const BASE_URL = `http://127.0.0.1:${PORT}`;
@@ -34,9 +35,13 @@ async function waitForReady() {
 }
 
 async function run() {
+  await assertPortFree(PORT, 'the smoke-test server');
   const server = spawn('./node_modules/.bin/http-server', ['.', '-p', String(PORT), '-c-1'], {
     stdio: ['ignore', 'pipe', 'pipe']
   });
+  // Also tears down on SIGINT/SIGTERM: killing only in the finally below left
+  // the server orphaned on Ctrl-C, holding the port for every later run.
+  const stopServer = stopOnExit(server);
 
   let startupLog = '';
   server.stdout.on('data', (chunk) => {
@@ -64,7 +69,7 @@ async function run() {
     }
     throw err;
   } finally {
-    server.kill('SIGTERM');
+    stopServer();
   }
 }
 

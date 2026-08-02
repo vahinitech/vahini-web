@@ -45,6 +45,11 @@ sudo apt-get install -y nginx-light   # once, for the routing test
 npm run test:routes                   # nginx-routes.mjs
 ```
 
+If a run dies to Ctrl-C, its server is torn down with it, and every harness
+refuses to start when its port is already taken rather than quietly grading
+whatever else is listening. If you do see `port 4173 is already in use`, the
+message names the fix (`lsof -ti tcp:4173 | xargs kill`).
+
 `test:routes` needs `nginx` on PATH. On a machine with a system Chromium
 instead of Playwright's download, point it at the binary:
 `VAHINI_CHROMIUM_PATH=/path/to/chrome npm run test:routes`. Set

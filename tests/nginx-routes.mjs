@@ -43,6 +43,7 @@ import { fileURLToPath } from 'node:url';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { assertPortFree, stopOnExit } from './lib/local-port.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PORT = Number(process.env.VAHINI_ROUTES_PORT || 8099);
@@ -151,6 +152,9 @@ const NGINX_ARGS = ['-p', './', '-c', 'nginx.conf'];
 
 function startNginx(dir) {
   const proc = spawn('nginx', NGINX_ARGS, { cwd: dir, stdio: ['ignore', 'pipe', 'pipe'] });
+  // Without this, Ctrl-C leaves nginx running on the port and the next run
+  // silently tests THAT instance's config instead of the one under test.
+  stopOnExit(proc);
   let stderr = '';
   proc.stderr.on('data', (d) => { stderr += d.toString(); });
   proc.on('error', () => { stderr += 'nginx not found on PATH\n'; });
@@ -424,6 +428,13 @@ try {
   if (spawnSync('nginx', ['-v']).error) {
     console.error('nginx is not on PATH. Install it first:\n  sudo apt-get install -y nginx-light');
     process.exit(1);
+  }
+  // All three ports must be clear: an nginx left over from an interrupted run
+  // would answer with ITS config, which is precisely what this suite asserts on.
+  for (const [p, what] of [[PORT, 'the routing harness'],
+                           [ANALYSER_PORT, 'the analyser stub'],
+                           [PERSIST_PORT, 'the persist stub']]) {
+    await assertPortFree(p, what, '127.0.0.1');
   }
   buildConfig(dir);
   stopStubs = startStubs();
