@@ -191,6 +191,20 @@ async function chase(url, max = 5) {
   return { status: 508, final: cur, hops: max + 1, chain };
 }
 
+// Deliberately NOT one regex over the whole document. A pattern like
+// /<link[^>]+rel=...[^>]+href=.../ has two unbounded quantifiers separated by
+// literals, which backtracks quadratically on long non-matching input -- and
+// it only matches when rel happens to precede href. Splitting into tags first
+// keeps every quantifier linear and makes attribute order irrelevant.
+function canonicalHref(html) {
+  for (const tag of html.match(/<link\b[^>]*>/gi) || []) {
+    if (!/\brel\s*=\s*["']canonical["']/i.test(tag)) continue;
+    const href = tag.match(/\bhref\s*=\s*["']([^"']*)["']/i);
+    if (href) return href[1];
+  }
+  return null;
+}
+
 function publicUrlOf(file) {
   const rel = path.relative(path.join(ROOT, 'site'), file).split(path.sep).join('/');
   return rel === 'index.html' ? '/' : `/${rel}`;
@@ -271,17 +285,16 @@ async function testCanonicalTags() {
   let checked = 0;
   for (const file of sitePages()) {
     const url = publicUrlOf(file);
-    const html = fs.readFileSync(file, 'utf8');
-    const m = html.match(/<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/i);
-    if (!m) continue;
+    const href = canonicalHref(fs.readFileSync(file, 'utf8'));
+    if (!href) continue;
     checked++;
     // Absolute, on our host: a relative canonical resolves against whatever
     // URL the page was reached at, which is the opposite of the point.
-    if (!m[1].startsWith(CANONICAL_HOST)) {
-      bad.push(`${url}: canonical "${m[1]}" is not an absolute ${CANONICAL_HOST} URL`);
+    if (!href.startsWith(CANONICAL_HOST)) {
+      bad.push(`${url}: canonical "${href}" is not an absolute ${CANONICAL_HOST} URL`);
       continue;
     }
-    const want = m[1].slice(CANONICAL_HOST.length) || '/';
+    const want = href.slice(CANONICAL_HOST.length) || '/';
     // The named URL must be the one that serves, not one that redirects.
     const target = await chase(want);
     if (target.hops !== 0 || target.status !== 200) {
