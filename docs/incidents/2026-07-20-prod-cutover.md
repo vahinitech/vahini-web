@@ -62,7 +62,7 @@ recreated them to match prod's definition — i.e. destroyed them.
 This was symmetric risk: the next unmodified `release.sh stage` run would
 just as easily have clobbered prod.
 
-**Fix:** [PR #26](https://github.com/vahinitech/web-live/pull/26) adds an
+**Fix:** [PR #26](https://github.com/vahinitech/vahini-web/pull/26) adds an
 explicit `name:` to all three compose files (`vahini-stage`, `vahini-prod`,
 `vahini-local`), so each environment gets its own isolated project namespace
 regardless of invoking directory. `deploy/release.sh` needed no change — it

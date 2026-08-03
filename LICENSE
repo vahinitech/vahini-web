@@ -3,13 +3,15 @@ Vahini Technologies - Proprietary License
 
 Copyright (c) 2026 Vahini Technologies. All rights reserved.
 
-This repository - the Vahini marketing website, investor materials and related
-deliverables - is PROPRIETARY and CONFIDENTIAL software of Vahini Technologies.
+This repository - the Vahini marketing website, investor pages and related
+deliverables - is PROPRIETARY software of Vahini Technologies.
 
-No part of this repository may be copied, reproduced, modified, published,
-uploaded, posted, transmitted, reverse-engineered, decompiled, disassembled, or
-distributed in any form or by any means without the prior written permission of
-Vahini Technologies.
+This repository is publicly readable. That is a decision to publish the source
+for inspection; it is NOT a grant of any licence and NOT a dedication to the
+public domain. No part of this repository may be copied, reproduced, modified,
+published, uploaded, posted, transmitted, reverse-engineered, decompiled,
+disassembled, or distributed in any form or by any means without the prior
+written permission of Vahini Technologies.
 
 EXCEPTION - the analyser engine:
 The "analyser/" directory is licensed separately under the GNU Affero General
@@ -20,9 +22,14 @@ ONLY to the contents of analyser/, not to the rest of this repository.
 Dual-IMU handwriting-motion sensing on ordinary paper is protected under Indian
 Patent No. 584433. Vahini Technologies is recognised by DPIIT.
 
-Permission to view the public website does not grant any licence to the
-underlying source code, algorithms, or models, except as stated above for the
-analyser engine.
+Permission to view the public website, or to read this repository, does not
+grant any licence to the underlying source code, algorithms, or models, except
+as stated above for the analyser engine.
+
+CONTRIBUTIONS
+-------------
+Vahini Technologies does not accept outside code contributions to this
+repository. Any unsolicited change submitted here is not merged.
 
 THIRD-PARTY COMPONENTS
 ----------------------
