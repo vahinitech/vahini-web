@@ -18,7 +18,7 @@ services:
       - HF_HOME=/data/hf-cache
       - HUGGING_FACE_HUB_TOKEN=${HUGGING_FACE_HUB_TOKEN:-}
     volumes:
-      - /home/vishnu/chandra-models:/data/hf-cache
+      - ${VAHINI_DATA_ROOT:-${HOME}}/chandra-models:/data/hf-cache
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request,sys;sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/v1/models', timeout=5).getcode()==200 else 1)"]
       interval: 30s

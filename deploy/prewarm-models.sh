@@ -7,6 +7,8 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DEPLOY_DIR="${ROOT_DIR}/deploy"
 ENV_NAME="${1:-stage}"
 LANGS_RAW="${2:-}"
+# Host root for all persisted data; the compose files mount subdirs of it.
+export VAHINI_DATA_ROOT="${VAHINI_DATA_ROOT:-${HOME}}"
 
 case "${ENV_NAME}" in
   stage)
@@ -27,7 +29,7 @@ if [[ -z "${LANGS_RAW}" ]]; then
 fi
 
 # Keep cache on host so container rebuild/restart does not re-download models.
-mkdir -p /home/vishnu/paddle-models/.paddlex
+mkdir -p "${VAHINI_DATA_ROOT}/paddle-models/.paddlex"
 
 echo "[prewarm] environment=${ENV_NAME}"
 echo "[prewarm] compose=${COMPOSE_FILE}"
@@ -47,4 +49,4 @@ docker compose -f "${COMPOSE_FILE}" exec -T \
   analyser \
   python /app/backend/warmup_models.py
 
-echo "[prewarm] done. Cache volume path: /home/vishnu/paddle-models/.paddlex"
+echo "[prewarm] done. Cache volume path: ${VAHINI_DATA_ROOT}/paddle-models/.paddlex"

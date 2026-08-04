@@ -1,4 +1,4 @@
-# CLAUDE.md — web-live (vahinitech.com marketing site)
+# CLAUDE.md — vahini-web (vahinitech.com marketing site, formerly web-live)
 
 ## Working rules (apply to every change)
 

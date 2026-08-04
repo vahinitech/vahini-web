@@ -83,7 +83,7 @@ For a routine content/code update once that's already set up, on the
 server:
 
 ```bash
-cd ~/web-live
+cd ~/vahini-web   # or wherever this repo is cloned on the server
 git checkout main
 git pull origin main
 
@@ -102,7 +102,7 @@ site exactly as it was.
 
 This sequence is normally exactly two commands (stage, verify, prod) — no
 extra steps. The one exception: after the Compose project-name fix
-([#26](https://github.com/vahinitech/web-live/pull/26)), the very next prod
+([#26](https://github.com/vahinitech/vahini-web/pull/26)), the very next prod
 release needed a one-time manual `docker stop && docker rm` of the
 old-labeled prod containers first, documented in
 `docs/DEPLOY-STAGE-PROD.md`'s Notes section — that was a one-off migration

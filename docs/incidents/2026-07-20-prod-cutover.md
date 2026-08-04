@@ -4,7 +4,9 @@
 # Incident report: vahinitech.com production cutover (2026-07-20)
 
 **What happened:** cutting `vahinitech.com` over from the old `vahini-vd-*`
-stack to web-live surfaced two real, pre-existing infrastructure bugs and one
+stack to web-live (this repo, since renamed `vahini-web`; the historical name
+is kept below because it was the literal Compose project label at the time)
+surfaced two real, pre-existing infrastructure bugs and one
 mistake made while fixing the first one. Staging went down for several
 minutes mid-cutover; production itself never went down, but briefly served
 OCR requests through the wrong backend after the cutover completed. Both are
@@ -62,7 +64,7 @@ recreated them to match prod's definition — i.e. destroyed them.
 This was symmetric risk: the next unmodified `release.sh stage` run would
 just as easily have clobbered prod.
 
-**Fix:** [PR #26](https://github.com/vahinitech/web-live/pull/26) adds an
+**Fix:** [PR #26](https://github.com/vahinitech/vahini-web/pull/26) adds an
 explicit `name:` to all three compose files (`vahini-stage`, `vahini-prod`,
 `vahini-local`), so each environment gets its own isolated project namespace
 regardless of invoking directory. `deploy/release.sh` needed no change — it
@@ -217,7 +219,7 @@ assuming the application code is at fault. Two independently-confirmed
 - `vahinitech.com`'s Hestia account is `vahini25` — note this is just how
   Hestia organizes the *hosting account*, unrelated to which application is
   actually deployed behind it (as of 2026-05-30, `vahini25`'s nginx config
-  proxies to the `vahini-vd-*` / now web-live Docker stack, not to anything
+  proxies to the `vahini-vd-*` / now vahini-web Docker stack, not to anything
   running as the `vahini25` user).
 - `include /etc/nginx/conf.d/*.conf;` **and**
   `include /etc/nginx/conf.d/domains/*.conf;` are both active (confirmed via

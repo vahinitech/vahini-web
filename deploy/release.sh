@@ -6,6 +6,10 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DEPLOY_DIR="${ROOT_DIR}/deploy"
 ENV_NAME="${1:-stage}"
+# Host root for all persisted data (uploads/reports/feedback/insights and
+# model caches); the compose files mount subdirs of it. Defaults to the
+# deploying user's home so no path is baked into the repo.
+export VAHINI_DATA_ROOT="${VAHINI_DATA_ROOT:-${HOME}}"
 
 case "${ENV_NAME}" in
   stage)
@@ -26,6 +30,9 @@ esac
 
 echo "[release] environment=${ENV_NAME}"
 echo "[release] compose=${COMPOSE_FILE}"
+echo "[release] data root=${VAHINI_DATA_ROOT}"
+mkdir -p "${VAHINI_DATA_ROOT}/uploads" "${VAHINI_DATA_ROOT}/reports" \
+  "${VAHINI_DATA_ROOT}/feedback" "${VAHINI_DATA_ROOT}/insights"
 
 echo "[release] syncing analyser submodule (vahinitech/20factor-analyser)"
 git -C "${ROOT_DIR}" submodule sync --recursive -- analyser
@@ -39,8 +46,10 @@ if [[ ! -f "${ROOT_DIR}/analyser/deployment/Dockerfile" ]]; then
 fi
 echo "[release] analyser submodule pinned at $(git -C "${ROOT_DIR}/analyser" rev-parse --short HEAD)"
 
-docker compose -f "${COMPOSE_FILE}" build --pull analyser web
-docker compose -f "${COMPOSE_FILE}" up -d --remove-orphans analyser web
+# persist is built/upped too: its env and volume mounts change with releases
+# (e.g. the insights split), and nothing else redeploys it.
+docker compose -f "${COMPOSE_FILE}" build --pull analyser web persist
+docker compose -f "${COMPOSE_FILE}" up -d --remove-orphans analyser web persist
 
 echo "[release] waiting for ${WEB_HEALTH_URL}"
 for _ in $(seq 1 40); do
