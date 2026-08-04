@@ -38,6 +38,7 @@ const child = spawn(process.execPath, ["services/persist-api/server.js"], {
     PERSIST_UPLOADS_DIR: join(dataDir, "uploads"),
     PERSIST_REPORTS_DIR: join(dataDir, "reports"),
     PERSIST_FEEDBACK_DIR: join(dataDir, "feedback"),
+    PERSIST_INSIGHTS_DIR: join(dataDir, "insights"),
     // Small limits so every ceiling is reachable in a fast test.
     RATE_WINDOW_MS: "60000",
     RATE_MAX_REQUESTS: "50",
@@ -93,6 +94,31 @@ try {
     check("feedback accepted", res.status === 200 && body.ok === true && typeof body.id === "string");
     const text = JSON.stringify(body);
     check("no filesystem paths leaked", !/(\/data\/|Path")/.test(text), text);
+  }
+
+  // 1b. Telemetry (kind: "pageview") is accepted but never gets a per-event
+  // file in the feedback dir -- it only appends to the daily insights
+  // stream. A widget submission (kind: "feedback") still gets its own file.
+  // On prod, per-pageview files had buried real feedback 425:1 (2026-08).
+  {
+    const ip = "203.0.113.30";
+    const pv = await post(
+      "/persist/feedback",
+      JSON.stringify({ kind: "pageview", page: "/site/index.html", data: { topic: "home" } }),
+      { ip }
+    );
+    const pvBody = await pv.json();
+    check("pageview accepted", pv.status === 200 && pvBody.ok === true && typeof pvBody.id === "string");
+    const feedbackFiles = readdirSync(join(dataDir, "feedback"));
+    check("pageview writes no per-event feedback file", !feedbackFiles.some((f) => f.includes(pvBody.id)));
+    const day = new Date().toISOString().slice(0, 10);
+    const streamPath = join(dataDir, "insights", `insights-${day}.ndjson`);
+    check("pageview appended to insights stream", existsSync(streamPath) && readFileSync(streamPath, "utf8").includes(pvBody.id));
+
+    const fb = await post("/persist/feedback", JSON.stringify({ kind: "feedback", message: "widget" }), { ip });
+    const fbBody = await fb.json();
+    check("widget submission accepted", fb.status === 200 && fbBody.ok === true);
+    check("widget submission gets its own file", existsSync(join(dataDir, "feedback", `${fbBody.id}.json`)));
   }
 
   // 2. Oversized feedback body -> 413 (cap is 1KB in this test).

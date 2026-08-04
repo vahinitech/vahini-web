@@ -13,6 +13,7 @@ const PORT = Number(process.env.PORT || 8090);
 const DIR_UPLOADS = process.env.PERSIST_UPLOADS_DIR || "/data/uploads";
 const DIR_REPORTS = process.env.PERSIST_REPORTS_DIR || "/data/reports";
 const DIR_FEEDBACK = process.env.PERSIST_FEEDBACK_DIR || "/data/feedback";
+const DIR_INSIGHTS = process.env.PERSIST_INSIGHTS_DIR || "/data/insights";
 
 /* ---- Abuse limits ---------------------------------------------------------
    nginx in front of this service already rate-limits /persist/ per IP and
@@ -124,6 +125,7 @@ async function ensureDirs() {
   await fsp.mkdir(DIR_UPLOADS, { recursive: true });
   await fsp.mkdir(DIR_REPORTS, { recursive: true });
   await fsp.mkdir(DIR_FEEDBACK, { recursive: true });
+  await fsp.mkdir(DIR_INSIGHTS, { recursive: true });
 }
 
 function nowStamp() {
@@ -434,13 +436,20 @@ async function handleFeedback(req, res, clientIp) {
     send(res, 429, { ok: false, error: "Daily quota exceeded" }, { "Retry-After": "86400" });
     return;
   }
-  const feedbackId = id("feedback");
+  // vahini-insights.js funnels two different things through this endpoint:
+  // real feedback-widget submissions (kind === "feedback") and per-page-load
+  // telemetry (kind === "pageview"). Telemetry only appends to a daily
+  // NDJSON stream in DIR_INSIGHTS; giving every page load its own file
+  // buried the actual feedback in DIR_FEEDBACK under hundreds of pageview
+  // files (425 of 426 on prod, 2026-08). Posts without a kind (direct API
+  // callers, text/plain fallback) are still treated as feedback.
+  const kind = typeof (json && json.kind) === "string" ? json.kind : "";
+  const isTelemetry = Boolean(kind) && kind !== "feedback";
+  const recId = id(isTelemetry ? "insight" : "feedback");
   const day = new Date().toISOString().slice(0, 10);
-  const filePath = path.join(DIR_FEEDBACK, `${feedbackId}.json`);
-  const streamPath = path.join(DIR_FEEDBACK, `feedback-${day}.ndjson`);
 
   const rec = {
-    id: feedbackId,
+    id: recId,
     ts: new Date().toISOString(),
     payload: json,
     raw: raw.length && !Object.keys(json || {}).length ? raw.toString("utf8") : "",
@@ -452,10 +461,14 @@ async function handleFeedback(req, res, clientIp) {
     ip: clientIp,
   };
 
-  await fsp.writeFile(filePath, JSON.stringify(rec, null, 2), "utf8");
-  await appendNdjson(streamPath, rec);
+  if (isTelemetry) {
+    await appendNdjson(path.join(DIR_INSIGHTS, `insights-${day}.ndjson`), rec);
+  } else {
+    await fsp.writeFile(path.join(DIR_FEEDBACK, `${recId}.json`), JSON.stringify(rec, null, 2), "utf8");
+    await appendNdjson(path.join(DIR_FEEDBACK, `feedback-${day}.ndjson`), rec);
+  }
 
-  send(res, 200, { ok: true, id: feedbackId });
+  send(res, 200, { ok: true, id: recId });
 }
 
 // Returns true when the request was fully answered here. Cross-origin
@@ -537,8 +550,8 @@ server.headersTimeout = 15 * 1000;
 server.requestTimeout = 120 * 1000;
 
 /* ---- Disk sweeper (lib/sweeper.js) --------------------------------------
-   The persist volume only ever grows (uploads + reports + feedback, no
-   deletes). Nightly, files older than SWEEP_COMPRESS_DAYS are gzipped in
+   The persist volume only ever grows (uploads + reports + feedback +
+   insights, no deletes). Nightly, files older than SWEEP_COMPRESS_DAYS are gzipped in
    place (JSON/HTML shrink 80-90%; incompressible JPEGs are skipped and
    remembered). Deletion is opt-in only: SWEEP_EVICT_DAYS drops files older
    than the horizon, SWEEP_CAP_MB sweeps oldest-first back under the cap.
@@ -560,7 +573,7 @@ async function runSweep() {
   sweeping = true;
   try {
     const stats = await sweep({
-      dirs: [DIR_UPLOADS, DIR_REPORTS, DIR_FEEDBACK],
+      dirs: [DIR_UPLOADS, DIR_REPORTS, DIR_FEEDBACK, DIR_INSIGHTS],
       compressDays: SWEEP_COMPRESS_DAYS,
       evictDays: SWEEP_EVICT_DAYS,
       capMB: SWEEP_CAP_MB,
@@ -585,6 +598,7 @@ ensureDirs()
       console.log(`uploads=${DIR_UPLOADS}`);
       console.log(`reports=${DIR_REPORTS}`);
       console.log(`feedback=${DIR_FEEDBACK}`);
+      console.log(`insights=${DIR_INSIGHTS}`);
       if (SWEEP_ENABLE) {
         runSweep(); // once at boot, then daily
         if (SWEEP_INTERVAL_H > 0) {

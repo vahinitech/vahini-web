@@ -334,7 +334,10 @@
 
   /* ---------- boot ---------- */
   function boot() {
-    try { profile(); send("pageview", { topic: topicOf(), title: document.title }); } catch (e) {}
+    // Pageview telemetry lands in the server's insights stream, never as a
+    // per-event feedback file; set VAHINI_INSIGHTS.pageviews = false to turn
+    // it off entirely.
+    try { profile(); if (CFG.pageviews !== false) send("pageview", { topic: topicOf(), title: document.title }); } catch (e) {}
     try { flush((window.VAHINI_INSIGHTS && window.VAHINI_INSIGHTS.endpoint) || ""); } catch (e) {}
     if (CFG.launcher !== false) launcher();
     // prompt for feedback after a report PDF is produced (Analyser only)
