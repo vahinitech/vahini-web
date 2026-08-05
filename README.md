@@ -1,10 +1,19 @@
-# Vahini — Website (internal)
+# Vahini — Website
 
 **Proprietary © 2026 Vahini Technologies. All rights reserved.** See [LICENSE](LICENSE).
 
-This is the **private** repository for the Vahini marketing website, the investor
-materials, the blog, and the printable deliverables. It is not for public
-distribution.
+This repository holds the Vahini marketing website, the investor pages, the blog
+and the printable deliverables.
+
+The source is **public to read, but it is not open source.** Being able to see
+this code does not grant a licence to copy, modify, redistribute or deploy it.
+The one exception is the `analyser/` submodule, which is AGPL-3.0 and lives in
+its own repository. See [LICENSE](LICENSE) for the exact terms.
+
+We are not accepting outside code contributions to this repository. Bug reports
+about the live site are welcome at info@vahinitech.com, and security issues at
+security@vahinitech.com (see
+[/.well-known/security.txt](https://vahinitech.com/.well-known/security.txt)).
 
 > The 20-factor analyser engine is **open source** under the GNU AGPL-3.0 and
 > lives in its own public repository:
