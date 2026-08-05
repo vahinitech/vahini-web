@@ -24,9 +24,9 @@ inputs:
     mechanism: git-submodule        # see .gitmodules
     path: analyser
     branch: main
-    version: v0.7-4-gece7fe8        # git -C analyser describe --tags; NOT a tag
+    version: v0.7-7-g66e0af9        # git -C analyser describe --tags; NOT a tag
     # Quoted so a sha that happens to be all digits still loads as a string.
-    commit: "ece7fe805ece359b7c511f6731318d4588114536"
+    commit: "66e0af9b1959bbb795b42f566c936e17cd700a11"
     consumed_as:
       # Docker image: compose service "analyser" builds analyser/deployment/Dockerfile
       # in docker-compose.yml + deploy/docker-compose.{stage,prod}.yml. The container
