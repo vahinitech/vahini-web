@@ -92,7 +92,7 @@ For a routine content/code update once that's already set up, on the
 server:
 
 ```bash
-cd ~/vahini-web
+cd ~/vahini-web   # or wherever this repo is cloned on the server
 git checkout main
 git pull origin main
 

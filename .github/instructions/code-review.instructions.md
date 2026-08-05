@@ -2,7 +2,7 @@
 applyTo: "**"
 ---
 
-# Code review instructions — vahinitech/web-live
+# Code review instructions — vahinitech/vahini-web
 
 This is the Vahini marketing site: static HTML/CSS/JS served by nginx
 inside Docker, plus a small persist API and the `analyser/` submodule

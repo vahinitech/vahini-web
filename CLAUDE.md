@@ -1,7 +1,21 @@
-# CLAUDE.md — web-live (vahinitech.com marketing site)
+# CLAUDE.md — vahini-web (vahinitech.com marketing site, formerly web-live)
+
+> **Repo name:** this repo is `vahinitech/vahini-web`. It was renamed from
+> `web-live` (2026-08); old GitHub URLs redirect, and the server checkout
+> may still live at `~/web-live` until someone renames the directory. Use
+> `vahini-web` in new links, docs, and package metadata. The 2026-07-20
+> incident report intentionally keeps its literal `project=web-live`
+> mentions (recorded Docker labels of the time) — don't "fix" those.
 
 ## Working rules (apply to every change)
 
+- **No hardcoded host paths in deploy files.** Compose files, `release.sh`
+  and `prewarm-models.sh` must never bake in an absolute host path
+  (`/home/<user>/...`). All host data hangs off `VAHINI_DATA_ROOT`
+  (default: the deploying user's home; compose syntax
+  `${VAHINI_DATA_ROOT:-${HOME}}`, exported by both scripts). This was
+  cleaned up once already in PR #56 after being reintroduced — check any
+  new volume mount or script path against this rule before committing.
 - **Verify before claiming.** Read the actual file/config before stating what
   it does. Never invent paths, APIs, stats, or benchmark numbers. If a fact
   can't be verified in this repo, say so instead of guessing.
@@ -71,6 +85,34 @@ npm run test:routes   # real nginx on deploy/nginx.conf: URLs, canonicals, asset
 node_modules/.bin/http-server site -p 4173   # front-end only, no Docker
 ```
 
+## Persist API data model (services/persist-api/server.js)
+
+One endpoint, two record types: `POST /persist/feedback` receives both the
+feedback widget and per-page-load telemetry from `site/js/vahini-insights.js`
+(`site/js/site.js` points the shared endpoint at it). The server routes by
+`payload.kind`:
+
+- `kind: "feedback"` — or no `kind` at all (direct API callers, text/plain
+  fallback): individual `feedback_*.json` **plus** a daily
+  `feedback-YYYY-MM-DD.ndjson` in `$VAHINI_DATA_ROOT/feedback`. Only these
+  are real humans clicking Feedback → Send.
+- any other `kind` (today: `"pageview"`): one line appended to
+  `$VAHINI_DATA_ROOT/insights/insights-YYYY-MM-DD.ndjson`, never a
+  per-event file. Before this split, 425 pageview files buried the one real
+  feedback submission on prod (PR #56) — don't collapse the two paths again.
+
+Pageview capture itself is deliberate first-party analytics (visitor id,
+topic, title per page load), not a bug; `window.VAHINI_INSIGHTS.pageviews =
+false` disables it client-side if ever wanted.
+
+The other two stores: `$VAHINI_DATA_ROOT/uploads` holds the uploaded image +
+metadata JSON (the image binary is purged once its report is generated;
+metadata stays, marked `imageDeleted`), and `$VAHINI_DATA_ROOT/reports`
+holds `report_*.json` + optional `.html` snapshot. A nightly sweeper
+gzips/evicts old files across all four dirs. Routing/limits are covered by
+`tests/security-abuse.test.mjs` (`npm run test:security`) — extend it when
+touching this service. Details: `docs/PERSISTENCE-VOLUMES.md`.
+
 ## Deploy (server: 110.172.148.13, Hestia CP — see docs/DEPLOY-STAGE-PROD.md)
 
 ```bash
@@ -79,6 +121,11 @@ git pull → ./deploy/release.sh stage → verify stag.vahinitech.com → ./depl
 
 - **`git pull` alone never updates the live site** — `site/` is baked into
   the Docker image (`Dockerfile` `COPY . .`); `release.sh` rebuilds/redeploys.
+- `release.sh` exports `VAHINI_DATA_ROOT` (default `$HOME`), creates the
+  four persist dirs (`uploads reports feedback insights`), and builds/ups
+  `analyser web persist`. `persist` is in that list on purpose: its env and
+  volume mounts change with releases and nothing else redeploys it — don't
+  trim it back to `analyser web`.
 - Compose files pin project names (`vahini-stage`/`vahini-prod`) — never
   remove `name:`; without it stage and prod destroy each other's containers
   (incident 2026-07-20, see docs/incidents/).

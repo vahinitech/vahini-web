@@ -22,7 +22,7 @@ services:
       - VAHINI_OCR_VARIANTS=2
       - VAHINI_OCR_GPU=0
     volumes:
-      - /home/vishnu/paddle-models/.paddlex:/opt/paddle-models
+      - ${VAHINI_DATA_ROOT:-${HOME}}/paddle-models/.paddlex:/opt/paddle-models
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request,sys;sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8868/ocr/health', timeout=5).getcode()==200 else 1)"]
       interval: 30s
@@ -42,10 +42,14 @@ services:
       - PERSIST_UPLOADS_DIR=/data/uploads
       - PERSIST_REPORTS_DIR=/data/reports
       - PERSIST_FEEDBACK_DIR=/data/feedback
+      - PERSIST_INSIGHTS_DIR=/data/insights
+    # VAHINI_DATA_ROOT defaults to the deploying user's home; release.sh
+    # exports it and creates these dirs before compose runs.
     volumes:
-      - /home/vishnu/uploads:/data/uploads
-      - /home/vishnu/reports:/data/reports
-      - /home/vishnu/feedback:/data/feedback
+      - ${VAHINI_DATA_ROOT:-${HOME}}/uploads:/data/uploads
+      - ${VAHINI_DATA_ROOT:-${HOME}}/reports:/data/reports
+      - ${VAHINI_DATA_ROOT:-${HOME}}/feedback:/data/feedback
+      - ${VAHINI_DATA_ROOT:-${HOME}}/insights:/data/insights
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8090/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
       interval: 30s

@@ -4,7 +4,9 @@
 # Incident report: vahinitech.com production cutover (2026-07-20)
 
 **What happened:** cutting `vahinitech.com` over from the old `vahini-vd-*`
-stack to web-live surfaced two real, pre-existing infrastructure bugs and one
+stack to web-live (this repo, since renamed `vahini-web`; the historical name
+is kept below because it was the literal Compose project label at the time)
+surfaced two real, pre-existing infrastructure bugs and one
 mistake made while fixing the first one. Staging went down for several
 minutes mid-cutover; production itself never went down, but briefly served
 OCR requests through the wrong backend after the cutover completed. Both are
@@ -217,7 +219,7 @@ assuming the application code is at fault. Two independently-confirmed
 - `vahinitech.com`'s Hestia account is `vahini25` — note this is just how
   Hestia organizes the *hosting account*, unrelated to which application is
   actually deployed behind it (as of 2026-05-30, `vahini25`'s nginx config
-  proxies to the `vahini-vd-*` / now web-live Docker stack, not to anything
+  proxies to the `vahini-vd-*` / now vahini-web Docker stack, not to anything
   running as the `vahini25` user).
 - `include /etc/nginx/conf.d/*.conf;` **and**
   `include /etc/nginx/conf.d/domains/*.conf;` are both active (confirmed via
